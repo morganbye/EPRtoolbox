@@ -28,6 +28,14 @@ v13.01
 
 --- EPRtoolbox hits 600 downloads ---
 
+Github
+======
+Constant development has been moved to github:
+github.com/morganbye/EPRtoolbox
+This allows users to pull updates as soon as they are coded. Releases will
+still be made to sourceforge as appropiate, but the toolbox_working_
+directory will be used less and less.
+
 BrukerRead
 ==========
 Big update to BrukerRead so that it now reliably can open and plot almost
