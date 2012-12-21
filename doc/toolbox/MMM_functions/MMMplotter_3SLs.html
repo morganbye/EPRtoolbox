@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MMMplotter_3SLs</title>
+  <meta name="keywords" content="MMMplotter_3SLs">
+  <meta name="description" content="Takes MMM figures from an entire directory and plots them onto">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">toolbox</a> &gt; <a href="index.html">MMM_functions</a> &gt; MMMplotter_3SLs.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for toolbox/MMM_functions&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>MMMplotter_3SLs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Takes MMM figures from an entire directory and plots them onto</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Takes MMM figures from an entire directory and plots them onto
+ one figure.
+ 
+ This version is for figues with more than one PELDOR / DEER distance
+ presence. It plots the overall PELDOR distances but will also plot the 
+ contribution of each individual distance as seperate dashed lines.
+
+ For more information see:
+ http://morganbye.net/eprtoolbox/mmm-plotter-3-spin-labels</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Takes MMM figures from an entire directory and plots them onto</span>
+0002 <span class="comment">% one figure.</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% This version is for figues with more than one PELDOR / DEER distance</span>
+0005 <span class="comment">% presence. It plots the overall PELDOR distances but will also plot the</span>
+0006 <span class="comment">% contribution of each individual distance as seperate dashed lines.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% For more information see:</span>
+0009 <span class="comment">% http://morganbye.net/eprtoolbox/mmm-plotter-3-spin-labels</span>
+0010 <span class="comment">%</span>
+0011 
+0012 <span class="comment">%                                        _                             _</span>
+0013 <span class="comment">%                                       | |                           | |</span>
+0014 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0015 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0016 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0017 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0018 <span class="comment">%                       __/ |                   __/ |</span>
+0019 <span class="comment">%                      |___/                   |___/</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% M. Bye v11.2</span>
+0023 
+0024 <span class="comment">% get files from directory</span>
+0025 folder = uigetdir;
+0026 cd(folder);
+0027 dtaFiles = dir(<span class="string">'*.fig'</span>);
+0028 
+0029 <span class="comment">% message user and abort script if no files are found</span>
+0030 <span class="keyword">if</span> numel(dtaFiles) == 0,
+0031     error(<span class="string">'No .fig files were found, check your Current Folder and try again'</span>)
+0032 <span class="keyword">end</span>
+0033 
+0034 
+0035 <span class="comment">% combine each file into one array</span>
+0036 <span class="keyword">for</span> k=1:numel(dtaFiles)
+0037     open(dtaFiles(k).name);
+0038     fig_details=get(get(gca,<span class="string">'Children'</span>));
+0039     
+0040     <span class="comment">% Overall trace</span>
+0041     X0(k,:) = fig_details(1,1).XData;
+0042     Y0(k,:) = fig_details(1,1).YData;
+0043     
+0044     <span class="comment">% Peak one</span>
+0045     X1(k,:) = fig_details(3,1).XData;
+0046     Y1(k,:) = fig_details(3,1).YData;
+0047     
+0048     <span class="comment">% Peak two</span>
+0049     X2(k,:) = fig_details(5,1).XData;
+0050     Y2(k,:) = fig_details(5,1).YData;
+0051     
+0052     <span class="comment">% Peak three</span>
+0053     X3(k,:) = fig_details(7,1).XData;
+0054     Y3(k,:) = fig_details(7,1).YData;
+0055     
+0056     close
+0057 <span class="keyword">end</span>
+0058 
+0059 close all
+0060 
+0061 <span class="comment">% prompt user for seperation between plots</span>
+0062 sep = input(<span class="string">'\nHow much do you wish to seperate the plots by?\n    Recommend ~ 0.1\n\n'</span>);
+0063 cpoint = input(<span class="string">'\nPick a distance between the peaks (in nm)\n    This keeps the presentation clean.\n    If unsure plot once, then look at black line and run script again.\nRecommend ~ 1.7\n\n'</span>);
+0064 
+0065 figure(<span class="string">'name'</span> , <span class="string">'MMM temperature assay: 3 label sites'</span>, <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>)
+0066 
+0067 hold on
+0068 
+0069 <span class="comment">% setup axis for plot</span>
+0070 xmin = 0.5;
+0071 xmax = 3.5;
+0072 ymin = 0;
+0073 ymax = (sep*numel(dtaFiles)+sep);
+0074 axis([xmin xmax ymin ymax]);
+0075 
+0076 <span class="comment">% other plot parameters</span>
+0077 xlabel(<span class="string">'Distance / nm'</span>);
+0078 ylabel(<span class="string">'Relative absorbance / arb. units'</span>);
+0079 set(gca,<span class="string">'XGrid'</span>,<span class="string">'on'</span>);
+0080 set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0081 set(gca,<span class="string">'ycolor'</span>,<span class="string">'white'</span>);
+0082 
+0083 
+0084 
+0085 <span class="comment">% plot data</span>
+0086 <span class="keyword">for</span> k=1:numel(dtaFiles)
+0087     
+0088     [~,col] = find(X0&gt;cpoint);
+0089     threshold = col(1,1);
+0090     
+0091     hold on
+0092     plot(X1(k,1:threshold) , (Y1(k,1:threshold)+(sep*k)) , <span class="string">'--g'</span>);
+0093     plot(X2(k,threshold:end) , (Y2(k,threshold:end)+(sep*k)) , <span class="string">'--b'</span>);
+0094     plot(X3(k,threshold:end) , (Y3(k,threshold:end)+(sep*k)) , <span class="string">'--r'</span>);
+0095     plot(X0(k,:) , (Y0(k,:)+(sep*k)) , <span class="string">'-k'</span> , <span class="string">'LineWidth'</span> , 2);
+0096     hold off
+0097 
+0098 <span class="comment">% %     Plotting function when not using threshold function. Gives more</span>
+0099 <span class="comment">% %     &quot;true&quot; representation, but messy diagrams</span>
+0100 <span class="comment">%</span>
+0101 <span class="comment">%     hold on</span>
+0102 <span class="comment">%     plot(X0(k,:) , (Y0(k,:)+(sep*k)) , '-k' , 'LineWidth' , 2);</span>
+0103 <span class="comment">%     plot(X1(k,:) , (Y1(k,:)+(sep*k)) , '--r');</span>
+0104 <span class="comment">%     plot(X2(k,:) , (Y2(k,:)+(sep*k)) , '--b');</span>
+0105 <span class="comment">%     plot(X3(k,:) , (Y3(k,:)+(sep*k)) , '--g');</span>
+0106 <span class="comment">%     hold off</span>
+0107 <span class="keyword">end</span>
+0108 
+0109 <span class="comment">% label each data set</span>
+0110 <span class="keyword">for</span> k=1:numel(dtaFiles)
+0111     
+0112     <span class="comment">% find file name for annotation</span>
+0113     label = strtok((dtaFiles(k).name) , <span class="string">'.'</span>);
+0114     
+0115     <span class="comment">% write annotation to plot</span>
+0116     text((xmin+0.1) , (sep*k)+(sep/5) , label)   
+0117 <span class="keyword">end</span>
+0118 
+0119 fprintf(<span class="string">'\nX0 and Y0 are the overall (resultant) plot\nX1 and Y1 refer to the first peak (shortest distance)\nX2...etc the next peaks by order of length\n\n'</span>);
+0120 
+0121 hold off   
+0122 
+0123 clear dtaFiles sep k xmin xmax ymin ymax label fig_details col threshold cpoint
+0124</pre></div>
+<hr><address>Generated on Thu 25-Oct-2012 18:03:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

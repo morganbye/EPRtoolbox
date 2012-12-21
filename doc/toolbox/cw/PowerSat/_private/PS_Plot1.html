@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PS_Plot1</title>
+  <meta name="keywords" content="PS_Plot1">
+  <meta name="description" content="PS_PLOT1 Plot the raw power saturation spectra">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">toolbox</a> &gt; <a href="../../index.html">cw</a> &gt; <a href="../index.html">PowerSat</a> &gt; <a href="index.html">_private</a> &gt; PS_Plot1.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for toolbox/cw/PowerSat/_private&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>PS_Plot1
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>PS_PLOT1 Plot the raw power saturation spectra</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function PS_Plot1(handles) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PS_PLOT1 Plot the raw power saturation spectra
+
+ Syntax:  PS_PLOT1
+
+ Inputs:
+    input1 - handles
+               define the GUI area (ie gcf for PowerSat)
+
+ Outputs:
+    output1 - Datasets plotted in PowerSat GUI
+
+ Example: 
+    see http://morganbye.net/PowerSat
+
+ Other m-files required:
+    PowerSat.m
+
+ Subfunctions:         PS_PLOT1_PLOTALL
+                       PS_PLOT1_PLOTSINGLE
+                       PS_PLOT1_VARIABLES
+
+ MAT-files required:   none</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="PS_Plot1_PlotAll.html" class="code" title="function PS_Plot1_PlotAll(handles,graph,exp,color)">PS_Plot1_PlotAll</a>	PS_Plot1_PlotAll Plot all spectra from one experiment at once</li><li><a href="PS_Plot1_PlotSingle.html" class="code" title="function [mwPower] = PS_Plot1_PlotSingle(handles,graph,exp,color)">PS_Plot1_PlotSingle</a>	PS_Plot1_PlotSingle Plot one spectrum from an experiment.</li><li><a href="PS_Plot1_Variables.html" class="code" title="function PS_Plot1_Variables(handles,exp)">PS_Plot1_Variables</a>	PS_Plot1_Variables Open power saturation experiments</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function PS_Plot1(handles)</a>
+0002 
+0003 <span class="comment">% PS_PLOT1 Plot the raw power saturation spectra</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Syntax:  PS_PLOT1</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%    input1 - handles</span>
+0009 <span class="comment">%               define the GUI area (ie gcf for PowerSat)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Outputs:</span>
+0012 <span class="comment">%    output1 - Datasets plotted in PowerSat GUI</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Example:</span>
+0015 <span class="comment">%    see http://morganbye.net/PowerSat</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Other m-files required:</span>
+0018 <span class="comment">%    PowerSat.m</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Subfunctions:         PS_PLOT1_PLOTALL</span>
+0021 <span class="comment">%                       PS_PLOT1_PLOTSINGLE</span>
+0022 <span class="comment">%                       PS_PLOT1_VARIABLES</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% MAT-files required:   none</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%</span>
+0027 
+0028 <span class="comment">%                                        _                             _</span>
+0029 <span class="comment">%                                       | |                           | |</span>
+0030 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0031 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0032 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0033 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0034 <span class="comment">%                       __/ |                   __/ |</span>
+0035 <span class="comment">%                      |___/                   |___/</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% M. Bye v12.7</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% Author:       Morgan Bye</span>
+0041 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0042 <span class="comment">%               University of East Anglia</span>
+0043 <span class="comment">%               NORWICH, UK</span>
+0044 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0045 <span class="comment">% Website:      http://www.morganbye.net/PowerSat</span>
+0046 <span class="comment">% Jun 12;       Last revision: 29-June-2012</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">% Version history:</span>
+0049 <span class="comment">% Jun 12        &gt; Changed calling of PS_Plot1 from</span>
+0050 <span class="comment">%                   PS_Plot1_PlotSingle(graph,'exp','colour',slider)</span>
+0051 <span class="comment">%                   to</span>
+0052 <span class="comment">%                   PS_Plot1_PlotSingle(handles,handles.plot_load,'exp','colour')</span>
+0053 <span class="comment">%                   required for folder loaded files</span>
+0054 <span class="comment">%               &gt; Similar change to PS_Plot1All call, required for Gaussian</span>
+0055 <span class="comment">%                   fitting</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% Oct 11        &gt; Initial release</span>
+0058 
+0059 <span class="comment">% Define handles</span>
+0060 graph  = handles.plot_load;
+0061 
+0062 <span class="keyword">global</span> vars
+0063 
+0064 <span class="comment">% Get dataset to plot</span>
+0065 <span class="keyword">switch</span> get(get(handles.panel_Plot,<span class="string">'SelectedObject'</span>),<span class="string">'String'</span>);
+0066     
+0067     <span class="keyword">case</span> <span class="string">' Oxygen'</span>                                <span class="comment">% If Oxygen</span>
+0068         
+0069         <a href="PS_Plot1_Variables.html" class="code" title="function PS_Plot1_Variables(handles,exp)">PS_Plot1_Variables</a>(handles,<span class="string">'Oxy'</span>);        <span class="comment">% Calculate the y-value</span>
+0070                                                   <span class="comment">%   according to options</span>
+0071         <span class="keyword">switch</span> get(handles.dropdown_view,<span class="string">'Value'</span>) <span class="comment">% Select plot method</span>
+0072             <span class="keyword">case</span> 1
+0073                 <a href="PS_Plot1_PlotAll.html" class="code" title="function PS_Plot1_PlotAll(handles,graph,exp,color)">PS_Plot1_PlotAll</a>(handles,graph,<span class="string">'Oxy'</span>,<span class="string">'red'</span>)
+0074                 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
+0075             <span class="keyword">case</span> 2
+0076                 <a href="PS_Plot1_PlotSingle.html" class="code" title="function [mwPower] = PS_Plot1_PlotSingle(handles,graph,exp,color)">PS_Plot1_PlotSingle</a>(handles,handles.plot_load,<span class="string">'Oxy'</span>,<span class="string">'red'</span>);
+0077                 set(handles.edit_mWpower,<span class="string">'String'</span>,num2str(vars.Oxy.mwPower,4));
+0078         <span class="keyword">end</span>
+0079                     
+0080     <span class="keyword">case</span> <span class="string">' Nitrogen'</span>
+0081         <a href="PS_Plot1_Variables.html" class="code" title="function PS_Plot1_Variables(handles,exp)">PS_Plot1_Variables</a>(handles,<span class="string">'N2'</span>);        
+0082         
+0083         <span class="keyword">switch</span> get(handles.dropdown_view,<span class="string">'Value'</span>)
+0084             <span class="keyword">case</span> 1
+0085                 <a href="PS_Plot1_PlotAll.html" class="code" title="function PS_Plot1_PlotAll(handles,graph,exp,color)">PS_Plot1_PlotAll</a>(handles,graph,<span class="string">'N2'</span>,<span class="string">'blue'</span>)
+0086                 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
+0087             <span class="keyword">case</span> 2
+0088                 <a href="PS_Plot1_PlotSingle.html" class="code" title="function [mwPower] = PS_Plot1_PlotSingle(handles,graph,exp,color)">PS_Plot1_PlotSingle</a>(handles,handles.plot_load,<span class="string">'N2'</span>,<span class="string">'blue'</span>)
+0089                 set(handles.edit_mWpower,<span class="string">'String'</span>,num2str(vars.N2.mwPower,4));
+0090 
+0091         <span class="keyword">end</span>
+0092         
+0093     <span class="keyword">case</span> <span class="string">' NiEDDA'</span>
+0094         <a href="PS_Plot1_Variables.html" class="code" title="function PS_Plot1_Variables(handles,exp)">PS_Plot1_Variables</a>(handles,<span class="string">'Ni'</span>);        
+0095         
+0096         <span class="keyword">switch</span> get(handles.dropdown_view,<span class="string">'Value'</span>)
+0097             <span class="keyword">case</span> 1
+0098                 <a href="PS_Plot1_PlotAll.html" class="code" title="function PS_Plot1_PlotAll(handles,graph,exp,color)">PS_Plot1_PlotAll</a>(handles,graph,<span class="string">'Ni'</span>,<span class="string">'green'</span>)
+0099                 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
+0100             <span class="keyword">case</span> 2
+0101                 <a href="PS_Plot1_PlotSingle.html" class="code" title="function [mwPower] = PS_Plot1_PlotSingle(handles,graph,exp,color)">PS_Plot1_PlotSingle</a>(handles,handles.plot_load,<span class="string">'Ni'</span>,<span class="string">'green'</span>)
+0102                 set(handles.edit_mWpower,<span class="string">'String'</span>,num2str(vars.Ni.mwPower,4));
+0103                 
+0104         <span class="keyword">end</span>
+0105         
+0106     <span class="keyword">case</span> <span class="string">' DPPH'</span>
+0107         <a href="PS_Plot1_Variables.html" class="code" title="function PS_Plot1_Variables(handles,exp)">PS_Plot1_Variables</a>(handles,<span class="string">'DPPH'</span>);        
+0108         
+0109         <span class="keyword">switch</span> get(handles.dropdown_view,<span class="string">'Value'</span>)
+0110             <span class="keyword">case</span> 1
+0111                 <a href="PS_Plot1_PlotAll.html" class="code" title="function PS_Plot1_PlotAll(handles,graph,exp,color)">PS_Plot1_PlotAll</a>(handles,graph,<span class="string">'DPPH'</span>,[0.871,0.49,0.0])
+0112                 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
+0113             <span class="keyword">case</span> 2
+0114                 <a href="PS_Plot1_PlotSingle.html" class="code" title="function [mwPower] = PS_Plot1_PlotSingle(handles,graph,exp,color)">PS_Plot1_PlotSingle</a>(handles,handles.plot_load,<span class="string">'DPPH'</span>,[0.871,0.49,0.0])
+0115                 set(handles.edit_mWpower,<span class="string">'String'</span>,num2str(vars.DPPH.mwPower,4));
+0116                 
+0117         <span class="keyword">end</span>
+0118 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 25-Oct-2012 18:03:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

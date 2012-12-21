@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of file_details</title>
+  <meta name="keywords" content="file_details">
+  <meta name="description" content="FILE_DETAILS The file details window for cwViewer">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">toolbox</a> &gt; <a href="../index.html">cw</a> &gt; <a href="index.html">cwViewer</a> &gt; file_details.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for toolbox/cw/cwViewer&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>file_details
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>FILE_DETAILS The file details window for cwViewer</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function varargout = file_details(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> FILE_DETAILS The file details window for cwViewer
+
+ Syntax:       - n/a
+
+ Inputs:
+    input1     - n/a
+
+ Outputs:
+    output1    - n/a
+
+ Example: 
+    see http://morganbye.net/cwViewer
+
+ Other m-files required:   /private (directory)
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: <a href="cwViewer.html" class="code" title="function varargout = cwViewer(varargin)">CWVIEWER</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>	CV_PLOT Plotting function for cwViewer</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="cwViewer.html" class="code" title="function varargout = cwViewer(varargin)">cwViewer</a>	CWVIEWER Open, analyse and plot cw-EPR experiments.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function file_details_OpeningFcn(hObject, eventdata, handles, varargin)</a></li><li><a href="#_sub2" class="code">function varargout = file_details_OutputFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub3" class="code">function edit_freq_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub4" class="code">function edit_freq_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub5" class="code">function edit_scans_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub6" class="code">function edit_scans_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub7" class="code">function edit_mw_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub8" class="code">function edit_mw_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub9" class="code">function figure1_CloseRequestFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub10" class="code">function listbox_files_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub11" class="code">function listbox_files_CreateFcn(hObject, eventdata, handles)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = file_details(varargin)</a>
+0002 
+0003 <span class="comment">% FILE_DETAILS The file details window for cwViewer</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Syntax:       - n/a</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%    input1     - n/a</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Outputs:</span>
+0011 <span class="comment">%    output1    - n/a</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Example:</span>
+0014 <span class="comment">%    see http://morganbye.net/cwViewer</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Other m-files required:   /private (directory)</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Subfunctions:             none</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% MAT-files required:       none</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% See also: CWVIEWER</span>
+0024 
+0025 <span class="comment">%                           oooooo     oooo   o8o</span>
+0026 <span class="comment">%                            `888.     .8'    `&quot;'</span>
+0027 <span class="comment">%  .ooooo.  oooo oooo    ooo   `888.   .8'   oooo   .ooooo.  oooo oooo    ooo  .ooooo.  oooo d8b</span>
+0028 <span class="comment">% d88' `&quot;Y8  `88. `88.  .8'     `888. .8'    `888  d88' `88b  `88. `88.  .8'  d88' `88b `888&quot;&quot;8P</span>
+0029 <span class="comment">% 888         `88..]88..8'       `888.8'      888  888ooo888   `88..]88..8'   888ooo888  888</span>
+0030 <span class="comment">% 888   .o8    `888'`888'         `888'       888  888    .o    `888'`888'    888    .o  888</span>
+0031 <span class="comment">% `Y8bod8P'     `8'  `8'           `8'       o888o `Y8bod8P'     `8'  `8'     `Y8bod8P' d888b</span>
+0032 <span class="comment">%</span>
+0033 
+0034 <span class="comment">%                                        _                             _</span>
+0035 <span class="comment">%                                       | |                           | |</span>
+0036 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0037 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0038 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0039 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0040 <span class="comment">%                       __/ |                   __/ |</span>
+0041 <span class="comment">%                      |___/                   |___/</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% M. Bye v12.6</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% Author:       Morgan Bye</span>
+0047 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0048 <span class="comment">%               University of East Anglia</span>
+0049 <span class="comment">%               NORWICH, UK</span>
+0050 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0051 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/cwviewer</span>
+0052 <span class="comment">% May 2012;     Last revision: 18-May-2012</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% Approximate coding time of file:</span>
+0055 <span class="comment">%               4 hours</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% Version history:</span>
+0059 <span class="comment">% Jun 12        Improved window placement on opening</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">% May 12        Initial release (open beta)</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">% Feb 12        First alpha</span>
+0064 
+0065 <span class="comment">% Last Modified by GUIDE v2.5 23-Apr-2012 17:11:09</span>
+0066 
+0067 <span class="comment">% Begin initialization code - DO NOT EDIT</span>
+0068 gui_Singleton = 1;
+0069 gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+0070                    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+0071                    <span class="string">'gui_OpeningFcn'</span>, @<a href="#_sub1" class="code" title="subfunction file_details_OpeningFcn(hObject, eventdata, handles, varargin)">file_details_OpeningFcn</a>, <span class="keyword">...</span>
+0072                    <span class="string">'gui_OutputFcn'</span>,  @<a href="#_sub2" class="code" title="subfunction varargout = file_details_OutputFcn(hObject, eventdata, handles)">file_details_OutputFcn</a>, <span class="keyword">...</span>
+0073                    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+0074                    <span class="string">'gui_Callback'</span>,   []);
+0075 <span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+0076     gui_State.gui_Callback = str2func(varargin{1});
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="keyword">if</span> nargout
+0080     [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+0081 <span class="keyword">else</span>
+0082     gui_mainfcn(gui_State, varargin{:});
+0083 <span class="keyword">end</span>
+0084 <span class="comment">% End initialization code - DO NOT EDIT</span>
+0085 
+0086 
+0087 <span class="comment">% --- Executes just before file_details is made visible.</span>
+0088 <a name="_sub1" href="#_subfunctions" class="code">function file_details_OpeningFcn(hObject, eventdata, handles, varargin)</a>
+0089 <span class="comment">% This function has no output args, see OutputFcn.</span>
+0090 <span class="comment">% hObject    handle to figure</span>
+0091 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0092 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0093 <span class="comment">% varargin   command line arguments to file_details (see VARARGIN)</span>
+0094 
+0095 <span class="comment">% Choose default command line output for file_details</span>
+0096 handles.output = hObject;
+0097 set(gcf,<span class="string">'Name'</span>,<span class="string">'File details'</span>);
+0098 
+0099 <span class="comment">% Update handles structure</span>
+0100 guidata(hObject, handles);
+0101 
+0102 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0103 setappdata(cwview,<span class="string">'wFile'</span>,1);
+0104 setappdata(cwview,<span class="string">'hFile'</span>,handles);
+0105 
+0106 
+0107 
+0108 <span class="comment">% --- Outputs from this function are returned to the command line.</span>
+0109 <a name="_sub2" href="#_subfunctions" class="code">function varargout = file_details_OutputFcn(hObject, eventdata, handles) </a>
+0110 <span class="comment">% varargout  cell array for returning output args (see VARARGOUT);</span>
+0111 <span class="comment">% hObject    handle to figure</span>
+0112 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0113 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0114 
+0115 <span class="comment">% Get default command line output from handles structure</span>
+0116 varargout{1} = handles.output;
+0117 
+0118 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0119 
+0120 set(gcf, <span class="string">'Units'</span> , <span class="string">'pixels'</span>);
+0121 
+0122 size = get(gcf,<span class="string">'OuterPosition'</span>);
+0123 setappdata(cwview,<span class="string">'Size_File'</span>,size);
+0124 
+0125 screen = getappdata(cwview,<span class="string">'screen'</span>);
+0126 
+0127 <span class="comment">% Get size of cwViewer window</span>
+0128 hcwView = getappdata(cwview,<span class="string">'hcwView'</span>);
+0129 h = get(hcwView.figure1);
+0130 Pos = h.Position;
+0131 
+0132 set(gcf, <span class="string">'OuterPosition'</span>, [ <span class="keyword">...</span>
+0133     (Pos(1)-size(3)-5) , <span class="keyword">...</span>
+0134     (screen(4) - 5) , <span class="keyword">...</span>
+0135     (size(3)),<span class="keyword">...</span>
+0136     (size(4))]);
+0137 
+0138 
+0139 
+0140 
+0141 <a name="_sub3" href="#_subfunctions" class="code">function edit_freq_Callback(hObject, eventdata, handles)</a>
+0142 <span class="comment">% hObject    handle to edit_freq (see GCBO)</span>
+0143 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0144 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0145 
+0146 <span class="comment">% Hints: get(hObject,'String') returns contents of edit_freq as text</span>
+0147 <span class="comment">%        str2double(get(hObject,'String')) returns contents of edit_freq as a double</span>
+0148 
+0149 
+0150 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0151 <a name="_sub4" href="#_subfunctions" class="code">function edit_freq_CreateFcn(hObject, eventdata, handles)</a>
+0152 <span class="comment">% hObject    handle to edit_freq (see GCBO)</span>
+0153 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0154 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0155 
+0156 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0157 <span class="comment">%       See ISPC and COMPUTER.</span>
+0158 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0159     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0160 <span class="keyword">end</span>
+0161 
+0162 
+0163 
+0164 <a name="_sub5" href="#_subfunctions" class="code">function edit_scans_Callback(hObject, eventdata, handles)</a>
+0165 <span class="comment">% hObject    handle to edit_scans (see GCBO)</span>
+0166 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0167 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0168 
+0169 <span class="comment">% Hints: get(hObject,'String') returns contents of edit_scans as text</span>
+0170 <span class="comment">%        str2double(get(hObject,'String')) returns contents of edit_scans as a double</span>
+0171 
+0172 
+0173 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0174 <a name="_sub6" href="#_subfunctions" class="code">function edit_scans_CreateFcn(hObject, eventdata, handles)</a>
+0175 <span class="comment">% hObject    handle to edit_scans (see GCBO)</span>
+0176 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0177 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0178 
+0179 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0180 <span class="comment">%       See ISPC and COMPUTER.</span>
+0181 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0182     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0183 <span class="keyword">end</span>
+0184 
+0185 
+0186 
+0187 <a name="_sub7" href="#_subfunctions" class="code">function edit_mw_Callback(hObject, eventdata, handles)</a>
+0188 <span class="comment">% hObject    handle to edit_mw (see GCBO)</span>
+0189 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0190 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0191 
+0192 <span class="comment">% Hints: get(hObject,'String') returns contents of edit_mw as text</span>
+0193 <span class="comment">%        str2double(get(hObject,'String')) returns contents of edit_mw as a double</span>
+0194 
+0195 
+0196 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0197 <a name="_sub8" href="#_subfunctions" class="code">function edit_mw_CreateFcn(hObject, eventdata, handles)</a>
+0198 <span class="comment">% hObject    handle to edit_mw (see GCBO)</span>
+0199 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0200 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0201 
+0202 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0203 <span class="comment">%       See ISPC and COMPUTER.</span>
+0204 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0205     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0206 <span class="keyword">end</span>
+0207 
+0208 
+0209 <span class="comment">% --- Executes when user attempts to close figure1.</span>
+0210 <a name="_sub9" href="#_subfunctions" class="code">function figure1_CloseRequestFcn(hObject, eventdata, handles)</a>
+0211 
+0212 <span class="comment">% Update handles so WindowVisible = 0</span>
+0213 cwview = getappdata(0, <span class="string">'cwview'</span>);
+0214 Visible = getappdata(cwview,<span class="string">'WindowVisible'</span>);
+0215 
+0216 Visible.FileDetails = 0;
+0217 
+0218 setappdata(cwview,<span class="string">'WindowVisible'</span>,Visible);
+0219 
+0220 <span class="comment">% Change Window menu in cwViewer to off status</span>
+0221         <span class="comment">% Get handles for cwViewer window</span>
+0222 h = getappdata(cwview,<span class="string">'handles'</span>);
+0223         <span class="comment">% Change checked status</span>
+0224 set(h.cwViewer.menu_Window_File, <span class="string">'Checked'</span> , <span class="string">'off'</span>);
+0225 
+0226 
+0227 delete(hObject);
+0228 
+0229 
+0230 <span class="comment">% --- Executes on selection change in listbox_files.</span>
+0231 <a name="_sub10" href="#_subfunctions" class="code">function listbox_files_Callback(hObject, eventdata, handles)</a>
+0232 <span class="comment">% hObject    handle to listbox_files (see GCBO)</span>
+0233 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0234 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0235 
+0236 <span class="comment">% Hints: contents = cellstr(get(hObject,'String')) returns listbox_files contents as cell array</span>
+0237 <span class="comment">%        contents{get(hObject,'Value')} returns selected item from listbox_files</span>
+0238 
+0239 <span class="comment">% Get handles</span>
+0240 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0241 data    = getappdata(cwview,<span class="string">'data'</span>);
+0242 hFile  = getappdata(cwview,<span class="string">'hFile'</span>);
+0243 
+0244 <span class="comment">% Find selected file</span>
+0245 fSelection = get(hFile.listbox_files,<span class="string">'Value'</span>);
+0246 exp = data.([<span class="string">'File'</span> mat2str(fSelection)]).info;
+0247 
+0248 <span class="comment">% Update edit boxes</span>
+0249 set(hFile.edit_freq,    <span class="string">'String'</span>, num2str(exp.MWFQ  /1e9));
+0250 set(hFile.edit_scans,   <span class="string">'String'</span>, num2str(exp.AVGS));
+0251 set(hFile.edit_mw,      <span class="string">'String'</span>, num2str(exp.MWPW  *1e3));
+0252 
+0253 <span class="comment">% Plot selection</span>
+0254 <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>
+0255 
+0256 
+0257 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0258 <a name="_sub11" href="#_subfunctions" class="code">function listbox_files_CreateFcn(hObject, eventdata, handles)</a>
+0259 <span class="comment">% hObject    handle to listbox_files (see GCBO)</span>
+0260 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0261 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0262 
+0263 <span class="comment">% Hint: listbox controls usually have a white background on Windows.</span>
+0264 <span class="comment">%       See ISPC and COMPUTER.</span>
+0265 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0266     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0267 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 25-Oct-2012 18:03:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

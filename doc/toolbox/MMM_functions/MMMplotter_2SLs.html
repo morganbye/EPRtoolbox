@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MMMplotter_2SLs</title>
+  <meta name="keywords" content="MMMplotter_2SLs">
+  <meta name="description" content="Takes MMM figures from an entire directory (current) and plots them onto">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">toolbox</a> &gt; <a href="index.html">MMM_functions</a> &gt; MMMplotter_2SLs.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for toolbox/MMM_functions&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>MMMplotter_2SLs
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Takes MMM figures from an entire directory (current) and plots them onto</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Takes MMM figures from an entire directory (current) and plots them onto
+ one figure
+
+ For more information see:
+ http://morganbye.net/eprtoolbox/mmm-plotter-2-spin-labels</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Takes MMM figures from an entire directory (current) and plots them onto</span>
+0002 <span class="comment">% one figure</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% For more information see:</span>
+0005 <span class="comment">% http://morganbye.net/eprtoolbox/mmm-plotter-2-spin-labels</span>
+0006 <span class="comment">%</span>
+0007 
+0008 <span class="comment">%                                        _                             _</span>
+0009 <span class="comment">%                                       | |                           | |</span>
+0010 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0011 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0012 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0013 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0014 <span class="comment">%                       __/ |                   __/ |</span>
+0015 <span class="comment">%                      |___/                   |___/</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% M. Bye v11.2</span>
+0018 
+0019 <span class="comment">% get files from directory</span>
+0020 folder = uigetdir;
+0021 cd(folder);
+0022 dtaFiles = dir(<span class="string">'*.fig'</span>);
+0023 
+0024 <span class="comment">% message user and abort script if no files are found</span>
+0025 <span class="keyword">if</span> numel(dtaFiles) == 0,
+0026     error(<span class="string">'No .fig files were found, check your Current Folder and try again'</span>)
+0027 <span class="keyword">end</span>
+0028 
+0029 <span class="comment">% combine each file into one array</span>
+0030 <span class="keyword">for</span> k=1:numel(dtaFiles)
+0031     open(dtaFiles(k).name);
+0032     fig_details=get(get(gca,<span class="string">'Children'</span>));
+0033     
+0034     X(k,:) = fig_details.XData;
+0035     Y(k,:) = fig_details.YData;
+0036     
+0037     close
+0038 <span class="keyword">end</span>
+0039 
+0040 close all
+0041 
+0042 sep = input(<span class="string">'\nHow much do you wish to seperate the plots?\n    Recommend ~ 0.1\n\n'</span>);
+0043 
+0044 figure(<span class="string">'name'</span> , <span class="string">'MMM temperature assay: 2 label sites'</span>, <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>)
+0045 
+0046 hold on
+0047 
+0048 <span class="comment">% setup axis for plot</span>
+0049 xmin = 0.5;
+0050 xmax = 3.5;
+0051 ymin = 0;
+0052 ymax = (sep*numel(dtaFiles)+sep);
+0053 axis([xmin xmax ymin ymax]);
+0054 
+0055 <span class="comment">% other plot parameters</span>
+0056 xlabel(<span class="string">'Distance / nm'</span>);
+0057 ylabel(<span class="string">'Relative absorbance / arb. units'</span>);
+0058 set(gca,<span class="string">'XGrid'</span>,<span class="string">'on'</span>);
+0059 set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0060 set(gca,<span class="string">'ycolor'</span>,<span class="string">'white'</span>);
+0061 
+0062 
+0063 
+0064 <span class="comment">% plot data</span>
+0065 <span class="keyword">for</span> k=1:numel(dtaFiles)
+0066     plot(X(k,:),(Y(k,:)+(sep*k)))   
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="comment">% label each data set</span>
+0070 <span class="keyword">for</span> k=1:numel(dtaFiles)
+0071     
+0072     <span class="comment">% find file name for annotation</span>
+0073     label = strtok((dtaFiles(k).name) , <span class="string">'.'</span>);
+0074     
+0075     <span class="comment">% write annotation to plot</span>
+0076     text((xmin+0.1) , (sep*k)+(sep/5) , label)   
+0077 <span class="keyword">end</span>
+0078 
+0079 
+0080 hold off   
+0081 
+0082 clear dtaFiles sep k xmin xmax ymin ymax label fig_details
+0083</pre></div>
+<hr><address>Generated on Thu 25-Oct-2012 18:03:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

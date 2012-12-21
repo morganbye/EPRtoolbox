@@ -1,0 +1,526 @@
+EPRtoolbox
+
+  ______ _____  _____    _               _ _ 
+ |  ____|  __ \|  __ \  | |             | | |              
+ | |__  | |__) | |__) | | |_  ___   ___ | | |__   _____  __
+ |  __| |  ___/|  _  /  | __|/ _ \ / _ \| | '_ \ / _ \ \/ /
+ | |____| |    | | \ \  | |_| (_) | (_) | | |_) | (_) >  < 
+ |______|_|    |_|  \_\  \__|\___/ \___/|_|_.__/ \___/_/\_\
+
+
+                                 by
+                                        _                             _   
+                                       | |                           | |  
+  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_ 
+ | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|
+ | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_ 
+ |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|
+                       __/ |                   __/ |                      
+                      |___/                   |___/                       
+
+
+                                                     developed at the         
+                                                 University of East Anglia
+
+M. Bye v13.01
+
+v13.01
+
+--- EPRtoolbox hits 600 downloads ---
+
+BrukerRead
+==========
+Big update to BrukerRead so that it now reliably can open and plot almost
+all common pulsed EPR experiments including FID, FSE, PELDOR, ESEEM,
+HYSCORE, ENDOR, DONUT.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v12.12 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+PowerSat
+========
+Big update for PowerSat fixing a lot of bugs. Especially concerning fitting
+of curves and file handling when a folder of files was used rather than a 
+single 3 dimensional .DTA/.DSC/.YGF file.
+
+Minor updates to figure creation and presentation.
+
+cwnorm
+======
+cwnorm now has the optional argument of 'true', this allows for a true
+normalisation of data between 0 and 1 rather than scaling data between -1
+and 1.
+
+DeerExtract
+===========
+Now with automatic plotting of figures from DeerAnalysis
+
+NEW FOLDER: HADDOCK
+===================
+New to the EPR toolbox is a set of tools for use with the NMR docking
+program HADDOCK (haddock.science.uu.nl).
+
+Currently these tools extend to post docking calculation manipulation and
+presenting of data. Stay tuned for further features in later releases.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v12.10 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+NEW FEATURE: e2af
+=================
+By request from the guys at NREL, e2a has been expanded to convert an
+entire folder of Bruker files to ASCII files in one easy script.
+
+MMM intergration
+================
+Integration between the EPR toolbox and tools provided by ETH Zurich
+(namely MMM and DeerAnalysis) has begun. This is part of a longer term
+project. This work is not yet published, but can start to be seen in
+changes to pdbimport/pdbexport.
+
+eloader
+=======
+Update reflecting changes in BrukerRead
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v12.9  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Acknowledgements
+================
+A short acknowledgements section has been added to README.txt
+
+Video Demonstrations
+====================
+PowerSat and cwViewer now have demonstration videos available on YouTube,
+see each programs help section for links, or their webpage to view.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v12.8  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+--- EPRtoolbox hits 500 downloads ---
+
+PowerSat
+========
+Another big update for PowerSat. Raw data can now be fitted using 5
+different methods
+1) Manually defined single points
+2) Splitting the peak into a positive and negative peak and then fitting
+    each with a Gaussian distribution
+3) Same as 2 but with a Lorentzian distribution
+4) Fitting the signal with a 1st derivative Gaussian distribution, the 2nd
+    derivative is then calculated, and where the 2nd derivative = 0 then
+    that is the turning point (peak or trough) of the 1st derivative
+5) Same as 4 but with a Lorentzian distribution
+
+randaddnoise
+============
+addnoise - renamed to avoid conflict with addnoise from EasySpin, as most
+users will have both installed. Minor update to help and argument inputs
+
+General toolbox
+===============
+Several functions have had minor tidy ups and optimisations
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v12.7  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+PowerSat
+========
+Massive rebuild of PowerSat, spectra can now be fitted with Gaussian peaks
+before the peak-to-peak height is taken. Accessibility calculations, have
+been improved and additional functionality for folder loading as well as 
+full compatibility with Bruker .spc/.par files from EMX machines.
+
+cwViewer
+========
+New function/window that allows you to send the currently viewable screen
+to EasySpin. Suitable for quick or frequently repeated EasySpin functions.
+The window comes complete preloaded for nitroxide spin labels
+
+BrukerRead
+==========
+Big reworking so that it now works with .spc/.par files from Bruker EMX
+spectrometers, having received some files to play with
+
+DeerExtract
+===========
+Function has been reworked so that it finds an open DeerAnalysis window by
+searching all MATLAB figure windows and then gets the figures. This means
+that it automatically obtains data arrays with no export needed.
+
+DeerConverter
+=============
+Error handling added so that no error is presented if a user cancels the
+selection of a file
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v12.5  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+NEW FEATURE: sgol
+=================
+Crude implementation of the Savitzky-Golay smoothing function. This allows
+for data to be smoothed without such pronounced problems of line/peak 
+broadening and intensity lose found with a moving point average.
+
+
+NEW FEATURE: Documentation
+==========================
+The toolbox now comes with a folder "doc" inside of which is index.html
+which gives support to all EPR Toolbox files in web page format.
+
+
+cwViewer
+========
+> Savitzky-Golay smoothing function added to Viewing Options
+> Add noise function added to Viewing Options
+> x-axis can now be switched between Magnetic Field and g-value
+> Export of CSV data includes g-values
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v12.5  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+NEW FEATURE: cwViewer
+=====================
+Massive revamp of cwPlotter into a new feature.
+
+> Ability to load a single cw file, folder of cw files or cw file with a
+    third dimension (such as power)
+> Will handle FSEs and FIDs
+> Ability to manipulate spectra in real time
+> Auto-zero, normalize and smoothing functions
+> Ability to stagger plots
+> Export and save functions as pictures, Bruker files or CSVs
+> Save/Load a workspace to continue working on files at a later date
+
+
+BrukerRead
+==========
+> Better handling of pulse experiments
+> Inputs changed so that 'plot' can be used by itself
+> Figure plotting reconfigured and improved
+      - imaginary channel for pulse experiments
+      - legend is displayed for real/imaginary channels
+      - x-axis corrected for time or mag field depending
+         on FSE or FID experiment with correct units/label
+
+BrukerWrite
+===========
+Changed 3rd input argument so that if a file path is
+specified then the script writes out to that address. Only
+useful really for when this script is called from other
+scripts; ie. in a for loop for writing many files
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v12.1  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+DEERextract
+===========
+> Extract the raw data behind plots in ETH Zurich's DeerAnalysis
+
+pdbexport
+=========
+> Partner script to pdbimport
+
+
+pdbimport
+=========
+> Complete reworking of function
+               - URL read added
+               - direct download from pdb.org added
+               - complete reworking of atom and sequence handling
+               - better progress bar functionality
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v12.1  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+NEW FEATURE: Fsc2Read
+=====================
+> Read Fsc2 files from Jens Törring's (FU Berlin) fsc2 program
+
+
+NEW FEATURE: JeolRead   < BETA release >
+=====================
+> Read Jeol *.esr files into MATLAB.
+
+
+NEW FEATURE: BrukerWrite
+========================
+
+> Allows x and y arrays in the MATLAB workspace to be saved out into the
+    Bruker BES3T format (.DTA and .DSC files)
+
+
+NEW FEATURE: addnoise
+=====================
+
+> Allows the application of noise to a spectrum as a random values added
+    or subtracted within a range defined as a percentage of the maximum
+    signal range
+
+
+EPRtoolbox
+==========
+
+> Minor fixes to folder structure
+> Additional help sections added to most scripts
+> Some minor coding housekeeping detailed in script help(/header) sections
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v11.11 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+PowerSat
+========
+
+> Massive overhaul of PowerSat
+> Far quicker processing time
+> Improved formatting for Windows user
+> Improved function handling thanks to tilde (~) removal in code
+> Better error catching and error messages
+> Modular design with full documentation
+
+KEY FEATURE:
+> PowerSat is now able to calculate the accessibility factor "Pi" as
+    according to Biophysical Journal (2005) vol 89, 2103-2112
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v11.10 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Minor bug fixes (not available for general release)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v11.9 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Minor bug fixes (not available for general release)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v11.8 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+v11.8
+
+KEY FEATURE: EPRtoolbox
+=======================
+> EPRtoolbox now functions under a full graphical user interface
+
+NEW FEATURE: cwPlotter
+======================
+> Ability to load a single cw file, folder of cw files or cw file with a
+    third dimension (such as power)
+> Ability to manipulate spectra in real time
+> Auto-zero, normalize and smoothing functions
+> Ability to stagger plots
+> Export and save functions
+> g - value cursor
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v11.7 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Minor bug fixes (not available for general release)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v11.6 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+v11.6
+
+KEY FEATURE: PowerSat
+=====================
+> The PowerSat feature has been completely reworked as a graphical user
+	interface for real time manipulation of data
+> Ability to choose peaks (from single power or all powers combined)
+> Automatic Power Saturation Curve plotting
+> Automatic P1/2 determination
+> Real time updates to curves and P1/2 when chosen peaks are changed
+> Ability to use 1, 2 or 3 datasets
+> Full details available at http://morganbye.net/PowerSat
+
+NEW FEATURE: arrow
+==================
+> Allows for the drawing of arrows on plots
+    > Adapted from http://www.mathworks.com/matlabcentral/fileexchange/278-arrow-m/content/arrow.m
+
+BrukerRead
+==========
+> Loads Bruker files
+    > Updated to accept .YGF for the 3rd axis
+        (important for power saturation curves, not available using
+        "eprload")
+        z_axis and z_axis_points in info matrix
+    > Now accepts pulsed experiments
+        > info matrix loads pulsed info only (no cw empty fields)
+        > Real and imaginary channels plotted into y.real and y.imag
+
+cwplot
+======
+> Updated for single x-axis or multiple x-axis data
+> z-axis indictation arrow added for staggered plots
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v11.5 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+v11.5.19
+
+NEW FEATURE: BrukerRead
+=======================
+> Loads Bruker spectrometer files (x, y and info)
+    > .DTA / .DSC
+    > .spc / .par
+> Replaces dependancy on "closed source" EasySpin function "eprload"
+> Functions updated to include BrukerRead rather than eprload
+    > eloader (single file and folder mode)
+    > cwplot
+
+PowerSat
+========
+> Tilde (~) replaced with "irrelivant_value" for better compatibility on Windows
+> Manual input of scan range improved
+> Handling of 1 peak in scan range added (that value automatically taken)
+> Complete GUI implementation development begun
+
+cwplot
+======
+> Updated to function
+> Added option to set the degree of seperation on multi-plots
+> Staggered plot function
+
+
+v11.5.0
+
+New in this release:
+
+NEW FEATURE: PDB MTSL changer
+=============================
+> Swaps PDB residue of MTSL attached to CYS, R1A (crystolgraphy code) for
+    CYM (computational) residue code
+
+PDBSplitter
+===========
+> Feature rewritten to run faster
+> Faster writing of PDB files
+> Maximum number of chains increased to 6 (Chains A to F)
+> Improved GUI for PDB gathering from rcsb.org
+
+PowerSat
+========
+> Smooth function improved
+    > Smooth now works for single file and folder modes
+    > Improved GUI prompts (at file load, smoothing and functions not found)
+
+> Known problem: at some points the fitting routine will give a negative b
+    value that causes dips in the curve. This is a as a result of imaginary
+    numbers. This is a minor problem and should be fixed shortly.
+
+Main Menu
+=========
+> Improved functionality
+> Updated with new functions
+> Added weblink to support
+> Added email link to support
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v11.4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+v11.4
+
+New in this release:
+
+NEW FEATURE: MMM rotamer exporter
+=================================
+> Allows for the exporting of individual rotamer PDBs rather than an
+  ensemble PDB of all the rotamers from MMM
+> Feature is implemented within MMM and relies upon code by Yevhen Polyhach
+  and Gunnar Jescke
+> Installer written by M. Bye
+> Uninstaller written by M. Bye
+     returns MMM to clean state if wished
+
+NEW FEATURE: cwnorm
+========================
+> Normalises a cw spectra
+     > By default between -1 and +1
+     > Input argument for any range
+          eg. cwnorm(y,100) for +/- 100
+
+EPRtoolbox menus
+================
+> cw menu updated for NormSpectra function
+> cw menu now has better error catching if spectra has not been loaded
+  correctly
+> MMM menu updated
+> MMM menu updated with better error catching
+
+PowerSat
+========
+> Spectra are zeroed before peaks are found. Should help with finding
+  peaks from noise
+> Improved GUI interface
+> Smooth function added for REALLY NOISY data
+
+e2a
+===
+> Script changed to function
+> Added input arguments for user's choice of delimiter and file extension
+    eg. e2a(filename , ',' , '.csv') for a comma seperated value file
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v11.3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+v11.3.18
+
+New in this release:
+
+EPRtoolbox menus
+================
+> Updated help function
+> Web links now provided to functions that are not necessarily included in
+  the toolbox (MMM, easyspin)
+> Menus updated to reflect combination of eloaders and cwzeros
+> Folder structure introduced for scripts
+
+PDBSplitter
+===========
+> Will now split NMR PDBs with multiple models (taking the first model)
+
+PowerSat
+========
+> Adjusted x-axis label to be more accurate
+> Adjusted NiEDDA label to a more accurate position
+> Added clear variables line
+> Adjusted fitting equation for better fit
+> Better curve reporting in command window
+
+cwzero
+======
+> cwzero and cwzero1 combined into cwzero
+> clearing variables tidied up
+
+e2a
+===
+> Clearing variables tidied up
+> Help added
+> Script / function tided up
+
+eloader
+=======
+> Combined eloader and eloader1 into a single eloader script
+> Clearing variables tidied up
+> Help added
+
+MMMplotter 2/3SLs
+=================
+> Added GUI to select folder
+> Created figures are now named
+> Clearing variables tidied up
+> Help added

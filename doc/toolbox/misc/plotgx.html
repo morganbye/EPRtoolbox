@@ -1,0 +1,286 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of plotgx</title>
+  <meta name="keywords" content="plotgx">
+  <meta name="description" content="PLOTGX Creates a new figure with a secondary x-axis for g-values">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">toolbox</a> &gt; <a href="index.html">misc</a> &gt; plotgx.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for toolbox/misc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>plotgx
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>PLOTGX Creates a new figure with a secondary x-axis for g-values</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function plotgx(x,y,mwFreq) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PLOTGX Creates a new figure with a secondary x-axis for g-values
+
+ Syntax:
+       PLOTGX (x,y)
+       PLOTGX (x,y,microwave frequency)
+
+ Inputs:
+    input1     - the magnetic field (in Gauss)
+    input2     - the intensity
+    input3     - the microwave frequency in GHz
+
+ Outputs:
+    output1    - n/a
+    figure(gcf)- updated with second x-axis
+
+ By default PLOTGX will assume a microwave frequency at X-band of
+ 9.75 GHz unless otherwise stated.
+
+ Example: 
+    PLOTGX(magfield,intensity,9.6847)
+
+ Other m-files required:   none
+
+ Subfunctions:
+   addtxaxis
+       http://www.mathworks.com/matlabcentral/fileexchange/4036-addtxaxis
+
+
+ MAT-files required:       none
+
+
+ See also: PLOT <a href="add_g_values.html" class="code" title="function add_g_values(varargin)">ADD_G_VALUES</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function tah = addtxaxis(ah,transform,ticks,txlabel,ticklabels)</a></li><li><a href="#_sub2" class="code">function tah = set_transformed_axes(ah,transform,ticks,txlabel,ticklabels)</a></li><li><a href="#_sub3" class="code">function clear_axes(tah)</a></li><li><a href="#_sub4" class="code">function switch_objects_depth(parenthandle,obj1,obj2)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function plotgx(x,y,mwFreq)</a>
+0002 
+0003 <span class="comment">% PLOTGX Creates a new figure with a secondary x-axis for g-values</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Syntax:</span>
+0006 <span class="comment">%       PLOTGX (x,y)</span>
+0007 <span class="comment">%       PLOTGX (x,y,microwave frequency)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Inputs:</span>
+0010 <span class="comment">%    input1     - the magnetic field (in Gauss)</span>
+0011 <span class="comment">%    input2     - the intensity</span>
+0012 <span class="comment">%    input3     - the microwave frequency in GHz</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Outputs:</span>
+0015 <span class="comment">%    output1    - n/a</span>
+0016 <span class="comment">%    figure(gcf)- updated with second x-axis</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% By default PLOTGX will assume a microwave frequency at X-band of</span>
+0019 <span class="comment">% 9.75 GHz unless otherwise stated.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Example:</span>
+0022 <span class="comment">%    PLOTGX(magfield,intensity,9.6847)</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Other m-files required:   none</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Subfunctions:</span>
+0027 <span class="comment">%   addtxaxis</span>
+0028 <span class="comment">%       http://www.mathworks.com/matlabcentral/fileexchange/4036-addtxaxis</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% MAT-files required:       none</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% See also: PLOT ADD_G_VALUES</span>
+0035 
+0036 <span class="comment">%                                        _                             _</span>
+0037 <span class="comment">%                                       | |                           | |</span>
+0038 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0039 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0040 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0041 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0042 <span class="comment">%                       __/ |                   __/ |</span>
+0043 <span class="comment">%                      |___/                   |___/</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% M. Bye v11.9</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">% Author:       Morgan Bye</span>
+0049 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0050 <span class="comment">%               University of East Anglia</span>
+0051 <span class="comment">%               NORWICH, UK</span>
+0052 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0053 <span class="comment">% Website:      http://www.morganbye.net/</span>
+0054 <span class="comment">% Sept 2011;    Last revision: 06-September-2011</span>
+0055 
+0056 <span class="keyword">switch</span> nargin
+0057     <span class="keyword">case</span> 2
+0058         mwFreq = 9.75;
+0059         disp(<span class="string">'No microwave frequency defined. X-band (9.75 GHz) assumed.'</span>);
+0060         
+0061     <span class="keyword">case</span> 3
+0062         <span class="comment">% mwFreq = varargin{3};</span>
+0063         
+0064 <span class="keyword">end</span>
+0065 
+0066 figure;
+0067 plot(x,y);
+0068 
+0069 <span class="comment">% Move plot down so g-values will fit</span>
+0070 a = get(gca,<span class="string">'Position'</span>);
+0071 set (gca,<span class="string">'Position'</span>,[a(1) a(2) a(3) a(4)-0.04]);
+0072 
+0073 
+0074 <span class="comment">% Get tick positions</span>
+0075 xlim = get(gca,<span class="string">'XLim'</span>);
+0076 x_ticks = get(gca,<span class="string">'XTick'</span>);
+0077 
+0078 <span class="comment">% Convert ticks to g values</span>
+0079 <span class="keyword">for</span> k = 1:numel(x_ticks)
+0080     g(k) = ((6.626068e-34 * mwFreq) / (9.27e-24 * x_ticks(k))) * 1e13;
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="keyword">if</span> g(1) &lt; 10
+0084     g = round(g/0.01)*0.01;     <span class="comment">% round to nearest 0.01</span>
+0085     g = unique(g);              <span class="comment">% remove duplicates</span>
+0086     g = g(end:-1:1);            <span class="comment">% flip order</span>
+0087     
+0088 <span class="keyword">else</span>
+0089     g = round(g/0.1)*0.1;
+0090     g = unique(g);
+0091     g = g(end:-1:1);
+0092 <span class="keyword">end</span>
+0093 
+0094 <span class="comment">% Call function</span>
+0095 equation = sprintf(<span class="string">'(((( 6.626068e-34 .* %f) ./ x)./  9.2740e-24).*1e13)'</span>,mwFreq);
+0096 
+0097 gx = <a href="#_sub1" class="code" title="subfunction tah = addtxaxis(ah,transform,ticks,txlabel,ticklabels)">addtxaxis</a>(gca,equation,g);
+0098 
+0099 <span class="comment">% Tidy up, make sure same number of significant figures on all labels</span>
+0100 <span class="keyword">if</span> g(1) &lt; 10
+0101     set(gx,<span class="string">'XTickLabel'</span>, num2str(str2num(get(gx,<span class="string">'XTickLabel'</span>)),<span class="string">'%4.2f'</span>));
+0102 <span class="keyword">else</span>
+0103     set(gx,<span class="string">'XTickLabel'</span>, num2str(str2num(get(gx,<span class="string">'XTickLabel'</span>)),<span class="string">'%4.1f'</span>));
+0104 <span class="keyword">end</span>
+0105 
+0106 linkaxes([gca gx],<span class="string">'xy'</span>)
+0107 
+0108 xlabel(gx,<span class="string">'g / arb. unit'</span>)
+0109 xlabel(gca,<span class="string">'Magnetic field / Gauss'</span>)
+0110 ylabel(<span class="string">'Relative intensity / arb. unit'</span>)
+0111 
+0112 
+0113 <span class="comment">%% ================== USE OF NON EPR-TOOLBOX CODE ====================</span>
+0114 
+0115 <span class="comment">% The following code is modified from addtxaxis by Francois Bouffard</span>
+0116 <span class="comment">% (fbouffar@gel.ulaval.ca) available from the MATLAB file exchange</span>
+0117 <span class="comment">% http://www.mathworks.com/matlabcentral/fileexchange/4036-addtxaxis</span>
+0118 <span class="comment">%</span>
+0119 <span class="comment">% It is recommended that if you are interested in this code to use the</span>
+0120 <span class="comment">% original source code and direct any questions to the author directly</span>
+0121 
+0122 
+0123 <a name="_sub1" href="#_subfunctions" class="code">function tah = addtxaxis(ah,transform,ticks,txlabel,ticklabels)</a>
+0124 
+0125 <span class="keyword">if</span> nargin&lt;5
+0126     ticklabels = <span class="string">''</span>;
+0127 <span class="keyword">end</span>;
+0128 <span class="keyword">if</span> nargin&lt;4
+0129     txlabel = <span class="string">''</span>;
+0130 <span class="keyword">end</span>;
+0131 <span class="keyword">if</span> nargin&lt;3 &amp; ~strcmp(transform,<span class="string">'clear'</span>)
+0132     error(<span class="string">'Not enough input arguments'</span>);
+0133 <span class="keyword">end</span>;
+0134 <span class="keyword">if</span> strcmp(transform,<span class="string">'clear'</span>);
+0135     <a href="#_sub3" class="code" title="subfunction clear_axes(tah)">clear_axes</a>(ah);
+0136     tah = [];
+0137 <span class="keyword">else</span>
+0138     tah = <a href="#_sub2" class="code" title="subfunction tah = set_transformed_axes(ah,transform,ticks,txlabel,ticklabels)">set_transformed_axes</a>(ah,transform,ticks,txlabel,ticklabels);
+0139 <span class="keyword">end</span>;
+0140 
+0141 <span class="comment">% Setting up transformed axes</span>
+0142 <a name="_sub2" href="#_subfunctions" class="code">function tah = set_transformed_axes(ah,transform,ticks,txlabel,ticklabels)</a>
+0143 
+0144 <span class="comment">% Creating and setting up second axis</span>
+0145 original.pos = get(ah,<span class="string">'Position'</span>);
+0146 original.color = get(ah,<span class="string">'Color'</span>);
+0147 original.units = get(ah,<span class="string">'units'</span>);
+0148 ahpos = original.pos;
+0149 <span class="keyword">if</span> ~isempty(txlabel)
+0150     ahpos(4) = ahpos(4)*0.95;
+0151     set(ah,<span class="string">'Position'</span>,ahpos);
+0152 <span class="keyword">end</span>;
+0153 tah = axes(<span class="string">'units'</span>,original.units,<span class="string">'Position'</span>,ahpos,<span class="string">'Box'</span>,<span class="string">'off'</span>);
+0154 <a href="#_sub4" class="code" title="subfunction switch_objects_depth(parenthandle,obj1,obj2)">switch_objects_depth</a>(gcf,ah,tah);
+0155 set(ah,<span class="string">'Tag'</span>,[<span class="string">'main_'</span> num2str(tah)],<span class="keyword">...</span>
+0156     <span class="string">'UserData'</span>,original);
+0157 set(ah,<span class="string">'Color'</span>,<span class="string">'none'</span>,<span class="string">'Box'</span>,<span class="string">'off'</span>);
+0158 set(tah,<span class="string">'XAxisLocation'</span>,<span class="string">'Top'</span>,<span class="keyword">...</span>
+0159     <span class="string">'YAxisLocation'</span>,<span class="string">'Right'</span>,<span class="keyword">...</span>
+0160     <span class="string">'YTick'</span>,[],<span class="keyword">...</span>
+0161     <span class="string">'XLim'</span>,get(ah,<span class="string">'XLim'</span>),<span class="keyword">...</span>
+0162     <span class="string">'XScale'</span>,get(ah,<span class="string">'XScale'</span>),<span class="keyword">...</span>
+0163     <span class="string">'XDir'</span>,get(ah,<span class="string">'Xdir'</span>));
+0164 set(get(tah,<span class="string">'XLabel'</span>),<span class="string">'String'</span>,txlabel);
+0165 
+0166 <span class="comment">% Applying transform</span>
+0167 x = ticks;
+0168 <span class="keyword">if</span> strcmp(transform(end),<span class="string">';'</span>);
+0169     transform = transform(1:end-1);
+0170 <span class="keyword">end</span>;
+0171 
+0172 evalin(<span class="string">'base'</span>,<span class="string">'if exist(''x''); org_x = x; end'</span>);
+0173 assignin(<span class="string">'base'</span>,<span class="string">'x'</span>,ticks);
+0174 tx = evalin(<span class="string">'base'</span>,transform,transform);
+0175 evalin(<span class="string">'base'</span>,<span class="string">'if exist(''org_x''); x = org_x; clear org_x; end'</span>);
+0176 
+0177 <span class="comment">% Displaying ticks and tick labels</span>
+0178 <span class="comment">% (sorting is necessary when transform</span>
+0179 <span class="comment">% reverses the axis)</span>
+0180 [sorted_tx,sorted_idx] = sort(tx);
+0181 <span class="keyword">if</span> isempty(ticklabels)
+0182     ticklabels = x(sorted_idx);
+0183 <span class="keyword">else</span>
+0184     ticklabels = ticklabels(sorted_idx);
+0185 <span class="keyword">end</span>;
+0186 set(tah,<span class="string">'XTick'</span>,sorted_tx,<span class="string">'XTickLabel'</span>,ticklabels);
+0187 axes(ah);
+0188 
+0189 <span class="comment">% Removing transformed axes and reverting</span>
+0190 <span class="comment">% to original state</span>
+0191 <a name="_sub3" href="#_subfunctions" class="code">function clear_axes(tah)</a>
+0192 ah = findobj(<span class="string">'Tag'</span>,[<span class="string">'main_'</span> num2str(tah)]);
+0193 delete(tah);
+0194 original = get(ah,<span class="string">'UserData'</span>);
+0195 set(ah,<span class="string">'Position'</span>,original.pos);
+0196 set(ah,<span class="string">'Color'</span>,original.color);
+0197 
+0198 <span class="comment">% This function is used to bring the original axes</span>
+0199 <span class="comment">% on the foreground and the transformed axis to the background</span>
+0200 <a name="_sub4" href="#_subfunctions" class="code">function switch_objects_depth(parenthandle,obj1,obj2)</a>
+0201 children = get(parenthandle,<span class="string">'Children'</span>);
+0202 obj1pos = find(children==obj1);
+0203 obj2pos = find(children==obj2);
+0204 children(obj1pos) = obj2;
+0205 children(obj2pos) = obj1;
+0206 set(parenthandle,<span class="string">'Children'</span>,children);</pre></div>
+<hr><address>Generated on Thu 25-Oct-2012 18:03:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,571 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MMMRotamerToPDB</title>
+  <meta name="keywords" content="MMMRotamerToPDB">
+  <meta name="description" content="MMMROTAMERTOPDB This script takes a PDB from a local source or from">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">toolbox</a> &gt; <a href="index.html">PDB</a> &gt; MMMRotamerToPDB.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for toolbox/PDB&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>MMMRotamerToPDB
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>MMMROTAMERTOPDB This script takes a PDB from a local source or from</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function MMMRotamerToPDB(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> MMMROTAMERTOPDB This script takes a PDB from a local source or from
+       rcsb.org (using PDB identifier code) and add a rotamer from the
+       output file of a MMM site scan.
+ 
+
+ Syntax:   MMMRotamerToPDB('file',rotamer number)
+
+ Inputs:
+    input1 - file
+               path to file
+                       eg. '/path/to/file/file.pdb'
+               PDB identifier (4 letter code), for download from rcsb.org
+                       eg/ '2J4Q'
+
+    input2 - rotamer number
+               the rotamer number from the MMM file to be added to the PDB
+               remember that the MMM file is listed by probability. By
+               default, this is defined as rotamer 1
+
+ Outputs:
+    output1 - not required
+               by default the script gets you to save a *.pdb
+
+ Example: 
+    see http://morganbye.net/eprtoolbox/MMMRotamertoPDB
+
+ Other m-files required:
+    pdbimport.m
+    pdbexport.m
+
+ Subfunctions:         none
+
+ MAT-files required:   none
+
+ See also: <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">PDBIMPORT</a> <a href="pdbexport.html" class="code" title="function pdbexport(varargin)">PDBEXPORT</a> MMM</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="pdbexport.html" class="code" title="function pdbexport(varargin)">pdbexport</a>	PDBEXPORT exports a PDB-like structure in MATLAB to a .pdb file</li><li><a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>	PDBIMPORT loads a PDB file into MATLAB</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function MMMRotamerToPDB(varargin)</a>
+0002 
+0003 <span class="comment">% MMMROTAMERTOPDB This script takes a PDB from a local source or from</span>
+0004 <span class="comment">%       rcsb.org (using PDB identifier code) and add a rotamer from the</span>
+0005 <span class="comment">%       output file of a MMM site scan.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Syntax:   MMMRotamerToPDB('file',rotamer number)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Inputs:</span>
+0011 <span class="comment">%    input1 - file</span>
+0012 <span class="comment">%               path to file</span>
+0013 <span class="comment">%                       eg. '/path/to/file/file.pdb'</span>
+0014 <span class="comment">%               PDB identifier (4 letter code), for download from rcsb.org</span>
+0015 <span class="comment">%                       eg/ '2J4Q'</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%    input2 - rotamer number</span>
+0018 <span class="comment">%               the rotamer number from the MMM file to be added to the PDB</span>
+0019 <span class="comment">%               remember that the MMM file is listed by probability. By</span>
+0020 <span class="comment">%               default, this is defined as rotamer 1</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Outputs:</span>
+0023 <span class="comment">%    output1 - not required</span>
+0024 <span class="comment">%               by default the script gets you to save a *.pdb</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Example:</span>
+0027 <span class="comment">%    see http://morganbye.net/eprtoolbox/MMMRotamertoPDB</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% Other m-files required:</span>
+0030 <span class="comment">%    pdbimport.m</span>
+0031 <span class="comment">%    pdbexport.m</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% Subfunctions:         none</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% MAT-files required:   none</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% See also: PDBIMPORT PDBEXPORT MMM</span>
+0038 
+0039 <span class="comment">%                                        _                             _</span>
+0040 <span class="comment">%                                       | |                           | |</span>
+0041 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0042 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0043 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0044 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0045 <span class="comment">%                       __/ |                   __/ |</span>
+0046 <span class="comment">%                      |___/                   |___/</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% M. Bye v12.9</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% Author:       Morgan Bye</span>
+0052 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0053 <span class="comment">%               University of East Anglia</span>
+0054 <span class="comment">%               NORWICH, UK</span>
+0055 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0056 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/</span>
+0057 <span class="comment">% Aug 2012;     Last revision: 23-August-2012</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">% Approximate coding time of file:</span>
+0060 <span class="comment">%               12 hours</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">% Version history:</span>
+0064 <span class="comment">% Aug 12        &gt; Removal of dependency on the MATLAB Bioinformatics</span>
+0065 <span class="comment">%                   toolbox</span>
+0066 
+0067 
+0068 <span class="comment">% Check pdb tools are available</span>
+0069 <span class="keyword">if</span> ~exist(<span class="string">'pdbimport'</span>) || ~exist(<span class="string">'pdbexport'</span>)
+0070     error(<span class="string">'Unfortunately the necessary PDB read/write function(s) were not found on your system. Please make sure that all of the EPR toolbox is on your active path'</span>)
+0071 <span class="keyword">end</span>
+0072 
+0073 
+0074 <span class="comment">% ===================================================</span>
+0075 <span class="comment">% Arguments in</span>
+0076 <span class="comment">% ===================================================</span>
+0077 
+0078 <span class="keyword">switch</span> nargin
+0079     <span class="keyword">case</span> 0
+0080        rotamer = 1;
+0081        
+0082        <span class="comment">% select pdb source</span>
+0083        Source = questdlg(<span class="string">'Where is the PDB file?'</span>,<span class="string">'PDB Source'</span>,<span class="string">'Local'</span>,<span class="string">'Online'</span>,<span class="string">'Local'</span>);
+0084        
+0085        <span class="keyword">switch</span> Source
+0086             <span class="keyword">case</span> <span class="string">'Local'</span>
+0087                 [file, directory] = uigetfile({<span class="string">'*.pdb'</span>,<span class="string">'PDB file (*.pdb)'</span>},<span class="string">'Load PDB file'</span>);
+0088                 PDBName = fullfile(directory, file);
+0089                 [~, name, extension] = fileparts(file);
+0090                 disp(<span class="string">'Loading PDB...(this may take some time)'</span>)
+0091                 input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>(PDBName);
+0092                 
+0093             <span class="keyword">case</span> <span class="string">'Online'</span>
+0094                 PDBcode = inputdlg(<span class="string">'What is the PDB code for the protein?'</span>, <span class="string">'PDB code'</span>,1,{<span class="string">'xxxx'</span>});
+0095                 PDBcode = char(PDBcode);
+0096                 disp(<span class="string">'Fetching PDB...(this may take some time)'</span>)
+0097                 input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> PDBcode <span class="string">''''</span>]);
+0098                 name = PDBcode;
+0099                 
+0100                 directory = pwd;
+0101         <span class="keyword">end</span>
+0102        
+0103     <span class="keyword">case</span> 1
+0104              
+0105         <span class="comment">% Rotamer</span>
+0106         <span class="comment">% =======</span>
+0107         
+0108         <span class="keyword">if</span> isnumeric(varargin{1})
+0109             rotamer = varargin{1};
+0110             
+0111             <span class="comment">% Do the GUI load option as per no options</span>
+0112             
+0113             Source = questdlg(<span class="string">'Where is the PDB file?'</span>,<span class="string">'PDB Source'</span>,<span class="string">'Local'</span>,<span class="string">'Online'</span>,<span class="string">'Local'</span>);
+0114             
+0115             <span class="keyword">switch</span> Source
+0116                 <span class="keyword">case</span> <span class="string">'Local'</span>
+0117                     [file, directory] = uigetfile({<span class="string">'*.pdb'</span>,<span class="string">'PDB file (*.pdb)'</span>},<span class="string">'Load PDB file'</span>);
+0118                     PDBName = fullfile(directory, file);
+0119                     [~, name, extension] = fileparts(file);
+0120                     disp(<span class="string">'Loading PDB...(this may take some time)'</span>)
+0121                     input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>(PDBName);
+0122                     
+0123                 <span class="keyword">case</span> <span class="string">'Online'</span>
+0124                     PDBcode = inputdlg(<span class="string">'What is the PDB code for the protein?'</span>, <span class="string">'PDB code'</span>,1,{<span class="string">'xxxx'</span>});
+0125                     PDBcode = char(PDBcode);
+0126                     disp(<span class="string">'Fetching PDB...(this may take some time)'</span>)
+0127                     input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> PDBcode <span class="string">''''</span>]);
+0128                     name = PDBcode;
+0129                     
+0130                     directory = pwd;
+0131             <span class="keyword">end</span>
+0132             
+0133         <span class="keyword">elseif</span> ischar(varargin{1})
+0134             
+0135             file = varargin{1};
+0136             rotamer = 1;
+0137                         
+0138             <span class="comment">% File</span>
+0139             <span class="comment">% ====</span>
+0140             <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
+0141                 
+0142                 disp(<span class="string">'Loading PDB...(this may take some time)'</span>)
+0143                 input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>(file);
+0144                 [directory, name, extension] = fileparts(file);
+0145                 
+0146                 <span class="comment">% Web address</span>
+0147                 <span class="comment">% ===========</span>
+0148             <span class="keyword">elseif</span> strfind(varargin{1},<span class="string">'://'</span>)
+0149                 
+0150                 <span class="comment">% Catch error if they dont have Java correctly set up</span>
+0151                 <span class="keyword">if</span> (~usejava(<span class="string">'jvm'</span>))
+0152                     error(sprintf(<span class="string">'\nLoading from an online source requires Java'</span>))
+0153                 <span class="keyword">end</span>
+0154                 
+0155                 input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
+0156                 
+0157                 directory = pwd;
+0158                 
+0159                 <span class="comment">% PDB code</span>
+0160                 <span class="comment">% ========</span>
+0161             <span class="keyword">elseif</span> ischar(varargin{1}) &amp;&amp; length(varargin{1}) == 4
+0162                 
+0163                 input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
+0164                 
+0165                 directory = pwd;
+0166                 
+0167             <span class="keyword">else</span>
+0168                 error(sprintf(<span class="string">'Your file/web address/PDB code was not recognised\nPlease check your first input argument'</span>));
+0169             <span class="keyword">end</span>
+0170             
+0171         <span class="keyword">end</span>
+0172         
+0173     <span class="keyword">case</span> 2
+0174        
+0175        file = varargin{1};
+0176        rotamer = varargin{2};
+0177         
+0178         <span class="comment">% File</span>
+0179         <span class="comment">% ====</span>
+0180         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);    
+0181                     
+0182             disp(<span class="string">'Loading PDB...(this may take some time)'</span>)
+0183             input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>(file);
+0184             [directory, name, extension] = fileparts(file);
+0185             
+0186         <span class="comment">% Web address</span>
+0187         <span class="comment">% ===========</span>
+0188         <span class="keyword">elseif</span> strfind(varargin{1},<span class="string">'://'</span>)
+0189             
+0190             <span class="comment">% Catch error if they dont have Java correctly set up</span>
+0191             <span class="keyword">if</span> (~usejava(<span class="string">'jvm'</span>))
+0192                 error(sprintf(<span class="string">'\nLoading from an online source requires Java'</span>))
+0193             <span class="keyword">end</span>
+0194             
+0195             input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
+0196             
+0197             directory = pwd;
+0198             
+0199         <span class="comment">% PDB code</span>
+0200         <span class="comment">% ========</span>
+0201         <span class="keyword">elseif</span> ischar(varargin{1}) &amp;&amp; length(varargin{1}) == 4
+0202             
+0203             input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
+0204             
+0205             directory = pwd;
+0206             
+0207         <span class="keyword">else</span>
+0208             error(sprintf(<span class="string">'Your file/web address/PDB code was not recognised\n\nPlease check your first input argument'</span>));
+0209         <span class="keyword">end</span>
+0210         
+0211     <span class="keyword">otherwise</span>
+0212         errordlg(sprintf(<span class="string">'The number of inputs was not recognised\n\nPlease ensure you use the format:\n\tMMMRotamerToPDB(''path/to/file.pdb'',rotamer)\n\tMMMRotamerToPDB(''XXXX'',rotamer)'</span>),<span class="string">'Input error'</span>);
+0213 <span class="keyword">end</span>
+0214 
+0215 
+0216 <span class="comment">% ===================================================</span>
+0217 <span class="comment">% MMM rotamer file</span>
+0218 <span class="comment">% ===================================================</span>
+0219 
+0220 [MMM_file , MMM_directory] = uigetfile({<span class="string">'*.pdb'</span>,<span class="string">'PDB file (*.pdb)'</span>},<span class="string">'Load MMM rotamer file'</span>);
+0221 MMM_address = [MMM_directory MMM_file];
+0222 
+0223 <span class="comment">% open file</span>
+0224 fid = fopen(MMM_address,<span class="string">'r'</span>);
+0225 
+0226 <span class="comment">% header section</span>
+0227 <span class="comment">% ===================================================</span>
+0228 
+0229 rotamers.Header = textscan(fid,<span class="string">'%s'</span>,4,<span class="string">'delimiter'</span>,<span class="string">'\n'</span>);
+0230 rotamers.Title = rotamers.Header{1,1}{2,1};
+0231 rotamers.Header = rotamers.Header{1,1}{1,1};
+0232 fclose(fid);
+0233 r.PDB = rotamers.Title(12:15);
+0234 r.chain = rotamers.Title(18);
+0235 
+0236 [~ , remain] = strtok(rotamers.Title,<span class="string">'}'</span>);
+0237 remain = remain(2:end);
+0238 r.residue = strtok(remain,<span class="string">' '</span>);
+0239 
+0240 rotamerInfo = textscan(MMM_file,<span class="string">'rotamers_[%4c](%1c){%1c}%2c_%3c_%3c'</span>);
+0241 
+0242 <span class="comment">% ID            = rotamerInfo(1);</span>
+0243 <span class="comment">% Chain letter  = rotamerInfo(2);</span>
+0244 <span class="comment">% Chain number  = rotamerInfo(3);</span>
+0245 <span class="comment">% Residue       = rotamerInfo(4);</span>
+0246 <span class="comment">% Label         = rotamerInfo(5);</span>
+0247 <span class="comment">% Temp          = rotamerInfo(6);</span>
+0248 
+0249 
+0250 <span class="comment">% body section</span>
+0251 <span class="comment">% ===================================================</span>
+0252 
+0253 fid = fopen(MMM_address,<span class="string">'r'</span>);
+0254 rotamers.loaded = textscan(fid,<span class="string">'%s %s %s %s %s %s %s %s %s %s %s %s'</span>);
+0255 
+0256 <span class="comment">% Again the %s %s... approach is lazy. It should be done by characters for</span>
+0257 <span class="comment">% futureproofing, so that high atom number rotamer libraries (&gt;9999) can</span>
+0258 <span class="comment">% still be read</span>
+0259 
+0260 fclose(fid);
+0261 
+0262 <span class="keyword">for</span> k = 1:numel(rotamers.loaded)
+0263     <span class="comment">% remove header lines</span>
+0264     rotamers.loaded{1,k} = rotamers.loaded{1,k}(5:end);
+0265     <span class="comment">% move all into one array</span>
+0266     rotamers.body(:,k) = rotamers.loaded{1,k};
+0267 <span class="keyword">end</span>
+0268 
+0269 <span class="comment">% split atoms from connect sequence</span>
+0270 row = find(strcmp(rotamers.body(:,1) , <span class="string">'CONECT'</span>) &gt; 0,1,<span class="string">'first'</span>);
+0271 
+0272 rotamers.connections = rotamers.body(row:<span class="keyword">end</span> , :);
+0273 rotamers.atoms = rotamers.body(1 : row-1 , :);
+0274 
+0275 <span class="comment">% find where the selected rotamer starts and ends (for MTSL then this</span>
+0276 <span class="comment">% should be 36 atoms later for IA-Proxyl it should be 41 atoms)</span>
+0277 r.start = find(strcmp(rotamers.atoms(:,6) , num2str(rotamer)) &gt; 0,1,<span class="string">'first'</span>);
+0278 r.end   = find(strcmp(rotamers.atoms(:,6) , num2str(rotamer)) &gt; 0,1,<span class="string">'last'</span>);
+0279 
+0280 
+0281 r.atoms = rotamers.atoms(r.start : r.end , :);
+0282 
+0283 
+0284 <span class="comment">% find CONECT values for selected rotamer</span>
+0285 <span class="comment">% ===================================================</span>
+0286 r.connections = rotamers.connections(r.start:r.end , :);
+0287 
+0288 
+0289 <span class="comment">% ===================================================</span>
+0290 <span class="comment">% PDB file</span>
+0291 <span class="comment">% ===================================================</span>
+0292 
+0293 output = input;
+0294 
+0295 <span class="comment">% find the location in array of the desired chain from MMM header. Chain A</span>
+0296 <span class="comment">% =1 , B=2, C=3 not always the case, especially with co-factors etc.</span>
+0297 
+0298 <span class="keyword">for</span> k = 1:numel(output.Sequence)
+0299     
+0300     <span class="comment">% If there us a field in output sequence (ie. ChainA) that matches the</span>
+0301     <span class="comment">% rotamer.chain (which is just a letter so needs to be prefixed with</span>
+0302     <span class="comment">% 'Chain'). Then set r.outputchain as that number.</span>
+0303     
+0304     <span class="keyword">if</span> isfield(output.Sequence(1),([<span class="string">'Chain'</span> (char(k-1+r.chain))]))
+0305         r.outputchain = [k];
+0306     <span class="keyword">end</span>
+0307     
+0308 <span class="keyword">end</span>
+0309 
+0310 
+0311 <span class="comment">% find atom numbers of residue to replace</span>
+0312 <span class="comment">% ===================================================</span>
+0313 
+0314 <span class="keyword">for</span> k = 1:numel(output.Model.Atom)
+0315     
+0316     <span class="keyword">if</span> strcmp(output.Model.Atom(k).chainID , r.chain) &gt; 0
+0317         
+0318         <span class="keyword">if</span> strcmp(num2str(output.Model.Atom(k).resSeq) , r.residue) == 1
+0319             
+0320             r.ToBeReplaced(k) = output.Model.Atom(k).AtomSerNo;
+0321         
+0322         <span class="keyword">end</span>
+0323     <span class="keyword">end</span>
+0324     
+0325 <span class="keyword">end</span>
+0326 
+0327 r.ToBeReplaced = find(r.ToBeReplaced);
+0328 
+0329 <span class="comment">% TER &quot;terminal&quot; signals in PDB have an atom number, which we need to</span>
+0330 <span class="comment">% adjust for (using chain number). So for chainA (#1) add nothing, chainB</span>
+0331 <span class="comment">% (#2) would have a TER between it and A, so it needs to add an atom number</span>
+0332 r.ToBeReplaced = r.ToBeReplaced + (r.outputchain - 1);
+0333 
+0334 
+0335 <span class="comment">% ===================================================</span>
+0336 <span class="comment">% Merge rotamer and PDB files</span>
+0337 <span class="comment">% ===================================================</span>
+0338 
+0339 <span class="comment">% remove old residue from PDB</span>
+0340 r.Atoms_minusresidue = [output.Model.Atom(1:(r.ToBeReplaced(1))) output.Model.Atom((r.ToBeReplaced(end)):end)];
+0341 r.Atoms_beforeresidue = output.Model.Atom(1:(r.ToBeReplaced(1)));
+0342 r.Atoms_afterresidue  = output.Model.Atom((r.ToBeReplaced(end)):end);
+0343 
+0344 <span class="comment">% renumber atoms to be inserted</span>
+0345 <span class="comment">% ===================================================</span>
+0346 
+0347 <span class="comment">% find max atom number on original PDB</span>
+0348 AtomIncrease = char(input.Model.Atom(end).AtomSerNo) + 500;
+0349 
+0350 <span class="comment">% increase atom number of rotamer</span>
+0351 <span class="keyword">for</span> k = 1:size(r.atoms,1)
+0352 
+0353 <span class="comment">%     A = char(r.atoms(k,2));   % convert cell to string</span>
+0354 <span class="comment">%     B = str2num(A);           % string to number</span>
+0355 <span class="comment">%     C = B + AtomIncrease;     % add the increase</span>
+0356 <span class="comment">%     D = num2cell(C);          % convert number to cell</span>
+0357 <span class="comment">%     r.atoms(k,2) = D;         % write cell back to array</span>
+0358 
+0359     r.atoms(k,2) = num2cell(str2num(char(r.atoms(k,2))) + AtomIncrease);
+0360     
+0361 <span class="keyword">end</span>
+0362 
+0363 <span class="comment">% increase the CONECT numbers of rotamer to match</span>
+0364 <span class="keyword">for</span> k = 1:numel(r.connections)                                              <span class="comment">% for number of cells</span>
+0365     
+0366     <span class="keyword">if</span> strcmp(<span class="string">'CONECT'</span>,r.connections(k)) == 0                               <span class="comment">% if not a CONECT cell</span>
+0367         
+0368         <span class="keyword">if</span> cellfun(@isempty,r.connections) == 0                             <span class="comment">% and is not empty, then...</span>
+0369             
+0370             r.connections(k) = num2cell(str2num(char(r.connections(k))) + AtomIncrease);
+0371             
+0372         <span class="keyword">end</span>
+0373         
+0374     <span class="keyword">end</span>
+0375     
+0376 <span class="keyword">end</span>
+0377 
+0378 
+0379 <span class="comment">% Insert atoms into PDB</span>
+0380 <span class="comment">% ===================================================</span>
+0381 r.Atoms_insert = r.Atoms_afterresidue(1:36);
+0382 
+0383 <span class="comment">% change the insert amino acid info</span>
+0384 <span class="keyword">for</span> k = 1:numel(r.Atoms_insert)
+0385     
+0386     r.Atoms_insert(k).resName    = char(rotamerInfo(5));  <span class="comment">% R1A/IAP</span>
+0387     r.Atoms_insert(k).chainID    = r.chain;
+0388     r.Atoms_insert(k).resSeq     = r.residue;
+0389     
+0390     r.Atoms_insert(k).AtomSerNo  = str2num(mat2str(cell2mat(r.atoms(k,2))));
+0391     r.Atoms_insert(k).AtomName   = char(r.atoms(k,3));
+0392     r.Atoms_insert(k).X          = str2num(char(r.atoms(k,7)));
+0393     r.Atoms_insert(k).Y          = str2num(char(r.atoms(k,8)));
+0394     r.Atoms_insert(k).Z          = str2num(char(r.atoms(k,9)));
+0395     r.Atoms_insert(k).occupancy  = 1;
+0396     r.Atoms_insert(k).tempFactor = 0;
+0397     r.Atoms_insert(k).element    = char(r.atoms(k,12));
+0398 
+0399 <span class="keyword">end</span>
+0400 
+0401 <span class="comment">% stick insert into atom list</span>
+0402 output.Model.Atom = [r.Atoms_beforeresidue r.Atoms_insert r.Atoms_afterresidue];
+0403 
+0404 <span class="comment">% Connectivity</span>
+0405 <span class="comment">% ===================================================</span>
+0406 
+0407 <span class="comment">% Spin label atoms</span>
+0408 
+0409 <span class="keyword">for</span> k = 1:numel(r.atoms(:,1))
+0410     
+0411     output.Connectivity(k).AtomSerNo = str2num(mat2str(cell2mat(r.atoms(k,2))));
+0412     output.Connectivity(k).BondAtomList = r.connections(k,3:end);           <span class="comment">% maybe need str2double</span>
+0413 
+0414     <span class="comment">% remove blank cells from BondAtomList</span>
+0415     A = cellfun(<span class="string">'isempty'</span>, output.Connectivity(k).BondAtomList);
+0416     output.Connectivity(k).BondAtomList(A) = [];
+0417     
+0418 <span class="keyword">end</span>
+0419 
+0420 <span class="comment">% Connection to residue before</span>
+0421 
+0422 <span class="keyword">for</span> j = 1:numel(output.Model.Atom)                                          <span class="comment">% for every atom in PDB</span>
+0423     
+0424     <span class="keyword">if</span> strcmp(output.Model.Atom(j).chainID , r.chain) &gt; 0                   <span class="comment">% that's the correct chain</span>
+0425         
+0426         <span class="keyword">if</span> output.Model.Atom(j).resSeq == str2num(r.residue)-1              <span class="comment">% and residue -1</span>
+0427             
+0428             <span class="keyword">if</span> strcmp(output.Model.Atom(j).AtomName,<span class="string">'O'</span>)                    <span class="comment">% and oxygen atom</span>
+0429                 
+0430                 output.Connectivity(k).AtomSerNo = <span class="keyword">...</span><span class="comment">                      % put into CONECT</span>
+0431                     output.Model.Atom(j).AtomSerNo;
+0432                 
+0433                 <span class="comment">% connect to N (3rd atom) of R1A residue</span>
+0434                 output.Connectivity(k).BondAtomList = <span class="keyword">...</span>
+0435                     r.Atoms_insert(3).AtomSerNo;
+0436             <span class="keyword">end</span>
+0437         <span class="keyword">end</span>
+0438     <span class="keyword">end</span>
+0439 <span class="keyword">end</span>
+0440 
+0441 <span class="comment">% Connection to residue after</span>
+0442 
+0443 <span class="keyword">for</span> j = 1:numel(output.Model.Atom)                                           <span class="comment">% for every atom in PDB</span>
+0444     
+0445     <span class="keyword">if</span> strcmp(output.Model.Atom(j).chainID , r.chain) &gt; 0                    <span class="comment">% that's the correct chain</span>
+0446         
+0447         <span class="keyword">if</span> strcmp(num2str(output.Model.Atom(j).resSeq) , r.residue+1) == 1   <span class="comment">% and residue +1</span>
+0448             
+0449             <span class="keyword">if</span> strcmp(num2str(output.Model.Atom(j).AtomName) , <span class="string">'N'</span>) == 1     <span class="comment">% and nitrogen atom</span>
+0450                 
+0451                 output.Connectivity(k).AtomSerNo = <span class="keyword">...</span><span class="comment">                       % put into CONECT</span>
+0452                     output.Model.Atom(j).AtomSerNo;
+0453                 
+0454                 <span class="comment">% connect to O (3rd atom) of R1A residue</span>
+0455                 output.Connectivity(k).BondAtomList = <span class="keyword">...</span>
+0456                     r.Atoms_insert(18).AtomSerNo;
+0457             <span class="keyword">end</span>
+0458         <span class="keyword">end</span>
+0459     <span class="keyword">end</span>
+0460 <span class="keyword">end</span>
+0461 
+0462 
+0463 <span class="comment">% Change sequence</span>
+0464 <span class="comment">% ===================================================</span>
+0465 
+0466 <span class="comment">% seq3 = textscan(output.Sequence((r.outputchain)).ResidueNames,'%s');</span>
+0467 <span class="comment">% seq3 = cell(seq3{1});</span>
+0468 <span class="comment">%</span>
+0469 <span class="comment">% seq3(r.residue) = regexprep(seq3(r.residue), '(\w*)','R1A');                % replace residue with R1A</span>
+0470 <span class="comment">%</span>
+0471 <span class="comment">% seq1 = textscan(output.Sequence((r.outputchain)).ResidueNames,'%c');</span>
+0472 <span class="comment">% seq1{1}(str2num(r.residue)) = 'X';</span>
+0473 <span class="comment">%</span>
+0474 <span class="comment">% output.Sequence((r.outputchain)).Sequence     = seq1;</span>
+0475 <span class="comment">% output.Sequence((r.outputchain)).ResidueNames = seq3;</span>
+0476 
+0477 
+0478 <span class="comment">% ===================================================</span>
+0479 <span class="comment">% Save file</span>
+0480 <span class="comment">% ===================================================</span>
+0481 
+0482 default_filename = char(strcat(name,<span class="string">'_['</span>,rotamerInfo(2),<span class="string">']('</span>,rotamerInfo(3),<span class="keyword">...</span>
+0483     <span class="string">'){'</span>,rotamerInfo(4),<span class="string">'}_'</span>,rotamerInfo(5),<span class="string">'_'</span>,rotamerInfo(6),<span class="string">'_'</span>,<span class="keyword">...</span>
+0484     num2str(rotamer)));
+0485 
+0486 [out_name, out_path] = uiputfile(<span class="string">'*.pdb'</span>, <span class="string">'Save PDB as...'</span>);
+0487 
+0488 <a href="pdbexport.html" class="code" title="function pdbexport(varargin)">pdbexport</a>(output , <span class="string">'basic'</span> , fullfile(out_path,out_name));
+0489     
+0490</pre></div>
+<hr><address>Generated on Thu 25-Oct-2012 18:03:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

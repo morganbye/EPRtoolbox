@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DeerExtract</title>
+  <meta name="keywords" content="DeerExtract">
+  <meta name="description" content="DEEREXTRACT Finds an open DeerAnalysis window and exports the data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">toolbox</a> &gt; <a href="index.html">pulsed</a> &gt; DeerExtract.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for toolbox/pulsed&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>DeerExtract
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>DEEREXTRACT Finds an open DeerAnalysis window and exports the data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [x,y] = DeerExtract(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DEEREXTRACT Finds an open DeerAnalysis window and exports the data
+ presented in the various plots into variables in MATLAB's base workspace
+ for easy use in calculations/exporting/plotting
+
+ This requires does not require anything except that you have a
+ DeerAnalysis window open (and that there is data plotted). Note that
+ L-curves probably won't work - but why would you want them?)
+
+ Syntax:  [x,y] = DEEREXTRACT
+
+ Inputs:
+    n/a
+
+ Outputs:
+    output1 - x
+               with the following sub-arrays
+                     DistanceDistribution
+                     TimeDomain or Pake
+                     OriginalData
+    output2 - y
+               with the following sub-arrays
+                     DistanceDistribution
+                     TimeDomain or Pake
+                     OriginalData
+
+ Example: 
+    [x,y] = DEEREXTRACT
+
+ Other m-files required:
+                       none
+
+ Subfunctions:         none
+
+ MAT-files required:   none</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [x,y] = DeerExtract(varargin)</a>
+0002 
+0003 <span class="comment">% DEEREXTRACT Finds an open DeerAnalysis window and exports the data</span>
+0004 <span class="comment">% presented in the various plots into variables in MATLAB's base workspace</span>
+0005 <span class="comment">% for easy use in calculations/exporting/plotting</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% This requires does not require anything except that you have a</span>
+0008 <span class="comment">% DeerAnalysis window open (and that there is data plotted). Note that</span>
+0009 <span class="comment">% L-curves probably won't work - but why would you want them?)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Syntax:  [x,y] = DEEREXTRACT</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Inputs:</span>
+0014 <span class="comment">%    n/a</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Outputs:</span>
+0017 <span class="comment">%    output1 - x</span>
+0018 <span class="comment">%               with the following sub-arrays</span>
+0019 <span class="comment">%                     DistanceDistribution</span>
+0020 <span class="comment">%                     TimeDomain or Pake</span>
+0021 <span class="comment">%                     OriginalData</span>
+0022 <span class="comment">%    output2 - y</span>
+0023 <span class="comment">%               with the following sub-arrays</span>
+0024 <span class="comment">%                     DistanceDistribution</span>
+0025 <span class="comment">%                     TimeDomain or Pake</span>
+0026 <span class="comment">%                     OriginalData</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% Example:</span>
+0029 <span class="comment">%    [x,y] = DEEREXTRACT</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Other m-files required:</span>
+0032 <span class="comment">%                       none</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% Subfunctions:         none</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% MAT-files required:   none</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%</span>
+0039 
+0040 <span class="comment">%                                        _                             _</span>
+0041 <span class="comment">%                                       | |                           | |</span>
+0042 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0043 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0044 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0045 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0046 <span class="comment">%                       __/ |                   __/ |</span>
+0047 <span class="comment">%                      |___/                   |___/</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% M. Bye v12.7</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% Author:       Morgan Bye</span>
+0052 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0053 <span class="comment">%               University of East Anglia</span>
+0054 <span class="comment">%               NORWICH, UK</span>
+0055 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0056 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox</span>
+0057 <span class="comment">% Jun 2012;     Last revision: 18-June-2012</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">% Approximate coding time of file:</span>
+0060 <span class="comment">%               3 hours</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% Version history:</span>
+0063 <span class="comment">% Jun 12        &gt; Complete rework so that handles are pulled straight from</span>
+0064 <span class="comment">%                   DeerAnalysis and the figures do not have to be copied</span>
+0065 <span class="comment">%                   out of DeerAnalysis and then analysed.</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">% Mar 12        &gt; Added functionality for &quot;Form factor&quot; figure, so that</span>
+0068 <span class="comment">%                   Time domain and Dipolar Spectrum figures can also be</span>
+0069 <span class="comment">%                   exported</span>
+0070 <span class="comment">%</span>
+0071 <span class="comment">% Dec 11        &gt; Conversion to function. Allows for single file input and</span>
+0072 <span class="comment">%                   gives x and y outputs.</span>
+0073 
+0074 <span class="comment">% CODING NOTE: any variable that begins with a lower case &quot;h&quot; is a</span>
+0075 <span class="comment">% handle for an object, ie hDA is the handles for the DeerAnalysis figure</span>
+0076 <span class="comment">%</span>
+0077 <span class="comment">% Handles with a lower case &quot;l&quot; are the handles for a line, ie lDD is the</span>
+0078 <span class="comment">% line for the curve in the distance distribution axes.</span>
+0079 
+0080 <span class="keyword">if</span> exist(<span class="string">'DeerAnalysis'</span>) == 0,
+0081     warndlg(sprintf(<span class="string">'The &quot;DeerAnalysis&quot; function was not found on your system.'</span>),<span class="string">'DeerAnalysis'</span>)
+0082 <span class="keyword">end</span>
+0083 
+0084 <span class="comment">% Get current figure</span>
+0085 <span class="comment">% h = get(gcf);</span>
+0086 
+0087 <span class="comment">% Find all figures</span>
+0088 figs = findall(0,<span class="string">'type'</span>,<span class="string">'figure'</span>);
+0089 
+0090 <span class="comment">% Search the figures for one with a window title that starts &quot;DeerAnalysis&quot;</span>
+0091 <span class="keyword">for</span> k = 1:numel(figs)
+0092     fig_name = get(figs(k) , <span class="string">'name'</span>);
+0093     
+0094     <span class="keyword">if</span> regexp(fig_name, <span class="string">'DeerAnalysis'</span>)
+0095         hDA = get(figs(k));
+0096     <span class="keyword">end</span>
+0097 <span class="keyword">end</span>
+0098 
+0099 hAxes = findall(hDA.Children, <span class="string">'Type'</span>, <span class="string">'Axes'</span>);
+0100 
+0101 <span class="comment">% Distance Distribution</span>
+0102 hDD = get(hAxes(1));
+0103 lDD = findall(hDD.Children, <span class="string">'Type'</span>, <span class="string">'Line'</span>);
+0104 
+0105 <span class="comment">% Line 1: dashed cyan vertical line (high)</span>
+0106 <span class="comment">% Line 2: dashed cyan vertical line (low)</span>
+0107 <span class="comment">% Line 3: solid blue vertical line at window max (8.0 nm)</span>
+0108 <span class="comment">% Line 4: solid blue vertical line at window min (1.5 nm)</span>
+0109 <span class="comment">% Line 5: curve</span>
+0110 
+0111 x.DistanceDistribution = get(lDD(5), <span class="string">'xdata'</span>);
+0112 x.DistanceDistribution = x.DistanceDistribution';
+0113 y.DistanceDistribution = get(lDD(5), <span class="string">'ydata'</span>);
+0114 y.DistanceDistribution = y.DistanceDistribution';
+0115         
+0116         
+0117 <span class="comment">% Form factor</span>
+0118 hFF = get(hAxes(2));
+0119 lFF = findall(hFF.Children, <span class="string">'Type'</span>, <span class="string">'Line'</span>);
+0120 
+0121 <span class="comment">% Line 1: Raw data</span>
+0122 <span class="comment">% Line 2: Fit</span>
+0123 <span class="comment">% Line 3: Raw data again (so as to be on top)</span>
+0124 
+0125 <span class="keyword">switch</span> get(hFF.XLabel,<span class="string">'String'</span>)
+0126     <span class="keyword">case</span> <span class="string">'f (MHz)'</span>              <span class="comment">% Dipolar spectrum</span>
+0127         
+0128         <span class="comment">% Line 1: Raw data</span>
+0129         <span class="comment">% Line 2: Fit</span>
+0130         <span class="comment">% Line 3: Raw data again (so as to be on top)</span>
+0131         
+0132         <span class="keyword">switch</span> size(lFF,1);
+0133             
+0134             <span class="keyword">case</span> 1              <span class="comment">% Pre fitting</span>
+0135                 x.Pake = get(lFF(1), <span class="string">'xdata'</span>);
+0136                 x.Pake = x.Pake';
+0137                 y.Pake = get(lFF(1), <span class="string">'ydata'</span>);
+0138                 y.Pake = y.Pake';
+0139                 
+0140             <span class="keyword">case</span> 3              <span class="comment">% After fitting</span>
+0141                 x.Pake.real = get(lFF(1), <span class="string">'xdata'</span>);
+0142                 x.Pake.real = x.Pake.real';
+0143                 y.Pake.real = get(lFF(1), <span class="string">'ydata'</span>);
+0144                 y.Pake.real = y.Pake.real';
+0145                 
+0146                 x.Pake.fit = get(lFF(2), <span class="string">'xdata'</span>);
+0147                 x.Pake.fit = x.Pake.fit';
+0148                 y.Pake.fit = get(lFF(2), <span class="string">'ydata'</span>);
+0149                 y.Pake.fit = y.Pake.fit';
+0150         <span class="keyword">end</span>
+0151         
+0152     <span class="keyword">otherwise</span>
+0153         
+0154         <span class="comment">% Line 1: Vertical red line at end of data set</span>
+0155         <span class="comment">% Line 2: Blue dot</span>
+0156         <span class="comment">% Line 3: Raw data</span>
+0157         <span class="comment">% Line 4: Fit (in red)</span>
+0158         <span class="comment">% Line 5: Blue dot again</span>
+0159         <span class="comment">% Line 6: Raw data again</span>
+0160         
+0161         <span class="keyword">switch</span> size(lFF,1);            
+0162             <span class="keyword">case</span> 6              <span class="comment">% After fitting</span>
+0163                 x.TimeDomain.real = get(lFF(3), <span class="string">'xdata'</span>);
+0164                 x.TimeDomain.real = x.TimeDomain.real';
+0165                 y.TimeDomain.real = get(lFF(3), <span class="string">'ydata'</span>);
+0166                 y.TimeDomain.real = y.TimeDomain.real';
+0167                 
+0168                 x.TimeDomain.fit = get(lFF(4), <span class="string">'xdata'</span>);
+0169                 x.TimeDomain.fit = x.TimeDomain.fit';
+0170                 y.TimeDomain.fit = get(lFF(4), <span class="string">'ydata'</span>);
+0171                 y.TimeDomain.fit = y.TimeDomain.fit';
+0172                 
+0173             <span class="keyword">otherwise</span>
+0174                 x.TimeDomain = get(lFF(3), <span class="string">'xdata'</span>);
+0175                 x.TimeDomain = x.TimeDomain';
+0176                 y.TimeDomain = get(lFF(3), <span class="string">'ydata'</span>);
+0177                 y.TimeDomain = y.TimeDomain';
+0178         <span class="keyword">end</span>
+0179 <span class="keyword">end</span>
+0180 
+0181 <span class="comment">% Original data</span>
+0182 hOD = get(hAxes(3));
+0183 lOD = findall(hOD.Children, <span class="string">'Type'</span>, <span class="string">'Line'</span>);
+0184 
+0185 <span class="comment">% Line 1: Real data set (black line)</span>
+0186 <span class="comment">% Line 2: Fitting of real data set (red dotted line)</span>
+0187 <span class="comment">% Line 3: Same as 2</span>
+0188 <span class="comment">% Line 4: Vertical red line at end of data set</span>
+0189 <span class="comment">% Line 5: Vertical cyan line for background</span>
+0190 <span class="comment">% Line 6: Vertical green line at zero time</span>
+0191 <span class="comment">% Line 7: Horizontal dotted pink line at 0</span>
+0192 <span class="comment">% Line 8: Imaginary data set (solid pink line)</span>
+0193 
+0194 x.OriginalData.Real = get(lOD(1), <span class="string">'xdata'</span>);
+0195 x.OriginalData.Real = x.OriginalData.Real';
+0196 y.OriginalData.Real = get(lOD(1), <span class="string">'ydata'</span>);
+0197 y.OriginalData.Real = y.OriginalData.Real';
+0198 
+0199 x.OriginalData.Imag = get(lOD(8), <span class="string">'xdata'</span>);
+0200 x.OriginalData.Imag = x.OriginalData.Imag';
+0201 y.OriginalData.Imag = get(lOD(8), <span class="string">'ydata'</span>);
+0202 y.OriginalData.Imag = y.OriginalData.Imag';</pre></div>
+<hr><address>Generated on Thu 25-Oct-2012 18:03:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

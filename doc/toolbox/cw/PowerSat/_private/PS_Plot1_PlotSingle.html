@@ -1,0 +1,274 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PS_Plot1_PlotSingle</title>
+  <meta name="keywords" content="PS_Plot1_PlotSingle">
+  <meta name="description" content="PS_Plot1_PlotSingle Plot one spectrum from an experiment.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">toolbox</a> &gt; <a href="../../index.html">cw</a> &gt; <a href="../index.html">PowerSat</a> &gt; <a href="index.html">_private</a> &gt; PS_Plot1_PlotSingle.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for toolbox/cw/PowerSat/_private&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>PS_Plot1_PlotSingle
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>PS_Plot1_PlotSingle Plot one spectrum from an experiment.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function [mwPower] = PS_Plot1_PlotSingle(handles,graph,exp,color) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PS_Plot1_PlotSingle Plot one spectrum from an experiment.
+
+ Syntax:  PS_Plot1_PlotSingle
+
+ Inputs:
+    input1 - handles
+
+    input2 - graph
+               define the graph area (ie gca or handles.plot_load)
+    input3 - exp
+               experiment variable (ie Oxy,N2,Ni)
+    input4 - color
+               color of lines drawn on graph for peaks
+
+ Outputs:
+    output1 - mwPower
+               the microwave power of the currently displayed spectrum
+
+ Example: 
+    see http://morganbye.net/PowerSat
+
+ Other m-files required:
+    PowerSat.m
+
+ Subfunctions:         none
+
+ MAT-files required:   none</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="PS_Plot1_Gaussian.html" class="code" title="function PS_Plot1_Gaussian(handles,Exp)">PS_Plot1_Gaussian</a>	PS_Plot1_Gaussian Use a Gaussian fitting model to fit the model high and</li><li><a href="PS_Plot1_GaussianDeriv.html" class="code" title="function PS_Plot1_GaussianDeriv(handles,Exp)">PS_Plot1_GaussianDeriv</a>	PS_PLOT1_GAUSSIAN Use a Gaussian fitting model to fit the model high</li><li><a href="PS_Plot1_Lorentzian.html" class="code" title="function PS_Plot1_Lorentzian(handles,Exp)">PS_Plot1_Lorentzian</a>	PS_PLOT1_LORENTZIAN Use a Lorentzian fitting model to fit the model high</li><li><a href="PS_Plot1_LorentzianDeriv.html" class="code" title="function PS_Plot1_LorentzianDeriv(handles,Exp)">PS_Plot1_LorentzianDeriv</a>	PS_PLOT1_LORENTZIAN Use a Lorentzian fitting model to fit the model high</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>	PS_PLOT1 Plot the raw power saturation spectra</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [mwPower] = PS_Plot1_PlotSingle(handles,graph,exp,color)</a>
+0002 
+0003 <span class="comment">% PS_Plot1_PlotSingle Plot one spectrum from an experiment.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Syntax:  PS_Plot1_PlotSingle</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%    input1 - handles</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    input2 - graph</span>
+0011 <span class="comment">%               define the graph area (ie gca or handles.plot_load)</span>
+0012 <span class="comment">%    input3 - exp</span>
+0013 <span class="comment">%               experiment variable (ie Oxy,N2,Ni)</span>
+0014 <span class="comment">%    input4 - color</span>
+0015 <span class="comment">%               color of lines drawn on graph for peaks</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Outputs:</span>
+0018 <span class="comment">%    output1 - mwPower</span>
+0019 <span class="comment">%               the microwave power of the currently displayed spectrum</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Example:</span>
+0022 <span class="comment">%    see http://morganbye.net/PowerSat</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Other m-files required:</span>
+0025 <span class="comment">%    PowerSat.m</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Subfunctions:         none</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% MAT-files required:   none</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%</span>
+0032 
+0033 <span class="comment">%                                        _                             _</span>
+0034 <span class="comment">%                                       | |                           | |</span>
+0035 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0036 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0037 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0038 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0039 <span class="comment">%                       __/ |                   __/ |</span>
+0040 <span class="comment">%                      |___/                   |___/</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">% M. Bye v12.8</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">% Author:       Morgan Bye</span>
+0046 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0047 <span class="comment">%               University of East Anglia</span>
+0048 <span class="comment">%               NORWICH, UK</span>
+0049 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0050 <span class="comment">% Website:      http://www.morganbye.net/PowerSat</span>
+0051 <span class="comment">% Aug 2012;     Last revision: 15-August-2012</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">% Version history:</span>
+0054 <span class="comment">% Aug 12        &gt; Change from Gaussian tickbox to a fitting dropdown menu</span>
+0055 <span class="comment">%                   for Lorentzian fitting</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% Jun 12        &gt; Update for Gaussian fitting, switch added for checkbox</span>
+0058 <span class="comment">%               &gt; Switch introduced for updating the microwave power</span>
+0059 <span class="comment">%                   display. Required for single file/folder of files</span>
+0060 <span class="comment">%                   handling, as they may have different x-axes</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% Oct 11        &gt; Initial release</span>
+0063 
+0064 <span class="comment">% Plot area setup</span>
+0065 cla(graph);                             <span class="comment">% Clear any old plots</span>
+0066 axes(graph);                            <span class="comment">% Select area</span>
+0067 set(handles.slider1,<span class="string">'Visible'</span>,<span class="string">'on'</span>);    <span class="comment">% Show the slider</span>
+0068 
+0069 <span class="comment">% Get variables</span>
+0070 warning off
+0071 <span class="keyword">global</span> vars
+0072 
+0073 x       = vars.(exp).x;
+0074 y       = vars.(exp).y0;
+0075 info    = vars.(exp).info;
+0076 maxpeak = vars.(exp).MaxPeak;
+0077 minpeak = vars.(exp).MinPeak;
+0078 warning on
+0079 
+0080 <span class="comment">% Find which spectrum to plot from the slider</span>
+0081 <span class="keyword">try</span>
+0082     c = size(y,2);
+0083 <span class="keyword">catch</span>
+0084     errordlg(<span class="string">'No file has been loaded for the selected dataset'</span>,<span class="string">'Plot error'</span>)
+0085 <span class="keyword">end</span>
+0086 
+0087 set(handles.slider1,<span class="string">'Max'</span>,c);
+0088 position = round(get(handles.slider1,<span class="string">'Value'</span>));
+0089 
+0090 <span class="comment">% Fitting method</span>
+0091 <span class="keyword">switch</span> get(handles.dropdown_fitting,<span class="string">'Value'</span>)
+0092     
+0093     <span class="comment">% GAUSSIAN</span>
+0094     <span class="keyword">case</span> 1
+0095         <span class="comment">% If Gaussian fits have not yet been calculated then calculate them</span>
+0096         <span class="keyword">if</span> isfield(vars.(exp),<span class="string">'FitGaussian'</span>) == 0
+0097             <a href="PS_Plot1_Gaussian.html" class="code" title="function PS_Plot1_Gaussian(handles,Exp)">PS_Plot1_Gaussian</a>(handles.exp);
+0098         <span class="keyword">end</span>
+0099         
+0100         legend(<span class="string">'off'</span>);
+0101 
+0102         hold on
+0103         plot(vars.(exp).FitGaussian.Peak.x , <span class="keyword">...</span>
+0104              vars.(exp).FitGaussian.Peak.y(:,position) , <span class="keyword">...</span>
+0105             <span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'LineWidth'</span>,2,<span class="string">'Color'</span>,color);
+0106         plot(vars.(exp).FitGaussian.Trough.x , <span class="keyword">...</span>
+0107              vars.(exp).FitGaussian.Trough.y(:,position) , <span class="keyword">...</span>
+0108             <span class="string">'LineStyle'</span>,<span class="string">'-.'</span>,<span class="string">'LineWidth'</span>,2,<span class="string">'Color'</span>,color);
+0109         plot(x,y(:,position),<span class="string">'Color'</span>,<span class="string">'k'</span>);
+0110         hold off        
+0111         
+0112     <span class="comment">% LORENTZIAN</span>
+0113     <span class="keyword">case</span> 2
+0114         <span class="comment">% If Lorentzian fits have not been calculated then calculate them</span>
+0115         <span class="keyword">if</span> isfield(vars.(exp),<span class="string">'FitLorentzian'</span>) == 0
+0116             <a href="PS_Plot1_Lorentzian.html" class="code" title="function PS_Plot1_Lorentzian(handles,Exp)">PS_Plot1_Lorentzian</a>(handles,exp);
+0117         <span class="keyword">end</span>
+0118         
+0119         legend(<span class="string">'off'</span>);
+0120         
+0121         hold on
+0122         plot(vars.(exp).FitLorentzian.Peak.x , <span class="keyword">...</span>
+0123              vars.(exp).FitLorentzian.Peak.y(:,position) , <span class="keyword">...</span>
+0124             <span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'LineWidth'</span>,2,<span class="string">'Color'</span>,color);
+0125         plot(vars.(exp).FitLorentzian.Trough.x , <span class="keyword">...</span>
+0126              vars.(exp).FitLorentzian.Trough.y(:,position) , <span class="keyword">...</span>
+0127             <span class="string">'LineStyle'</span>,<span class="string">'-.'</span>,<span class="string">'LineWidth'</span>,2,<span class="string">'Color'</span>,color);
+0128         plot(x,y(:,position),<span class="string">'Color'</span>,<span class="string">'k'</span>);
+0129         hold off   
+0130         
+0131     
+0132     <span class="comment">% SINGLE POINT</span>
+0133     <span class="keyword">case</span> 3
+0134         legend(<span class="string">'off'</span>);
+0135         plot(x,y(:,position),<span class="string">'Color'</span>,<span class="string">'k'</span>);
+0136         
+0137         <span class="comment">% Plot peak lines</span>
+0138         hold on
+0139         ylimits = ylim;
+0140         
+0141         <span class="keyword">if</span> maxpeak ~= <span class="string">'-'</span>
+0142             line([maxpeak maxpeak],[ylimits(1,1) ylimits(1,2)],<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'Color'</span>,color);
+0143         <span class="keyword">end</span>
+0144         
+0145         <span class="keyword">if</span> minpeak ~= <span class="string">'-'</span>
+0146             line([minpeak minpeak],[ylimits(1,1) ylimits(1,2)],<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'Color'</span>,color);
+0147         <span class="keyword">end</span>
+0148         
+0149         hold off
+0150         
+0151     <span class="comment">% GAUSSIAN DERIVATIVE</span>
+0152     <span class="keyword">case</span> 4
+0153         <span class="comment">% If Gaussian fits have not yet been calculated then calculate them</span>
+0154         <span class="keyword">if</span> isfield(vars.(exp),<span class="string">'FitGaussianDeriv'</span>) == 0
+0155             <a href="PS_Plot1_GaussianDeriv.html" class="code" title="function PS_Plot1_GaussianDeriv(handles,Exp)">PS_Plot1_GaussianDeriv</a>(handles,exp);
+0156         <span class="keyword">end</span>
+0157         
+0158         hold on
+0159         plot(vars.(exp).x , <span class="keyword">...</span>
+0160              vars.(exp).FitGaussianDeriv.First.y(:,position) , <span class="keyword">...</span>
+0161             <span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'LineWidth'</span>,2,<span class="string">'Color'</span>,color);
+0162         plot(vars.(exp).FitGaussianDeriv.Second.x , <span class="keyword">...</span>
+0163              vars.(exp).FitGaussianDeriv.Second.y(:,position) , <span class="keyword">...</span>
+0164             <span class="string">'LineStyle'</span>,<span class="string">':'</span>,<span class="string">'LineWidth'</span>,1,<span class="string">'Color'</span>,color);
+0165         plot(x,y(:,position),<span class="string">'Color'</span>,<span class="string">'k'</span>);
+0166         hold off    
+0167         
+0168         legend(<span class="string">'1st derivative'</span>,<span class="string">'2nd derivative'</span>,<span class="string">'Raw data'</span>);
+0169         
+0170     <span class="comment">% LORENTZIAN DERIVATIVE</span>
+0171     <span class="keyword">case</span> 5
+0172         <span class="comment">% If Lorentzian fits have not been calculated then calculate them</span>
+0173         <span class="keyword">if</span> isfield(vars.(exp),<span class="string">'FitLorentzianDeriv'</span>) == 0
+0174             <a href="PS_Plot1_LorentzianDeriv.html" class="code" title="function PS_Plot1_LorentzianDeriv(handles,Exp)">PS_Plot1_LorentzianDeriv</a>(handles,exp);
+0175         <span class="keyword">end</span>
+0176         
+0177         hold on
+0178         plot(vars.(exp).x , <span class="keyword">...</span>
+0179              vars.(exp).FitLorentzianDeriv.First.y(:,position) , <span class="keyword">...</span>
+0180             <span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'LineWidth'</span>,2,<span class="string">'Color'</span>,color);
+0181         plot(vars.(exp).FitLorentzianDeriv.Second.x , <span class="keyword">...</span>
+0182              vars.(exp).FitLorentzianDeriv.Second.y(:,position) , <span class="keyword">...</span>
+0183             <span class="string">'LineStyle'</span>,<span class="string">':'</span>,<span class="string">'LineWidth'</span>,1,<span class="string">'Color'</span>,color);
+0184         plot(x,y(:,position),<span class="string">'Color'</span>,<span class="string">'k'</span>);
+0185         hold off
+0186         
+0187         legend(<span class="string">'1st derivative'</span>,<span class="string">'2nd derivative'</span>,<span class="string">'Raw data'</span>);
+0188 <span class="keyword">end</span>
+0189 
+0190 xlabel(<span class="string">'Magnetic Field / Gauss'</span>);
+0191 ylabel(<span class="string">'Intensity'</span>);
+0192 
+0193 <span class="comment">% Set mwPower for GUI display</span>
+0194 <span class="keyword">switch</span> size(x,2)
+0195     <span class="keyword">case</span> 1
+0196         a = (flipud(vars.(exp).info.z_axis));
+0197         vars.(exp).mwPower = a(position);
+0198 
+0199     <span class="keyword">otherwise</span>
+0200         vars.(exp).mwPower = vars.(exp).info.MWPW(position);
+0201 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 25-Oct-2012 18:03:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

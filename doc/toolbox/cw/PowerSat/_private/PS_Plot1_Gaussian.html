@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PS_Plot1_Gaussian</title>
+  <meta name="keywords" content="PS_Plot1_Gaussian">
+  <meta name="description" content="PS_Plot1_Gaussian Use a Gaussian fitting model to fit the model high and">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="../../../index.html">toolbox</a> &gt; <a href="../../index.html">cw</a> &gt; <a href="../index.html">PowerSat</a> &gt; <a href="index.html">_private</a> &gt; PS_Plot1_Gaussian.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for toolbox/cw/PowerSat/_private&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>PS_Plot1_Gaussian
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>PS_Plot1_Gaussian Use a Gaussian fitting model to fit the model high and</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function PS_Plot1_Gaussian(handles,Exp) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PS_Plot1_Gaussian Use a Gaussian fitting model to fit the model high and
+ low points of the graph. The high and low peak points are then calculated
+ from the result of the fit
+
+ Syntax:  PS_PLOT1_GAUSSIAN
+
+ Inputs:
+    input1 - handles
+
+    input2 - Exp
+               experiment variable (ie Oxy,N2,Ni)
+
+ Outputs:
+    output1 - mwPower
+               the microwave power of the currently displayed spectrum
+
+ Example: 
+    see http://morganbye.net/PowerSat
+
+ Other m-files required:
+    PowerSat.m
+
+ Subfunctions:         none
+
+ MAT-files required:   none</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="PS_Plot1_PlotAll.html" class="code" title="function PS_Plot1_PlotAll(handles,graph,exp,color)">PS_Plot1_PlotAll</a>	PS_Plot1_PlotAll Plot all spectra from one experiment at once</li><li><a href="PS_Plot1_PlotSingle.html" class="code" title="function [mwPower] = PS_Plot1_PlotSingle(handles,graph,exp,color)">PS_Plot1_PlotSingle</a>	PS_Plot1_PlotSingle Plot one spectrum from an experiment.</li><li><a href="PS_PlotPS_Plot.html" class="code" title="function PS_PlotPS_Plot(handles,exp,color)">PS_PlotPS_Plot</a>	PS_PLOTPS_Plot Plot the power saturation curves</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function PS_Plot1_Gaussian(handles,Exp)</a>
+0002 
+0003 <span class="comment">% PS_Plot1_Gaussian Use a Gaussian fitting model to fit the model high and</span>
+0004 <span class="comment">% low points of the graph. The high and low peak points are then calculated</span>
+0005 <span class="comment">% from the result of the fit</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Syntax:  PS_PLOT1_GAUSSIAN</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Inputs:</span>
+0010 <span class="comment">%    input1 - handles</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    input2 - Exp</span>
+0013 <span class="comment">%               experiment variable (ie Oxy,N2,Ni)</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Outputs:</span>
+0016 <span class="comment">%    output1 - mwPower</span>
+0017 <span class="comment">%               the microwave power of the currently displayed spectrum</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Example:</span>
+0020 <span class="comment">%    see http://morganbye.net/PowerSat</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% Other m-files required:</span>
+0023 <span class="comment">%    PowerSat.m</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Subfunctions:         none</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% MAT-files required:   none</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%</span>
+0030 
+0031 <span class="comment">%                                        _                             _</span>
+0032 <span class="comment">%                                       | |                           | |</span>
+0033 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0034 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0035 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0036 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0037 <span class="comment">%                       __/ |                   __/ |</span>
+0038 <span class="comment">%                      |___/                   |___/</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">% M. Bye v12.8</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">% Author:       Morgan Bye</span>
+0044 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0045 <span class="comment">%               University of East Anglia</span>
+0046 <span class="comment">%               NORWICH, UK</span>
+0047 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0048 <span class="comment">% Website:      http://www.morganbye.net/PowerSat</span>
+0049 <span class="comment">% Aug 2012;     Last revision: 5-August-2012</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% Version history:</span>
+0052 <span class="comment">% Aug 12        &gt; Change from Gaussian tickbox to a fitting dropdown menu</span>
+0053 <span class="comment">%                   for Lorentzian fitting</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% Jul 12        &gt; Initial release</span>
+0056 <span class="comment">%               &gt; Rearrangement of fitting call, so that peak and trough</span>
+0057 <span class="comment">%                   analysed in one step of the waitbar rather than having</span>
+0058 <span class="comment">%                   2 waitbars (computational expensive)</span>
+0059 
+0060 <span class="comment">% Note to self:</span>
+0061 <span class="comment">% In this script only the shorthand for experiment is Exp not exp like</span>
+0062 <span class="comment">% everything else because otherwise the calculation of y of the Gaussian</span>
+0063 <span class="comment">% doesnt work as it tries to call the string of exp and not the function</span>
+0064 <span class="comment">% exp (exponential)</span>
+0065 
+0066 <span class="comment">% Get variables</span>
+0067 warning off
+0068 <span class="keyword">global</span> vars
+0069 
+0070 x       = vars.(Exp).x;
+0071 y       = vars.(Exp).y0;
+0072 info    = vars.(Exp).info;
+0073 maxpeak = vars.(Exp).MaxPeak;
+0074 minpeak = vars.(Exp).MinPeak;
+0075 warning on
+0076 
+0077 <span class="comment">% Set up the window in which to fit</span>
+0078 window  = str2double(get(handles.edit_fittingWindow,<span class="string">'String'</span>));
+0079 
+0080 PEAKWindUp   = maxpeak + (window/2);
+0081 PEAKWindLo   = maxpeak - (window/2);
+0082 TROUGHWindUp = minpeak + (window/2);
+0083 TROUGHWindLo = minpeak - (window/2);
+0084 
+0085 <span class="comment">% PEAK SETUP</span>
+0086 <span class="comment">% ========================================================================</span>
+0087 
+0088 <span class="comment">% Change all negative results to equal 0</span>
+0089 yP = y;
+0090 
+0091 yP(yP&lt;0) = [0];
+0092 
+0093 <span class="comment">% Get data within window</span>
+0094 [arb, PEAK_WindUp] = min(abs(x-PEAKWindUp));
+0095 [arb, PEAK_WindLo] = min(abs(x-PEAKWindLo));
+0096 
+0097 <span class="comment">% Resize x and y to only include the window</span>
+0098 yP = yP(PEAK_WindLo:PEAK_WindUp,:);
+0099 xP = x (PEAK_WindLo:PEAK_WindUp,:);
+0100 
+0101 <span class="comment">% Setup fit</span>
+0102 fP = fittype(<span class="string">'a1*exp(-((x-b1)/c1)^2)'</span>);
+0103 
+0104 options             = fitoptions(fP);
+0105 options.StartPoint  = [2.5 maxpeak 0.5];
+0106 options.Lower       = [0 0 0];
+0107 options.Upper       = [Inf Inf Inf];
+0108 options.MaxFunEvals = 1200;
+0109 options.MaxIter     = 800;
+0110  
+0111 fP = setoptions(fP, options);
+0112 
+0113 
+0114 <span class="comment">% TROUGH SETUP</span>
+0115 <span class="comment">% ========================================================================</span>
+0116 
+0117 <span class="comment">% Change all positive results to equal 0</span>
+0118 yT = y;
+0119 
+0120 yT(yT&gt;0) = [0];
+0121 
+0122 <span class="comment">% Get data within window</span>
+0123 [arb, TROUGH_WindUp] = min(abs(x-TROUGHWindUp));
+0124 [arb, TROUGH_WindLo] = min(abs(x-TROUGHWindLo));
+0125 
+0126 <span class="comment">% Resize x and y to only include the window</span>
+0127 yT = yT(TROUGH_WindLo:TROUGH_WindUp,:);
+0128 xT = x (TROUGH_WindLo:TROUGH_WindUp,:);
+0129 
+0130 <span class="comment">% Setup fit</span>
+0131 fT = fittype(<span class="string">'a1*exp(-((x-b1)/c1)^2)'</span>);
+0132 
+0133 options             = fitoptions(fT);
+0134 options.StartPoint  = [-2.5 minpeak 0.5];
+0135 options.Lower       = [-Inf 0 0];
+0136 options.Upper       = [0 Inf Inf];
+0137 options.MaxFunEvals = 1200;
+0138 options.MaxIter     = 800;
+0139  
+0140 fT = setoptions(fT, options);
+0141 
+0142 
+0143 <span class="comment">% FITTING</span>
+0144 <span class="comment">% ========================================================================</span>
+0145 warning off
+0146 
+0147 ysize = size(yP,2);
+0148 
+0149 set(gcf, <span class="string">'Units'</span> , <span class="string">'pixels'</span>);
+0150 a = waitbar(0,sprintf(<span class="string">'Fitting %1d of %1d'</span>,0,ysize));
+0151 
+0152 PS_position = get(handles.figure1,<span class="string">'OuterPosition'</span>);
+0153 b = get(a,<span class="string">'OuterPosition'</span>);
+0154 set(a,<span class="string">'OuterPosition'</span>,[PS_position(1)+200 PS_position(2)+200 b(3) b(4)]);
+0155 
+0156 <span class="keyword">for</span> k = 1: ysize
+0157     
+0158     waitbar(k/ysize,a,sprintf(<span class="string">'Fitting spectrum %1d of %1d'</span>,k,ysize));
+0159     
+0160     PEAKFit       = fit(xP,yP(:,k),fP);
+0161     PEAKCoeff{k}  = coeffvalues(PEAKFit);
+0162     
+0163     TROUGHFit       = fit(xT,yT(:,k),fT);
+0164     TROUGHCoeff{k}  = coeffvalues(TROUGHFit);
+0165     
+0166 <span class="keyword">end</span>
+0167 
+0168 close(a)
+0169 warning on
+0170 
+0171 
+0172 <span class="comment">% POST FITTING</span>
+0173 <span class="comment">% ========================================================================</span>
+0174 
+0175 <span class="comment">% Save fittings to variables</span>
+0176 vars.(Exp).FitGaussian.Peak.Coeff       = PEAKCoeff;
+0177 vars.(Exp).FitGaussian.Trough.Coeff     = TROUGHCoeff;
+0178 
+0179 <span class="comment">% Create fitting curves</span>
+0180 vars.(Exp).FitGaussian.Peak.x   = xP;
+0181 vars.(Exp).FitGaussian.Trough.x = xT;
+0182 
+0183 
+0184 <span class="keyword">for</span> k = 1: ysize
+0185     vars.(Exp).FitGaussian.Peak.y(:,k)   = (PEAKCoeff{k}(1))*exp(-((xP-(PEAKCoeff{k}(2)))/(PEAKCoeff{k}(3))).^2);
+0186     vars.(Exp).FitGaussian.Trough.y(:,k) = (TROUGHCoeff{k}(1))*exp(-((xT-(TROUGHCoeff{k}(2)))/(TROUGHCoeff{k}(3))).^2);
+0187 <span class="keyword">end</span>
+0188 
+0189</pre></div>
+<hr><address>Generated on Thu 25-Oct-2012 18:03:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of transform_rotamers</title>
+  <meta name="keywords" content="transform_rotamers">
+  <meta name="description" content="for selected sites in the protein structure (or model), initilize">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">toolbox</a> &gt; <a href="../index.html">MMM_rotamers</a> &gt; <a href="index.html">private</a> &gt; transform_rotamers.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for toolbox/MMM_rotamers/private&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>transform_rotamers
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>for selected sites in the protein structure (or model), initilize</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function msg=transform_rotamers(indices) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> for selected sites in the protein structure (or model), initilize
+ coordinate transformation of rotamers from the selected rotamer library</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="mk_pdb_rotamers.html" class="code" title="function calc_positions=mk_pdb_rotamers(allindices,rot_lib,T,no_compute,stat_file,PDB_path,library)">mk_pdb_rotamers</a>	Transforms rotamer coordinates from the native frame in which they are</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function msg=transform_rotamers(indices)</a>
+0002 <span class="comment">% for selected sites in the protein structure (or model), initilize</span>
+0003 <span class="comment">% coordinate transformation of rotamers from the selected rotamer library</span>
+0004 <span class="comment">%</span>
+0005 
+0006 <span class="keyword">global</span> hMain
+0007 <span class="keyword">global</span> residue_defs
+0008 <span class="keyword">global</span> model
+0009 
+0010 
+0011 msg.error=0;
+0012 msg.text=<span class="string">'No error.'</span>;
+0013 
+0014 scanned=0;
+0015 
+0016 [mm,nn]=size(indices);
+0017 newindices=zeros(size(indices));
+0018 
+0019 starting_time=clock;
+0020 <span class="comment">% Check for input consistency</span>
+0021 
+0022 <span class="keyword">if</span> mm==1 &amp;&amp; hMain.site_scan_inter&gt;0 &amp;&amp; ~hMain.site_scan_residue,
+0023     add_msg_board(<span class="string">'### Warning ### Only one chain model. No inter-chain analysis.'</span>);
+0024 <span class="keyword">end</span>;
+0025 
+0026 <span class="keyword">if</span> hMain.site_scan_residue,
+0027     labeling_conditions;
+0028     <span class="keyword">if</span> ~isempty(hMain.library) &amp;&amp; ~isempty(hMain.temperature),
+0029         T(1)=hMain.temperature;
+0030         libraries{1}=hMain.library;
+0031     <span class="keyword">else</span>
+0032         add_msg_board(<span class="string">'Site scan of selected residues cancelled by user.'</span>);
+0033         <span class="keyword">return</span>
+0034     <span class="keyword">end</span>;
+0035 <span class="keyword">else</span>
+0036     poi=0;
+0037     T=zeros(1,mm);
+0038     <span class="keyword">for</span> k=1:mm,
+0039         hMain.label_selection=mk_address(indices(k,:));
+0040         labeling_conditions;
+0041         <span class="keyword">if</span> ~isempty(hMain.library) &amp;&amp; ~isempty(hMain.temperature),
+0042             poi=poi+1;
+0043             newindices(poi,:)=indices(poi,:);
+0044             T(poi)=hMain.temperature;
+0045             libraries{poi}=hMain.library;
+0046         <span class="keyword">else</span>
+0047             add_msg_board(sprintf(<span class="string">'Chain model %s excluded from site scan by user'</span>,hMain.label_selection));
+0048         <span class="keyword">end</span>;
+0049     <span class="keyword">end</span>;
+0050 
+0051     indices=newindices(1:poi,:);
+0052     T=T(1:poi);
+0053 <span class="keyword">end</span>;
+0054 
+0055 <span class="keyword">if</span> isempty(indices),
+0056     msg.error=1;
+0057     msg.text=<span class="string">'Nothing to scan.'</span>;
+0058     add_msg_board(<span class="string">'### Warning ### All chains or residues cancelled. No site scan.'</span>);
+0059     <span class="keyword">return</span>
+0060 <span class="keyword">else</span>
+0061     [mm,nn]=size(indices);
+0062     sel_residues=hMain.residue_pattern;
+0063     <span class="keyword">if</span> sum(sel_residues)&lt;1,
+0064         add_msg_board(<span class="string">'### Warning ### No residue types selected. No site scan'</span>);
+0065         <span class="keyword">return</span>
+0066     <span class="keyword">end</span>;
+0067     res_string=<span class="string">''</span>;
+0068     res_tags=<span class="string">':'</span>;
+0069     oo=0;
+0070     <span class="keyword">for</span> k=1:length(sel_residues),
+0071         <span class="keyword">if</span> sel_residues(k),
+0072             oo=oo+1;
+0073             res_string=sprintf(<span class="string">'%s&quot;%s&quot;,'</span>,res_string,residue_defs.residues(k).tc);
+0074             res_tags=sprintf(<span class="string">'%s%s:'</span>,res_tags,upper(residue_defs.residues(k).tc));
+0075         <span class="keyword">end</span>;
+0076     <span class="keyword">end</span>;
+0077     res_string=res_string(1:end-1);
+0078     defname=sprintf(<span class="string">'MMM_site_scan_%s.html'</span>,datestr(now,<span class="string">'yyyy-mm-dd_HH-MM-SS'</span>));
+0079     [filename,pathname] = uiputfile(<span class="string">'*.html,*.htm'</span>,<span class="string">'Save site analysis in HTML format'</span>,defname);
+0080     <span class="keyword">if</span> isequal(filename,0) || isequal(pathname,0)
+0081         add_msg_board(<span class="string">'No HTML file with analysis will be saved.'</span>);
+0082         add_msg_board(<span class="string">'Site information will be stored internally.'</span>);
+0083         html_name=<span class="string">''</span>;
+0084         PDB_path=<span class="string">''</span>;
+0085     <span class="keyword">else</span>
+0086         html_name=fullfile(pathname,filename);
+0087         PDB_path=pathname;
+0088     <span class="keyword">end</span>;
+0089 
+0090     known_chains=zeros(1,50);
+0091     known_residues=zeros(50,800);
+0092     cp=0;
+0093     maxres=0;
+0094     <span class="keyword">if</span> hMain.site_scan_residue,
+0095         cindices0=indices;
+0096         [mmm,nnn]=size(cindices0);
+0097         <span class="keyword">for</span> k=1:mmm,
+0098             cind=cindices0(k,:);
+0099             p=find(known_chains==cind(2), 1);
+0100             <span class="keyword">if</span> isempty(p),
+0101                 cp=cp+1;
+0102                 p=cp;
+0103                 known_chains(cp)=cind(2);
+0104             <span class="keyword">end</span>;
+0105             resi=known_residues(p,:);
+0106             pp=sum(resi&gt;0)+1;
+0107             <span class="keyword">if</span> pp&gt;maxres, maxres=pp; <span class="keyword">end</span>;
+0108             known_residues(p,pp)=k;
+0109         <span class="keyword">end</span>;
+0110         mm=cp;
+0111         <span class="keyword">for</span> k=1:mm,
+0112             T(k)=T(1);
+0113             libraries{k}=libraries{1};
+0114         <span class="keyword">end</span>;
+0115         known_residues=known_residues(1:cp,1:maxres);
+0116     <span class="keyword">end</span>;
+0117 
+0118     <span class="keyword">for</span> k=1:mm,
+0119         <span class="keyword">if</span> hMain.statistics,
+0120             poi=strfind(html_name,<span class="string">'.'</span>);
+0121             <span class="keyword">if</span> ~isempty(poi) &amp;&amp; poi(end)&gt;1,
+0122                 stat_name=sprintf(<span class="string">'%s_%i%s'</span>,html_name(1:poi(end)-1),k,<span class="string">'.dat'</span>);
+0123             <span class="keyword">else</span>
+0124                 stat_name=sprintf(<span class="string">'%s_%i%s'</span>,html_name,k,<span class="string">'.dat'</span>);
+0125             <span class="keyword">end</span>;
+0126             stat_file=fopen(stat_name,<span class="string">'w'</span>);
+0127 <span class="comment">% on 26012011--------------------------------------------------------------</span>
+0128 <span class="comment">%             fprintf(stat_file,'%%%% Rotamer site scan with library %s\n',libraries{k});</span>
+0129             fprintf(stat_file,<span class="string">'%%%% Rotamer coordinates transformation with library %s\n'</span>,libraries{k});
+0130 
+0131         <span class="keyword">else</span>
+0132             stat_file=-1;
+0133         <span class="keyword">end</span>;
+0134         <span class="keyword">if</span> hMain.site_scan_residue,
+0135             respoi=known_residues(k,:);
+0136             respoi=respoi(respoi&gt;0);
+0137             cindices0=indices(respoi,:);
+0138             cindices=cindices0;
+0139             [mmm0,nnn]=size(cindices0);
+0140             mmm=0;
+0141             <span class="keyword">for</span> kr=1:mmm0, <span class="comment">% narrow down residues to selected types</span>
+0142                 [message,name]=get_residue(cindices0(kr,:),<span class="string">'name'</span>);
+0143                 id=tag2id(name,res_tags);
+0144                 <span class="keyword">if</span> ~isempty(id),
+0145                     mmm=mmm+1;
+0146                     cindices(mmm,:)=cindices0(kr,:);
+0147                 <span class="keyword">end</span>;
+0148             <span class="keyword">end</span>;
+0149             cindices=cindices(1:mmm,:);
+0150         <span class="keyword">else</span>
+0151             adr=mk_address(indices(k,:));
+0152             to_label=sprintf(<span class="string">'%s%s'</span>,adr,res_string);
+0153             [cindices,msg]=resolve_address(to_label);
+0154             [mmm,nnn]=size(cindices);
+0155         <span class="keyword">end</span>;
+0156         <span class="keyword">if</span> mmm&gt;=1,
+0157 
+0158             <span class="keyword">if</span> hMain.site_scan_residue,
+0159                 add_msg_board(sprintf(<span class="string">'Scanning %i selected residues.'</span>,mmm));
+0160             <span class="keyword">else</span>
+0161                 add_msg_board(sprintf(<span class="string">'Scanning %i residues in chain model %s'</span>,mmm,adr));
+0162             <span class="keyword">end</span>;
+0163 
+0164             scanned=scanned+mmm;
+0165             load(libraries{k});
+0166  <span class="comment">% 13012011: use mk_pdb_rotamers.m function here:</span>
+0167             calc_positions=<a href="mk_pdb_rotamers.html" class="code" title="function calc_positions=mk_pdb_rotamers(allindices,rot_lib,T,no_compute,stat_file,PDB_path,library)">mk_pdb_rotamers</a>(cindices,rot_lib,T(k),false,stat_file,PDB_path,libraries{k});
+0168             sites(k).residue=calc_positions;
+0169  <span class="comment">% 09122010: add saving a name of the library in use</span>
+0170             sites(k).library=libraries{k};
+0171             
+0172                        
+0173             <span class="keyword">for</span> kk=1:length(calc_positions),
+0174 <span class="comment">%                 text=sprintf('rotamers computed: %s using library %s at a temperature of %4.0f K',calc_positions(kk).label,libraries{k},T(k));</span>
+0175                 text=sprintf(<span class="string">'transformed rotamer coordinates: %s using library %s at a temperature of %4.0f K'</span>,calc_positions(kk).label,libraries{k},T(k));
+0176                 
+0177 <span class="comment">%                 add_annotation(calc_positions(kk).indices,'Spin',text,{'rotamers computed'});</span>
+0178 <span class="comment">%                 numr=length(calc_positions(kk).rotamers);</span>
+0179 <span class="comment">%                 rmsd=NOpos_rmsd(calc_positions(kk).NOpos);</span>
+0180 <span class="comment">%                 rmsdz=NOpos_rmsdz(calc_positions(kk).NOpos);</span>
+0181 <span class="comment">%                 Z=calc_positions(kk).partition_function;</span>
+0182 <span class="comment">%                 add_annotation(calc_positions(kk).indices,'Spin',sprintf('%i significant rotamers with partition function %7.5f',numr,Z),{'rotamers computed'});</span>
+0183 <span class="comment">%                 if Z&lt;partition_function_threshold,</span>
+0184 <span class="comment">%                     add_annotation(calc_positions(kk).indices,'Spin','Tight site. Labeling may fail here.',{'rotamers computed'});</span>
+0185 <span class="comment">%                 end;</span>
+0186 <span class="comment">%                 text=sprintf('NO position r.m.s.d. %4.2f nm',rmsd);</span>
+0187 <span class="comment">%                 if hMain.z_analysis,</span>
+0188 <span class="comment">%                     text=sprintf('%s; NO z position r.m.s.d. %4.2f nm',text,rmsdz);</span>
+0189 <span class="comment">%                 end;</span>
+0190 <span class="comment">%                 add_annotation(calc_positions(kk).indices,'Spin',text,{'rotamers computed'});</span>
+0191             <span class="keyword">end</span>;
+0192         <span class="keyword">else</span>
+0193             <span class="keyword">if</span> hMain.site_scan_residue,
+0194                 add_msg_board(<span class="string">'No selected residue matches the selected residue types.'</span>);
+0195             <span class="keyword">else</span>
+0196                 add_msg_board(sprintf(<span class="string">'No residues selected in chain model %s'</span>,adr));
+0197             <span class="keyword">end</span>;
+0198         <span class="keyword">end</span>;
+0199         <span class="keyword">try</span>
+0200             fclose(stat_file);
+0201         <span class="keyword">catch</span> ME
+0202         <span class="keyword">end</span>;
+0203     <span class="keyword">end</span>;
+0204 <span class="keyword">end</span>;
+0205 
+0206 <span class="comment">% if scanned&lt;1,</span>
+0207 <span class="comment">%     msg.error=1;</span>
+0208 <span class="comment">%     msg.text='No sites encountered for selection';</span>
+0209 <span class="comment">%     add_msg_board('### ERROR ### No sites found for current selection.');</span>
+0210 <span class="comment">% else</span>
+0211 <span class="comment">%     scan=1;</span>
+0212 <span class="comment">%     if isfield(model,'sites'),</span>
+0213 <span class="comment">%         scan=length(model.sites)+1;</span>
+0214 <span class="comment">%     end;</span>
+0215 <span class="comment">%     model.sites{scan}=sites;</span>
+0216 <span class="comment">%     if ~isempty(html_name)</span>
+0217 <span class="comment">%         labeling_analysis(sites,html_name);</span>
+0218 <span class="comment">%     end;</span>
+0219 <span class="comment">%     needed_time=etime(clock,starting_time);</span>
+0220 <span class="comment">%     hour=floor(needed_time/3600);</span>
+0221 <span class="comment">%     min=floor((needed_time-3600*hour)/60);</span>
+0222 <span class="comment">%     sec=floor(needed_time-3600*hour-60*min);</span>
+0223 <span class="comment">%     add_msg_board(sprintf('Site scan completed in %i h, %i min, %i s',hour,min,sec));</span>
+0224 <span class="comment">%     if ~isempty(html_name)</span>
+0225 <span class="comment">%         button = questdlg('Open result file in web browser?','Site scan completed','Yes','No','Yes');</span>
+0226 <span class="comment">%         if strcmpi(button,'Yes')</span>
+0227 <span class="comment">%             web(html_name);</span>
+0228 <span class="comment">%         end;</span>
+0229 <span class="comment">%     end;</span>
+0230 <span class="comment">% end;</span>
+0231 
+0232 <span class="comment">% function rmsd=NOpos_rmsd(NOall)</span>
+0233 <span class="comment">% % in nm(!)</span>
+0234 <span class="comment">%</span>
+0235 <span class="comment">% pop=NOall(:,4);</span>
+0236 <span class="comment">% pop=pop/sum(pop);</span>
+0237 <span class="comment">% xmean=sum(NOall(:,1).*pop);</span>
+0238 <span class="comment">% ymean=sum(NOall(:,2).*pop);</span>
+0239 <span class="comment">% zmean=sum(NOall(:,3).*pop);</span>
+0240 <span class="comment">% dx=(NOall(:,1)-xmean);</span>
+0241 <span class="comment">% dy=(NOall(:,2)-ymean);</span>
+0242 <span class="comment">% dz=(NOall(:,3)-zmean);</span>
+0243 <span class="comment">% nNO=length(dx);</span>
+0244 <span class="comment">% rmsd=sqrt(0.005+nNO*sum(dx.^2.*pop+dy.^2.*pop+dz.^2.*pop)/(nNO-1))/10; % divided by 10 for �-&gt; nm</span>
+0245 <span class="comment">%</span>
+0246 <span class="comment">% function rmsd=NOpos_rmsdz(NOall)</span>
+0247 <span class="comment">% % in nm(!)</span>
+0248 <span class="comment">%</span>
+0249 <span class="comment">% pop=NOall(:,4);</span>
+0250 <span class="comment">% pop=pop/sum(pop);</span>
+0251 <span class="comment">% zmean=sum(NOall(:,3).*pop);</span>
+0252 <span class="comment">% dz=(NOall(:,3)-zmean);</span>
+0253 <span class="comment">% nNO=length(dz);</span>
+0254 <span class="comment">% rmsd=sqrt(0.005/3+nNO*sum(dz.^2.*pop)/(nNO-1))/10; % divided by 10 for �-&gt; nm</span></pre></div>
+<hr><address>Generated on Thu 25-Oct-2012 18:03:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

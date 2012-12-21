@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of put_pdb_coor</title>
+  <meta name="keywords" content="put_pdb_coor">
+  <meta name="description" content="Conversion of Matlab geometry data (with atom numbers and bond data)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">toolbox</a> &gt; <a href="../index.html">MMM_rotamers</a> &gt; <a href="index.html">private</a> &gt; put_pdb_coor.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for toolbox/MMM_rotamers/private&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>put_pdb_coor
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Conversion of Matlab geometry data (with atom numbers and bond data)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function put_pdb_coor(fname,coor,connect) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Conversion of Matlab geometry data (with atom numbers and bond data) 
+ to Titan readable PDB format
+
+ (c) 2000 Gunnar Jeschke
+
+ write_pdb(fname,coor,connect)
+ fname   file basis name without extension
+ coor    coordinates (row 2-4) with atomic numbers (row 1)
+ connect connection table</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="wr_sep_rot_pdb.html" class="code" title="function wr_sep_rot_pdb(input)">wr_sep_rot_pdb</a>	funtion wr_sep_rot_pdb() writes pdb separate pdb files for each rotamer</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function put_pdb_coor(fname,coor,connect)</a>
+0002 
+0003 <span class="comment">% Conversion of Matlab geometry data (with atom numbers and bond data)</span>
+0004 <span class="comment">% to Titan readable PDB format</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% (c) 2000 Gunnar Jeschke</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% write_pdb(fname,coor,connect)</span>
+0009 <span class="comment">% fname   file basis name without extension</span>
+0010 <span class="comment">% coor    coordinates (row 2-4) with atomic numbers (row 1)</span>
+0011 <span class="comment">% connect connection table</span>
+0012 <span class="comment">%</span>
+0013 
+0014 pse=<span class="string">' HHeLiBe B C N O FNeNaMgAlSi P SClAr KCaScTi VCrMnFeCoNiCuZnGaGeAsSeBrKrRbSr YZrNbMoTcRuRhPdAgCdInSnSbTe IXeCsBaLaCePrNdPmSmEuGdTbDyHoErTmYbLuHfTa WReOsIrPtAuHgTlPbBiPoAtRnFrRaAcThPaUNpPuAmCmBkCfEsFmMdNoLr'</span>;
+0015 
+0016 [m,n]=size(coor);
+0017 outname=strcat(fname,<span class="string">'.pdb'</span>);
+0018 wfile=fopen(outname,<span class="string">'w+'</span>);
+0019 line=<span class="string">'HEADER'</span>;
+0020 fprintf(wfile,<span class="string">'%s\n'</span>,line);
+0021 line=<span class="string">'REMARK MATLAB exported ADF coordinates'</span>;
+0022 fprintf(wfile,<span class="string">'%s\n'</span>,line);
+0023 <span class="keyword">for</span> k=1:m,
+0024    atn=k;
+0025    label=sprintf(<span class="string">'%5u'</span>,atn');
+0026    label=strcat(<span class="string">'HETATM'</span>,label);
+0027    element=2*coor(k,1)-1;
+0028    symb=pse(element:element+1);
+0029    symb=sprintf(<span class="string">'%3s'</span>,symb');
+0030    label=strcat(label,symb,<span class="string">'   UNK  0001'</span>);
+0031    xc=coor(k,2);
+0032    yc=coor(k,3);
+0033    zc=coor(k,4);
+0034    xcoor=sprintf(<span class="string">'%12.3f'</span>,xc);
+0035    ycoor=sprintf(<span class="string">'%8.3f'</span>,yc);
+0036    zcoor=sprintf(<span class="string">'%8.3f'</span>,zc);
+0037    label=strcat(label,xcoor,ycoor,zcoor);
+0038    fprintf(wfile,<span class="string">'%s\n'</span>,label); 
+0039 <span class="keyword">end</span>;
+0040 [m,n]=size(connect);
+0041 <span class="keyword">for</span> k=1:m,
+0042    line=sprintf(<span class="string">'%s%5u'</span>,<span class="string">'CONECT'</span>,k);
+0043    numcon=length(find(connect(k,:)));
+0044    <span class="keyword">for</span> l=1:numcon,
+0045       bond=sprintf(<span class="string">'%5u'</span>,connect(k,l));
+0046       line=[line bond];
+0047    <span class="keyword">end</span>;
+0048    fprintf(wfile,<span class="string">'%s\n'</span>,line);
+0049 <span class="keyword">end</span>;
+0050 fprintf(wfile,<span class="string">'%s\n'</span>,<span class="string">'END'</span>);
+0051 
+0052 fclose(wfile);</pre></div>
+<hr><address>Generated on Thu 25-Oct-2012 18:03:26 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
