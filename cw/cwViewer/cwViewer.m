@@ -4,7 +4,7 @@ function varargout = cwViewer(varargin)
 %      CWVIEWER, is designed as a complete solution for viewing standard 
 %      cwEPR experiments, quickly and simply.
 %
-%       CWVIEWER also provides basic data manipulation tools to quickly
+%       CWVIEWER provides basic data manipulation tools to quickly
 %       tidy up spectra. Spectra can then be exported as:
 %           > Bruker files (*.DTA / *.DSC)
 %           > Comma seperated value files (*.csv files)
@@ -16,7 +16,7 @@ function varargout = cwViewer(varargin)
 %      CWVIEWER, provides support for:
 %           > Bruker BE3ST files (.DTA / .DSC)
 %                   - .YGF when accessory files are in the same folder)
-%           > Older Bruker files (.spc / .par)  - UNTESTED
+%           > Older Bruker files (.spc / .par)
 %           > FSC2 files                        - LIMITED FUNCTIONALITY
 %           > Jeol files (*.ESR)                - UNTESTED
 %
@@ -76,7 +76,7 @@ function varargout = cwViewer(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v12.7
+% M. Bye v13.01
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -84,13 +84,18 @@ function varargout = cwViewer(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/cwviewer
-% Jun 2012;     Last revision: 12-June-2012
+% Jan 2013;     Last revision: 07-January-2013
 %
 % Approximate coding time of file:
 %               21 hours
 %
 %
 % Version history:
+% Jan 13        Switches introduced for Windows users, as Windows using a
+%               different pixel position referencing system for
+%               window/figure placement. This caused some windows to be
+%               opened above the actual screen.
+%
 % Jul 12        > Export of datasets to the MATLAB workspace not just to a
 %                   file. Useful for EasySpin. File > Export > to Workspace
 %
@@ -142,7 +147,7 @@ handles.output = hObject;
 guidata(hObject, handles);
 
 % Name the window
-set(gcf,'Name','cwViewer - v12.7');
+set(gcf,'Name','cwViewer - v13.01');
 
 %Hand.cwViewer = handles;
 
@@ -177,10 +182,25 @@ set(gcf, 'Units' , 'pixels');
 viewer_size =  get(gcf,'OuterPosition');
 screen      =  get(0,'ScreenSize');
 
-set(cwview, 'OuterPosition', [325, ...
-    (screen(4) - 5) , ...
-    (viewer_size(3)),...
-    (viewer_size(4))]);
+% Switch needed for Windows machines not conforming to normal standard
+
+switch computer
+    case 'PCWIN'
+        set(cwview, 'OuterPosition', [325, ...
+            (screen(4) - viewer_size(4) - 5) , ...
+            (viewer_size(3)),...
+            (viewer_size(4))]);       
+    case 'PCWIN64'
+        set(cwview, 'OuterPosition', [325, ...
+            (screen(4) - viewer_size(4) - 5) , ...
+            (viewer_size(3)),...
+            (viewer_size(4))]);
+    otherwise
+        set(cwview, 'OuterPosition', [325, ...
+            (screen(4) - 5) , ...
+            (viewer_size(3)),...
+            (viewer_size(4))]);
+end
 
 setappdata(cwview,'screen',screen);
 setappdata(cwview,'size_viewer',viewer_size);

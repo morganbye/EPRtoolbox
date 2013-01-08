@@ -22,7 +22,7 @@ EPRtoolbox
                                                  developed at the         
                                                  University of East Anglia
 
- M. Bye v12.12
+ M. Bye v13.01
 
 
 INSTALLATION:
@@ -46,21 +46,28 @@ examples of how to use the script.
 
 FOR MORE INFORMATION:
 =====================
-For update information please see:
+For the most up-to-date information please see:
 morganbye.net/eprtoolbox
+and
+morganbye.net/eprtoolbox/version-history
+as well as
 morganbye.net/PowerSat
 morganbye.net/cwViewer
-sourceforge.net/projects/eprtoolbox
+
+For the most recent releases:
+sourceforge.net/projects/eprtoolbox     (general release)
+and
+github.com/morganbye/EPRtoolbox         (developer release)
 
 As always for any problems, suggestions or contributions please contact me:
 morgan.bye@uea.ac.uk
-Or via my contact page
+Or via the contact page on the website:
 morganbye.net/contact
 
 ACKNOWLEDGEMENTS:
 =================
 Müge Aksoyoglu - Uni. Freiburg, Germany
-	BrukerRead, PowerSat error finding
+	BrukerRead and PowerSat error reporting
 Ray Burton-Smith - Queen Mary, Uni. of London, UK
 	Concept development (over beer)
 Gunnar Jeschke - ETH Zurich, Switzerland
@@ -72,7 +79,7 @@ Patrick Pennington - Dartmouth, USA
 Yevhen Polyhach - ETH Zurich, Switzerland
 	MMM questions and development
 Richard Rothery - Uni. of Alberta, Canada
-	e2a, BrukerRead error finding
+	e2a, BrukerRead error reporting
 David Mulder - National Renewable Energy Laboratory, USA
-    cwViewer error finding
+    cwViewer error reporting
     e2af inspiration

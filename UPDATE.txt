@@ -42,6 +42,13 @@ Big update to BrukerRead so that it now reliably can open and plot almost
 all common pulsed EPR experiments including FID, FSE, PELDOR, ESEEM,
 HYSCORE, ENDOR, DONUT.
 
+cwViewer
+========
+Many improvements for Windows users, Windows despite what the documentation
+says, uses a different addressing system for positioning windows/figures.
+Switches have been introduced such that windows always appear on-screen and
+not just above it as was reported by some users.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v12.12 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

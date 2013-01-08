@@ -41,7 +41,7 @@ function varargout = file_details(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v12.6
+% M. Bye v13.01
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -49,13 +49,18 @@ function varargout = file_details(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/cwviewer
-% May 2012;     Last revision: 18-May-2012
+% Jan 2013;     Last revision: 07-January-2013
 %
 % Approximate coding time of file:
-%               4 hours
+%               5 hours
 %
 %
 % Version history:
+% Jan 13        Switches introduced for Windows users, as Windows using a
+%               different pixel position referencing system for
+%               window/figure placement. This caused some windows to be
+%               opened above the actual screen.
+%
 % Jun 12        Improved window placement on opening
 %
 % May 12        Initial release (open beta)
@@ -129,13 +134,28 @@ hcwView = getappdata(cwview,'hcwView');
 h = get(hcwView.figure1);
 Pos = h.Position;
 
-set(gcf, 'OuterPosition', [ ...
-    (Pos(1)-size(3)-5) , ...
-    (screen(4) - 5) , ...
-    (size(3)),...
-    (size(4))]);
+% Switch needed for Windows machines not conforming to normal standard
 
-
+switch computer
+    case 'PCWIN'
+        set(gcf, 'OuterPosition', [ ...
+            (Pos(1)-size(3)-5) , ...
+            (screen(4) - size(4) - 5) , ...
+            (size(3)),...
+            (size(4))]);
+    case 'PCWIN64'
+        set(gcf, 'OuterPosition', [ ...
+            (Pos(1)-size(3)-5) , ...
+            (screen(4) - size(4) - 5) , ...
+            (size(3)),...
+            (size(4))]);
+    otherwise
+        set(gcf, 'OuterPosition', [ ...
+            (Pos(1)-size(3)-5) , ...
+            (screen(4) - 5) , ...
+            (size(3)),...
+            (size(4))]);
+end
 
 
 function edit_freq_Callback(hObject, eventdata, handles)
