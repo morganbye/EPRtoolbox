@@ -22,7 +22,7 @@ EPRtoolbox
                                                  developed at the         
                                                  University of East Anglia
 
- M. Bye v13.01
+ M. Bye v13.02
 
 
 INSTALLATION:
@@ -74,12 +74,14 @@ Gunnar Jeschke - ETH Zurich, Switzerland
 	DeerAnalysis and MMM questions
 Peter Meadows - Jeol (UK) Ltd, UK
 	File format discussion
+Alexander Morley - UEA, UK
+    cwViewer error reporting
+David Mulder - National Renewable Energy Laboratory, USA
+    cwViewer error reporting
+    e2af inspiration
 Patrick Pennington - Dartmouth, USA
 	Concept development
 Yevhen Polyhach - ETH Zurich, Switzerland
 	MMM questions and development
 Richard Rothery - Uni. of Alberta, Canada
 	e2a, BrukerRead error reporting
-David Mulder - National Renewable Energy Laboratory, USA
-    cwViewer error reporting
-    e2af inspiration

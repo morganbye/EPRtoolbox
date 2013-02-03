@@ -22,9 +22,18 @@ EPRtoolbox
                                                      developed at the         
                                                  University of East Anglia
 
-M. Bye v13.01
+M. Bye v13.02
 
-v13.01
+v13.02
+
+EasyRefiner
+===========
+Faced with 50+ cw spectra to put through EasySpin to get accurate
+g-tensors, A-values and correlation times, this GUI will simulate
+folders of spectra at a time and through multiple steps refine each
+value.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v13.01 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 --- EPRtoolbox hits 600 downloads ---
 
