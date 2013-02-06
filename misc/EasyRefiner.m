@@ -746,16 +746,13 @@ for k = 1:files
             end
             
             info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed round 1 of ' ER.data.(strcat('File',num2str(k))).info.TITL])];
-            info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Time taken: ' num2str(round(toc(timeVar1))) ' s'])];
+            info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Round 1 time taken: ' num2str(round(toc(timeVar1))) ' s'])];
             set(handles.edit_info,'String',info(end-2:end , :));
             
             
             % Save variables
             Results.(strcat('File',num2str(k))).r1.bestsys = bestsys;
             Results.(strcat('File',num2str(k))).r1.bestspc = bestspc;
-            
-            
-            
             
             % Save the figure?
             switch figSave
@@ -766,11 +763,14 @@ for k = 1:files
                     saveas(gcf,[outAdd '/' regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','') 'r1.fig']);
             end
             
+            close(gcf);
+            
             % Keep the figure open?
             switch figOpen
                 case 0
-                    close(gcf)
+                    % Do nothing
                 case 1
+                    openfig([outAdd '/' regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','') 'r1.fig'],'new');
                     set(gcf,'Name',['EasyRefiner - ' regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','') ' - Round 1']);
             end
             
@@ -803,7 +803,7 @@ for k = 1:files
             
             % Report to user
             info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed round 2 of ' ER.data.(strcat('File',num2str(k))).info.TITL])];
-            info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Time taken: ' num2str(round(toc(timeVar2))) ' s'])];
+            info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Round 2 time taken: ' num2str(round(toc(timeVar2))) ' s'])];
             set(handles.edit_info,'String',info(end-2:end , :));
             
             % Save variables
@@ -819,11 +819,14 @@ for k = 1:files
                     saveas(gcf,[outAdd '/' regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','') 'r2.fig']);
             end
             
+            close(gcf);
+            
             % Keep the figure open?
             switch figOpen
                 case 0
-                    close(gcf)
+                    % Do nothing
                 case 1
+                    openfig([outAdd '/' regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','') 'r2.fig'],'new');
                     set(gcf,'Name',['EasyRefiner - ' regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','') ' - Round 2']);
             end
             
@@ -856,7 +859,7 @@ for k = 1:files
             
             % Report to user
             info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed round 3 of ' ER.data.(strcat('File',num2str(k))).info.TITL])];
-            info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Time taken: ' num2str(round(toc(timeVar3))) ' s'])];
+            info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Round 3 time taken: ' num2str(round(toc(timeVar3))) ' s'])];
             set(handles.edit_info,'String',info(end-2:end , :));
             
             % Save variables
@@ -872,11 +875,14 @@ for k = 1:files
                     saveas(gcf,[outAdd '/' regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','') 'r3.fig']);
             end
             
+            close(gcf);
+            
             % Keep the figure open?
             switch figOpen
                 case 0
-                    close(gcf)
+                    % Do nothing
                 case 1
+                    openfig([outAdd '/' regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','') 'r3.fig'],'new');
                     set(gcf,'Name',['EasyRefiner - ' regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','') ' - Round 3']);
             end
             
@@ -888,19 +894,56 @@ for k = 1:files
                     pause(delay)
             end
     end
-    
+     
+    % Message user for file completion
     info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed file ' ER.data.(strcat('File',num2str(k))).info.TITL])];
-    info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Time taken: ' num2str(round(toc(timeVar1))) ' s'])];
+    info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'File time taken: ' num2str(round(toc(timeVar1))) ' s'])];
     set(handles.edit_info,'String',info(end-2:end , :));
     
+    % Update progress bar
     wb = waitbar((k/files)-(1/files),wb,sprintf('Completed %1d of %1d',k,files));
     
 end
 
 delete(wb);
 
+% Process the outputs
+out =[];
+
+for k = 1:files
+    % Create nice array of data for plotting
+    
+    % Column 1 and 2 are original data
+    ER.data.(strcat('File',num2str(k))).Plots(:,1) = ER.data.(strcat('File',num2str(k))).x;
+    ER.data.(strcat('File',num2str(k))).Plots(:,2) = ER.data.(strcat('File',num2str(k))).y;
+    % Column 3 and 4 is round 1
+    ER.data.(strcat('File',num2str(k))).Plots(:,3) = ER.data.(strcat('File',num2str(k))).x;
+    ER.data.(strcat('File',num2str(k))).Plots(:,4) = (Results.(strcat('File',num2str(k))).r1.bestspc)';
+    
+    if isfield(Results.(strcat('File',num2str(k))),'r2')
+        % Column 5 and 6 is round 2
+        ER.data.(strcat('File',num2str(k))).Plots(:,5) = ER.data.(strcat('File',num2str(k))).x;
+        ER.data.(strcat('File',num2str(k))).Plots(:,6) = (Results.(strcat('File',num2str(k))).r2.bestspc)';
+        
+        if isfield(Results.(strcat('File',num2str(k))),'r3')
+            % Column 7 and 8 is round 3
+            ER.data.(strcat('File',num2str(k))).Plots(:,7) = ER.data.(strcat('File',num2str(k))).x;
+            ER.data.(strcat('File',num2str(k))).Plots(:,8) = (Results.(strcat('File',num2str(k))).r3.bestspc)';
+        end
+    end
+    
+    % Rename FileX to out.{FileTitle}
+    out.(regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','')) = ER.data.(strcat('File',num2str(k)));
+end
+
+% Save the results
+save([outAdd '/' datestr(now, 'dd-mm-yy_HH:MM_') 'EasyRefiner_Results.mat'],'out');
+% Put output to base workspace
+assignin('base','EasyRefiner_Results',out);
+
+% Message user for queue completion
 info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed queue!'])];
-info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Time taken: ' num2str(round(toc(timeBegin))) ' s'])];
+info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Queue time taken: ' num2str(round(toc(timeBegin))) ' s'])];
 set(handles.edit_info,'String',info(end-2:end , :));
 
 switch log
@@ -908,7 +951,7 @@ switch log
         % Do nothing
     case 1
         % Save out info
-        logFile = fopen([outAdd '/' regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','') 'EasyRefinerLog.txt'],'w');
+        logFile = fopen([outAdd '/' datestr(now, 'dd-mm-yy_HH:MM_') 'EasyRefiner_Log.txt'],'w');
         
         for k = 1:size(info,1)
             fprintf(logFile,'%-50s\n',info(k,:));
@@ -916,3 +959,5 @@ switch log
         
         fclose(logFile);
 end
+
+
