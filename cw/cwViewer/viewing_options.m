@@ -41,7 +41,7 @@ function varargout = viewing_options(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v12.6
+% M. Bye v13.2
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -49,13 +49,15 @@ function varargout = viewing_options(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/cwviewer
-% Feb 2012;     Last revision: 26-April-2012
+% Jan 2013;     Last revision: 24-January-2012
 %
 % Approximate coding time of file:
 %               4 hours
 %
 %
 % Version history:
+% Jan 13        Corrected Gauss for mT mistake
+%
 % Jun 12        > Allow for x-axis to swap to g-value
 %               > Improved window placement on opening
 %
@@ -63,7 +65,7 @@ function varargout = viewing_options(varargin)
 %
 % Feb 12        First alpha
 
-% Last Modified by GUIDE v2.5 18-May-2012 17:58:28
+% Last Modified by GUIDE v2.5 24-Jan-2013 18:54:48
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -541,4 +543,3 @@ set(h.cwViewer.menu_Window_View, 'Checked' , 'off');
 
 
 delete(hObject);
-
