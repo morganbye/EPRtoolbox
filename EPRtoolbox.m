@@ -37,7 +37,7 @@ function varargout = EPRtoolbox(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v12.12
+% M. Bye v13.02
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -45,10 +45,12 @@ function varargout = EPRtoolbox(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/EPRtoolbox
-% May 2012;     Last revision: 30-May-2012
+% Feb 2013;     Last revision: 06-Feb-2013
 %
 % Approximate coding time of file:
 %               3 hours
+%
+% Feb 13        v13.02 release: EasyRefiner to cw menu
 %
 % Oct 12        v12.10 release: e2af added to File menu
 %
@@ -62,7 +64,7 @@ function varargout = EPRtoolbox(varargin)
 
 % Edit the above text to modify the response to help EPRtoolbox
 
-% Last Modified by GUIDE v2.5 25-Oct-2012 17:59:50
+% Last Modified by GUIDE v2.5 06-Feb-2013 17:15:56
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -120,14 +122,14 @@ Warning = ' ';
 Status  = sprintf('Status:\t\tUp-to-date');
 
 % Check the version number
-if now > datenum('2013-03-01')
-    Status  = sprintf('Status:\t\tPossibly out-of-date');
+if now > datenum('2013-06-01')
+    Status  = sprintf('Status:\t\tProbably out-of-date');
     Warning = sprintf('EPR Toolbox is updated frequently with new features and bug fixes.\nYour version is over 3 months old, please consider upgrading.\n\nFor more information please see:\nmorganbye.net/eprtoolbox\n');
 end
 
 % Startup message
-Version = sprintf('Version:\t\tv12.12');
-Release = sprintf('Release date:\t7th December 2012');
+Version = sprintf('Version:\t\tv13.02');
+Release = sprintf('Release date:\t6th Feb 2013');
 Info    = sprintf('User interfaces are available from the menus above\n\nFor more scripts please explore the downloaded folder');
 
 startup_text = strvcat(Version, Release, Status, Warning, Info);
@@ -216,6 +218,11 @@ PowerSat
 function cwViewer_Callback(hObject, eventdata, handles)
 
 cwViewer
+
+% --------------------------------------------------------------------
+function EasyRefiner_Callback(hObject, eventdata, handles)
+
+EasyRefiner
 
 % --------------------------------------------------------------------
 function MMMplotter_2_Callback(hObject, eventdata, handles)
@@ -310,4 +317,5 @@ Links = sprintf('\n<a href="http://morganbye.net/eprtoolbox">morganbye.net/eprto
 
 set(handles.editbox,'Max',2)
 set(handles.editbox,'String',l1);
+
 

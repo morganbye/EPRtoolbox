@@ -1,0 +1,766 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of site_scan</title>
+  <meta name="keywords" content="site_scan">
+  <meta name="description" content="SITE_SCAN M-file for site_scan.fig">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">MMM_rotamers</a> &gt; site_scan.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for MMM_rotamers&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>site_scan
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>SITE_SCAN M-file for site_scan.fig</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = site_scan(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SITE_SCAN M-file for site_scan.fig
+      SITE_SCAN, by itself, creates a new SITE_SCAN or raises the existing
+      singleton*.
+
+      H = SITE_SCAN returns the handle to a new SITE_SCAN or the handle to
+      the existing singleton*.
+
+      SITE_SCAN('CALLBACK',hObject,eventData,handles,...) calls the local
+      function named CALLBACK in SITE_SCAN.M with the given input arguments.
+
+      SITE_SCAN('Property','Value',...) creates a new SITE_SCAN or raises the
+      existing singleton*.  Starting from the left, property value pairs are
+      applied to the GUI before site_scan_OpeningFcn gets called.  An
+      unrecognized property name or invalid value makes property application
+      stop.  All inputs are passed to site_scan_OpeningFcn via varargin.
+
+      *See GUI Options on GUIDE's Tools menu.  Choose &quot;GUI allows only one
+      instance to run (singleton)&quot;.
+
+ See also: GUIDE, GUIDATA, GUIHANDLES</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="MMM_prototype.html" class="code" title="function varargout = MMM_prototype(varargin)">MMM_prototype</a>	MMM_PROTOTYPE M-file for MMM_prototype.fig</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function site_scan_OpeningFcn(hObject, eventdata, handles, varargin)</a></li><li><a href="#_sub2" class="code">function varargout = site_scan_OutputFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub3" class="code">function site_scan_setup_CloseRequestFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub4" class="code">function checkbox_Ala_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub5" class="code">function checkbox_Arg_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub6" class="code">function checkbox_Asn_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub7" class="code">function checkbox_Asp_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub8" class="code">function checkbox_Cys_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub9" class="code">function checkbox_Gln_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub10" class="code">function checkbox_Glu_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub11" class="code">function checkbox_Gly_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub12" class="code">function checkbox_His_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub13" class="code">function checkbox_Ile_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub14" class="code">function checkbox_Leu_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub15" class="code">function checkbox_Lys_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub16" class="code">function checkbox_Met_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub17" class="code">function checkbox_Phe_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub18" class="code">function checkbox_Pro_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub19" class="code">function checkbox_Ser_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub20" class="code">function checkbox_Thr_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub21" class="code">function checkbox_Trp_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub22" class="code">function checkbox_Tyr_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub23" class="code">function checkbox_Val_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub24" class="code">function radiobutton_conservative_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub25" class="code">function radiobutton_all_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub26" class="code">function radiobutton_user_defined_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub27" class="code">function radiobutton_intra_all_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub28" class="code">function radiobutton_intra_none_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub29" class="code">function edit_multiplicity_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub30" class="code">function edit_multiplicity_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub31" class="code">function radiobutton_inter_all_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub32" class="code">function radiobutton_inter_equivalent_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub33" class="code">function radiobutton_inter_none_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub34" class="code">function pushbutton_OK_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub35" class="code">function pushbutton_cancel_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub36" class="code">function checkbox_homooligomer_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub37" class="code">function pattern=residue_pattern(handles)</a></li><li><a href="#_sub38" class="code">function pushbutton_help_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub39" class="code">function checkbox_z_analysis_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub40" class="code">function checkbox_statistics_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub41" class="code">function checkbox_PDB_rotamers_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub42" class="code">function edit3_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub43" class="code">function checkbox_no_rot_populations_Callback(hObject, eventdata, handles)</a></li></ul>
+<h2><a name="_download"></a>DOWNLOAD <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<p><a href="site_scan.m">site_scan.m</a></p>
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = site_scan(varargin)</a>
+0002 <span class="comment">% SITE_SCAN M-file for site_scan.fig</span>
+0003 <span class="comment">%      SITE_SCAN, by itself, creates a new SITE_SCAN or raises the existing</span>
+0004 <span class="comment">%      singleton*.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">%      H = SITE_SCAN returns the handle to a new SITE_SCAN or the handle to</span>
+0007 <span class="comment">%      the existing singleton*.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%      SITE_SCAN('CALLBACK',hObject,eventData,handles,...) calls the local</span>
+0010 <span class="comment">%      function named CALLBACK in SITE_SCAN.M with the given input arguments.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%      SITE_SCAN('Property','Value',...) creates a new SITE_SCAN or raises the</span>
+0013 <span class="comment">%      existing singleton*.  Starting from the left, property value pairs are</span>
+0014 <span class="comment">%      applied to the GUI before site_scan_OpeningFcn gets called.  An</span>
+0015 <span class="comment">%      unrecognized property name or invalid value makes property application</span>
+0016 <span class="comment">%      stop.  All inputs are passed to site_scan_OpeningFcn via varargin.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%      *See GUI Options on GUIDE's Tools menu.  Choose &quot;GUI allows only one</span>
+0019 <span class="comment">%      instance to run (singleton)&quot;.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% See also: GUIDE, GUIDATA, GUIHANDLES</span>
+0022 
+0023 <span class="comment">% Edit the above text to modify the response to help site_scan</span>
+0024 
+0025 <span class="comment">% Last Modified by GUIDE v2.5 13-Jan-2011 18:09:11</span>
+0026 
+0027 <span class="comment">% Begin initialization code - DO NOT EDIT</span>
+0028 gui_Singleton = 1;
+0029 gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+0030                    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+0031                    <span class="string">'gui_OpeningFcn'</span>, @<a href="#_sub1" class="code" title="subfunction site_scan_OpeningFcn(hObject, eventdata, handles, varargin)">site_scan_OpeningFcn</a>, <span class="keyword">...</span>
+0032                    <span class="string">'gui_OutputFcn'</span>,  @<a href="#_sub2" class="code" title="subfunction varargout = site_scan_OutputFcn(hObject, eventdata, handles)">site_scan_OutputFcn</a>, <span class="keyword">...</span>
+0033                    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+0034                    <span class="string">'gui_Callback'</span>,   []);
+0035 <span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+0036     gui_State.gui_Callback = str2func(varargin{1});
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="keyword">if</span> nargout
+0040     [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+0041 <span class="keyword">else</span>
+0042     gui_mainfcn(gui_State, varargin{:});
+0043 <span class="keyword">end</span>
+0044 <span class="comment">% End initialization code - DO NOT EDIT</span>
+0045 
+0046 
+0047 <span class="comment">% --- Executes just before site_scan is made visible.</span>
+0048 <a name="_sub1" href="#_subfunctions" class="code">function site_scan_OpeningFcn(hObject, eventdata, handles, varargin)</a>
+0049 <span class="comment">% This function has no output args, see OutputFcn.</span>
+0050 <span class="comment">% hObject    handle to figure</span>
+0051 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0052 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0053 <span class="comment">% varargin   command line arguments to site_scan (see VARARGIN)</span>
+0054 
+0055 <span class="keyword">global</span> hMain
+0056 <span class="keyword">global</span> MMM_icon
+0057 
+0058 j = get(hObject,<span class="string">'javaframe'</span>);    
+0059 j.setFigureIcon(javax.swing.ImageIcon(im2java(MMM_icon)));  <span class="comment">%create a java image and set the figure icon</span>
+0060 
+0061 <span class="comment">% Choose default command line output for site_scan</span>
+0062 handles.output = hObject;
+0063 
+0064 hMain.site_scan_homooligomer=0;
+0065 hMain.site_scan_intra=1;
+0066 hMain.site_scan_inter=2;
+0067 hMain.site_scan_multiplicity=2;
+0068 
+0069 handles.multiplicity=2;
+0070 
+0071 <span class="keyword">if</span> hMain.site_scan_residue,
+0072     set(handles.radiobutton_all,<span class="string">'Value'</span>,1);
+0073     <a href="#_sub25" class="code" title="subfunction radiobutton_all_Callback(hObject, eventdata, handles)">radiobutton_all_Callback</a>(handles.radiobutton_all, [], handles);
+0074 <span class="keyword">end</span>;
+0075 
+0076 <a href="#_sub37" class="code" title="subfunction pattern=residue_pattern(handles)">residue_pattern</a>(handles);
+0077 
+0078 load helpicon
+0079 set(handles.pushbutton_help,<span class="string">'CData'</span>,cdata);
+0080 
+0081 <span class="comment">% Update handles structure</span>
+0082 guidata(hObject, handles);
+0083 
+0084 <span class="comment">% UIWAIT makes site_scan wait for user response (see UIRESUME)</span>
+0085 uiwait(handles.site_scan_setup);
+0086 
+0087 
+0088 <span class="comment">% --- Outputs from this function are returned to the command line.</span>
+0089 <a name="_sub2" href="#_subfunctions" class="code">function varargout = site_scan_OutputFcn(hObject, eventdata, handles) </a>
+0090 <span class="comment">% varargout  cell array for returning output args (see VARARGOUT);</span>
+0091 <span class="comment">% hObject    handle to figure</span>
+0092 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0093 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0094 
+0095 <span class="comment">% Get default command line output from handles structure</span>
+0096 
+0097 
+0098 
+0099 <span class="comment">% --- Executes when user attempts to close site_scan_setup.</span>
+0100 <a name="_sub3" href="#_subfunctions" class="code">function site_scan_setup_CloseRequestFcn(hObject, eventdata, handles)</a>
+0101 <span class="comment">% hObject    handle to site_scan_setup (see GCBO)</span>
+0102 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0103 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0104 
+0105 <span class="comment">% Hint: delete(hObject) closes the figure</span>
+0106 <span class="keyword">global</span> hMain
+0107 
+0108 hMain.site_scan=0;
+0109 
+0110 delete(hObject);
+0111 
+0112 
+0113 <span class="comment">% --- Executes on button press in checkbox_Ala.</span>
+0114 <a name="_sub4" href="#_subfunctions" class="code">function checkbox_Ala_Callback(hObject, eventdata, handles)</a>
+0115 <span class="comment">% hObject    handle to checkbox_Ala (see GCBO)</span>
+0116 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0117 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0118 
+0119 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Ala</span>
+0120 
+0121 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0122 
+0123 <span class="comment">% --- Executes on button press in checkbox_Arg.</span>
+0124 <a name="_sub5" href="#_subfunctions" class="code">function checkbox_Arg_Callback(hObject, eventdata, handles)</a>
+0125 <span class="comment">% hObject    handle to checkbox_Arg (see GCBO)</span>
+0126 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0127 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0128 
+0129 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Arg</span>
+0130 
+0131 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0132 
+0133 <span class="comment">% --- Executes on button press in checkbox_Asn.</span>
+0134 <a name="_sub6" href="#_subfunctions" class="code">function checkbox_Asn_Callback(hObject, eventdata, handles)</a>
+0135 <span class="comment">% hObject    handle to checkbox_Asn (see GCBO)</span>
+0136 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0137 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0138 
+0139 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Asn</span>
+0140 
+0141 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0142 
+0143 <span class="comment">% --- Executes on button press in checkbox_Asp.</span>
+0144 <a name="_sub7" href="#_subfunctions" class="code">function checkbox_Asp_Callback(hObject, eventdata, handles)</a>
+0145 <span class="comment">% hObject    handle to checkbox_Asp (see GCBO)</span>
+0146 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0147 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0148 
+0149 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Asp</span>
+0150 
+0151 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0152 
+0153 <span class="comment">% --- Executes on button press in checkbox_Cys.</span>
+0154 <a name="_sub8" href="#_subfunctions" class="code">function checkbox_Cys_Callback(hObject, eventdata, handles)</a>
+0155 <span class="comment">% hObject    handle to checkbox_Cys (see GCBO)</span>
+0156 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0157 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0158 
+0159 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Cys</span>
+0160 
+0161 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0162 
+0163 <span class="comment">% --- Executes on button press in checkbox_Gln.</span>
+0164 <a name="_sub9" href="#_subfunctions" class="code">function checkbox_Gln_Callback(hObject, eventdata, handles)</a>
+0165 <span class="comment">% hObject    handle to checkbox_Gln (see GCBO)</span>
+0166 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0167 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0168 
+0169 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Gln</span>
+0170 
+0171 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0172 
+0173 <span class="comment">% --- Executes on button press in checkbox_Glu.</span>
+0174 <a name="_sub10" href="#_subfunctions" class="code">function checkbox_Glu_Callback(hObject, eventdata, handles)</a>
+0175 <span class="comment">% hObject    handle to checkbox_Glu (see GCBO)</span>
+0176 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0177 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0178 
+0179 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Glu</span>
+0180 
+0181 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0182 
+0183 <span class="comment">% --- Executes on button press in checkbox_Gly.</span>
+0184 <a name="_sub11" href="#_subfunctions" class="code">function checkbox_Gly_Callback(hObject, eventdata, handles)</a>
+0185 <span class="comment">% hObject    handle to checkbox_Gly (see GCBO)</span>
+0186 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0187 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0188 
+0189 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Gly</span>
+0190 
+0191 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0192 
+0193 <span class="comment">% --- Executes on button press in checkbox_His.</span>
+0194 <a name="_sub12" href="#_subfunctions" class="code">function checkbox_His_Callback(hObject, eventdata, handles)</a>
+0195 <span class="comment">% hObject    handle to checkbox_His (see GCBO)</span>
+0196 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0197 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0198 
+0199 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_His</span>
+0200 
+0201 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0202 
+0203 <span class="comment">% --- Executes on button press in checkbox_Ile.</span>
+0204 <a name="_sub13" href="#_subfunctions" class="code">function checkbox_Ile_Callback(hObject, eventdata, handles)</a>
+0205 <span class="comment">% hObject    handle to checkbox_Ile (see GCBO)</span>
+0206 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0207 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0208 
+0209 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Ile</span>
+0210 
+0211 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0212 
+0213 <span class="comment">% --- Executes on button press in checkbox_Leu.</span>
+0214 <a name="_sub14" href="#_subfunctions" class="code">function checkbox_Leu_Callback(hObject, eventdata, handles)</a>
+0215 <span class="comment">% hObject    handle to checkbox_Leu (see GCBO)</span>
+0216 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0217 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0218 
+0219 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Leu</span>
+0220 
+0221 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0222 
+0223 <span class="comment">% --- Executes on button press in checkbox_Lys.</span>
+0224 <a name="_sub15" href="#_subfunctions" class="code">function checkbox_Lys_Callback(hObject, eventdata, handles)</a>
+0225 <span class="comment">% hObject    handle to checkbox_Lys (see GCBO)</span>
+0226 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0227 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0228 
+0229 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Lys</span>
+0230 
+0231 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0232 
+0233 <span class="comment">% --- Executes on button press in checkbox_Met.</span>
+0234 <a name="_sub16" href="#_subfunctions" class="code">function checkbox_Met_Callback(hObject, eventdata, handles)</a>
+0235 <span class="comment">% hObject    handle to checkbox_Met (see GCBO)</span>
+0236 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0237 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0238 
+0239 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Met</span>
+0240 
+0241 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0242 
+0243 <span class="comment">% --- Executes on button press in checkbox_Phe.</span>
+0244 <a name="_sub17" href="#_subfunctions" class="code">function checkbox_Phe_Callback(hObject, eventdata, handles)</a>
+0245 <span class="comment">% hObject    handle to checkbox_Phe (see GCBO)</span>
+0246 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0247 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0248 
+0249 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Phe</span>
+0250 
+0251 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0252 
+0253 <span class="comment">% --- Executes on button press in checkbox_Pro.</span>
+0254 <a name="_sub18" href="#_subfunctions" class="code">function checkbox_Pro_Callback(hObject, eventdata, handles)</a>
+0255 <span class="comment">% hObject    handle to checkbox_Pro (see GCBO)</span>
+0256 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0257 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0258 
+0259 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Pro</span>
+0260 
+0261 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0262 
+0263 <span class="comment">% --- Executes on button press in checkbox_Ser.</span>
+0264 <a name="_sub19" href="#_subfunctions" class="code">function checkbox_Ser_Callback(hObject, eventdata, handles)</a>
+0265 <span class="comment">% hObject    handle to checkbox_Ser (see GCBO)</span>
+0266 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0267 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0268 
+0269 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Ser</span>
+0270 
+0271 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0272 
+0273 <span class="comment">% --- Executes on button press in checkbox_Thr.</span>
+0274 <a name="_sub20" href="#_subfunctions" class="code">function checkbox_Thr_Callback(hObject, eventdata, handles)</a>
+0275 <span class="comment">% hObject    handle to checkbox_Thr (see GCBO)</span>
+0276 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0277 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0278 
+0279 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Thr</span>
+0280 
+0281 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0282 
+0283 <span class="comment">% --- Executes on button press in checkbox_Trp.</span>
+0284 <a name="_sub21" href="#_subfunctions" class="code">function checkbox_Trp_Callback(hObject, eventdata, handles)</a>
+0285 <span class="comment">% hObject    handle to checkbox_Trp (see GCBO)</span>
+0286 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0287 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0288 
+0289 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Trp</span>
+0290 
+0291 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0292 
+0293 <span class="comment">% --- Executes on button press in checkbox_Tyr.</span>
+0294 <a name="_sub22" href="#_subfunctions" class="code">function checkbox_Tyr_Callback(hObject, eventdata, handles)</a>
+0295 <span class="comment">% hObject    handle to checkbox_Tyr (see GCBO)</span>
+0296 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0297 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0298 
+0299 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Tyr</span>
+0300 
+0301 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0302 
+0303 <span class="comment">% --- Executes on button press in checkbox_Val.</span>
+0304 <a name="_sub23" href="#_subfunctions" class="code">function checkbox_Val_Callback(hObject, eventdata, handles)</a>
+0305 <span class="comment">% hObject    handle to checkbox_Val (see GCBO)</span>
+0306 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0307 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0308 
+0309 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_Val</span>
+0310 
+0311 <a href="#_sub26" class="code" title="subfunction radiobutton_user_defined_Callback(hObject, eventdata, handles)">radiobutton_user_defined_Callback</a>(hObject, eventdata, handles);
+0312 
+0313 <span class="comment">% --- Executes on button press in radiobutton_conservative.</span>
+0314 <a name="_sub24" href="#_subfunctions" class="code">function radiobutton_conservative_Callback(hObject, eventdata, handles)</a>
+0315 <span class="comment">% hObject    handle to radiobutton_conservative (see GCBO)</span>
+0316 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0317 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0318 
+0319 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of radiobutton_conservative</span>
+0320 conservative=get(hObject,<span class="string">'Value'</span>);
+0321 <span class="keyword">if</span> conservative,
+0322     set(handles.radiobutton_all,<span class="string">'Value'</span>,0);
+0323     set(handles.radiobutton_user_defined,<span class="string">'Value'</span>,0);
+0324     set(handles.checkbox_Ala,<span class="string">'Value'</span>,0);
+0325     set(handles.checkbox_Arg,<span class="string">'Value'</span>,0);
+0326     set(handles.checkbox_Asn,<span class="string">'Value'</span>,0);
+0327     set(handles.checkbox_Asp,<span class="string">'Value'</span>,0);
+0328     set(handles.checkbox_Cys,<span class="string">'Value'</span>,1);
+0329     set(handles.checkbox_Gln,<span class="string">'Value'</span>,0);
+0330     set(handles.checkbox_Glu,<span class="string">'Value'</span>,0);
+0331     set(handles.checkbox_Gly,<span class="string">'Value'</span>,0);
+0332     set(handles.checkbox_His,<span class="string">'Value'</span>,0);
+0333     set(handles.checkbox_Ile,<span class="string">'Value'</span>,1);
+0334     set(handles.checkbox_Leu,<span class="string">'Value'</span>,1);
+0335     set(handles.checkbox_Lys,<span class="string">'Value'</span>,0);
+0336     set(handles.checkbox_Met,<span class="string">'Value'</span>,1);
+0337     set(handles.checkbox_Phe,<span class="string">'Value'</span>,0);
+0338     set(handles.checkbox_Pro,<span class="string">'Value'</span>,0);
+0339     set(handles.checkbox_Ser,<span class="string">'Value'</span>,1);
+0340     set(handles.checkbox_Thr,<span class="string">'Value'</span>,1);
+0341     set(handles.checkbox_Trp,<span class="string">'Value'</span>,0);
+0342     set(handles.checkbox_Tyr,<span class="string">'Value'</span>,0);
+0343     set(handles.checkbox_Val,<span class="string">'Value'</span>,1);
+0344 <span class="keyword">else</span>
+0345     set(handles.radiobutton_conservative,<span class="string">'Value'</span>,0);
+0346     all=get(handles.radiobutton_all,<span class="string">'Value'</span>);
+0347     <span class="keyword">if</span> ~all,
+0348         set(handles.radiobutton_user_defined,<span class="string">'Value'</span>,1);
+0349     <span class="keyword">end</span>;
+0350 <span class="keyword">end</span>;
+0351 guidata(hObject, handles);
+0352 
+0353 
+0354 <span class="comment">% --- Executes on button press in radiobutton_all.</span>
+0355 <a name="_sub25" href="#_subfunctions" class="code">function radiobutton_all_Callback(hObject, eventdata, handles)</a>
+0356 <span class="comment">% hObject    handle to radiobutton_all (see GCBO)</span>
+0357 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0358 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0359 
+0360 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of radiobutton_all</span>
+0361 
+0362 all=get(hObject,<span class="string">'Value'</span>);
+0363 <span class="keyword">if</span> all,
+0364     set(handles.radiobutton_conservative,<span class="string">'Value'</span>,0);
+0365     set(handles.radiobutton_user_defined,<span class="string">'Value'</span>,0);
+0366     set(handles.checkbox_Ala,<span class="string">'Value'</span>,1);
+0367     set(handles.checkbox_Arg,<span class="string">'Value'</span>,1);
+0368     set(handles.checkbox_Asn,<span class="string">'Value'</span>,1);
+0369     set(handles.checkbox_Asp,<span class="string">'Value'</span>,1);
+0370     set(handles.checkbox_Cys,<span class="string">'Value'</span>,1);
+0371     set(handles.checkbox_Gln,<span class="string">'Value'</span>,1);
+0372     set(handles.checkbox_Glu,<span class="string">'Value'</span>,1);
+0373     set(handles.checkbox_Gly,<span class="string">'Value'</span>,1);
+0374     set(handles.checkbox_His,<span class="string">'Value'</span>,1);
+0375     set(handles.checkbox_Ile,<span class="string">'Value'</span>,1);
+0376     set(handles.checkbox_Leu,<span class="string">'Value'</span>,1);
+0377     set(handles.checkbox_Lys,<span class="string">'Value'</span>,1);
+0378     set(handles.checkbox_Met,<span class="string">'Value'</span>,1);
+0379     set(handles.checkbox_Phe,<span class="string">'Value'</span>,1);
+0380     set(handles.checkbox_Pro,<span class="string">'Value'</span>,1);
+0381     set(handles.checkbox_Ser,<span class="string">'Value'</span>,1);
+0382     set(handles.checkbox_Thr,<span class="string">'Value'</span>,1);
+0383     set(handles.checkbox_Trp,<span class="string">'Value'</span>,1);
+0384     set(handles.checkbox_Tyr,<span class="string">'Value'</span>,1);
+0385     set(handles.checkbox_Val,<span class="string">'Value'</span>,1);
+0386 <span class="keyword">else</span>
+0387     set(handles.radiobutton_all,<span class="string">'Value'</span>,0);
+0388     conservative=get(handles.radiobutton_conservative,<span class="string">'Value'</span>);
+0389     <span class="keyword">if</span> ~conservative,
+0390         set(handles.radiobutton_user_defined,<span class="string">'Value'</span>,1);
+0391     <span class="keyword">end</span>;
+0392 <span class="keyword">end</span>;
+0393 guidata(hObject, handles);
+0394 
+0395 <span class="comment">% --- Executes on button press in radiobutton_user_defined.</span>
+0396 <a name="_sub26" href="#_subfunctions" class="code">function radiobutton_user_defined_Callback(hObject, eventdata, handles)</a>
+0397 <span class="comment">% hObject    handle to radiobutton_user_defined (see GCBO)</span>
+0398 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0399 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0400 
+0401 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of radiobutton_user_defined</span>
+0402 
+0403 set(handles.radiobutton_all,<span class="string">'Value'</span>,0);
+0404 set(handles.radiobutton_conservative,<span class="string">'Value'</span>,0);
+0405 set(handles.radiobutton_user_defined,<span class="string">'Value'</span>,1);
+0406 guidata(hObject,handles);
+0407 
+0408 <span class="comment">% --- Executes on button press in radiobutton_intra_all.</span>
+0409 <a name="_sub27" href="#_subfunctions" class="code">function radiobutton_intra_all_Callback(hObject, eventdata, handles)</a>
+0410 <span class="comment">% hObject    handle to radiobutton_intra_all (see GCBO)</span>
+0411 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0412 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0413 
+0414 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of radiobutton_intra_all</span>
+0415 
+0416 <span class="keyword">global</span> hMain
+0417 
+0418 hMain.site_scan_intra=1;
+0419 set(handles.radiobutton_intra_none,<span class="string">'Value'</span>,0);
+0420 set(handles.radiobutton_intra_all,<span class="string">'Value'</span>,1);
+0421 guidata(hObject, handles);
+0422 
+0423 <span class="comment">% --- Executes on button press in radiobutton_intra_none.</span>
+0424 <a name="_sub28" href="#_subfunctions" class="code">function radiobutton_intra_none_Callback(hObject, eventdata, handles)</a>
+0425 <span class="comment">% hObject    handle to radiobutton_intra_none (see GCBO)</span>
+0426 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0427 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0428 
+0429 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of radiobutton_intra_none</span>
+0430 
+0431 <span class="keyword">global</span> hMain
+0432 
+0433 none=get(hObject,<span class="string">'Value'</span>);
+0434 <span class="keyword">if</span> none,
+0435     hMain.site_scan_intra=0;
+0436     set(handles.radiobutton_intra_all,<span class="string">'Value'</span>,0);
+0437 <span class="keyword">else</span>
+0438     hMain.site_scan_intra=1;
+0439     set(handles.radiobutton_intra_all,<span class="string">'Value'</span>,1);
+0440 <span class="keyword">end</span>;    
+0441 guidata(hObject, handles);
+0442 
+0443 
+0444 <a name="_sub29" href="#_subfunctions" class="code">function edit_multiplicity_Callback(hObject, eventdata, handles)</a>
+0445 <span class="comment">% hObject    handle to edit_multiplicity (see GCBO)</span>
+0446 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0447 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0448 
+0449 <span class="comment">% Hints: get(hObject,'String') returns contents of edit_multiplicity as text</span>
+0450 <span class="comment">%        str2double(get(hObject,'String')) returns contents of edit_multiplicity as a double</span>
+0451 <span class="keyword">global</span> hMain
+0452 
+0453 [v,handles]=edit_update_MMM(handles,hObject,2,100,3,<span class="string">'%i'</span>,1);
+0454 handles.multiplicity=v;
+0455 hMain.site_scan_multiplicity=handles.multiplicity;
+0456 guidata(hObject, handles);
+0457 
+0458 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0459 <a name="_sub30" href="#_subfunctions" class="code">function edit_multiplicity_CreateFcn(hObject, eventdata, handles)</a>
+0460 <span class="comment">% hObject    handle to edit_multiplicity (see GCBO)</span>
+0461 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0462 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0463 
+0464 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0465 <span class="comment">%       See ISPC and COMPUTER.</span>
+0466 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0467     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0468 <span class="keyword">end</span>
+0469 
+0470 
+0471 <span class="comment">% --- Executes on button press in radiobutton_inter_all.</span>
+0472 <a name="_sub31" href="#_subfunctions" class="code">function radiobutton_inter_all_Callback(hObject, eventdata, handles)</a>
+0473 <span class="comment">% hObject    handle to radiobutton_inter_all (see GCBO)</span>
+0474 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0475 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0476 
+0477 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of radiobutton_inter_all</span>
+0478 
+0479 <span class="keyword">global</span> hMain
+0480 
+0481 hMain.site_scan_inter=2;
+0482 set(handles.radiobutton_inter_equivalent,<span class="string">'Value'</span>,0);
+0483 set(handles.radiobutton_inter_none,<span class="string">'Value'</span>,0);
+0484 set(handles.radiobutton_inter_all,<span class="string">'Value'</span>,1);
+0485 guidata(hObject, handles);
+0486 
+0487 <span class="comment">% --- Executes on button press in radiobutton_inter_equivalent.</span>
+0488 <a name="_sub32" href="#_subfunctions" class="code">function radiobutton_inter_equivalent_Callback(hObject, eventdata, handles)</a>
+0489 <span class="comment">% hObject    handle to radiobutton_inter_equivalent (see GCBO)</span>
+0490 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0491 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0492 
+0493 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of radiobutton_inter_equivalent</span>
+0494 
+0495 <span class="keyword">global</span> hMain
+0496 
+0497 equiv=get(hObject,<span class="string">'Value'</span>);
+0498 <span class="keyword">if</span> equiv,
+0499     hMain.site_scan_inter=1;
+0500     set(handles.radiobutton_inter_none,<span class="string">'Value'</span>,0);
+0501     set(handles.radiobutton_inter_all,<span class="string">'Value'</span>,0);
+0502 <span class="keyword">else</span>
+0503     hMain.site_scan_inter=2;
+0504     set(handles.radiobutton_inter_equivalent,<span class="string">'Value'</span>,0);
+0505     set(handles.radiobutton_inter_all,<span class="string">'Value'</span>,1);
+0506 <span class="keyword">end</span>;    
+0507 guidata(hObject, handles);
+0508 
+0509 <span class="comment">% --- Executes on button press in radiobutton_inter_none.</span>
+0510 <a name="_sub33" href="#_subfunctions" class="code">function radiobutton_inter_none_Callback(hObject, eventdata, handles)</a>
+0511 <span class="comment">% hObject    handle to radiobutton_inter_none (see GCBO)</span>
+0512 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0513 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0514 
+0515 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of radiobutton_inter_none</span>
+0516 
+0517 <span class="keyword">global</span> hMain
+0518 
+0519 none=get(hObject,<span class="string">'Value'</span>);
+0520 <span class="keyword">if</span> none,
+0521     hMain.site_scan_inter=0;
+0522     set(handles.radiobutton_inter_equivalent,<span class="string">'Value'</span>,0);
+0523     set(handles.radiobutton_inter_all,<span class="string">'Value'</span>,0);
+0524 <span class="keyword">else</span>
+0525     hMain.site_scan_inter=2;
+0526     set(handles.radiobutton_inter_equivalent,<span class="string">'Value'</span>,0);
+0527     set(handles.radiobutton_inter_all,<span class="string">'Value'</span>,1);
+0528 <span class="keyword">end</span>;    
+0529 guidata(hObject, handles);
+0530 
+0531 <span class="comment">% --- Executes on button press in pushbutton_OK.</span>
+0532 <a name="_sub34" href="#_subfunctions" class="code">function pushbutton_OK_Callback(hObject, eventdata, handles)</a>
+0533 <span class="comment">% hObject    handle to pushbutton_OK (see GCBO)</span>
+0534 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0535 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0536 
+0537 <span class="keyword">global</span> hMain
+0538 
+0539 hMain.site_scan=1;
+0540 hMain.z_analysis=get(handles.checkbox_z_analysis,<span class="string">'Value'</span>);
+0541 hMain.statistics=get(handles.checkbox_statistics,<span class="string">'Value'</span>);
+0542 hMain.rotamer_PDB=get(handles.checkbox_PDB_rotamers,<span class="string">'Value'</span>);
+0543 hMain.no_rot_pop=get(handles.checkbox_no_rot_populations,<span class="string">'Value'</span>);
+0544 <a href="#_sub37" class="code" title="subfunction pattern=residue_pattern(handles)">residue_pattern</a>(handles);
+0545 
+0546 delete(handles.site_scan_setup);
+0547 
+0548 
+0549 <span class="comment">% --- Executes on button press in pushbutton_cancel.</span>
+0550 <a name="_sub35" href="#_subfunctions" class="code">function pushbutton_cancel_Callback(hObject, eventdata, handles)</a>
+0551 <span class="comment">% hObject    handle to pushbutton_cancel (see GCBO)</span>
+0552 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0553 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0554 
+0555 <span class="keyword">global</span> hMain
+0556 
+0557 hMain.site_scan=0;
+0558 
+0559 delete(handles.site_scan_setup);
+0560 
+0561 
+0562 <span class="comment">% --- Executes on button press in checkbox_homooligomer.</span>
+0563 <a name="_sub36" href="#_subfunctions" class="code">function checkbox_homooligomer_Callback(hObject, eventdata, handles)</a>
+0564 <span class="comment">% hObject    handle to checkbox_homooligomer (see GCBO)</span>
+0565 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0566 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0567 
+0568 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_homooligomer</span>
+0569 
+0570 <span class="keyword">global</span> hMain
+0571 
+0572 hom=get(hObject,<span class="string">'Value'</span>);
+0573 hMain.site_scan_homooligomer=hom;
+0574 <span class="keyword">if</span> hom,
+0575     hMain.site_scan_multiplicity=handles.multiplicity;
+0576     set(handles.edit_multiplicity,<span class="string">'String'</span>,sprintf(<span class="string">'%i'</span>,handles.multiplicity));
+0577     set(handles.edit_multiplicity,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0578     set(handles.text_multiplicity,<span class="string">'Enable'</span>,<span class="string">'on'</span>);
+0579 <span class="keyword">else</span>
+0580     set(handles.edit_multiplicity,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0581     set(handles.text_multiplicity,<span class="string">'Enable'</span>,<span class="string">'off'</span>);
+0582 <span class="keyword">end</span>;
+0583 guidata(hObject, handles);
+0584 
+0585 
+0586 <a name="_sub37" href="#_subfunctions" class="code">function pattern=residue_pattern(handles)</a>
+0587 <span class="comment">% store array with residue pattern in hMain and return it</span>
+0588 <span class="comment">% the pattern is a vector of flags for natural amino acid residues ordered</span>
+0589 <span class="comment">% alphabetically according to the three-letter code</span>
+0590 
+0591 <span class="keyword">global</span> hMain
+0592 
+0593 pattern=[];
+0594 
+0595 pattern=[pattern get(handles.checkbox_Ala,<span class="string">'Value'</span>)];
+0596 pattern=[pattern get(handles.checkbox_Arg,<span class="string">'Value'</span>)];
+0597 pattern=[pattern get(handles.checkbox_Asn,<span class="string">'Value'</span>)];
+0598 pattern=[pattern get(handles.checkbox_Asp,<span class="string">'Value'</span>)];
+0599 pattern=[pattern get(handles.checkbox_Cys,<span class="string">'Value'</span>)];
+0600 pattern=[pattern get(handles.checkbox_Gln,<span class="string">'Value'</span>)];
+0601 pattern=[pattern get(handles.checkbox_Glu,<span class="string">'Value'</span>)];
+0602 pattern=[pattern get(handles.checkbox_Gly,<span class="string">'Value'</span>)];
+0603 pattern=[pattern get(handles.checkbox_His,<span class="string">'Value'</span>)];
+0604 pattern=[pattern get(handles.checkbox_Ile,<span class="string">'Value'</span>)];
+0605 pattern=[pattern get(handles.checkbox_Leu,<span class="string">'Value'</span>)];
+0606 pattern=[pattern get(handles.checkbox_Lys,<span class="string">'Value'</span>)];
+0607 pattern=[pattern get(handles.checkbox_Met,<span class="string">'Value'</span>)];
+0608 pattern=[pattern get(handles.checkbox_Phe,<span class="string">'Value'</span>)];
+0609 pattern=[pattern get(handles.checkbox_Pro,<span class="string">'Value'</span>)];
+0610 pattern=[pattern get(handles.checkbox_Ser,<span class="string">'Value'</span>)];
+0611 pattern=[pattern get(handles.checkbox_Thr,<span class="string">'Value'</span>)];
+0612 pattern=[pattern get(handles.checkbox_Trp,<span class="string">'Value'</span>)];
+0613 pattern=[pattern get(handles.checkbox_Tyr,<span class="string">'Value'</span>)];
+0614 pattern=[pattern get(handles.checkbox_Val,<span class="string">'Value'</span>)];
+0615 
+0616 hMain.residue_pattern=pattern;
+0617 
+0618 
+0619 <span class="comment">% --- Executes on button press in pushbutton_help.</span>
+0620 <a name="_sub38" href="#_subfunctions" class="code">function pushbutton_help_Callback(hObject, eventdata, handles)</a>
+0621 <span class="comment">% hObject    handle to pushbutton_help (see GCBO)</span>
+0622 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0623 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0624 
+0625 <span class="keyword">global</span> help_files
+0626 
+0627 entry=strcat(help_files,<span class="string">'site_scan_window.html'</span>);
+0628 web(entry,<span class="string">'-helpbrowser'</span>);
+0629 
+0630 
+0631 <span class="comment">% --- Executes on button press in checkbox_z_analysis.</span>
+0632 <a name="_sub39" href="#_subfunctions" class="code">function checkbox_z_analysis_Callback(hObject, eventdata, handles)</a>
+0633 <span class="comment">% hObject    handle to checkbox_z_analysis (see GCBO)</span>
+0634 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0635 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0636 
+0637 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_z_analysis</span>
+0638 
+0639 
+0640 <span class="comment">% --- Executes on button press in checkbox_statistics.</span>
+0641 <a name="_sub40" href="#_subfunctions" class="code">function checkbox_statistics_Callback(hObject, eventdata, handles)</a>
+0642 <span class="comment">% hObject    handle to checkbox_statistics (see GCBO)</span>
+0643 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0644 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0645 
+0646 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_statistics</span>
+0647 
+0648 <span class="keyword">if</span> ~get(hObject,<span class="string">'Value'</span>),
+0649     set(handles.checkbox_PDB_rotamers,<span class="string">'Value'</span>,0);
+0650 <span class="keyword">end</span>;
+0651 guidata(hObject,handles);
+0652 
+0653 
+0654 <span class="comment">% --- Executes on button press in checkbox_PDB_rotamers.</span>
+0655 <a name="_sub41" href="#_subfunctions" class="code">function checkbox_PDB_rotamers_Callback(hObject, eventdata, handles)</a>
+0656 <span class="comment">% hObject    handle to checkbox_PDB_rotamers (see GCBO)</span>
+0657 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0658 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0659 
+0660 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_PDB_rotamers</span>
+0661 
+0662 <span class="keyword">if</span> get(hObject,<span class="string">'Value'</span>),
+0663     ButtonName = questdlg(<span class="string">'This is only recommended for methodological work. Do you really need these files?'</span>, <span class="string">'Very storage intensive feature'</span>, <span class="string">'No'</span>, <span class="string">'Yes'</span>, <span class="string">'No'</span>);
+0664     <span class="keyword">if</span> strcmpi(ButtonName,<span class="string">'Yes'</span>),
+0665         set(handles.checkbox_statistics,<span class="string">'Value'</span>,1);
+0666     <span class="keyword">else</span>
+0667         set(hObject,<span class="string">'Value'</span>,0);
+0668     <span class="keyword">end</span>;
+0669 <span class="keyword">end</span>;
+0670 guidata(hObject,handles);
+0671 
+0672 
+0673 
+0674 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0675 <a name="_sub42" href="#_subfunctions" class="code">function edit3_CreateFcn(hObject, eventdata, handles)</a>
+0676 <span class="comment">% hObject    handle to edit3 (see GCBO)</span>
+0677 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0678 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0679 
+0680 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0681 <span class="comment">%       See ISPC and COMPUTER.</span>
+0682 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0683     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0684 <span class="keyword">end</span>
+0685 
+0686 
+0687 
+0688 <span class="comment">% --- Executes on button press in checkbox_no_rot_populations.</span>
+0689 <a name="_sub43" href="#_subfunctions" class="code">function checkbox_no_rot_populations_Callback(hObject, eventdata, handles)</a>
+0690 <span class="comment">% hObject    handle to checkbox_no_rot_populations (see GCBO)</span>
+0691 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0692 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0693 
+0694 <span class="comment">% Hint: get(hObject,'Value') returns toggle state of checkbox_no_rot_populations</span>
+0695 <span class="keyword">global</span> hMain
+0696 no_rot_pop=get(hObject,<span class="string">'Value'</span>);
+0697 hMain.no_rot_pop=no_rot_pop;</pre></div>
+<hr><address>Generated on Wed 06-Feb-2013 17:24:48 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

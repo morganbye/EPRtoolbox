@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of randaddnoise</title>
+  <meta name="keywords" content="randaddnoise">
+  <meta name="description" content="RANDADDNOISE add noise to a spectrum, as a percentage of the">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">misc</a> &gt; randaddnoise.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>randaddnoise
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>RANDADDNOISE add noise to a spectrum, as a percentage of the</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function y_noise = randaddnoise(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> RANDADDNOISE add noise to a spectrum, as a percentage of the
+ experimental range
+
+ [y_noise] = RANDADDNOISE (y,noise)
+
+ RANDADDNOISE adds noise to a spectrum randomly.
+
+ Noise is calculated randomly +/- within a range defined as a percentage
+ of the difference between the highest and lowest data point.
+
+
+ Inputs:
+    input1     - y
+                   a data array
+    input2     - noise
+                   a %age of the y maximum range
+                   ASSUMED AS 5% IF NOTHING STATED
+
+ Outputs:
+    output1    - y_noise
+                   a new data array with noise added
+
+ Example: 
+    [y_noise] = RANDADDNOISE (y,5)
+               adds 5% noise to the spectrum y
+
+
+ Other m-files required:   none
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: EPRTOOLBOX</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_download"></a>DOWNLOAD <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<p><a href="randaddnoise.m">randaddnoise.m</a></p>
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function y_noise = randaddnoise(varargin)</a>
+0002 
+0003 <span class="comment">% RANDADDNOISE add noise to a spectrum, as a percentage of the</span>
+0004 <span class="comment">% experimental range</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% [y_noise] = RANDADDNOISE (y,noise)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% RANDADDNOISE adds noise to a spectrum randomly.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Noise is calculated randomly +/- within a range defined as a percentage</span>
+0011 <span class="comment">% of the difference between the highest and lowest data point.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Inputs:</span>
+0015 <span class="comment">%    input1     - y</span>
+0016 <span class="comment">%                   a data array</span>
+0017 <span class="comment">%    input2     - noise</span>
+0018 <span class="comment">%                   a %age of the y maximum range</span>
+0019 <span class="comment">%                   ASSUMED AS 5% IF NOTHING STATED</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Outputs:</span>
+0022 <span class="comment">%    output1    - y_noise</span>
+0023 <span class="comment">%                   a new data array with noise added</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Example:</span>
+0026 <span class="comment">%    [y_noise] = RANDADDNOISE (y,5)</span>
+0027 <span class="comment">%               adds 5% noise to the spectrum y</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Other m-files required:   none</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% Subfunctions:             none</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% MAT-files required:       none</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% See also: EPRTOOLBOX</span>
+0038 
+0039 
+0040 <span class="comment">%                                        _                             _</span>
+0041 <span class="comment">%                                       | |                           | |</span>
+0042 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0043 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0044 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0045 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0046 <span class="comment">%                       __/ |                   __/ |</span>
+0047 <span class="comment">%                      |___/                   |___/</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% M. Bye v12.8</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% Author:       Morgan Bye</span>
+0053 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0054 <span class="comment">%               University of East Anglia</span>
+0055 <span class="comment">%               NORWICH, UK</span>
+0056 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0057 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/</span>
+0058 <span class="comment">% Aug 2012;     Last revision: 03-August-2012</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">% Approximate coding time of file:</span>
+0061 <span class="comment">%               1 hours</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">% Version history:</span>
+0065 <span class="comment">% Aug 12        Minor update, rename of function to RANDADDNOISE</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">% Dec 11        Initial release</span>
+0068 
+0069 <span class="comment">%                         Input arguments</span>
+0070 <span class="comment">% ========================================================================</span>
+0071 
+0072 <span class="keyword">switch</span> nargin
+0073     <span class="keyword">case</span> 1
+0074         y = varargin{1};
+0075         noise = 5;
+0076         
+0077     <span class="keyword">case</span> 2
+0078         y = varargin{1};
+0079         noise = varargin{2};
+0080         
+0081     <span class="keyword">otherwise</span>
+0082         error(<span class="string">'Error in number of inputs for addnoise function'</span>);
+0083 <span class="keyword">end</span>
+0084         
+0085 <span class="comment">%                              Method</span>
+0086 <span class="comment">% ========================================================================</span>
+0087 
+0088 y_max = max(y);
+0089 y_min = min(y);
+0090 y_range = y_max - y_min;
+0091 
+0092 range = y_range * (noise/100);
+0093 
+0094 <span class="comment">%                           Output arguments</span>
+0095 <span class="comment">% ========================================================================</span>
+0096 
+0097 <span class="keyword">for</span> k = 1:numel(y)
+0098     <span class="keyword">if</span> rand(1) &lt; 0.5
+0099         y_noise(k) = y(k) - (range * rand(1));
+0100     <span class="keyword">else</span>
+0101         y_noise(k) = y(k) + (range * rand(1));
+0102     <span class="keyword">end</span>
+0103 <span class="keyword">end</span>
+0104 
+0105 y_noise = y_noise';</pre></div>
+<hr><address>Generated on Wed 06-Feb-2013 17:24:48 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of sgol</title>
+  <meta name="keywords" content="sgol">
+  <meta name="description" content="SGOL A crude Savitzky-Golay smoothing function">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">misc</a> &gt; sgol.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>sgol
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>SGOL A crude Savitzky-Golay smoothing function</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function out = sgol(in,nl,nr,Poly) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> SGOL A crude Savitzky-Golay smoothing function
+
+ Syntax:       - 
+
+ Inputs:
+    input1     - array (the data to be smoothed)
+
+    input2     - nl
+                   the number of points to the left (past) of the current
+                   data point
+    input3     - nr
+                   the number of points to the right (future) of the
+                   current data point
+    input4     - Polynominal Order
+
+ Outputs:
+    output1    - smoothed array
+
+ Example: 
+    see http://morganbye.net/eprtoolbox/sgol
+
+ Other m-files required:   none
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: ADDNOISE CWZERO CWNORM
+
+ References:
+   [1] Solving Problems in Scientific Computing Using Maple and Matlab,
+   Walter Gander and Jiří Hřebíček, Springer, 2004, p 133-139.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_download"></a>DOWNLOAD <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<p><a href="sgol.m">sgol.m</a></p>
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function out = sgol(in,nl,nr,Poly)</a>
+0002 
+0003 <span class="comment">% SGOL A crude Savitzky-Golay smoothing function</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Syntax:       -</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%    input1     - array (the data to be smoothed)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    input2     - nl</span>
+0011 <span class="comment">%                   the number of points to the left (past) of the current</span>
+0012 <span class="comment">%                   data point</span>
+0013 <span class="comment">%    input3     - nr</span>
+0014 <span class="comment">%                   the number of points to the right (future) of the</span>
+0015 <span class="comment">%                   current data point</span>
+0016 <span class="comment">%    input4     - Polynominal Order</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Outputs:</span>
+0019 <span class="comment">%    output1    - smoothed array</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Example:</span>
+0022 <span class="comment">%    see http://morganbye.net/eprtoolbox/sgol</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Other m-files required:   none</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Subfunctions:             none</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% MAT-files required:       none</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% See also: ADDNOISE CWZERO CWNORM</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% References:</span>
+0034 <span class="comment">%   [1] Solving Problems in Scientific Computing Using Maple and Matlab,</span>
+0035 <span class="comment">%   Walter Gander and Jiří Hřebíček, Springer, 2004, p 133-139.</span>
+0036 
+0037 <span class="comment">%                                        _                             _</span>
+0038 <span class="comment">%                                       | |                           | |</span>
+0039 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0040 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0041 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0042 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0043 <span class="comment">%                       __/ |                   __/ |</span>
+0044 <span class="comment">%                      |___/                   |___/</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% M. Bye v12.6</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% Author:       Morgan Bye</span>
+0050 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0051 <span class="comment">%               University of East Anglia</span>
+0052 <span class="comment">%               NORWICH, UK</span>
+0053 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0054 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/cwviewer</span>
+0055 <span class="comment">% May 2012;     Last revision: 30-May-2012</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% Approximate coding time of file:</span>
+0058 <span class="comment">%               &gt; 1 hour</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">% Version history:</span>
+0062 <span class="comment">% Jun 12        Initial release</span>
+0063 
+0064 A  = ones (nl+nr+1, Poly+1);
+0065 
+0066 <span class="keyword">for</span> j = Poly:-1:1
+0067     A (:,j) = [-nl:nr]' .* A(:, j+1);
+0068 <span class="keyword">end</span>
+0069 
+0070 <span class="keyword">try</span>
+0071     [Q,R] = qr(A);
+0072     c = Q(:,Poly+1) / R(Poly+1,Poly+1);
+0073 <span class="keyword">catch</span>
+0074     warndlg(<span class="string">'An error occured, try keeping the number of points more than the polynominal order'</span>,<span class="string">'Savitzky-Golay Error'</span>)
+0075 <span class="keyword">end</span>
+0076 
+0077 n               = length(in);
+0078 
+0079 out             = filter(c(nl+nr+1:-1:1), 1, in);
+0080 out(1:nl)       = in (1:nl);
+0081 out(nl+1:n-nr)  = out(nl+nr+1:n);
+0082 out(n-nr+1:n)   = in (n-nr+1:n);
+0083</pre></div>
+<hr><address>Generated on Wed 06-Feb-2013 17:24:48 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

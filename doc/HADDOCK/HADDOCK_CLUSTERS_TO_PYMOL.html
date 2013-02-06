@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of HADDOCK_CLUSTERS_TO_PYMOL</title>
+  <meta name="keywords" content="HADDOCK_CLUSTERS_TO_PYMOL">
+  <meta name="description" content="">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">HADDOCK</a> &gt; HADDOCK_CLUSTERS_TO_PYMOL.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for HADDOCK&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>HADDOCK_CLUSTERS_TO_PYMOL
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong></strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> 
+
+ HADDOCK_CLUSTERS_PROCESSING ()
+ HADDOCK_CLUSTERS_PROCESSING ('/path/to/folder')
+ [HADDOCK_score, RMSD_Emin_from_average] = HADDOCK_CLUSTERS_PROCESSING (...)
+
+ FUNCTION full description
+
+ Inputs:
+    input1     - 
+
+
+ Outputs:
+    output0    - 
+
+ Example: 
+    HADDOCK_CLUSTERS_PROCESSING
+               GUI load a folder, new figure created
+
+    [hdScore,RMSD] = HADDOCK_CLUSTERS_PROCESSING('/path/to/folder')
+               load designated folder into variables hdScore and RMSD
+
+ Other m-files required:   none
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: EPRTOOLBOX</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+<h2><a name="_download"></a>DOWNLOAD <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<p><a href="HADDOCK_CLUSTERS_TO_PYMOL.m">HADDOCK_CLUSTERS_TO_PYMOL.m</a></p>
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)</a>
+0002 
+0003 <span class="comment">%</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% HADDOCK_CLUSTERS_PROCESSING ()</span>
+0006 <span class="comment">% HADDOCK_CLUSTERS_PROCESSING ('/path/to/folder')</span>
+0007 <span class="comment">% [HADDOCK_score, RMSD_Emin_from_average] = HADDOCK_CLUSTERS_PROCESSING (...)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% FUNCTION full description</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Inputs:</span>
+0012 <span class="comment">%    input1     -</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Outputs:</span>
+0016 <span class="comment">%    output0    -</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Example:</span>
+0019 <span class="comment">%    HADDOCK_CLUSTERS_PROCESSING</span>
+0020 <span class="comment">%               GUI load a folder, new figure created</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    [hdScore,RMSD] = HADDOCK_CLUSTERS_PROCESSING('/path/to/folder')</span>
+0023 <span class="comment">%               load designated folder into variables hdScore and RMSD</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Other m-files required:   none</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Subfunctions:             none</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% MAT-files required:       none</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% See also: EPRTOOLBOX</span>
+0033 
+0034 
+0035 <span class="comment">%                                        _                             _</span>
+0036 <span class="comment">%                                       | |                           | |</span>
+0037 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0038 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0039 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0040 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0041 <span class="comment">%                       __/ |                   __/ |</span>
+0042 <span class="comment">%                      |___/                   |___/</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">% M. Bye v12.11</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% Author:       Morgan Bye</span>
+0048 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0049 <span class="comment">%               University of East Anglia</span>
+0050 <span class="comment">%               NORWICH, UK</span>
+0051 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0052 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/</span>
+0053 <span class="comment">% Dec 2011;     Last revision: 22-November-2012</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% Approximate coding time of file:</span>
+0056 <span class="comment">%               8 hours</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">% Version history:</span>
+0060 <span class="comment">% Nov 12        First release</span>
+0061 
+0062 <span class="comment">% Error check</span>
+0063 
+0064 disp(<span class="string">'Checking operating system...'</span>)
+0065 OS = computer;
+0066 fprintf(<span class="string">'System is - %s\n'</span>,OS);
+0067 
+0068 <span class="keyword">if</span> strcmp(OS,<span class="string">'GLNXA64'</span>) == 0
+0069     error(<span class="string">'HADDOCK_CLUSTERS_TO_PYMOL only works on Linux systems'</span>)
+0070     <span class="keyword">return</span>
+0071 <span class="keyword">end</span>
+0072 
+0073 disp(<span class="string">'Checking for valid PyMOL installation...'</span>)
+0074 
+0075 [status,result] = unix(<span class="string">'which pymol'</span>);
+0076 
+0077 <span class="keyword">if</span>  status == 1
+0078     disp(<span class="string">'PyMOL could not be found.'</span>)
+0079     error(<span class="string">'HADDOCK_CLUSTERS_TO_PYMOL requires PyMOL. In a terminal type &quot;which pymol&quot; to confirm.'</span>)
+0080     <span class="keyword">return</span>
+0081 <span class="keyword">else</span>
+0082     fprintf(<span class="string">'PyMOL found at - %s'</span>,result)
+0083 <span class="keyword">end</span>
+0084 
+0085 <span class="comment">% Input arguments</span>
+0086 <span class="comment">% ===============</span>
+0087 
+0088 <span class="keyword">switch</span> nargin
+0089     
+0090     <span class="keyword">case</span> 0
+0091         folder = uigetdir(<span class="string">''</span>,<span class="string">'HADDOCKtoPyMOL: Select a folder to load'</span>);
+0092         
+0093         <span class="comment">% if user cancels command nothing happens</span>
+0094         <span class="keyword">if</span> isequal(folder,0)
+0095             <span class="keyword">return</span>
+0096         <span class="keyword">end</span>
+0097         
+0098         noClust  = 4;
+0099         noStruct = 4;
+0100         disp(<span class="string">'No structure restraints defined, using default parameters'</span>)
+0101         
+0102         
+0103     <span class="keyword">case</span> 1
+0104         <span class="comment">% Folder defined</span>
+0105         <span class="keyword">if</span> ischar(varargin{1})
+0106             folder   = varargin{1};
+0107             noClust  = 4;
+0108             noStruct = 4;
+0109             disp(<span class="string">'No structure restraints defined, using default parameters'</span>)
+0110             
+0111         <span class="comment">% Number of structures defined</span>
+0112         <span class="keyword">elseif</span> isnumeric(varargin{1})
+0113             folder = uigetdir(<span class="string">''</span>,<span class="string">'HADDOCKtoPyMOL: Select a folder to load'</span>);
+0114             
+0115             <span class="comment">% if user cancels command nothing happens</span>
+0116             <span class="keyword">if</span> isequal(folder,0)
+0117                 <span class="keyword">return</span>
+0118             <span class="keyword">end</span>
+0119             noClust  = varargin{1};
+0120             noStruct = 4;
+0121         <span class="keyword">end</span>
+0122         
+0123     <span class="keyword">case</span> 2
+0124         <span class="comment">% Folder and cluster defined</span>
+0125         <span class="keyword">if</span> ischar(varargin{1})
+0126             folder   = varargin{1};
+0127             noClust  = varargin{2};
+0128             noStruct = 4; 
+0129         
+0130         <span class="comment">% Structures and clusters defined</span>
+0131         <span class="keyword">elseif</span> isnumeric(varargin{1})
+0132             folder = uigetdir(<span class="string">''</span>,<span class="string">'HADDOCKtoPyMOL: Select a folder to load'</span>);
+0133             
+0134             <span class="comment">% if user cancels command nothing happens</span>
+0135             <span class="keyword">if</span> isequal(folder,0)
+0136                 <span class="keyword">return</span>
+0137             <span class="keyword">end</span>
+0138             
+0139             noClust  = varargin{1};
+0140             noStruct = varargin{2};
+0141         <span class="keyword">end</span>
+0142         
+0143     <span class="keyword">case</span> 3
+0144         folder   = varargin{1};
+0145         noClust  = varargin{2};
+0146         noStruct = varargin{3};
+0147 <span class="keyword">end</span>
+0148 
+0149 <span class="keyword">if</span> noClust == 1
+0150     fprintf(<span class="string">'Using top cluster only and using %d structures\n'</span>,noStruct)
+0151 <span class="keyword">else</span>
+0152     fprintf(<span class="string">'Using %d structures from the top %d clusters\n'</span>,noStruct,noClust)
+0153 <span class="keyword">end</span>
+0154 
+0155 <span class="comment">% Get cluster order when ranked by Haddock score</span>
+0156 A = importdata([folder <span class="string">'/clusters_haddock-sorted.stat'</span>]);
+0157 clusterNamesSorted = A.textdata(2:<span class="keyword">end</span>,1);
+0158 
+0159 fprintf(<span class="string">'Searching clusters for PDBs...\n'</span>)
+0160 
+0161 <span class="keyword">for</span> k = 1:noClust
+0162     clusterPDBs{k} = importdata([folder <span class="string">'/'</span> clusterNamesSorted{k}]);
+0163     fprintf(<span class="string">'Found %0.2d PDBs in cluster %s\n'</span>,numel(clusterPDBs{k}),regexprep(clusterNamesSorted{k},<span class="string">'file.nam_clust'</span>,<span class="string">''</span>))
+0164 <span class="keyword">end</span>
+0165     
+0166 <span class="comment">% Create file for loading into PyMOL</span>
+0167 fprintf(<span class="string">'Creating PyMOL initialisation script...'</span>)
+0168 PyMOL_launch = fopen([folder <span class="string">'HADDOCKtoPYMOL.pml'</span>],<span class="string">'w'</span>);
+0169 
+0170 header = [<span class="keyword">...</span>
+0171 <span class="string">'#                                        _                             _   '</span>;<span class="keyword">...</span>
+0172 <span class="string">'#                                       | |                           | |  '</span>;<span class="keyword">...</span>
+0173 <span class="string">'#  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_ '</span>;<span class="keyword">...</span>
+0174 <span class="string">'# | ''_ ` _ \ / _ \| ''__/ _` |/ _` | ''_ \| ''_ \| | | |/ _ \ | ''_ \ / _ \ __|'</span>;<span class="keyword">...</span>
+0175 <span class="string">'# | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_ '</span>;<span class="keyword">...</span>
+0176 <span class="string">'# |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|'</span>;<span class="keyword">...</span>
+0177 <span class="string">'#                       __/ |                   __/ |                      '</span>;<span class="keyword">...</span>
+0178 <span class="string">'#                      |___/                   |___/                       '</span>;<span class="keyword">...</span>
+0179 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0180 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0181 <span class="string">'# M. Bye v12.10                                                            '</span>;<span class="keyword">...</span>
+0182 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0183 <span class="string">'# Author:       Morgan Bye                                                 '</span>;<span class="keyword">...</span>
+0184 <span class="string">'# Work address: Henry Wellcome Unit for Biological EPR                     '</span>;<span class="keyword">...</span>
+0185 <span class="string">'#               University of East Anglia                                  '</span>;<span class="keyword">...</span>
+0186 <span class="string">'#               NORWICH, UK                                                '</span>;<span class="keyword">...</span>
+0187 <span class="string">'# Email:        morgan.bye@uea.ac.uk                                       '</span>;<span class="keyword">...</span>
+0188 <span class="string">'# Website:      http://www.morganbye.net/eprtoolbox/                       '</span>;<span class="keyword">...</span>
+0189 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0190 <span class="string">'# File created at:                                                         '</span>];
+0191 
+0192 header = [header ; sprintf(<span class="string">'%-75s'</span>, [<span class="string">'# '</span> datestr(now, <span class="string">'dd mmmm yyyy - HH:MM'</span>)])];
+0193 
+0194 <span class="keyword">for</span> k = 1:size(header,1)
+0195     fprintf(PyMOL_launch,<span class="string">'%-75s\n'</span>,header(k,:));
+0196 <span class="keyword">end</span>
+0197 
+0198 <span class="comment">% Find location of align script</span>
+0199 alignscript  = which(<span class="string">'align_all.py'</span>);
+0200 
+0201 fprintf(PyMOL_launch,<span class="string">'%-75s\n'</span>,[<span class="string">'run '</span> alignscript]);
+0202 fprintf(PyMOL_launch,<span class="string">'%-75s\n'</span>,<span class="string">'align_all $TOPMOD'</span>);
+0203 fprintf(PyMOL_launch,<span class="string">'%-75s\n'</span>,<span class="string">'hide all'</span>);
+0204 fprintf(PyMOL_launch,<span class="string">'%-75s\n'</span>,<span class="string">'show cartoon'</span>);</pre></div>
+<hr><address>Generated on Wed 06-Feb-2013 17:24:48 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
