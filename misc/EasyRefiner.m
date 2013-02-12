@@ -44,7 +44,7 @@ function varargout = EasyRefiner(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.02
+% M. Bye v13.03
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -52,18 +52,20 @@ function varargout = EasyRefiner(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/cwviewer
-% Feb 2013;     Last revision: 03-February-2013
+% Mar 2013;     Last revision: 08-March-2013
 %
 % Approximate coding time of file:
 %               1 hours
 %
 %
 % Version history:
+% Mar 13        "Run later" button added
+%
 % Feb 13        Initial release
 
 % Edit the above text to modify the response to help EasyRefiner
 
-% Last Modified by GUIDE v2.5 06-Feb-2013 09:21:15
+% Last Modified by GUIDE v2.5 12-Feb-2013 16:04:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -100,7 +102,7 @@ handles.output = hObject;
 guidata(hObject, handles);
 
 % Name the window
-set(gcf,'Name','EasyRefiner - v13.02');
+set(gcf,'Name','EasyRefiner - v13.03');
 
 % Update output location edit box to current folder
 set(handles.edit_outputAddress,'String',pwd);
@@ -974,3 +976,30 @@ switch log
 end
 
 
+% --- Executes on button press in button_RunLater.
+function button_RunLater_Callback(hObject, eventdata, handles)
+
+timenow = datevec(now);
+
+prompt = 'When would like the queue to start? (dd-mm-yy HH:MM:SS)';
+dlg_title = 'Delay queue start';
+num_lines = 1;
+def = {[num2str(timenow(3)) '-' num2str(timenow(2)) '-' num2str(timenow(1)) ' ',...
+    num2str(timenow(4)) ':' num2str(timenow(5)+5) ':00']};
+
+start = inputdlg(prompt,dlg_title,num_lines,def);
+
+
+t1 = datevec(start,'dd-mm-yy HH:MM:SS');
+t2 = clock;
+
+diff = etime(t1,t2);
+
+info = [sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'EasyRefiner has been queued:' ])];
+info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Starting at:' datestr(t1, 'dd-mm-yy HH:MM:SS ')])];
+info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Waiting: ' num2str(round(diff)) ' s'])];
+set(handles.edit_info,'String',info);
+
+pause(diff);
+
+button_RUN_Callback(hObject, eventdata, handles);
