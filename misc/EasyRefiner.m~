@@ -52,17 +52,14 @@ function varargout = EasyRefiner(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/cwviewer
-% Mar 2013;     Last revision: 14-March-2013
+% Mar 2013;     Last revision: 08-March-2013
 %
 % Approximate coding time of file:
-%               20 hours
+%               1 hours
 %
 %
 % Version history:
 % Mar 13        "Run later" button added
-%               Better error handling
-%               Supports long file names
-%               Closing waitbar cancels queue
 %
 % Feb 13        Initial release
 
@@ -758,7 +755,7 @@ for k = 1:files
                        
             % Call EasySpin
             try
-                eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , Sys, Var, Exp , Opt, FitOpt);']);
+                eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , Sys, Var, Exp , Opt, FitOpt);'])
             catch
                 fail = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'FAILED round 1 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
                 info = [info ; fail(1:50)];
@@ -824,7 +821,7 @@ for k = 1:files
             try
                 eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , bestsys, Var, Exp , Opt, FitOpt);']);
             catch
-                fail = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'FAILED round 2 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
+                fail = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'FAILED round 1 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
                 info = [info ; fail(1:50)];
                 continue
             end
@@ -884,13 +881,7 @@ for k = 1:files
             end
             
             % Call EasySpin
-            try
-                eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , bestsys, Var, Exp , Opt, FitOpt);'])
-            catch
-                fail = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'FAILED round 3 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
-                info = [info ; fail(1:50)];
-                continue
-            end
+            eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , bestsys, Var, Exp , Opt, FitOpt);'])
             
             % Report to user
             str4 = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed round 3 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
