@@ -63,6 +63,8 @@ function varargout = EasyRefiner(varargin)
 %               Better error handling
 %               Supports long file names
 %               Closing waitbar cancels queue
+%               Seperating of fitting in command window using file name
+%               Add fit results to the output
 %
 % Feb 13        Initial release
 
@@ -572,26 +574,31 @@ set(handles.edit_var3,'String','');
 switch get(handles.popupmenu_defaults,'Value')
     case 1  % Nitroxide
         set(handles.edit_system,'String',[...
-        'Sys.g = [2.025 2.005 1.985];';...
+        'Sys.g = [2.02 2.01 2.00];   ';...
         'Sys.Nucs = ''14N'';           ';...
-        'Sys.A = 45;                 ';...
+        'Sys.A = [20 20 85];         ';...
         'Sys.n = 1;                  ';...
         'Sys.lwpp = 0.25;            ']);
     
         set(handles.edit_var1,'String',[...
-        'Var.g = [0.005 0.005 0.005];';...
-        'Var.A = 0.5;                ';...
+        'Var.g = [0.01 0.01 0.01];   ';...
+        'Var.A = [2 2 2];            ';...
         'Var.lwpp = 0.05;            ']);
     
         set(handles.edit_var2,'String',[...
         'Var.g = [0.001 0.001 0.001];';...
-        'Var.A = 0.1;                ';...
+        'Var.A = [0.5 0.5 0.5];      ';...
         'Var.lwpp = 0.01;            ']);
     
         set(handles.edit_var3,'String',[...
         'Var.g = [0.0005 0.0005 0.0005];';...
-        'Var.A = 0.001;                 ';...
+        'Var.A = [0.001 0.001 0.001];   ';...
         'Var.lwpp = 0.001;              ']);
+    
+        set(handles.edit_opt,'String',[...
+            'FitOpt.PopulationSize = 80;';...
+            'FitOpt.maxGenerations = 80;']);
+            
     
     case 2  % Fremy's
         set(handles.edit_system,'String',[...
@@ -757,6 +764,8 @@ for k = 1:files
             ER.data.(strcat('File',num2str(k))).y(:,1) = ER.data.(strcat('File',num2str(k))).y(:,1) - (m);
                        
             % Call EasySpin
+            disp([datestr(now, 'dd-mm-yy HH:MM:SS ') 'File ' ER.data.(strcat('File',num2str(k))).info.TITL , 'round 1']);
+            
             try
                 eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , Sys, Var, Exp , Opt, FitOpt);']);
             catch
@@ -822,6 +831,8 @@ for k = 1:files
             end
                       
             % Call EasySpin
+            disp([datestr(now, 'dd-mm-yy HH:MM:SS ') 'File ' ER.data.(strcat('File',num2str(k))).info.TITL , 'round 2']);
+            
             try
                 eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , bestsys, Var, Exp , Opt, FitOpt);']);
             catch
@@ -886,6 +897,8 @@ for k = 1:files
             end
             
             % Call EasySpin
+            disp([datestr(now, 'dd-mm-yy HH:MM:SS ') 'File ' ER.data.(strcat('File',num2str(k))).info.TITL , 'round 3']);
+            
             try
                 eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , bestsys, Var, Exp , Opt, FitOpt);'])
             catch
@@ -956,7 +969,8 @@ delete(wb);
 out =[];
 
 for k = 1:files
-    % Create nice array of data for plotting
+    
+    % Create nice array of data for plotting & copy EasySpin results
     
     % Column 1 and 2 are original data
     ER.data.(strcat('File',num2str(k))).Plots(:,1) = ER.data.(strcat('File',num2str(k))).x;
@@ -965,15 +979,21 @@ for k = 1:files
     ER.data.(strcat('File',num2str(k))).Plots(:,3) = ER.data.(strcat('File',num2str(k))).x;
     ER.data.(strcat('File',num2str(k))).Plots(:,4) = (Results.(strcat('File',num2str(k))).r1.bestspc)';
     
+    ER.data.(strcat('File',num2str(k))).Fits.r1    = Results.(strcat('File',num2str(k))).r1.bestsys;
+    
     if isfield(Results.(strcat('File',num2str(k))),'r2')
         % Column 5 and 6 is round 2
         ER.data.(strcat('File',num2str(k))).Plots(:,5) = ER.data.(strcat('File',num2str(k))).x;
         ER.data.(strcat('File',num2str(k))).Plots(:,6) = (Results.(strcat('File',num2str(k))).r2.bestspc)';
         
+        ER.data.(strcat('File',num2str(k))).Fits.r2    = Results.(strcat('File',num2str(k))).r2.bestsys;
+        
         if isfield(Results.(strcat('File',num2str(k))),'r3')
             % Column 7 and 8 is round 3
             ER.data.(strcat('File',num2str(k))).Plots(:,7) = ER.data.(strcat('File',num2str(k))).x;
             ER.data.(strcat('File',num2str(k))).Plots(:,8) = (Results.(strcat('File',num2str(k))).r3.bestspc)';
+            
+            ER.data.(strcat('File',num2str(k))).Fits.r3    = Results.(strcat('File',num2str(k))).r3.bestsys;
         end
     end
     
