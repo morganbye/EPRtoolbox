@@ -762,6 +762,7 @@ for k = 1:files
             catch
                 fail = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'FAILED round 1 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
                 info = [info ; fail(1:50)];
+                set(handles.edit_info,'String',info(end-2:end , :));
                 continue
             end
             
@@ -826,6 +827,7 @@ for k = 1:files
             catch
                 fail = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'FAILED round 2 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
                 info = [info ; fail(1:50)];
+                set(handles.edit_info,'String',info(end-2:end , :));
                 continue
             end
             
@@ -889,6 +891,7 @@ for k = 1:files
             catch
                 fail = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'FAILED round 3 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
                 info = [info ; fail(1:50)];
+                set(handles.edit_info,'String',info(end-2:end , :));
                 continue
             end
             
