@@ -65,6 +65,7 @@ function varargout = EasyRefiner(varargin)
 %               Closing waitbar cancels queue
 %               Seperating of fitting in command window using file name
 %               Add fit results to the output
+%               Handling of non-valid file name characters in file title
 %
 % Feb 13        Initial release
 
@@ -915,8 +916,8 @@ for k = 1:files
             set(handles.edit_info,'String',info(end-2:end , :));
             
             % Save variables
-            Results.(strcat('File',num2str(k))).r2.bestsys = bestsys;
-            Results.(strcat('File',num2str(k))).r2.bestspc = bestspc;
+            Results.(strcat('File',num2str(k))).r3.bestsys = bestsys;
+            Results.(strcat('File',num2str(k))).r3.bestspc = bestspc;
             
             % Save the figure?
             switch figSave
@@ -998,7 +999,12 @@ for k = 1:files
     end
     
     % Rename FileX to out.{FileTitle}
-    out.(regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','')) = ER.data.(strcat('File',num2str(k)));
+    try
+        out.(regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'[- \/'']','')) = ER.data.(strcat('File',num2str(k)));
+    catch
+        error('%s is not a valid file name and will be skipped', ER.data.(strcat('File',num2str(k))).info.TITL);
+        continue
+    end
 end
 
 % Save the results
