@@ -15,10 +15,33 @@ function varargout = EasyRefiner(varargin)
 % Syntax:  EASYREFINER
 %
 % Inputs:
-%    input1     - n/a
+%    input1     - Files
+%                   selectable using "Load file" and "Load folder"
+%    input2     - System
+%                   System properties for EasySpin. Anything can be used,
+%                   but it is recommend to use "Sys.Variable"
+%    input3     - Experiment
+%                   Experiment properties for EasySpin. You must use
+%                   "Exp.Variable" as the experiment frequency and magnetic
+%                   field range are imported automatically from the file
+%    input4,5,6 - Variables
+%                   Variable properties for EasySpin. Anything can be used,
+%                   but it is recommend to use "Var.Variable"
+%    input7     - Fitting options
+%                   Fitting properties for EasySpin. You must use
+%                   "FitOpt.Variable" or "SimOpt.Variable" here
 %
 % Outputs:
-%    output1    - n/a
+%    output1    - Command window
+%                   EasySpin results are printed out
+%    output2    - EasyRefiner_Results (structure)
+%                   Fitting results
+%    output2    - Figures
+%                   EasySpin fitting figures
+%    output3    - DD-MM-YY_hh:mm_EasyRefiner_Log.txt
+%                   Log file from fitting
+%    output4    - DD-MM-YY_hh:mm_EasyRefiner_Results.mat
+%                   Matlab array of fitting results
 %
 % Example: 
 %    see http://morganbye.net/eprtoolbox/easyrefiner
