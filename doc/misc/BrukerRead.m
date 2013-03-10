@@ -208,18 +208,18 @@ switch extension
 end
 
 % Get characters from file
-[string , string_characters] = fscanf( fid , '%c' );
-
-% Close file, free up memory
-fclose(fid);
-
-% Convert character array into useful string array (insert line breaks)
-parameters = [];
-
-while isempty(string) == 0;
-    [token, string] = strtok(string,char(delimiter));
-    parameters = str2mat(parameters,token);
-end
+% [string , string_characters] = fscanf( fid , '%c' );
+% 
+% % Close file, free up memory
+% fclose(fid);
+% 
+% % Convert character array into useful string array (insert line breaks)
+% parameters = [];
+% 
+% while isempty(string) == 0;
+%     [token, string] = strtok(string,char(delimiter));
+%     parameters = str2mat(parameters,token);
+% end
 
 % Do basic reading of info file to decide on how to proceed with number
 % crunching.

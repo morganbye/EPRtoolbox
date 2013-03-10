@@ -22,9 +22,28 @@ EPRtoolbox
                                                      developed at the         
                                                  University of East Anglia
 
-M. Bye v13.02
+M. Bye v13.03
 
-v13.02
+v13.03
+
+Various bug fixes to many scripts
+
+MMM 2013
+========
+Work here has been published in the new version of MMM in that the PDB read and write functions have been revamped to conform better with the PDB standard and ensure better functionality with other programs. Namely enforcing 80 character lines.
+
+EasyRefiner
+===========
+> Added a "Run later" button, so that the start of a fitting run can be 	defined as an exact date and time in the future.
+> Better error handling
+> Supports long file names
+> Closing waitbar cancels queue at end of current fit
+> Seperation of EasySpin stats in command window using file name
+> Add fit results to the output
+> Handling of non-valid file name characters in file title
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v13.02 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 EasyRefiner
 ===========
