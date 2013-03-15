@@ -40,9 +40,6 @@ function e2af(varargin)
 %           Take the file "file.DTA" and convert it to "file.txt" where
 %           values are seperated with a space rather than the standard
 %           comma
-%
-%   For use with pyDipfit
-%        e2af('/folder/of/files','\t', '.dat', 'noheader', 0.2)
 %               
 %
 % For more information see:
@@ -55,7 +52,7 @@ function e2af(varargin)
 %
 % MAT-files required:   none
 %
-% See also: E2A BRUKERREAD
+% See also: CWPLOT CWZERO CWNORM
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -142,6 +139,7 @@ switch nargin
             folder = varargin{1};
         else
             error('e2af: Folder was not recognised')
+            return
         end
 
         delimiter = varargin{2};
@@ -149,9 +147,7 @@ switch nargin
     % File, delimiter and extension selection
     case 3
         if exist(varargin{1},'dir');
-            folder = varargin{1};
-        else
-            error('e2af: Folder was not recognised')
+            address = varargin{1};
         end
         
         delimiter = varargin{2};
@@ -160,9 +156,8 @@ switch nargin
         % File, delimiter, extension and 'noheader'/interval selection
     case 4
         if exist(varargin{1},'dir');
-            folder = varargin{1};
-        else
-            error('e2af: Folder was not recognised')
+            in_address = varargin{1};
+            
         end
         
         delimiter = varargin{2};
@@ -178,15 +173,9 @@ switch nargin
         
          % File, delimiter, extension and 'noheader'/interval selection
     case 5
-        if exist(varargin{1},'dir');
-            folder = varargin{1};
-        else
-            error('e2af: Folder was not recognised')
-        end
-        
+        folder = varargin{1};
         delimiter = varargin{2};
         extension = varargin{3};
-        
         if isa(varargin{4},'char')
             noheader  = varargin{4};
         end
@@ -261,10 +250,10 @@ if noFiles ~= 0
         
         % Create matrix for exporting
         if exist('interval','var')
-            x1 = (x(1):interval:x(end));
-            y1 = interp1(x,y,x1);
+            x = (mag_field(1):interval:mag_field(end));
+            y = interp1(mag_field,abs,x);
             
-            z = [x1' y1'];
+            z = [x' y'];
             
         else
             z = [x y];

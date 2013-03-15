@@ -1,4 +1,4 @@
-function [ASCII] = e2a(varargin)
+function e2a(varargin)
 
 % E2A Convert EPR file (Bruker format) to ASCII data file
 %
@@ -7,11 +7,11 @@ function [ASCII] = e2a(varargin)
 %
 % Syntax:
 %       E2A
-%       E2A = ('path/to/file.DTA')
-%       E2A = (delimiter)
-%       E2A = ('path/to/file.DTA',delimiter)
-%       E2A = ('path/to/file.DTA',delimiter, extension)
-%       E2A = ('path/to/file.DTA',delimiter, extension, interval)
+%       E2A ('path/to/file.DTA')
+%       E2A (delimiter)
+%       E2A ('path/to/file.DTA',delimiter)
+%       E2A ('path/to/file.DTA',delimiter, extension)
+%       E2A ('path/to/file.DTA',delimiter, extension, interval)
 %
 % Inputs:
 %       input1      - The path to a file
@@ -47,7 +47,7 @@ function [ASCII] = e2a(varargin)
 %
 % MAT-files required:   none
 %
-% See also: CWPLOT CWZERO CWNORM
+% See also: E2AF BRUKERREAD
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -197,6 +197,10 @@ if exist('interval','var')
 else
     z = [mag_field abs];
 end
+
+% ========================================================================
+% Output arguments
+% ========================================================================
 
 % select ouput method
 prompt = questdlg('Do you wish to convert to the same folder?','Export','Yes','No','Yes');

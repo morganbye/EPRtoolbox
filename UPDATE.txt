@@ -34,6 +34,14 @@ e2a
 > Added switch for output to the same folder - so that if the folder is the
     current folder it still works
 
+e2af
+====
+> Added interpolation variable so that the created files can have data
+    points at a given interval eg. 0.2 gives a data point every 0.2 G
+> Added 'noheader' option for use with programs that do not like headers
+> Compatible with pyDipfit:
+    e2af('/folder/of/files','\t', '.dat', 'noheader', 0.2)
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v13.03 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
