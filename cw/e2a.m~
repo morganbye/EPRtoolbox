@@ -20,8 +20,7 @@ function [ASCII] = e2a(varargin)
 %       input3      - Extension is the file format to output
 %                       eg '.csv' , '.txt', '.dat', etc
 %       input4      - Desired magnetic field interval
-%                       eg 0.2 to use interpolation to give data points
-%                       every 0.2 Gauss
+%                       eg 0.2 to use interpolation to give data po
 %
 % Outputs:
 %       output      - a file
@@ -79,8 +78,6 @@ function [ASCII] = e2a(varargin)
 %                   command
 %                   Added switch for output to the same folder - so that if
 %                   the folder is the current folder it still works
-%               Added an interpolation function so that the output data
-%               files can have set interval between data-points
 %
 % Feb 12        Update for file load error and inputs have changed allowing
 %               for a command line file selection.
@@ -167,7 +164,6 @@ switch nargin
         delimiter = varargin{2};
         extension = varargin{3};
         
-        % File, delimiter, extension and interval selection
     case 4
         if exist(varargin{1},'file');
             in_address = varargin{1};

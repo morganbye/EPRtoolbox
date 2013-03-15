@@ -22,15 +22,29 @@ EPRtoolbox
                                                      developed at the         
                                                  University of East Anglia
 
-M. Bye v13.03
+M. Bye v13.04
 
-v13.03
+v13.04
+
+e2a
+===
+> Added interpolation variable so that the created files can have data
+    points at a given interval eg. 0.2 gives a data point every 0.2 G
+> Changed input address - removes conflict with address command
+> Added switch for output to the same folder - so that if the folder is the
+    current folder it still works
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v13.03 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Various bug fixes to many scripts
 
 MMM 2013
 ========
-Work here has been published in the new version of MMM in that the PDB read and write functions have been revamped to conform better with the PDB standard and ensure better functionality with other programs. Namely enforcing 80 character lines.
+Work here has been published in the new version of MMM in that the PDB read
+and write functions have been revamped to conform better with the PDB
+standard and ensure better functionality with other programs.
+Namely enforcing 80 character lines.
 
 EasyRefiner
 ===========
