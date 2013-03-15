@@ -254,9 +254,16 @@ switch prompt,
                 out_add = fullfile(out_path,out_name);
                 
                 dlmwrite(out_add, z, 'delimiter', delimiter,'precision', '%.13f');
+                
+            case 4
+                [out_name, out_path] = uiputfile(['*' delimiter], 'Save output as...');
+                out_add = fullfile(out_path,out_name);
+                
+                dlmwrite(out_add, z, 'delimiter', delimiter,'precision', '%.13f');
+                
         end
-       name = out_name;
+
 end
 
 % Message user
-fprintf('File %s has been successfully converted to %s%s \n \n', file, name, extension)
+fprintf('File %s has been successfully converted to %s%s \n \n', file, out_name, extension)
