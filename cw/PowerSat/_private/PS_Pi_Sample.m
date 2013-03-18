@@ -43,7 +43,7 @@ function PS_Pi_Sample(handles,exp)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/PowerSat
-% Oct 2011;    Last revision: 19-October-2011
+% Oct 2011;     Last revision: 19-October-2011
 %
 % Version history:
 % Oct 11        > Initial release

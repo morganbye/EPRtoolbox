@@ -36,7 +36,7 @@ function PS_FileLoad(exp,file)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v12.12
+% M. Bye v13.04
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -44,9 +44,11 @@ function PS_FileLoad(exp,file)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/PowerSat
-% Dec 2012;     Last revision: 5-December-2012
+% Mar 2013;     Last revision: 18-March-2013
 %
 % Version history:
+% Mar 13        > Replaced error with a return if the user cancels the load
+% 
 % Dec 12        > Progressbar fix for folder loading
 %
 % Aug 12        > Error catching for if the user cancels the file load
@@ -63,7 +65,9 @@ switch file
         try
             [x,y,info] = BrukerRead;
         catch
-            error('File load cancelled by user')
+            % Do nothing rather than error
+            return
+            % error('File load cancelled by user')
         end
         x_= x;
         

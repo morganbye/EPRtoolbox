@@ -35,7 +35,7 @@ function PS_Pi(handles)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v12.7
+% M. Bye v13.04
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -43,9 +43,15 @@ function PS_Pi(handles)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/PowerSat
-% Jun 2012;     Last revision: 29-June-2012
+% Mar 2013;     Last revision: 18-March-2013
 %
 % Version history:
+% Mar 13        > Pi is calculated faster and calculated automatically if
+%                   N2 and DPPH have been loaded, it does not wait for all
+%                   4 datasets to be loaded.
+%               > Lookup vars.exp.x not vars.exp to make sure the exp is
+%                   populated
+%
 % Jun 12        > Error catching added to top of file.
 %
 % Oct 11        > Initial release
@@ -57,49 +63,110 @@ if isfield(vars,'DPPH') == 0
     return
 end
 
+% % Always run DPPH calculation, to make sure that the DPPH values have not
+% % changed. We can then compare each experiment (that exists) to the DPPH
+% % and solve for Pi
+% 
+% PS_Pi_DPPH(handles);
+% 
+% if isfield(vars,'Oxy')
+%     exp   = 'Oxy';
+%     PS_Pi_Sample(handles,exp)
+% end
+% 
+% if isfield(vars,'N2')
+%     exp   = 'N2';
+%     PS_Pi_Sample(handles,exp)
+% end
+% 
+% if isfield(vars,'Ni')
+%     exp   = 'Ni';
+%     PS_Pi_Sample(handles,exp)
+% end
+%
+% % If all experiments have been loaded, then finally calculate Pi
+% 
+% if isfield(vars,'Oxy') && isfield(vars,'N2') && isfield(vars,'Ni')
+% 
+%     PS_Pi_Calculate(handles,'Oxy');
+%     
+%     if isfield(vars.Oxy, 'Pi')
+%         set(handles.edit_pi_Oxy,'String',num2str(vars.Oxy.Pi));
+%     end
+%         
+%     PS_Pi_Calculate(handles,'Ni');
+%     
+%     if isfield(vars.Ni, 'Pi')
+%         set(handles.edit_pi_Ni,'String',num2str(vars.Ni.Pi));
+%     end
+%     
+%     if isfield(vars.Oxy, 'Pi') == 0 && isfield(vars.Ni, 'Pi') == 0
+%         
+%         error('Accessibility:PiCalculation', ... 
+%       ['No Π values could be calculated\n\n'...
+%       'This may be because the P 1/2 value of Nitrogen is so high. '...
+%       'Consult your data and try adjusting your parameters.'])
+%     end
+%     return
+% end
+
+% v13.04
+% NEW METHOD: if Nitrogen and DPPH are loaded then calculate Pi. Dont wait,
+% as Pi calculation time is not long and allows for single experiment
+% analysis.
+
 % Always run DPPH calculation, to make sure that the DPPH values have not
 % changed. We can then compare each experiment (that exists) to the DPPH
 % and solve for Pi
 
 PS_Pi_DPPH(handles);
 
-if isfield(vars,'Oxy')
-    exp   = 'Oxy';
-    PS_Pi_Sample(handles,exp)
-end
-
-if isfield(vars,'N2')
+% Calculate the nitrogen Pi first
+if isfield(vars.N2,'x')
     exp   = 'N2';
     PS_Pi_Sample(handles,exp)
 end
 
-if isfield(vars,'Ni')
-    exp   = 'Ni';
-    PS_Pi_Sample(handles,exp)
+% Lookup the x of the Oxy rather than Oxy itself cos if the file has been
+% cleared then Oxy will exist but will be empty.
+try
+    if isfield(vars.Oxy,'x')
+        exp   = 'Oxy';
+        PS_Pi_Sample(handles,exp)
+        
+        % If nitrogen loaded calculate pi
+        if isfield(vars.N2,'x')
+            PS_Pi_Calculate(handles,'Oxy');
+            
+            % If pi calculated, display it
+            if isfield(vars.Oxy, 'Pi')
+                set(handles.edit_pi_Oxy,'String',num2str(vars.Oxy.Pi));
+            end
+        end
+    end
 end
 
-% If all experiments have been loaded, then finally calculate Pi
-
-if isfield(vars,'Oxy') && isfield(vars,'N2') && isfield(vars,'Ni')
-
-    PS_Pi_Calculate(handles,'Oxy');
-    
-    if isfield(vars.Oxy, 'Pi')
-        set(handles.edit_pi_Oxy,'String',num2str(vars.Oxy.Pi));
-    end
+try
+    if isfield(vars.Ni,'x')
+        exp   = 'Ni';
+        PS_Pi_Sample(handles,exp)
         
-    PS_Pi_Calculate(handles,'Ni');
-    
-    if isfield(vars.Ni, 'Pi')
-        set(handles.edit_pi_Ni,'String',num2str(vars.Ni.Pi));
+        if isfield(vars.N2,'x')
+            
+            PS_Pi_Calculate(handles,'Ni');
+            
+            if isfield(vars.Ni, 'Pi')
+                set(handles.edit_pi_Ni,'String',num2str(vars.Ni.Pi));
+            end
+        end
     end
+end
+
+% Error checking
+if isfield(vars.Oxy, 'Pi') == 0 && isfield(vars.Ni, 'Pi') == 0
     
-    if isfield(vars.Oxy, 'Pi') == 0 && isfield(vars.Ni, 'Pi') == 0
-        
-        error('Accessibility:PiCalculation', ... 
-      ['No Π values could be calculated\n\n'...
-      'This may be because the P 1/2 value of Nitrogen is so high. '...
-      'Consult your data and try adjusting your parameters.'])
-    end
-    return
+    error('Accessibility:PiCalculation', ...
+        ['No Π values could be calculated\n\n'...
+        'This may be because the P 1/2 value of Nitrogen is so high. '...
+        'Consult your data and try adjusting your parameters.'])
 end

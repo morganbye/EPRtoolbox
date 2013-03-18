@@ -37,7 +37,7 @@ function PS_PlotPS(handles)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v12.7
+% M. Bye v13.04
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -45,9 +45,12 @@ function PS_PlotPS(handles)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/PowerSat
-% Jul 2012;     Last revision: 9-July-2012
+% Mar 2013;     Last revision: 18-March-2013
 %
 % Version history:
+% Mar 13        > Lookup button selection and switch rather than a series
+%                   of over-writing if statements
+%
 % Jul 12        > Removed EzyFit requirement
 %
 % Oct 11        > Initial release
@@ -60,33 +63,33 @@ cla(graph,'reset');
 axes(graph);
 hold on
 
-global vars
+% global vars
 
-if isfield(vars,'Oxy')
-    
-    exp   = 'Oxy';
-    color = 'r';
-    hold on
-    PS_PlotPS_Plot(handles,exp,color);
-    
-end
+% Get the selected button
+buttonGroup = get(handles.panel_Plot,'SelectedObject');
 
-if isfield(vars,'N2')
-    
-    exp   = 'N2';
-    color = 'b';
-    hold on
-    PS_PlotPS_Plot(handles,exp,color);
-
-end
-
-if isfield(vars,'Ni')
-    
-    exp   = 'Ni';
-    color = 'g';
-    hold on
-    PS_PlotPS_Plot(handles,exp,color);
-
+switch buttonGroup.Tag
+    case 'button_OxySelect'
+        
+        exp   = 'Oxy';
+        color = 'r';
+        hold on
+        PS_PlotPS_Plot(handles,exp,color);
+        
+    case 'button_N2Select'
+        
+        exp   = 'N2';
+        color = 'b';
+        hold on
+        PS_PlotPS_Plot(handles,exp,color);
+        
+    case 'button_NiSelect'
+        
+        exp   = 'Ni';
+        color = 'g';
+        hold on
+        PS_PlotPS_Plot(handles,exp,color);
+        
 end
 
 xlabel('\surd Microwave Power / mW^½');

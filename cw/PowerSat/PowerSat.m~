@@ -100,15 +100,9 @@ function varargout = PowerSat(varargin)
 % Mar 2013;     Last revision: 18-March-2013
 %
 % Version history:
-% Mar 13        > When loading a file, check added to see if file has already
+% Mar 13        When loading a file, check added to see if file has already
 %               been loaded. If so, erases previous file, preventing errors
 %               and allows for better file comparison.
-%               > File > Reset all now clears the old data files and axes
-%               instead of opening a new instance of PowerSat and closing
-%               the old one
-%               > Changed PS_Pi so that Pi is calculated faster and
-%               calculated automatically if N2 and DPPH have been loaded,
-%               it does not wait for all 4 datasets to be loaded.
 %
 % Dec 12        > Multiple fixes for folder loading, and then peak finding
 %                   and processing as multiple files may not necessarily
@@ -189,7 +183,7 @@ end
 % --- Executes just before PowerSat is made visible.
 function PowerSat_OpeningFcn(hObject, eventdata, handles, varargin)
 
-clear global vars
+clear global
 
 % Check fitting program exists
 if exist('cftool') == 0,
@@ -324,6 +318,9 @@ end
 % ===================================================
 
 function edit_N2High_Callback(hObject, eventdata, handles)
+
+global vars
+vars.N2.MaxPeak = str2num(get(hObject,'String'));
 
 set(handles.button_N2Select,'Value',1)
 
@@ -884,23 +881,6 @@ function menu_reset_Callback(hObject, eventdata, handles)
 
 
 % NEW METHOD: clear variables, reset axes
-global vars
-vars.Oxy = [];
-vars.N2 = [];
-vars.Ni = [];
-vars.DPPH = [];
-
-cla(handles.plot_load);
-xlabel('Magnetic Field / Gauss');
-ylabel('Intensity');
-
-cla(handles.plot_PS);
-xlabel('\surd Microwave Power / mW^½');
-ylabel('Y'' / arb. units');
-
-
-
-
 
 
 
@@ -983,7 +963,7 @@ function menu_DS_N21_Callback(hObject, eventdata, handles)
 
 global vars
 % This creates a structure or overwrites an old one
-vars.N2 = [];
+vars.Oxy = [];
 
 % Set defaults
 set(handles.button_N2Select  ,'Value',1)
@@ -1008,7 +988,7 @@ function menu_DS_N22_Callback(hObject, eventdata, handles)
 
 global vars
 % This creates a structure or overwrites an old one
-vars.N2 = [];
+vars.Oxy = [];
 
 % Set defaults
 set(handles.button_N2Select  ,'Value',1)
@@ -1036,7 +1016,7 @@ function menu_DS_Ni1_Callback(hObject, eventdata, handles)
 
 global vars
 % This creates a structure or overwrites an old one
-vars.Ni = [];
+vars.Oxy = [];
 
 % Set defaults
 set(handles.button_NiSelect ,'Value',1)
@@ -1061,7 +1041,7 @@ function menu_DS_Ni2_Callback(hObject, eventdata, handles)
 
 global vars
 % This creates a structure or overwrites an old one
-vars.Ni = [];
+vars.Oxy = [];
 
 % Set defaults
 set(handles.button_NiSelect ,'Value',1)
@@ -1089,7 +1069,7 @@ function menu_DS_DPPH1_Callback(hObject, eventdata, handles)
 
 global vars
 % This creates a structure or overwrites an old one
-vars.DPPH = [];
+vars.Oxy = [];
 
 % Set defaults
 set(handles.button_DPPHSelect,'Value',1)
@@ -1115,7 +1095,7 @@ function menu_DS_DPPH2_Callback(hObject, eventdata, handles)
 
 global vars
 % This creates a structure or overwrites an old one
-vars.DPPH = [];
+vars.Oxy = [];
 
 % Set defaults
 set(handles.button_DPPHSelect,'Value',1)
