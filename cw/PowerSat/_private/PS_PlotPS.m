@@ -63,33 +63,35 @@ cla(graph,'reset');
 axes(graph);
 hold on
 
-% global vars
+global vars
 
 % Get the selected button
-buttonGroup = get(handles.panel_Plot,'SelectedObject');
+% buttonGroup = get(handles.panel_Plot,'SelectedObject');
+%switch get(buttonGroup,'Tag')
 
-switch buttonGroup.Tag
-    case 'button_OxySelect'
-        
+% Doesnt work as a switch cos it will only ever plot whichever dataset us
+% selected
+if isfield(vars,'Oxy') && isfield(vars.Oxy,'x')
+    
         exp   = 'Oxy';
         color = 'r';
         hold on
         PS_PlotPS_Plot(handles,exp,color);
+end
         
-    case 'button_N2Select'
+if isfield(vars,'N2') && isfield(vars.N2,'x')
         
         exp   = 'N2';
         color = 'b';
         hold on
         PS_PlotPS_Plot(handles,exp,color);
+end
         
-    case 'button_NiSelect'
-        
+if isfield(vars,'Ni') && isfield(vars.Ni,'x')        
         exp   = 'Ni';
         color = 'g';
         hold on
         PS_PlotPS_Plot(handles,exp,color);
-        
 end
 
 xlabel('\surd Microwave Power / mW^½');

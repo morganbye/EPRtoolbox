@@ -66,22 +66,29 @@ global vars
 
 vars.(exp).dPhalf = vars.(exp).Fit.P - vars.N2.Fit.P;
 
+% Nitrogen is the control and should always be the lowest P_1/2 value.
+% If it is not then calculation is abort.
 if vars.(exp).dPhalf < 0
     set(handles.(['edit_pi_' exp]),'String','N/A');
+    
+    if strcmp(exp,'Oxy')
+        er = 'oxygen';
+    else
+        er = 'NiEDDA';
+    end
+    
+    warndlg(sprintf(...
+        'The P 1/2 value of %s is less than that of nitrogen.\n\nSomething is wrong! Please check your data',er),...
+        'Accessibility Calculation');
     return
 end
 
-% Nitrogen is the control and should always be the lowest P_1/2 value.
-% If it is not then calculation is abort.
+
 
 POX = str2double(get(handles.CFOxyP,'String'));
 PN2 = str2double(get(handles.CFN2P ,'String'));
 PNI = str2double(get(handles.CFNiP ,'String'));
 
-if PN2 > POX || PN2 > PNI
-    warndlg('The P 1/2 value of Nitrogen is greater than that for Oxygen or NiEDDA. Something is wrong! Please check your data','Accessibility Calculation');
-    return
-end
 
 
 % Eq 10 of Altenbach et al

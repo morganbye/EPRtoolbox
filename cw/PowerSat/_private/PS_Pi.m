@@ -129,41 +129,40 @@ end
 
 % Lookup the x of the Oxy rather than Oxy itself cos if the file has been
 % cleared then Oxy will exist but will be empty.
-try
-    if isfield(vars.Oxy,'x')
-        exp   = 'Oxy';
-        PS_Pi_Sample(handles,exp)
+
+if isfield(vars,'Oxy') && isfield(vars.Oxy,'x')
+    exp   = 'Oxy';
+    PS_Pi_Sample(handles,exp)
+    
+    % If nitrogen loaded calculate pi
+    if isfield(vars.N2,'x')
+        PS_Pi_Calculate(handles,'Oxy');
         
-        % If nitrogen loaded calculate pi
-        if isfield(vars.N2,'x')
-            PS_Pi_Calculate(handles,'Oxy');
-            
-            % If pi calculated, display it
-            if isfield(vars.Oxy, 'Pi')
-                set(handles.edit_pi_Oxy,'String',num2str(vars.Oxy.Pi));
-            end
+        % If pi calculated, display it
+        if isfield(vars.Oxy, 'Pi')
+            set(handles.edit_pi_Oxy,'String',num2str(vars.Oxy.Pi));
         end
     end
 end
 
-try
-    if isfield(vars.Ni,'x')
-        exp   = 'Ni';
-        PS_Pi_Sample(handles,exp)
+
+if isfield(vars,'Ni') && isfield(vars.Ni,'x')
+    exp   = 'Ni';
+    PS_Pi_Sample(handles,exp)
+    
+    if isfield(vars.N2,'x')
         
-        if isfield(vars.N2,'x')
-            
-            PS_Pi_Calculate(handles,'Ni');
-            
-            if isfield(vars.Ni, 'Pi')
-                set(handles.edit_pi_Ni,'String',num2str(vars.Ni.Pi));
-            end
+        PS_Pi_Calculate(handles,'Ni');
+        
+        if isfield(vars.Ni, 'Pi')
+            set(handles.edit_pi_Ni,'String',num2str(vars.Ni.Pi));
         end
     end
 end
 
 % Error checking
-if isfield(vars.Oxy, 'Pi') == 0 && isfield(vars.Ni, 'Pi') == 0
+if (isfield(vars.Oxy,'x') == 0 && isfield(vars.Oxy, 'Pi') == 0) ...
+        && ((isfield(vars.Ni,'x') == 0 && isfield(vars.Ni, 'Pi') == 0))
     
     error('Accessibility:PiCalculation', ...
         ['No Π values could be calculated\n\n'...
