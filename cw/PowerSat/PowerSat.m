@@ -882,24 +882,64 @@ function menu_reset_Callback(hObject, eventdata, handles)
 % 
 % clear global
 
-
 % NEW METHOD: clear variables, reset axes
-global vars
-vars.Oxy = [];
-vars.N2 = [];
-vars.Ni = [];
-vars.DPPH = [];
 
-cla(handles.plot_load);
-xlabel('Magnetic Field / Gauss');
-ylabel('Intensity');
+close = questdlg(...
+    'Are you sure you want to reset PowerSat? This will clear all unsaved data.',...
+    'Reset PowerSat?',...
+    'Yes',...
+    'No',...
+    'Yes');
 
-cla(handles.plot_PS);
-xlabel('\surd Microwave Power / mW^½');
-ylabel('Y'' / arb. units');
+switch strcmp(close,'Yes')
+    case 1
+        
+        global vars
+        vars.Oxy = [];
+        vars.N2 = [];
+        vars.Ni = [];
+        vars.DPPH = [];
+        
+        cla(handles.plot_load);
+        xlabel('Magnetic Field / Gauss');
+        ylabel('Intensity');
+        
+        cla(handles.plot_PS);
+        xlabel('\surd Microwave Power / mW^½');
+        ylabel('Y'' / arb. units');
+        
+        set(handles.edit_OxyHigh,'String','-');
+        set(handles.edit_OxyLow,'String','-');
+        set(handles.edit_N2High,'String','-');
+        set(handles.edit_N2Low,'String','-');
+        set(handles.edit_NiHigh,'String','-');
+        set(handles.edit_NiLow,'String','-');
+        set(handles.edit_DPPHHigh,'String','-');
+        set(handles.edit_DPPHLow,'String','-');
+        
+        set(handles.button_OxySelect ,'Value',1);
+        set(handles.checkbox_autozero,'Value',1);
+        set(handles.dropdown_view    ,'Value',1);
 
+        set(handles.CFOxyP,'String','-');
+        set(handles.CFOxyA,'String','-');
+        set(handles.CFOxyB,'String','-');
+        set(handles.CFOxyR,'String','-');
+        set(handles.CFN2P,'String','-');
+        set(handles.CFN2A,'String','-');
+        set(handles.CFN2B,'String','-');
+        set(handles.CFN2R,'String','-');
+        set(handles.CFNiP,'String','-');
+        set(handles.CFNiA,'String','-');
+        set(handles.CFNiB,'String','-');
+        set(handles.CFNiR,'String','-');
 
-
+        set(handles.edit_pi_Oxy,'String','-');
+        set(handles.edit_pi_Ni,'String','-');
+  
+    case 0
+        
+end
 
 
 
