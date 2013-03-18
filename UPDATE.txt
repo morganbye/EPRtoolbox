@@ -26,6 +26,23 @@ M. Bye v13.04
 
 v13.04
 
+--- EPRtoolbox hits 700 downloads ---
+
+PowerSat
+========
+ > When loading a file, check added to see if file has already been loaded.
+    If so, erases previous file, preventing errors and allows for better
+    file comparison.
+> "File" > "Reset all" now clears the old data files and axes instead of
+    opening a new instance of PowerSat and closing the old one
+> Changed PS_Pi so that Pi is calculated faster and calculated
+    automatically if nitrogen and DPPH have been loaded, allowing for
+    single oxygen or NiEDDA experiments to be analysed and not requiring
+    all 4 datasets to be loaded.
+> Minor bug fixes, better graphic presentation.
+> More error reporting added - if power saturation fails or Pi is not able
+    to be calculated then the user is messaged.
+
 e2a
 ===
 > Added interpolation variable so that the created files can have data

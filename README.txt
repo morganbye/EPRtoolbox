@@ -22,7 +22,7 @@ EPRtoolbox
                                                  developed at the         
                                                  University of East Anglia
 
- M. Bye v13.03
+ M. Bye v13.04
 
 
 INSTALLATION:
@@ -41,7 +41,6 @@ The toolbox contains many useful scripts that are not contained within the
 main graphical user interface. Feel free to browse these at your leisure.
 Each has an extensive help header section and most contain a weblink to
 examples of how to use the script.
-
 
 
 FOR MORE INFORMATION:
@@ -64,6 +63,19 @@ morgan.bye@uea.ac.uk
 Or via the contact page on the website:
 morganbye.net/contact
 
+
+CONTRIBUTE:
+===========
+If you spot an error - please report them to me via
+
+If you'd like to contribute to the toolbox - please email
+
+If you use the toolbox and feel like it's saved you time/effort/frustration
+please consider buying me a coffee as saying thanks:
+[there's a PayPal link at morganbye.net/eprtoolbox]
+Or buying me a beer at the next conference!
+
+
 ACKNOWLEDGEMENTS:
 =================
 Müge Aksoyoglu - Uni. Freiburg, Germany
@@ -75,7 +87,7 @@ Gunnar Jeschke - ETH Zurich, Switzerland
 Peter Meadows - Jeol (UK) Ltd, UK
 	File format discussion
 Alexander Morley - UEA, UK
-    cwViewer error reporting
+    cwViewer and PowerSat error reporting
 David Mulder - National Renewable Energy Laboratory, USA
     cwViewer error reporting
     e2af inspiration
@@ -84,4 +96,4 @@ Patrick Pennington - Dartmouth, USA
 Yevhen Polyhach - ETH Zurich, Switzerland
 	MMM questions and development
 Richard Rothery - Uni. of Alberta, Canada
-	e2a, BrukerRead error reporting
+	e2a and BrukerRead error reporting

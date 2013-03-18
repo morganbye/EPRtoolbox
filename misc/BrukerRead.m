@@ -85,7 +85,7 @@ function varargout = BrukerRead(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.01
+% M. Bye v13.04
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -93,13 +93,20 @@ function varargout = BrukerRead(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/brukerread
-% Dec 2012;     Last revision: 20-December-2012
+% Mar 2013;     Last revision: 18-March-2013
 %
 % Approximate coding time of file:
 %               12 hours
 %
 %
 % Version history:
+% Mar 13        > Minor edits to help compatibility with the EasySpin's
+%                   "eprsave". This is not a fix as the function does not
+%                   export several key components for a spectrum (such as
+%                   experiment type, microwave power, etc). But 'plot'
+%                   input argument works - using the assumption that the
+%                   spectra is a standard CW experiment.
+%
 % Dec 12        > Major update for HYSCORE experiment handling
 %               > Bug fixes and better handling for ENDOR, ESEEM, DONUT
 %                   experiment handling especially in figure plotting

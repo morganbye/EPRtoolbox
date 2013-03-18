@@ -37,7 +37,7 @@ function varargout = EPRtoolbox(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.03
+% M. Bye v13.04
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -45,12 +45,13 @@ function varargout = EPRtoolbox(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/EPRtoolbox
-% Feb 2013;     Last revision: 06-Feb-2013
+% Mar 2013;     Last revision: 18-March-2013
 %
 % Approximate coding time of file:
 %               3 hours
 %
-% Mar 13	v13.03 release
+% Mar 13        v13.04 release
+%               v13.03 release
 %
 % Feb 13        v13.02 release: EasyRefiner to cw menu
 %
@@ -124,14 +125,14 @@ Warning = ' ';
 Status  = sprintf('Status:\t\tUp-to-date');
 
 % Check the version number
-if now > datenum('2013-07-01')
+if now > datenum('2013-08-01')
     Status  = sprintf('Status:\t\tProbably out-of-date');
     Warning = sprintf('EPR Toolbox is updated frequently with new features and bug fixes.\nYour version is over 3 months old, please consider upgrading.\n\nFor more information please see:\nmorganbye.net/eprtoolbox\n');
 end
 
 % Startup message
-Version = sprintf('Version:\t\tv13.03');
-Release = sprintf('Release date:\t10th Mar 2013');
+Version = sprintf('Version:\t\tv13.04');
+Release = sprintf('Release date:\t1st Apr 2013');
 Info    = sprintf('User interfaces are available from the menus above\n\nFor more scripts please explore the downloaded folder');
 
 startup_text = strvcat(Version, Release, Status, Warning, Info);
