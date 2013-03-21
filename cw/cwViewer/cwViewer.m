@@ -95,6 +95,8 @@ function varargout = cwViewer(varargin)
 %               > Web link adjusted to system background colour.
 %               > Clicking on the web link opens system default browser to
 %                   the cwViewer homepage.
+%               > Improved image export so that figures are no longer
+%                  cropped removing the top half of the spectra.
 %
 % Jan 13        Switches introduced for Windows users, as Windows using a
 %               different pixel position referencing system for
@@ -881,6 +883,10 @@ set(axesObject,'Position',[15 5 axes_pos(3) axes_pos(4)]);
 % adjusts the new figure accordingly
 set(newFig,'Units',axes_units);
 set(newFig,'Position',[15 5 axes_pos(3)+30 axes_pos(4)+10]);
+
+% adjust the "paper" positioning to avoid Matlab cropping the top of the
+% figure off
+set(newFig,'PaperPositionMode','auto');
 
 % saves the plot
 saveas(newFig,[pathname filename]) 
