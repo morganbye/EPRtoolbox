@@ -76,7 +76,7 @@ function varargout = cwViewer(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.01
+% M. Bye v13.04
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -84,13 +84,18 @@ function varargout = cwViewer(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/cwviewer
-% Jan 2013;     Last revision: 07-January-2013
+% Mar 2013;     Last revision: 21-March-2013
 %
 % Approximate coding time of file:
 %               21 hours
 %
 %
 % Version history:
+% Mar 13        > Error message for folder loading an empty folder
+%               > Web link adjusted to system background colour.
+%               > Clicking on the web link opens system default browser to
+%                   the cwViewer homepage.
+%
 % Jan 13        Switches introduced for Windows users, as Windows using a
 %               different pixel position referencing system for
 %               window/figure placement. This caused some windows to be
@@ -108,7 +113,7 @@ function varargout = cwViewer(varargin)
 %
 % Feb 12        First alpha
 
-% Last Modified by GUIDE v2.5 19-Jun-2012 17:25:49
+% Last Modified by GUIDE v2.5 21-Mar-2013 11:36:51
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -147,7 +152,7 @@ handles.output = hObject;
 guidata(hObject, handles);
 
 % Name the window
-set(gcf,'Name','cwViewer - v13.01');
+set(gcf,'Name','cwViewer - v13.04');
 
 %Hand.cwViewer = handles;
 
@@ -166,6 +171,9 @@ set(handles.slider , 'Min'    , Var.Slider.Min);
 set(handles.slider , 'Max'    , Var.Slider.Max);
 set(handles.slider , 'Value'  , Var.Slider.Value);
 set(handles.slider , 'Visible', Var.Slider.Visible);
+
+% Setup web link
+set(handles.text_weblink  , 'BackgroundColor' , get(0,'defaultUicontrolBackgroundColor'));
 
 setappdata(cwview, 'Var' , Var);
 setappdata(cwview,'hcwView',handles);
@@ -259,6 +267,14 @@ if getappdata(cwview,'logo') == 1;
     axis off
     axis image
 end
+
+
+% --- If Enable == 'on', executes on mouse press in 5 pixel border.
+% --- Otherwise, executes on mouse press in 5 pixel border or over text_weblink.
+function text_weblink_ButtonDownFcn(hObject, eventdata, handles)
+
+web('http://morganbye.net/eprtoolbox/cwviewer','-browser')
+
 
 %  .d8888b.  888 d8b      888                  
 % d88P  Y88b 888 Y8P      888                  
@@ -576,7 +592,7 @@ if numel(dtaFiles) ~= 0
             
             % Write out new string to File Details listbox
             set(hFile.listbox_files,'String',files)
-                        
+            
         end
     end
     
@@ -590,12 +606,17 @@ if numel(dtaFiles) ~= 0
     set(hFile.edit_freq,    'String', num2str(info.MWFQ/1e9));
     set(hFile.edit_scans,   'String', num2str(info.AVGS));
     set(hFile.edit_mw,      'String', num2str(info.MWPW*1e3));
+    
+    
+    
+    % Save variables to main workspace
+    setappdata(cwview,'hFile',hFile);
+    
+    cv_plot;
+    
+else
+    warndlg('No files could be found in that folder','Load folder error');
 end
-
-% Save variables to main workspace
-setappdata(cwview,'hFile',hFile);
-
-cv_plot;
 
 
 
@@ -1087,4 +1108,7 @@ l1 = sprintf('cwViewer is part of the EPR Toolbox and has been developed by Morg
 
 Links = sprintf('\n<a href="http://morganbye.net/eprtoolbox">morganbye.net/eprtoolbox</a>\n<a href="http://sourceforge.net/projects/eprtoolbox">sourceforge.net/projects/eprtoolbox</a>\n\n')
 
-msgbox(l1,'cwViewer - v12.7');
+msgbox(l1,'cwViewer - v13.04');
+
+
+
