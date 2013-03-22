@@ -61,7 +61,7 @@ function varargout = MISHAP_pro(varargin)
 
 % Edit the above text to modify the response to help MISHAP_pro
 
-% Last Modified by GUIDE v2.5 11-Jan-2013 17:00:54
+% Last Modified by GUIDE v2.5 22-Mar-2013 18:42:20
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -328,3 +328,24 @@ function edit2_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in button_save_both.
+function button_save_both_Callback(hObject, eventdata, handles)
+% hObject    handle to button_save_both (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in button_save2.
+function button_save2_Callback(hObject, eventdata, handles)
+% hObject    handle to button_save2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in button_save1.
+function button_save1_Callback(hObject, eventdata, handles)
+% hObject    handle to button_save1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
