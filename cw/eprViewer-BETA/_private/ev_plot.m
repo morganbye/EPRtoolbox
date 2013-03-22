@@ -1,4 +1,4 @@
-function cv_plot(varargin)
+function ev_plot(varargin)
 
 % CV_PLOT Plotting function for cwViewer
 %
