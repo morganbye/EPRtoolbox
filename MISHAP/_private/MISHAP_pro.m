@@ -46,7 +46,7 @@ function varargout = MISHAP_pro(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.01
+% M. Bye v13.04
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -54,10 +54,10 @@ function varargout = MISHAP_pro(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/mishap/
-% Jan 2013;     Last revision: 12-January-2013
+% Mar 2013;     Last revision: 22-March-2013
 %
 % Version history:
-% Jan 13        Initial release
+% Mar 13        Initial release
 
 % Edit the above text to modify the response to help MISHAP_pro
 
@@ -123,6 +123,11 @@ axis(handles.axes2,'off');
 
 % Update the dropdown boxes according to what's loaded in MMM
 global model
+
+if isfield(model,'structures') == 0
+    warndlg(sprintf('Could not find MMM variables\n\nYou have probably called MISHAP without MMM open.\n\nPlease open MMM and call MISHAP using \n> Predict menu\n   > Quaternary \n     > HADDOCK \n       > MISHAP'),...
+        'MISHAP')
+end
 
 NoStruct = size(model.structures,2);
 NoChains = size(model.structures{1},2);

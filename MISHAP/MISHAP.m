@@ -111,8 +111,28 @@ text(.4,.5,splash,...
     'Color','w',...
     'EdgeColor','w');
 
+% Load preferences
+global MISHAP
+MS_loca = which('MISHAP');
+MS_directory = fileparts(MS_loca);
+MISHAP.pref = load([MS_directory '/_private/preferences.mat']);
+
 % Start MISHAP
-MISHAP_dist;
+switch MISHAP.pref.installed
+    case 1
+        MISHAP_dist;
+    case 0
+        button = questdlg('MISHAP has not yet been installed. Would you like to install it now?',...
+            'Install MISHAP?','Yes','No','Yes');
+        
+        switch button
+            case 'Yes'        
+                MISHAP_install;
+            case 'No'
+                return
+        end
+end
+
 pause(2);
 
 % Close MISHAP

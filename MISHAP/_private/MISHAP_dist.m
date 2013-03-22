@@ -46,7 +46,7 @@ function varargout = MISHAP_dist(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.01
+% M. Bye v13.04
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -54,10 +54,10 @@ function varargout = MISHAP_dist(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/mishap/
-% Jan 2013;     Last revision: 12-January-2013
+% Mar 2013;     Last revision: 22-March-2013
 %
 % Version history:
-% Jan 13        Initial release
+% Mar 13        Initial release
 
 % Edit the above text to modify the response to help MISHAP_dist
 
