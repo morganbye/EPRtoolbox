@@ -61,7 +61,7 @@ function varargout = MISHAP_pro(varargin)
 
 % Edit the above text to modify the response to help MISHAP_pro
 
-% Last Modified by GUIDE v2.5 25-Mar-2013 17:54:59
+% Last Modified by GUIDE v2.5 25-Mar-2013 17:30:29
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -114,12 +114,7 @@ set(gcf,'OuterPosition',[...
 
 % Change default save path to current path
 set(handles.edit_savepath,'String',pwd);
-
 set(handles.edit_seq1,'Max',2);
-set(handles.edit_seq1,'FontName','FixedWidth');
-
-set(handles.edit_seq2,'Max',2);
-set(handles.edit_seq2,'FontName','FixedWidth');
 
 global model
 
@@ -141,23 +136,14 @@ NamesChain{1}(strcmp('',NamesChain{1})) = [];
 set(handles.popupmenu_chain1,'String',NamesChain{1});
 set(handles.popupmenu_chain2,'String',NamesChain{1});
 
-if  size(get(handles.popupmenu_chain2,'String'),1) > 1
+if get(handles.popupmenu_chain2,'Value') > 1
     set(handles.popupmenu_chain2,'Value',2);
 end
 
-% % With chains and structures found show sequence preview
-% seq = sprintf('%c%c%c%c%c ',model.structures{1}(1).sequence);
-% seq = linewrap(seq,30);
-% seq = textwrap(handles.edit_seq1,seq);
-% set(handles.edit_seq1,'String',seq);
-% 
-% seq = sprintf('%c%c%c%c%c ',model.structures{1}(2).sequence);
-% seq = linewrap(seq,30);
-% seq = textwrap(handles.edit_seq1,seq);
-% set(handles.edit_seq2,'String',seq);
+% With chains and structures found show sequence preview
 
-MISHAP_pro_sequence(1,1,1);
-MISHAP_pro_sequence(2,1,1);
+sprintf()
+set(handles.edit_seq1,'String',model.structures{1}(1).sequence);
 
 % Update handles structure
 guidata(hObject, handles);
@@ -430,26 +416,3 @@ get_contents = @(f) f{1};
 c = cellfun(get_contents, tokens, 'UniformOutput', false);
 
 c = deblank(c);
-
-
-
-function edit_seq2_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_seq2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit_seq2 as text
-%        str2double(get(hObject,'String')) returns contents of edit_seq2 as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function edit_seq2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit_seq2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end

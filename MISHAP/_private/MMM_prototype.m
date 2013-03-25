@@ -22,7 +22,7 @@ function varargout = MMM_prototype(varargin)
 
 % Edit the above text to modify the response to help MMM_prototype
 
-% Last Modified by GUIDE v2.5 22-Mar-2013 17:25:19
+% Last Modified by GUIDE v2.5 25-Mar-2013 16:31:46
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -1111,15 +1111,26 @@ global web_adr
 
 webcall(web_adr.RosettaDock);
 
+
 % --------------------------------------------------------------------
-function menu_predict_quater_HADDOCK_Callback(hObject, eventdata, handles)
-% hObject    handle to menu_predict_quater_HADDOCK (see GCBO)
+function menu_predict_quater_HADDOCK_MISHAP_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_predict_quater_HADDOCK_MISHAP (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+MISHAP;
+
+
+% --------------------------------------------------------------------
+function menu_predict_quater_HADDOCK_HADDOCK_Callback(hObject, eventdata, handles)
+% hObject    handle to menu_predict_quater_HADDOCK_HADDOCK (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 global web_adr
 
 webcall(web_adr.Haddock);
+
 
 % --------------------------------------------------------------------
 function menu_predict_quater_AutoDock_Callback(hObject, eventdata, handles)
@@ -2498,7 +2509,7 @@ hMain.virgin=0;
 
 snum=model.current_structure;
 if isfield(model.info{snum},'resolution') && ~isempty(model.info{snum}.resolution),
-    resstring=sprintf('%4.2f �,model.info{snum}.resolution);
+    resstring=sprintf('%4.2f',model.info{snum}.resolution);
 else
     resstring='not specified';
 end;
@@ -4288,7 +4299,7 @@ end;
 if message.error==0,
     model.current_structure=snum1;
     if isfield(model.info{snum1},'resolution') && ~isempty(model.info{snum1}.resolution),
-        resstring=sprintf('%4.2f �,model.info{snum1}.resolution);
+        resstring=sprintf('%4.2f',model.info{snum1}.resolution);
     else
         resstring='not specified';
     end;
@@ -4898,11 +4909,3 @@ function menu_analysis_compare_Callback(hObject, eventdata, handles)
 
 [ merit, message ] = analyze_model_fom;
 
-
-% --------------------------------------------------------------------
-function menu_predict_quater_HADDOCK_MISHAP_Callback(hObject, eventdata, handles)
-% hObject    handle to menu_predict_quater_HADDOCK_MISHAP (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-MISHAP;

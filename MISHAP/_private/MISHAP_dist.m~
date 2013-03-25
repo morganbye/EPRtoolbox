@@ -342,8 +342,7 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 
 global MISHAP
 
-if MISHAP.pro == 1
-    close(MISHAP.handles.pro.figure1);
-end
+if MISHAP.pro = 1
+close(MISHAP.handles.pro.figure1)
 
 delete(hObject);

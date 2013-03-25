@@ -46,7 +46,7 @@ function MISHAP
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.01
+% M. Bye v13.04
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -54,10 +54,10 @@ function MISHAP
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/mishap/
-% Jan 2013;     Last revision: 12-January-2013
+% Mar 2013;     Last revision: 23-March-2013
 %
 % Version history:
-% Jan 13        Initial release
+% Mar 13        Initial release
 
 % Create splash screen
 h=figure;
@@ -133,7 +133,7 @@ switch MISHAP.pref.installed
         end
 end
 
-pause(2);
+pause(1);
 
 % Close MISHAP
 close(h);
