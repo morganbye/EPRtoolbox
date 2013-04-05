@@ -30,7 +30,7 @@ INSTALLATION:
 Extract the zip folder
 Add the folder to your MATLAB path
      File -> Set Path -> Add with Subfolders
-     Save, Close, Restart MATLAB
+     Save, Close.
 Type "EPRtoolbox" to start the main toolbox
 Type "PowerSat" to start the power saturation tool
     (also available through the main toolbox)
@@ -57,6 +57,10 @@ For the most recent releases:
 sourceforge.net/projects/eprtoolbox     (general release)
 and
 github.com/morganbye/EPRtoolbox         (developer release)
+
+
+CONTACT ME:
+===========
 
 As always for any problems, suggestions or contributions please contact me:
 morgan.bye@uea.ac.uk

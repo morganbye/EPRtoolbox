@@ -25,7 +25,7 @@ function varargout = EPRtoolbox(varargin)
 %
 % MAT-files required: none
 %
-% See also: EPRTOOLBOX_CLI (Command Line Interface (EPRtoolbox v11.1 to 11.6)
+% See also: POWERSAT CWVIEWER MISHAP_MISHAP
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -67,7 +67,7 @@ function varargout = EPRtoolbox(varargin)
 
 % Edit the above text to modify the response to help EPRtoolbox
 
-% Last Modified by GUIDE v2.5 06-Feb-2013 17:15:56
+% Last Modified by GUIDE v2.5 05-Apr-2013 11:43:17
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -125,14 +125,14 @@ Warning = ' ';
 Status  = sprintf('Status:\t\tUp-to-date');
 
 % Check the version number
-if now > datenum('2013-08-01')
+if now > datenum('2013-10-01')
     Status  = sprintf('Status:\t\tProbably out-of-date');
     Warning = sprintf('EPR Toolbox is updated frequently with new features and bug fixes.\nYour version is over 3 months old, please consider upgrading.\n\nFor more information please see:\nmorganbye.net/eprtoolbox\n');
 end
 
 % Startup message
 Version = sprintf('Version:\t\tv13.04');
-Release = sprintf('Release date:\t1st Apr 2013');
+Release = sprintf('Release date:\t5th Apr 2013');
 Info    = sprintf('User interfaces are available from the menus above\n\nFor more scripts please explore the downloaded folder');
 
 startup_text = strvcat(Version, Release, Status, Warning, Info);
@@ -252,6 +252,14 @@ MMM_rota_uninstall
 function DEERtoMatrix_Callback(hObject, eventdata, handles)
 
 DEERconverter
+
+% --------------------------------------------------------------------
+function MISHAP_Callback(hObject, eventdata, handles)
+
+% --------------------------------------------------------------------
+function MISHAP_MISHAP_Callback(hObject, eventdata, handles)
+
+% MISHAP
 
 
 % --------------------------------------------------------------------

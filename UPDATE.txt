@@ -26,11 +26,11 @@ M. Bye v13.04
 
 v13.04
 
---- EPRtoolbox hits 700 downloads ---
+--- EPRtoolbox hits 800 downloads ---
 
 PowerSat
 ========
- > When loading a file, check added to see if file has already been loaded.
+> When loading a file, check added to see if file has already been loaded.
     If so, erases previous file, preventing errors and allows for better
     file comparison.
 > "File" > "Reset all" now clears the old data files and axes instead of
@@ -59,8 +59,26 @@ e2af
 > Compatible with pyDipfit:
     e2af('/folder/of/files','\t', '.dat', 'noheader', 0.2)
 
+NEW FEATURE: eprViewer - BETA
+=============================
+This feature will eventually take over from cwViewer as the main viewer
+interface with more features and significantly better handling of pulsed
+experiments.
+
+NEW FEATURE: MMM_figureshaper
+=============================
+Take DEER window distance distribution saved figures and plot them nicely,
+saving them automatically as an image file whilst simultaniously generating
+a .CSV file of the x and y axis.
+
+FEATURE REMOVAL: MMM_rotamers (directory/_install.m/_uninstall.m)
+===========================================
+Feature not required with new MMM release.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v13.03 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+--- EPRtoolbox hits 700 downloads ---
 
 Various bug fixes to many scripts
 
