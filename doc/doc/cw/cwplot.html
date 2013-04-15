@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of cwplot</title>
+  <meta name="keywords" content="cwplot">
+  <meta name="description" content="Plots cw spectra">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">doc</a> &gt; <a href="index.html">cw</a> &gt; cwplot.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for doc/cw&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>cwplot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Plots cw spectra</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function cwplot(x,y,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Plots cw spectra
+
+ CWPLOT (x , y)
+ CWPLOT (x , y , separation)
+ CWPLOT (x , y , separation , offset)
+
+ Where separation is the degree to which plots are separated if more than
+ one plot is plotted onto one graph. Default = 0.15.
+
+ Offset allows you to create a staggered plot, offseting each plot by the
+ stated number of Gauss. Recommended value ~ 5.
+ Inputs:
+    input1     - x axis
+                   Magnetic field
+    input2     - y axis
+                   Intensity
+    input3     - separation
+                   Movement on y-axis
+    input4     - offset
+                   Movement on x-axis
+ Outputs:
+    output1    - new figure
+
+ Example: 
+    cwplot(x,y,1.2,5)
+               Plots y against x with each spectrum (y) being moved up 1.2
+               and across by 5 Gauss
+
+ Other m-files required:   none
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: EPRTOOLBOX CWPLOTTER</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function cwplot(x,y,varargin)</a>
+0002 <span class="comment">% Plots cw spectra</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% CWPLOT (x , y)</span>
+0005 <span class="comment">% CWPLOT (x , y , separation)</span>
+0006 <span class="comment">% CWPLOT (x , y , separation , offset)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Where separation is the degree to which plots are separated if more than</span>
+0009 <span class="comment">% one plot is plotted onto one graph. Default = 0.15.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Offset allows you to create a staggered plot, offseting each plot by the</span>
+0012 <span class="comment">% stated number of Gauss. Recommended value ~ 5.</span>
+0013 <span class="comment">% Inputs:</span>
+0014 <span class="comment">%    input1     - x axis</span>
+0015 <span class="comment">%                   Magnetic field</span>
+0016 <span class="comment">%    input2     - y axis</span>
+0017 <span class="comment">%                   Intensity</span>
+0018 <span class="comment">%    input3     - separation</span>
+0019 <span class="comment">%                   Movement on y-axis</span>
+0020 <span class="comment">%    input4     - offset</span>
+0021 <span class="comment">%                   Movement on x-axis</span>
+0022 <span class="comment">% Outputs:</span>
+0023 <span class="comment">%    output1    - new figure</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Example:</span>
+0026 <span class="comment">%    cwplot(x,y,1.2,5)</span>
+0027 <span class="comment">%               Plots y against x with each spectrum (y) being moved up 1.2</span>
+0028 <span class="comment">%               and across by 5 Gauss</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Other m-files required:   none</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% Subfunctions:             none</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% MAT-files required:       none</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% See also: EPRTOOLBOX CWPLOTTER</span>
+0038 
+0039 <span class="comment">%                                        _                             _</span>
+0040 <span class="comment">%                                       | |                           | |</span>
+0041 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0042 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0043 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0044 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0045 <span class="comment">%                       __/ |                   __/ |</span>
+0046 <span class="comment">%                      |___/                   |___/</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">% M. Bye v11.12</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% Author:       Morgan Bye</span>
+0051 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0052 <span class="comment">%               University of East Anglia</span>
+0053 <span class="comment">%               NORWICH, UK</span>
+0054 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0055 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/cwplot</span>
+0056 <span class="comment">% Dec 2011;     Last revision: 12-December-2011</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% Approximate coding time of file:</span>
+0059 <span class="comment">%               2 hours</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% Version history:</span>
+0063 <span class="comment">% Dec 11        Help section added</span>
+0064 <span class="comment">%</span>
+0065 <span class="comment">% May 11        Initial release</span>
+0066 <span class="comment">%</span>
+0067 
+0068 
+0069 [~,C] = size(x);
+0070 [~,c] = size(y);
+0071 
+0072     <span class="keyword">if</span> c == 0
+0073         error(sprintf(<span class="string">'\nNo spectra have been found in array x\n\nPlease load a spectra and try again'</span>))
+0074                 
+0075     <span class="keyword">elseif</span> c == 1
+0076         figure(<span class="string">'name'</span> , <span class="string">'Loaded EPR spectrum'</span>, <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>)
+0077         plot(x , y);
+0078         xlabel(<span class="string">'Magnetic field / Gauss'</span>);
+0079         ylabel(<span class="string">'Relative intensity / arb. units'</span>);
+0080         set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0081         set(gca,<span class="string">'XGrid'</span>,<span class="string">'on'</span>);
+0082         
+0083     <span class="keyword">else</span>
+0084         figure(<span class="string">'name'</span> , <span class="string">'Loaded EPR spectra'</span>, <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>)
+0085         hold on
+0086         <span class="keyword">if</span> nargin &gt; 3
+0087             separation = varargin{1};
+0088             offset = varargin{2};
+0089             
+0090             <span class="keyword">if</span> C == 1
+0091                 <span class="keyword">for</span> k=1:c
+0092                     plot((x(:,1)+(k*offset)),(y(:,k)+(separation*k)))
+0093                 <span class="keyword">end</span>
+0094             <span class="keyword">else</span>
+0095                 <span class="keyword">for</span> k=1:c
+0096                     plot((x(:,k)+(k*offset)),(y(:,k)+(separation*k)))
+0097                 <span class="keyword">end</span>
+0098             <span class="keyword">end</span>
+0099             
+0100             <span class="comment">% As a single line (compatible without arrow.m)</span>
+0101             <span class="comment">% line([x(1,1) x(1,1)+(c*offset)],[y(1,1) y(end,1)+(c*separation)],'LineStyle','--','Color',[.6 .6 .6])</span>
+0102             
+0103             <span class="comment">% Right hand side arrow</span>
+0104             <span class="comment">% arrow([x(end,1)+5 mean(y(:,1))],[x(end,1)+5+(offset*c) y(end,end)+(separation*k)])</span>
+0105             
+0106             <span class="comment">% Left hand side arrow</span>
+0107             <span class="comment">% arrow([x(1,1)-5 mean(y(:,1))],[x(1,1)-5+(offset*c) y(end,end)+(separation*k)])</span>
+0108 
+0109 
+0110         <span class="keyword">elseif</span> nargin &gt; 2
+0111             separation = varargin{1};
+0112             
+0113             <span class="keyword">if</span> C == 1
+0114                 <span class="keyword">for</span> k=1:c
+0115                     plot( x(:,1) , (y(:,k)+(separation*k)))
+0116                 <span class="keyword">end</span>
+0117             <span class="keyword">else</span>
+0118                 <span class="keyword">for</span> k=1:c
+0119                     plot( x(:,k) , (y(:,k)+(separation*k)))
+0120                 <span class="keyword">end</span>
+0121             <span class="keyword">end</span>
+0122             
+0123         <span class="keyword">else</span>
+0124             <span class="keyword">for</span> k=1:c
+0125                 plot(x(:,k),(y(:,k)+(0.15*k)))
+0126                 set(gca,<span class="string">'XGrid'</span>,<span class="string">'on'</span>);
+0127             <span class="keyword">end</span>
+0128         <span class="keyword">end</span>
+0129         
+0130         hold off
+0131         xlabel(<span class="string">'Magnetic field / Gauss'</span>);
+0132         ylabel(<span class="string">'Relative intensity / arb. units'</span>);
+0133         set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0134         set(gca,<span class="string">'ycolor'</span>,<span class="string">'white'</span>);
+0135     <span class="keyword">end</span>
+0136     
+0137 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 12:00:44 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

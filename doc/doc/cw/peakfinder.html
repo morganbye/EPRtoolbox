@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of peakfinder</title>
+  <meta name="keywords" content="peakfinder">
+  <meta name="description" content="load spectra, autozero and find the peaks">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">doc</a> &gt; <a href="index.html">cw</a> &gt; peakfinder.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for doc/cw&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>peakfinder
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>load spectra, autozero and find the peaks</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> load spectra, autozero and find the peaks
+
+ For more information see:
+ http://morganbye.net/eprtoolbox/peakfinder</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% load spectra, autozero and find the peaks</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% For more information see:</span>
+0004 <span class="comment">% http://morganbye.net/eprtoolbox/peakfinder</span>
+0005 <span class="comment">%</span>
+0006 
+0007 <span class="comment">%</span>
+0008 <span class="comment">%                                        _                             _</span>
+0009 <span class="comment">%                                       | |                           | |</span>
+0010 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0011 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0012 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0013 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0014 <span class="comment">%                       __/ |                   __/ |</span>
+0015 <span class="comment">%                      |___/                   |___/</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% requires the use of:</span>
+0018 <span class="comment">% eprload from</span>
+0019 <span class="comment">% S. Stoll's EasySpin</span>
+0020 <span class="comment">% fpeak from</span>
+0021 <span class="comment">% http://www.mathworks.com/matlabcentral/fileexchange/4242</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% M. Bye v11.2</span>
+0024 
+0025 [file, directory] = uigetfile(<span class="string">'*.DTA'</span>);
+0026 [pathname, ~ , ~] = fileparts(directory);
+0027 [~, name, extension] = fileparts(file);
+0028 
+0029 <span class="comment">% create eprload friendly names</span>
+0030 address = [pathname,<span class="string">'/'</span>,file];
+0031 eprname = fullfile(pathname, name);
+0032 
+0033 <span class="comment">% load epr spectrum using EasySpin</span>
+0034 [x, y, pars] = eprload(eprname);
+0035 
+0036 <span class="comment">% autozero the y-axis using cwzero function</span>
+0037 m = mean([(y(end-4:<span class="keyword">end</span>,1)) ; (y(1:5,1))]);
+0038     y(:,1) = y(:,1) - (m);
+0039 
+0040 <span class="comment">% select peak selection mode</span>
+0041 prompt = questdlg(<span class="string">'Do you wish to automatically guess peak fitting parameters?'</span>,<span class="string">'Auto peak pick?'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>,<span class="string">'Yes'</span>);
+0042 
+0043 <span class="comment">% Peak selection method</span>
+0044 <span class="keyword">switch</span> prompt,
+0045     <span class="comment">% Auto select peaks</span>
+0046     <span class="keyword">case</span> <span class="string">'Yes'</span>,
+0047         peaklist_pos = fpeak(x,y,15,[-inf,inf,0.2,inf]);
+0048         peaklist_neg = fpeak(x,y,15,[-inf,inf,-inf,-0.2]);
+0049         peaklist = [peaklist_pos ; peaklist_neg];
+0050         plot(x,y);
+0051         xlabel(<span class="string">'Magnetic field / Gauss'</span>);
+0052         ylabel(<span class="string">'Relative absorbance / arb. units'</span>);
+0053         set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0054         hold on;
+0055         plot(peaklist(:,1),peaklist(:,2),<span class="string">'o'</span>);
+0056         fprintf(<span class="string">'\n%d peaks have been found \n\n'</span>, (numel(peaklist)/2) );
+0057     
+0058     <span class="comment">% Manually edit parameters</span>
+0059     <span class="keyword">case</span> <span class="string">'No'</span>,
+0060         <span class="comment">% prompt user for variables</span>
+0061         xstart = input(<span class="string">'\nStart searching the x-axis for peaks at? \n'</span>);
+0062         xend = input(<span class="string">'\nEnd searching the x-axis at? \n'</span>);
+0063         ystart = input(<span class="string">'\nStart searching the y-axis at? \n    HINT: inf = infinity \n\n'</span>);
+0064         yend = input(<span class="string">'\nEnd searching the y-axis at? \n'</span>);
+0065         
+0066         sens = input(<span class="string">'\nSelect sensitivity \n   width at 1/2 peak height\n   Recommended ~15 \n\n'</span>);
+0067         
+0068         noisefilter = questdlg(<span class="string">'Do you wish to ignore noise about zero?'</span>,<span class="string">'Noise filtering'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>,<span class="string">'Yes'</span>);
+0069         
+0070         <span class="comment">% Does the user want to use noise filtering? ie ignore values close</span>
+0071         <span class="comment">% to zero</span>
+0072         <span class="keyword">switch</span> noisefilter,
+0073             <span class="keyword">case</span> <span class="string">'Yes'</span>,
+0074                 noise = input(<span class="string">'\nSet noise value? \n    the deviation of noise about zero\n   Recommended ~0.2 \n\n'</span>);
+0075                 peaklist_pos = fpeak(x,y,sens,[xstart,xend,noise,yend]);
+0076                 peaklist_neg = fpeak(x,y,sens,[xstart,xend,ystart,-noise]);
+0077                 peaklist = [peaklist_pos ; peaklist_neg];
+0078                 plot(x,y);
+0079                 xlabel(<span class="string">'Magnetic field / Gauss'</span>);
+0080                 ylabel(<span class="string">'Relative absorbance / arb. units'</span>);
+0081                 set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0082                 hold on;
+0083                 plot(peaklist(:,1),peaklist(:,2),<span class="string">'o'</span>);
+0084                 fprintf(<span class="string">'\n%d peaks have been found \n\n'</span>, (numel(peaklist)/2) );
+0085                 
+0086                 
+0087             <span class="keyword">case</span> <span class="string">'No'</span>,
+0088                 peaklist = fpeak(x,y,sens,[xstart,xend,ystart,yend]);
+0089                 plot(x,y);
+0090                 xlabel(<span class="string">'Magnetic field / Gauss'</span>);
+0091                 ylabel(<span class="string">'Relative absorbance / arb. units'</span>);
+0092                 set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0093                 hold on;
+0094                 plot(peaklist(:,1),peaklist(:,2),<span class="string">'o'</span>);
+0095                 fprintf(<span class="string">'\n%d peaks have been found between %d and %d Gauss\n\n'</span> , numel(peaklist)/2 , xstart , xend )
+0096                 
+0097         <span class="keyword">end</span>
+0098         
+0099         hold off;
+0100         
+0101 <span class="keyword">end</span>
+0102 
+0103 peak_list = sortrows(peaklist,1)
+0104 
+0105 clear address directory eprname extension file m name prompt <span class="keyword">...</span>
+0106     pars pathname peaklist_neg peaklist_pos peaklist noisefilter noise <span class="keyword">...</span>
+0107     sens xend xstart yend ystart</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 12:00:44 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

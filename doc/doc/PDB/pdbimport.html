@@ -1,0 +1,682 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of pdbimport</title>
+  <meta name="keywords" content="pdbimport">
+  <meta name="description" content="PDBIMPORT loads a PDB file into MATLAB">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">doc</a> &gt; <a href="index.html">PDB</a> &gt; pdbimport.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for doc/PDB&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>pdbimport
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>PDBIMPORT loads a PDB file into MATLAB</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function structure = pdbimport(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PDBIMPORT loads a PDB file into MATLAB
+
+   PDBIMPORT ()
+   PDBIMPORT('/path/to/file.pdb')
+   PDBIMPORT('http://web.address.net/file.pdb')
+   PDBIMPORT('XXXX')
+   STRUCTURE = PDBIMPORT(...)
+
+ PDBIMPORT when run with no inputs launches a graphic user interface that
+ allows the user to navigate their system and select a file to load.
+ Alternitively, the user can manually type the address to a local file or
+ a web address.
+
+ PDBIMPORT also can fetch files directly from rcsb.org/pdb (pdb.org) if
+ the PDB accession number is known, it should be a 4 digit aplha-numeric
+ code.
+
+ To save the fetched PDB as a structure PDBIMPORT should always be run
+ with an output.
+
+ PDBIMPORT supports the loading of files with more than one chain.
+
+ Inputs:
+    input0     - a GUI file selector
+    input1     - manual input
+                   a local path to a file
+                       '/path/to/file.pdb'
+                   a web address
+                       'http://server.domain/files/file.pdb'
+                   a PDB accession code
+                       '1QTJ' 
+
+ Outputs:
+    output1    - a structure containing all the PDB information
+
+ Example:
+    proteinA = pdbimport
+                   GUI import of file
+
+    proteinB = pdbimport('1QTJ')
+                   load PDB: 1QTJ directly from pdb.org
+
+ Other m-files required:   BrukerRead
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: EPRTOOLBOX <a href="PDBSplitter.html" class="code" title="">PDBSPLITTER</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="MMMRotamerToPDB.html" class="code" title="function MMMRotamerToPDB(varargin)">MMMRotamerToPDB</a>	MMMROTAMERTOPDB This script takes a PDB from a local source or from</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function structure = pdbimport(varargin)</a>
+0002 
+0003 <span class="comment">% PDBIMPORT loads a PDB file into MATLAB</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   PDBIMPORT ()</span>
+0006 <span class="comment">%   PDBIMPORT('/path/to/file.pdb')</span>
+0007 <span class="comment">%   PDBIMPORT('http://web.address.net/file.pdb')</span>
+0008 <span class="comment">%   PDBIMPORT('XXXX')</span>
+0009 <span class="comment">%   STRUCTURE = PDBIMPORT(...)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% PDBIMPORT when run with no inputs launches a graphic user interface that</span>
+0012 <span class="comment">% allows the user to navigate their system and select a file to load.</span>
+0013 <span class="comment">% Alternitively, the user can manually type the address to a local file or</span>
+0014 <span class="comment">% a web address.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% PDBIMPORT also can fetch files directly from rcsb.org/pdb (pdb.org) if</span>
+0017 <span class="comment">% the PDB accession number is known, it should be a 4 digit aplha-numeric</span>
+0018 <span class="comment">% code.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% To save the fetched PDB as a structure PDBIMPORT should always be run</span>
+0021 <span class="comment">% with an output.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% PDBIMPORT supports the loading of files with more than one chain.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Inputs:</span>
+0026 <span class="comment">%    input0     - a GUI file selector</span>
+0027 <span class="comment">%    input1     - manual input</span>
+0028 <span class="comment">%                   a local path to a file</span>
+0029 <span class="comment">%                       '/path/to/file.pdb'</span>
+0030 <span class="comment">%                   a web address</span>
+0031 <span class="comment">%                       'http://server.domain/files/file.pdb'</span>
+0032 <span class="comment">%                   a PDB accession code</span>
+0033 <span class="comment">%                       '1QTJ'</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% Outputs:</span>
+0036 <span class="comment">%    output1    - a structure containing all the PDB information</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% Example:</span>
+0039 <span class="comment">%    proteinA = pdbimport</span>
+0040 <span class="comment">%                   GUI import of file</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%    proteinB = pdbimport('1QTJ')</span>
+0043 <span class="comment">%                   load PDB: 1QTJ directly from pdb.org</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">% Other m-files required:   BrukerRead</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% Subfunctions:             none</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% MAT-files required:       none</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% See also: EPRTOOLBOX PDBSPLITTER</span>
+0053 
+0054 <span class="comment">%                                        _                             _</span>
+0055 <span class="comment">%                                       | |                           | |</span>
+0056 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0057 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0058 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0059 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0060 <span class="comment">%                       __/ |                   __/ |</span>
+0061 <span class="comment">%                      |___/                   |___/</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">% M. Bye v12.9</span>
+0064 <span class="comment">%</span>
+0065 <span class="comment">% Author:       Morgan Bye</span>
+0066 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0067 <span class="comment">%               University of East Anglia</span>
+0068 <span class="comment">%               NORWICH, UK</span>
+0069 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0070 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/</span>
+0071 <span class="comment">% Aug 2012;     Last revision: 23-August-2012</span>
+0072 <span class="comment">%</span>
+0073 <span class="comment">% Approximate coding time of file:</span>
+0074 <span class="comment">%               12 hours</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">%</span>
+0077 <span class="comment">% Version history:</span>
+0078 <span class="comment">% Aug 12        &gt; After initial load, text is split using the \t delimiter</span>
+0079 <span class="comment">%                   rather than assuming that the PDB is true to the PDB</span>
+0080 <span class="comment">%                   format and uses exactly 80 characters per line</span>
+0081 <span class="comment">%               &gt; Better file handling/closing to reduce memory load</span>
+0082 <span class="comment">%               &gt; Replacement of strfind with textscan commands for</span>
+0083 <span class="comment">%                   MATLAB futureproofing</span>
+0084 <span class="comment">%               &gt; Removed the progress bar, as it actually was massively</span>
+0085 <span class="comment">%                   slowing down the file load. Replaced with display</span>
+0086 <span class="comment">%                   commands to the command window, which better informs</span>
+0087 <span class="comment">%                   user of what is happening</span>
+0088 <span class="comment">%</span>
+0089 <span class="comment">% Feb 12        Complete reworking of function</span>
+0090 <span class="comment">%               - URL read added</span>
+0091 <span class="comment">%               - direct download from pdb.org added</span>
+0092 <span class="comment">%               - complete reworking of atom and sequence handling</span>
+0093 <span class="comment">%               - better progress bar functionality</span>
+0094 <span class="comment">%</span>
+0095 <span class="comment">% Jun 11        Initial release</span>
+0096 
+0097 <span class="comment">% Arguments in</span>
+0098 <span class="comment">% ===================================================</span>
+0099 
+0100 <span class="keyword">switch</span> nargin
+0101     <span class="keyword">case</span> 0
+0102         
+0103         [file, directory] = uigetfile({<span class="string">'*.pdb'</span>,<span class="string">'PDB file (*.pdb)'</span>},<span class="string">'Load PDB file'</span>);
+0104         
+0105         <span class="keyword">if</span> file == 0
+0106             error(sprintf(<span class="string">'\nFile load canceled by user'</span>))
+0107         <span class="keyword">end</span>
+0108         
+0109         path = fullfile(directory, file);
+0110         
+0111         fid = fopen(path,<span class="string">'r'</span>);
+0112         
+0113         fullPDB = textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
+0114         
+0115         fclose(fid);
+0116 
+0117     <span class="keyword">case</span> 1
+0118         
+0119         <span class="comment">% Find out what has been input and act accordingly.</span>
+0120         
+0121         <span class="comment">% File</span>
+0122         <span class="comment">% ====</span>
+0123         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
+0124             
+0125             path = varargin{1};
+0126             [address,filename,~] = fileparts(path);
+0127             
+0128             fid = fopen(path,<span class="string">'r'</span>);
+0129             
+0130             fullPDB = textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
+0131             
+0132             fclose(fid);
+0133 
+0134             
+0135         <span class="comment">% Web address</span>
+0136         <span class="comment">% ===========</span>
+0137         <span class="keyword">elseif</span> ~isempty(strfind(varargin{1},<span class="string">'://'</span>))
+0138             
+0139             <span class="comment">% Catch error if they dont have Java correctly set up</span>
+0140             <span class="keyword">if</span> (~usejava(<span class="string">'jvm'</span>))
+0141                 error(sprintf(<span class="string">'\nLoading from an online source requires Java'</span>))
+0142             <span class="keyword">end</span>
+0143             
+0144             <span class="comment">% Try to get PDB from provided URL</span>
+0145             <span class="keyword">try</span>
+0146                 disp(<span class="string">'Fetching PDB...'</span>)
+0147                 file = urlread(varargin{1});
+0148                 
+0149                 <span class="comment">% Replace HTML &quot;&amp;&quot; into MATLAB format</span>
+0150                 file = strrep(file,<span class="string">'&amp;amp;'</span>,<span class="string">'&amp;'</span>);
+0151                 
+0152                 <span class="comment">% Test that something has been returned that resembles a</span>
+0153                 <span class="comment">% PDB file format, and produce error otherwise</span>
+0154                 <span class="keyword">if</span> isempty(strfind(s,<span class="string">'HEADER'</span>))
+0155                     error(<span class="string">'No PDB matching your input could be imported.'</span>)
+0156                 <span class="keyword">end</span>
+0157                 
+0158                 disp(<span class="string">'PDB found! Loading...'</span>)
+0159                 
+0160                 <span class="comment">% Find length of file by searching for the END term</span>
+0161                 [~, ending] = regexp(file,<span class="string">'\nEND\s.*\n'</span>);
+0162 
+0163                 fullPDB = textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
+0164                 
+0165             <span class="keyword">catch</span>
+0166                 error(<span class="string">'No PDB matching your input could be imported.'</span>)
+0167             <span class="keyword">end</span>
+0168             
+0169             fclose(fid);
+0170         
+0171         <span class="comment">% PDB code</span>
+0172         <span class="comment">% ========</span>
+0173         <span class="keyword">elseif</span> ischar(varargin{1}) &amp;&amp; (length(varargin{1}) == 4 || length(varargin{1}) == 6)
+0174             
+0175             <span class="comment">% Simple edit, encase the function has been handed a string in</span>
+0176             <span class="comment">% quotes ie. '1A2C'</span>
+0177             <span class="keyword">if</span> length(varargin{1}) == 6
+0178                 varargin{1} = varargin{1}(2:5);
+0179             <span class="keyword">end</span>
+0180             
+0181             <span class="comment">% Put together address to download</span>
+0182             pdbaddress = [<span class="string">'http://www.rcsb.org/pdb/downloadFile.do?fileFormat=pdb&amp;compression=NO&amp;structureId='</span> varargin{1}];
+0183             
+0184             disp(<span class="string">'Fetching PDB...'</span>)
+0185             
+0186             file = urlread(pdbaddress);              <span class="comment">% Get file</span>
+0187             
+0188             file = strrep(file,<span class="string">'&amp;amp;'</span>,<span class="string">'&amp;'</span>);         <span class="comment">% Replace HTML &quot;&amp;&quot; into MATLAB format</span>
+0189 
+0190             <span class="keyword">if</span> isempty(strfind(file,<span class="string">'HEADER'</span>))       <span class="comment">% Test that something has been returned</span>
+0191                 error(<span class="string">'No PDB matching your input could be imported.'</span>)
+0192             <span class="keyword">end</span>
+0193             
+0194             disp(<span class="string">'PDB found! Loading...'</span>)
+0195             
+0196             fullPDB = textscan(file,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
+0197             
+0198             fclose(fid);
+0199         
+0200         <span class="keyword">else</span>
+0201             error(sprintf(<span class="string">'\nFile does not exist or the URL was not recognised'</span>))
+0202         <span class="keyword">end</span>
+0203         
+0204 <span class="keyword">end</span>
+0205     
+0206 
+0207 <span class="comment">% File splitting</span>
+0208 <span class="comment">% ===================================================</span>
+0209 
+0210 r = size(fullPDB{1},1);
+0211 
+0212 disp(sprintf(<span class="string">'PDB loaded!\nNow reading through the file...'</span>))
+0213 
+0214 <span class="keyword">for</span> k = 1:r
+0215       
+0216     <span class="keyword">switch</span> char(strtok(fullPDB{1}(k,:)))
+0217         
+0218         <span class="keyword">case</span> <span class="string">'HEADER'</span>
+0219             structure.Header(k,:) = (fullPDB{1}(k,:));
+0220             
+0221         <span class="keyword">case</span> <span class="string">'OBSLTE'</span>
+0222             structure.Obsolete(k,:) = (fullPDB{1}(k,:));
+0223             
+0224         <span class="keyword">case</span> <span class="string">'TITLE'</span>
+0225             structure.Title(k,:) = (fullPDB{1}(k,:));
+0226             
+0227         <span class="keyword">case</span> <span class="string">'CAVEAT'</span>
+0228             structure.Caveat(k,:) = (fullPDB{1}(k,:));
+0229             
+0230         <span class="keyword">case</span> <span class="string">'COMPND'</span>
+0231             structure.Compound(k,:) = (fullPDB{1}(k,:));
+0232             
+0233         <span class="keyword">case</span> <span class="string">'SOURCE'</span>
+0234             structure.Source(k,:) = (fullPDB{1}(k,:));
+0235             
+0236         <span class="keyword">case</span> <span class="string">'KEYWDS'</span>
+0237             structure.Keywords(k,:) = (fullPDB{1}(k,:));
+0238             
+0239         <span class="keyword">case</span> <span class="string">'EXPDTA'</span>
+0240             structure.ExperimentalData(k,:) = (fullPDB{1}(k,:));
+0241             
+0242         <span class="keyword">case</span> <span class="string">'AUTHOR'</span>
+0243             structure.Authors(k,:) = (fullPDB{1}(k,:));
+0244             
+0245         <span class="keyword">case</span> <span class="string">'REVDAT'</span>
+0246             structure.RevisionDate(k,:) = (fullPDB{1}(k,:));
+0247             
+0248         <span class="keyword">case</span> <span class="string">'SPRSDE'</span>
+0249             structure.Superseded(k,:) = (fullPDB{1}(k,:));
+0250             
+0251         <span class="keyword">case</span> <span class="string">'JRNL'</span>
+0252             structure.Journal(k,:) = (fullPDB{1}(k,:));
+0253             
+0254         <span class="keyword">case</span> <span class="string">'REMARK'</span>
+0255             structure.Remark(k,:) = (fullPDB{1}(k,:));
+0256             
+0257         <span class="keyword">case</span> <span class="string">'DBREF'</span>
+0258             structure.DBReferences(k,:) = (fullPDB{1}(k,:));
+0259             
+0260         <span class="keyword">case</span> <span class="string">'SEQADV'</span>
+0261             structure.SequenceConflicts(k,:) = (fullPDB{1}(k,:));
+0262             
+0263         <span class="keyword">case</span> <span class="string">'SEQRES'</span>
+0264             structure.Sequence(k,:) = (fullPDB{1}(k,:));
+0265             
+0266         <span class="keyword">case</span> <span class="string">'FTNOTE'</span>
+0267             structure.Footnote(k,:) = (fullPDB{1}(k,:));
+0268             
+0269         <span class="keyword">case</span> <span class="string">'MODRES'</span>
+0270             structure.ModifiedResidues(k,:) = (fullPDB{1}(k,:));
+0271             
+0272         <span class="keyword">case</span> <span class="string">'HET'</span>
+0273             structure.Heterogen(k,:) = (fullPDB{1}(k,:));
+0274             
+0275         <span class="keyword">case</span> <span class="string">'HETNAM'</span>
+0276             structure.HeterogenName(k,:) = (fullPDB{1}(k,:));
+0277             
+0278         <span class="keyword">case</span> <span class="string">'HETSYN'</span>
+0279             structure.HeterogenSynonym(k,:) = (fullPDB{1}(k,:));
+0280             
+0281         <span class="keyword">case</span> <span class="string">'FORMUL'</span>
+0282             structure.Formula(k,:) = (fullPDB{1}(k,:));
+0283             
+0284         <span class="keyword">case</span> <span class="string">'HELIX'</span>
+0285             structure.Helix(k,:) = (fullPDB{1}(k,:));
+0286             
+0287         <span class="keyword">case</span> <span class="string">'SHEET'</span>
+0288             structure.Sheet(k,:) = (fullPDB{1}(k,:));
+0289             
+0290         <span class="keyword">case</span> <span class="string">'TURN'</span>
+0291             structure.Turn(k,:) = (fullPDB{1}(k,:));
+0292             
+0293         <span class="keyword">case</span> <span class="string">'SSBOND'</span>
+0294             structure.SSBond(k,:) = (fullPDB{1}(k,:));
+0295             
+0296         <span class="keyword">case</span> <span class="string">'LINK'</span>
+0297             structure.Link(k,:) = (fullPDB{1}(k,:));
+0298             
+0299         <span class="keyword">case</span> <span class="string">'HYDBND'</span>
+0300             structure.HydrogenBond(k,:) = (fullPDB{1}(k,:));
+0301             
+0302         <span class="keyword">case</span> <span class="string">'SLTBRG'</span>
+0303             structure.SaltBridge(k,:) = (fullPDB{1}(k,:));
+0304             
+0305         <span class="keyword">case</span> <span class="string">'CISPEP'</span>
+0306             structure.CISPeptide(k,:) = (fullPDB{1}(k,:));
+0307             
+0308         <span class="keyword">case</span> <span class="string">'SITE'</span>
+0309             structure.Site(k,:) = (fullPDB{1}(k,:));
+0310             
+0311         <span class="keyword">case</span> <span class="string">'CRYST1'</span>
+0312             structure.Cryst1(k,:) = (fullPDB{1}(k,:));
+0313             
+0314         <span class="keyword">case</span> <span class="string">'TVECT'</span>
+0315             structure.TranslationVector(k,:) = (fullPDB{1}(k,:));
+0316             
+0317         <span class="keyword">case</span> <span class="string">'MODEL'</span>
+0318             structure.Model(k,:) = (fullPDB{1}(k,:));
+0319             
+0320         <span class="keyword">case</span> <span class="string">'ATOM'</span>
+0321             structure.Atom(k,:) = (fullPDB{1}(k,:));
+0322                         
+0323         <span class="keyword">case</span> <span class="string">'SIGATM'</span>
+0324             structure.AtomSD(k,:) = (fullPDB{1}(k,:));
+0325             
+0326         <span class="keyword">case</span> <span class="string">'ANISOU'</span>
+0327             structure.AnisotropicTemp(k,:) = (fullPDB{1}(k,:));
+0328             
+0329         <span class="keyword">case</span> <span class="string">'SIGUIJ'</span>
+0330             structure.AnisotropicTempSD(k,:) = (fullPDB{1}(k,:));
+0331             
+0332         <span class="keyword">case</span> <span class="string">'TER'</span>
+0333             structure.Terminal(k,:) = (fullPDB{1}(k,:));
+0334             <span class="comment">% structure.Terminal = strcat(structure.Terminal);</span>
+0335             
+0336         <span class="keyword">case</span> <span class="string">'HETATM'</span>
+0337             structure.HeterogenAtom(k,:) = (fullPDB{1}(k,:));
+0338             
+0339         <span class="keyword">case</span> <span class="string">'CONECT'</span>
+0340             structure.Connectivity(k,:) = (fullPDB{1}(k,:));
+0341             
+0342             
+0343     <span class="keyword">end</span>
+0344 <span class="keyword">end</span>
+0345 
+0346 
+0347 
+0348 <span class="keyword">for</span> k = 1:r
+0349     <span class="keyword">if</span> strncmpi(fullPDB{1}(k,:),<span class="string">'ORIGX'</span>,5) == 1
+0350         structure.Origin.(char(strtok(fullPDB{1}(k,:)))) = char((fullPDB{1}(k,:)));
+0351     
+0352     <span class="keyword">elseif</span> strncmpi(fullPDB{1}(k,:),<span class="string">'SCALE'</span>,5) == 1
+0353         structure.Scale.(char(strtok(fullPDB{1}(k,:)))) = char((fullPDB{1}(k,:)));
+0354         
+0355     <span class="keyword">elseif</span> strncmpi(fullPDB{1}(k,:),<span class="string">'MTRIX'</span>,5) == 1
+0356         structure.Origin.(char(strtok(fullPDB{1}(k,:)))) = char((fullPDB{1}(k,:)));
+0357     <span class="keyword">end</span>
+0358 <span class="keyword">end</span>
+0359 
+0360 
+0361 <span class="comment">% Section sorting</span>
+0362 <span class="comment">% ===================================================</span>
+0363 
+0364 <span class="comment">% Atoms</span>
+0365 <span class="keyword">if</span> ~isfield(structure,<span class="string">'Atom'</span>)
+0366     structure.Atom = [];
+0367 <span class="keyword">end</span>
+0368 
+0369 <span class="comment">% Make all the same length</span>
+0370 z = strcat(structure.Atom);
+0371 
+0372 <span class="comment">% Remove blank cells, and string the result back</span>
+0373 x = char(z(~cellfun(@isempty,z)));
+0374 
+0375 <span class="comment">% Split each string into several strings</span>
+0376 <span class="keyword">for</span> k = 1:size(x,1)
+0377     Atoms.Preformated{k} = textscan(x(k,:),<span class="string">'%s'</span>);
+0378                 <span class="comment">% This is a lazy split as the rotamer file will never go</span>
+0379                 <span class="comment">% high enough to not have a space between columns</span>
+0380 <span class="keyword">end</span>
+0381 
+0382 disp(sprintf(<span class="string">'%d lines were read\nNow sorting the atoms...'</span>,r))
+0383 
+0384 <span class="keyword">for</span> k = 1:numel(Atoms.Preformated)
+0385     structure.Model.Atom(k).AtomSerNo = str2num(Atoms.Preformated{k}{1}{2});
+0386     structure.Model.Atom(k).AtomName  = Atoms.Preformated{k}{1}{3};
+0387     structure.Model.Atom(k).resName   = Atoms.Preformated{k}{1}{4};
+0388     structure.Model.Atom(k).chainID   = Atoms.Preformated{k}{1}{5};
+0389     structure.Model.Atom(k).resSeq    = str2num(Atoms.Preformated{k}{1}{6});
+0390     structure.Model.Atom(k).X         = str2num(Atoms.Preformated{k}{1}{7});
+0391     structure.Model.Atom(k).Y         = str2num(Atoms.Preformated{k}{1}{8});
+0392     structure.Model.Atom(k).Z         = str2num(Atoms.Preformated{k}{1}{9});
+0393     structure.Model.Atom(k).occupancy = str2num(Atoms.Preformated{k}{1}{10});
+0394     structure.Model.Atom(k).tempFactor= str2num(Atoms.Preformated{k}{1}{11});
+0395     structure.Model.Atom(k).element   = Atoms.Preformated{k}{1}{12};
+0396 <span class="keyword">end</span>
+0397 
+0398 clear structure.Atom
+0399 
+0400 disp(sprintf(<span class="string">'%d atoms were sorted!\nFinal tidy up...'</span>,numel(Atoms.Preformated)))
+0401 
+0402 <span class="comment">% Sequence sorting</span>
+0403 <span class="comment">% ===================================================</span>
+0404 
+0405 <span class="comment">% Make all fields the same length</span>
+0406 q = strcat(structure.Sequence);
+0407 <span class="comment">% Remove any blank fields</span>
+0408 w = char(q(~cellfun(@isempty,q)));
+0409 
+0410 <span class="comment">% Split each line of the sequence into individual strings</span>
+0411 <span class="keyword">for</span> k = 1:size(w,1)
+0412     Sequence.Preformated{k} = textscan(w(k,:),<span class="string">'%s'</span>);
+0413 <span class="keyword">end</span>
+0414 
+0415 highestChain = Sequence.Preformated{end}{1}{3};
+0416 
+0417 <span class="comment">% Convert Chain &quot;Letter&quot; to Chain &quot;Number&quot; through ASCII number</span>
+0418 ChainMax = double(highestChain)-64;
+0419 
+0420 <span class="comment">% Find where each chain ends</span>
+0421 <span class="keyword">for</span> k = 1:numel(Sequence.Preformated)
+0422     Chains(k) = Sequence.Preformated{k}{1}{3};
+0423 <span class="keyword">end</span>
+0424 
+0425 [~,b] = unique(Chains,<span class="string">'first'</span>);      <span class="comment">% gives row number of each new Chain</span>
+0426 [~,c] = unique(Chains,<span class="string">'last'</span>);       <span class="comment">% gives row of last</span>
+0427 
+0428 warning off
+0429 
+0430 <span class="keyword">for</span> k = 1:ChainMax
+0431 
+0432     <span class="comment">% Remove header lines</span>
+0433     <span class="keyword">for</span> l = b(k) : c(k)
+0434         Sequence.Formating{l} = Sequence.Preformated{l}(5:end);
+0435     <span class="keyword">end</span>
+0436     
+0437     <span class="comment">% Split the chains and merge them into single column of text</span>
+0438     structure.Sequence.([<span class="string">'Chain'</span> (char(k-1+<span class="string">'A'</span>))]) = (cat(1,Sequence.Formating{b(k):c(k)}));
+0439 <span class="keyword">end</span>
+0440 
+0441 warning on
+0442 
+0443 <span class="comment">% Finally look at each string field and remove any blank lines created</span>
+0444 <span class="comment">% during the reading in of fields</span>
+0445 
+0446 <span class="keyword">if</span> isfield(structure,<span class="string">'Obsolete'</span>)
+0447     structure.Obsolete = char(structure.Obsolete(~cellfun(@isempty,structure.Obsolete)));
+0448 <span class="keyword">end</span>
+0449 
+0450 <span class="keyword">if</span> isfield(structure,<span class="string">'Title'</span>)
+0451     structure.Title = char(structure.Title(~cellfun(@isempty,structure.Title)));
+0452 <span class="keyword">end</span>
+0453 
+0454 <span class="keyword">if</span> isfield(structure,<span class="string">'Caveat'</span>)
+0455     structure.Caveat = char(structure.Caveat(~cellfun(@isempty,structure.Caveat)));
+0456 <span class="keyword">end</span>
+0457 
+0458 <span class="keyword">if</span> isfield(structure,<span class="string">'Compound'</span>)
+0459     structure.Compound = char(structure.Compound(~cellfun(@isempty,structure.Compound)));
+0460 <span class="keyword">end</span>
+0461 
+0462 <span class="keyword">if</span> isfield(structure,<span class="string">'Source'</span>)
+0463     structure.Source = char(structure.Source(~cellfun(@isempty,structure.Source)));
+0464 <span class="keyword">end</span>
+0465 
+0466 <span class="keyword">if</span> isfield(structure,<span class="string">'Keywords'</span>)
+0467     structure.Keywords = char(structure.Keywords(~cellfun(@isempty,structure.Keywords)));
+0468 <span class="keyword">end</span>
+0469 
+0470 <span class="keyword">if</span> isfield(structure,<span class="string">'ExperimentalData'</span>)
+0471     structure.ExperimentalData = char(structure.ExperimentalData(~cellfun(@isempty,structure.ExperimentalData)));
+0472 <span class="keyword">end</span>
+0473 
+0474 <span class="keyword">if</span> isfield(structure,<span class="string">'Authors'</span>)
+0475     structure.Authors = char(structure.Authors(~cellfun(@isempty,structure.Authors)));
+0476 <span class="keyword">end</span>
+0477 
+0478 <span class="keyword">if</span> isfield(structure,<span class="string">'RevisionDate'</span>)
+0479     structure.RevisionDate = char(structure.RevisionDate(~cellfun(@isempty,structure.RevisionDate)));
+0480 <span class="keyword">end</span>
+0481 
+0482 <span class="keyword">if</span> isfield(structure,<span class="string">'Superseded'</span>)
+0483     structure.Superseded = char(structure.Superseded(~cellfun(@isempty,structure.Superseded)));
+0484 <span class="keyword">end</span>
+0485 
+0486 <span class="keyword">if</span> isfield(structure,<span class="string">'Journal'</span>)
+0487     structure.Journal = char(structure.Journal(~cellfun(@isempty,structure.Journal)));
+0488 <span class="keyword">end</span>
+0489 
+0490 <span class="keyword">if</span> isfield(structure,<span class="string">'Remark'</span>)
+0491     structure.Remark = char(structure.Remark(~cellfun(@isempty,structure.Remark)));
+0492 <span class="keyword">end</span>
+0493 
+0494 <span class="keyword">if</span> isfield(structure,<span class="string">'DBReferences'</span>)
+0495     structure.DBReferences = char(structure.DBReferences(~cellfun(@isempty,structure.DBReferences)));
+0496 <span class="keyword">end</span>
+0497 
+0498 <span class="keyword">if</span> isfield(structure,<span class="string">'SequenceConflicts'</span>)
+0499     structure.SequenceConflicts = char(structure.SequenceConflicts(~cellfun(@isempty,structure.SequenceConflicts)));
+0500 <span class="keyword">end</span>
+0501 
+0502 <span class="keyword">if</span> isfield(structure,<span class="string">'Footnote'</span>)
+0503     structure.Footnote = char(structure.Footnote(~cellfun(@isempty,structure.Footnote)));
+0504 <span class="keyword">end</span>
+0505 
+0506 <span class="keyword">if</span> isfield(structure,<span class="string">'MODRES'</span>)
+0507     structure.MODRES = char(structure.MODRES(~cellfun(@isempty,structure.MODRES)));
+0508 <span class="keyword">end</span>
+0509 
+0510 <span class="keyword">if</span> isfield(structure,<span class="string">'Heterogen'</span>)
+0511     structure.Heterogen = char(structure.Heterogen(~cellfun(@isempty,structure.Heterogen)));
+0512 <span class="keyword">end</span>
+0513 
+0514 <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenName'</span>)
+0515     structure.HeterogenName = char(structure.HeterogenName(~cellfun(@isempty,structure.HeterogenName)));
+0516 <span class="keyword">end</span>
+0517 
+0518 <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenSynonym'</span>)
+0519     structure.HeterogenSynonym = char(structure.HeterogenSynonym(~cellfun(@isempty,structure.HeterogenSynonym)));
+0520 <span class="keyword">end</span>
+0521 
+0522 <span class="keyword">if</span> isfield(structure,<span class="string">'Formula'</span>)
+0523     structure.Formula = char(structure.Formula(~cellfun(@isempty,structure.Formula)));
+0524 <span class="keyword">end</span>
+0525 
+0526 <span class="keyword">if</span> isfield(structure,<span class="string">'Helix'</span>)
+0527     structure.Helix = char(structure.Helix(~cellfun(@isempty,structure.Helix)));
+0528 <span class="keyword">end</span>
+0529 
+0530 <span class="keyword">if</span> isfield(structure,<span class="string">'Sheet'</span>)
+0531     structure.Sheet = char(structure.Sheet(~cellfun(@isempty,structure.Sheet)));
+0532 <span class="keyword">end</span>
+0533 
+0534 <span class="keyword">if</span> isfield(structure,<span class="string">'SSBond'</span>)
+0535     structure.SSBond = char(structure.SSBond(~cellfun(@isempty,structure.SSBond)));
+0536 <span class="keyword">end</span>
+0537 
+0538 <span class="keyword">if</span> isfield(structure,<span class="string">'Link'</span>)
+0539     structure.Link = char(structure.Link(~cellfun(@isempty,structure.Link)));
+0540 <span class="keyword">end</span>
+0541 
+0542 <span class="keyword">if</span> isfield(structure,<span class="string">'HydrogenBond'</span>)
+0543     structure.HydrogenBond = char(structure.HydrogenBond(~cellfun(@isempty,structure.HydrogenBond)));
+0544 <span class="keyword">end</span>
+0545 
+0546 <span class="keyword">if</span> isfield(structure,<span class="string">'SaltBridge'</span>)
+0547     structure.SaltBridge = char(structure.SaltBridge(~cellfun(@isempty,structure.SaltBridge)));
+0548 <span class="keyword">end</span>
+0549 
+0550 <span class="keyword">if</span> isfield(structure,<span class="string">'CISPeptide'</span>)
+0551     structure.CISPeptide = char(structure.CISPeptide(~cellfun(@isempty,structure.CISPeptide)));
+0552 <span class="keyword">end</span>
+0553 
+0554 <span class="keyword">if</span> isfield(structure,<span class="string">'Cryst1'</span>)
+0555     structure.Cryst1 = char(structure.Cryst1(~cellfun(@isempty,structure.Cryst1)));
+0556 <span class="keyword">end</span>
+0557 
+0558 <span class="keyword">if</span> isfield(structure,<span class="string">'TranslationVector'</span>)
+0559     structure.TranslationVector = char(structure.TranslationVector(~cellfun(@isempty,structure.TranslationVector)));
+0560 <span class="keyword">end</span>
+0561 
+0562 <span class="keyword">if</span> isfield(structure,<span class="string">'AtomSD'</span>)
+0563     structure.AtomSD = char(structure.AtomSD(~cellfun(@isempty,structure.AtomSD)));
+0564 <span class="keyword">end</span>
+0565 
+0566 <span class="keyword">if</span> isfield(structure,<span class="string">'AnisotropicTemp'</span>)
+0567     structure.AnisotropicTemp = char(structure.AnisotropicTemp(~cellfun(@isempty,structure.AnisotropicTemp)));
+0568 <span class="keyword">end</span>
+0569 
+0570 <span class="keyword">if</span> isfield(structure,<span class="string">'AnisotropicTempSD'</span>)
+0571     structure.AnisotropicTempSD = char(structure.AnisotropicTempSD(~cellfun(@isempty,structure.AnisotropicTempSD)));
+0572 <span class="keyword">end</span>
+0573 
+0574 <span class="keyword">if</span> isfield(structure,<span class="string">'Terminal'</span>)
+0575     structure.Terminal = char(structure.Terminal(~cellfun(@isempty,structure.Terminal)));
+0576 <span class="keyword">end</span>
+0577 
+0578 <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenAtom'</span>)
+0579     structure.HeterogenAtom = char(structure.HeterogenAtom(~cellfun(@isempty,structure.HeterogenAtom)));
+0580 <span class="keyword">end</span>
+0581 
+0582 <span class="keyword">if</span> isfield(structure,<span class="string">'Connectivity'</span>)
+0583     structure.Connectivity = char(structure.Connectivity(~cellfun(@isempty,structure.Connectivity)));
+0584 <span class="keyword">end</span>
+0585 
+0586 disp(sprintf(<span class="string">'Tidy up complete!\nPDB has been loaded.'</span>))</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 12:00:44 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of ev_plot</title>
+  <meta name="keywords" content="ev_plot">
+  <meta name="description" content="CV_PLOT Plotting function for cwViewer">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">cw</a> &gt; <a href="../index.html">eprViewer-BETA</a> &gt; <a href="index.html">_private</a> &gt; ev_plot.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for cw/eprViewer-BETA/_private&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>ev_plot
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>CV_PLOT Plotting function for cwViewer</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function ev_plot(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> CV_PLOT Plotting function for cwViewer
+
+ Syntax:  cv_plot
+
+ Inputs:
+    input1     - n/a
+
+ Outputs:
+    output1    - n/a
+
+ Example: 
+    see http://morganbye.net/cwViewer
+
+ Other m-files required:   /private (directory)
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: CWVIEWER</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function ev_plot(varargin)</a>
+0002 
+0003 <span class="comment">% CV_PLOT Plotting function for cwViewer</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Syntax:  cv_plot</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%    input1     - n/a</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Outputs:</span>
+0011 <span class="comment">%    output1    - n/a</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Example:</span>
+0014 <span class="comment">%    see http://morganbye.net/cwViewer</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Other m-files required:   /private (directory)</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Subfunctions:             none</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% MAT-files required:       none</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% See also: CWVIEWER</span>
+0024 
+0025 <span class="comment">%                           oooooo     oooo   o8o</span>
+0026 <span class="comment">%                            `888.     .8'    `&quot;'</span>
+0027 <span class="comment">%  .ooooo.  oooo oooo    ooo   `888.   .8'   oooo   .ooooo.  oooo oooo    ooo  .ooooo.  oooo d8b</span>
+0028 <span class="comment">% d88' `&quot;Y8  `88. `88.  .8'     `888. .8'    `888  d88' `88b  `88. `88.  .8'  d88' `88b `888&quot;&quot;8P</span>
+0029 <span class="comment">% 888         `88..]88..8'       `888.8'      888  888ooo888   `88..]88..8'   888ooo888  888</span>
+0030 <span class="comment">% 888   .o8    `888'`888'         `888'       888  888    .o    `888'`888'    888    .o  888</span>
+0031 <span class="comment">% `Y8bod8P'     `8'  `8'           `8'       o888o `Y8bod8P'     `8'  `8'     `Y8bod8P' d888b</span>
+0032 <span class="comment">%</span>
+0033 
+0034 <span class="comment">%                                        _                             _</span>
+0035 <span class="comment">%                                       | |                           | |</span>
+0036 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0037 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0038 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0039 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0040 <span class="comment">%                       __/ |                   __/ |</span>
+0041 <span class="comment">%                      |___/                   |___/</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% M. Bye v12.6</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% Author:       Morgan Bye</span>
+0047 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0048 <span class="comment">%               University of East Anglia</span>
+0049 <span class="comment">%               NORWICH, UK</span>
+0050 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0051 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/</span>
+0052 <span class="comment">% May 2012;     Last revision: 30-May-2012</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% Approximate coding time of file:</span>
+0055 <span class="comment">%               6 hours</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% Version history:</span>
+0059 <span class="comment">% Jun 12        &gt; Savitzky-Golay implemented</span>
+0060 <span class="comment">%               &gt; Add noise added</span>
+0061 <span class="comment">%               &gt; g - value x-axis scale added</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">% May 12        Initial release (open beta)</span>
+0064 <span class="comment">%</span>
+0065 <span class="comment">% Feb 12        First alpha</span>
+0066 
+0067 <span class="comment">% Get variables</span>
+0068 <span class="comment">% --------------------------------------------------------------------</span>
+0069 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0070 
+0071 data    = getappdata(cwview,<span class="string">'data'</span>);
+0072 Handles = getappdata(cwview,<span class="string">'WindowHandles'</span>);
+0073 Visible = getappdata(cwview,<span class="string">'WindowVisible'</span>);
+0074 hFile   = getappdata(cwview,<span class="string">'hFile'</span>);
+0075 hView   = getappdata(cwview,<span class="string">'hView'</span>);
+0076 hMan    = getappdata(cwview,<span class="string">'hMan'</span>);
+0077 hcwView = getappdata(cwview,<span class="string">'hcwView'</span>);
+0078 Var     = getappdata(cwview,<span class="string">'Var'</span>);
+0079 
+0080 
+0081 
+0082 <span class="comment">% File details window</span>
+0083 <span class="comment">% --------------------------------------------------------------------</span>
+0084 fSelection = get(hFile.listbox_files,<span class="string">'Value'</span>);
+0085 
+0086 <span class="comment">% Data set selection</span>
+0087 <span class="comment">% --------------------------------------------------------------------</span>
+0088 <span class="keyword">try</span>
+0089     exp = data.([<span class="string">'File'</span> mat2str(fSelection)]);
+0090 <span class="keyword">catch</span>
+0091     disp(<span class="string">'No file has been loaded, plotting could not occur.'</span>)
+0092     <span class="keyword">return</span>
+0093 <span class="keyword">end</span>
+0094 
+0095 x1 = exp.x;
+0096 y1 = exp.y;
+0097 
+0098 [r,c] = size(y1);
+0099 
+0100 <span class="comment">% View window (g-value x-axis)</span>
+0101 <span class="comment">% --------------------------------------------------------------------</span>
+0102 
+0103 <span class="keyword">switch</span> get(hView.checkbox_g,<span class="string">'Value'</span>)
+0104     <span class="keyword">case</span> 0
+0105         <span class="comment">% Change Gauss to mT</span>
+0106         x3 = x1/10;
+0107         
+0108     <span class="keyword">case</span> 1
+0109         <span class="comment">% If there is a reference then adjust mag field</span>
+0110         <span class="keyword">switch</span> get(hView.checkbox_reference,<span class="string">'Value'</span>)
+0111             <span class="keyword">case</span> 0
+0112                 <span class="comment">% Do nothing</span>
+0113                 x2 = x1;
+0114                 
+0115             <span class="keyword">case</span> 1
+0116                 <span class="comment">% Get reference values from GUI</span>
+0117                 g_ideal   = str2num(get(hView.edit_refg,<span class="string">'String'</span>));
+0118                 ref_freq  = str2num(get(hView.edit_refFreq,<span class="string">'String'</span>));
+0119                 ref_field = str2num(get(hView.edit_refField,<span class="string">'String'</span>));
+0120                 
+0121                 <span class="comment">% Calculate the reference offset</span>
+0122                 
+0123                 <span class="comment">%      Plank's constant X mwFreq</span>
+0124                 <span class="comment">% g = ----------------------------</span>
+0125                 <span class="comment">%     Bohr's constant X Mag. Field</span>
+0126                 
+0127                 <span class="comment">% Remember 1 GHz = 10^9 Hz and 1 Tesla = 10^5 Gauss</span>
+0128                 g_measured = ((6.626068e-34 * ref_freq *10^9) / (9.27400915e-24 * (ref_field /10^4)));
+0129                 
+0130                 g_offset   = g_ideal - g_measured;
+0131                 
+0132                 <span class="comment">%              Plank's constant X mwFreq</span>
+0133                 <span class="comment">% Mag.Field = ----------------------------</span>
+0134                 <span class="comment">%                  Bohr's constant</span>
+0135                 <span class="comment">%                  ---------------</span>
+0136                 <span class="comment">%                         g</span>
+0137                 
+0138                 mag_offset = (((6.626068e-34 * (ref_freq*10^9)) / g_offset) / 9.27400915e-24);
+0139                               
+0140                 x2 = x1 + mag_offset;     
+0141         <span class="keyword">end</span>
+0142         
+0143         <span class="comment">% Magnetic field to g-values</span>
+0144         <span class="keyword">for</span> k = 1:numel(x2)
+0145             
+0146             <span class="comment">%      Plank's constant X mwFreq</span>
+0147             <span class="comment">% g = ----------------------------</span>
+0148             <span class="comment">%     Bohr's constant X Mag. Field</span>
+0149             
+0150             x3(k,:) = ((6.626068e-34 * exp.info.MWFQ) / (9.27400915e-24 * (x2(k) /10000) ));
+0151         <span class="keyword">end</span>
+0152         
+0153 <span class="keyword">end</span>
+0154 
+0155 
+0156 
+0157 <span class="comment">% Data manipulation window</span>
+0158 <span class="comment">% --------------------------------------------------------------------</span>
+0159 
+0160 <span class="comment">% Normalize</span>
+0161 <span class="comment">% ===================================================</span>
+0162 
+0163 <span class="keyword">switch</span> get(hMan.checkbox_norm,<span class="string">'Value'</span>)
+0164     
+0165     <span class="keyword">case</span> 1
+0166         
+0167         <span class="keyword">if</span> isstruct(y1) == 1
+0168             warndlg(<span class="string">'Pulsed experiments cannot be normalized'</span>,<span class="string">'Normalize'</span>);
+0169             <span class="keyword">return</span>
+0170         <span class="keyword">end</span>
+0171             
+0172         <span class="keyword">for</span> k = 1:c
+0173             max_y1(:,k) = max(y1(:,k));
+0174             min_y1(:,k) = min(y1(:,k));
+0175             
+0176             y2(:,k) = (( y1(:,k) - min_y1(:,k))/(max_y1(:,k) - min_y1(:,k)) - 0.5) *2;
+0177         <span class="keyword">end</span>
+0178         
+0179     <span class="keyword">case</span> 0
+0180         y2 = y1;
+0181 <span class="keyword">end</span>
+0182 
+0183 <span class="comment">% Digital smooth</span>
+0184 <span class="comment">% ===================================================</span>
+0185 
+0186 <span class="keyword">switch</span> get(hMan.checkbox_dsmooth,<span class="string">'Value'</span>)
+0187     <span class="keyword">case</span> 1
+0188         <span class="keyword">for</span> k = 1:c
+0189             wndw = str2num(get(hMan.edit_dsmooth,<span class="string">'String'</span>));
+0190             h = ones(1,wndw)/wndw;
+0191             y3(:,k) = filter(h, 1, y2(:,k));
+0192         <span class="keyword">end</span>
+0193     
+0194     <span class="keyword">case</span> 0
+0195         y3 = y2;
+0196 <span class="keyword">end</span>        
+0197 
+0198 <span class="comment">% FFT smooth</span>
+0199 <span class="comment">% ===================================================</span>
+0200 
+0201 <span class="keyword">switch</span> get(hMan.checkbox_fsmooth,<span class="string">'Value'</span>)
+0202     <span class="keyword">case</span> 1
+0203         <span class="keyword">for</span> k = 1:c
+0204             points = str2num(get(hMan.edit_fsmooth,<span class="string">'String'</span>));
+0205             f(:,k) = fft(y3(:,k));
+0206             <span class="keyword">try</span>
+0207                 f(r/2+1-points:r/2+points,k) = zeros(2*points,1);
+0208             <span class="keyword">catch</span>
+0209                 errordlg(sprintf(<span class="string">'FFT value is too high to compute or not a positive interger.\n\nPlease try again.'</span>),<span class="string">'FFT Smooth'</span>)
+0210             <span class="keyword">end</span>
+0211             
+0212             y4(:,k) = real(ifft(f(:,k)));
+0213         <span class="keyword">end</span>
+0214         
+0215     <span class="keyword">case</span> 0
+0216         y4 = y3;
+0217 <span class="keyword">end</span>
+0218 
+0219 <span class="comment">% Add noise</span>
+0220 <span class="comment">% ===================================================</span>
+0221 
+0222 <span class="keyword">switch</span> get(hMan.checkbox_addnoise,<span class="string">'Value'</span>)
+0223     <span class="keyword">case</span> 1
+0224         noise = str2num(get(hMan.edit_noise,<span class="string">'String'</span>));
+0225         
+0226         y_max = max(y4);
+0227         y_min = min(y4);
+0228         y_range = y_max - y_min;
+0229         
+0230         range = y_range * (noise/100);
+0231         
+0232         <span class="keyword">for</span> k = 1:numel(y4)
+0233             <span class="keyword">if</span> rand(1) &lt; 0.5
+0234                 y_noise(k) = y4(k) - (range * rand(1));
+0235             <span class="keyword">else</span>
+0236                 y_noise(k) = y4(k) + (range * rand(1));
+0237             <span class="keyword">end</span>
+0238         <span class="keyword">end</span>
+0239         
+0240         y5 = y_noise';
+0241         
+0242     <span class="keyword">case</span> 0
+0243         y5 = y4;
+0244 <span class="keyword">end</span>
+0245 
+0246 <span class="comment">% Savitzky-Golay</span>
+0247 <span class="comment">% ===================================================</span>
+0248 
+0249 <span class="keyword">switch</span> get(hMan.checkbox_sgo,<span class="string">'Value'</span>)
+0250     <span class="keyword">case</span> 1
+0251         sgo_points = str2num(get(hMan.edit_sgo_points,<span class="string">'String'</span>));
+0252         sgo_poly   = str2num(get(hMan.edit_sgo_poly,  <span class="string">'String'</span>));
+0253         
+0254         nl = round(sgo_points / 2);
+0255         nr = round(sgo_points / 2);
+0256         
+0257         A  = ones(nl+nr+1 , sgo_poly+1);
+0258 
+0259         <span class="keyword">for</span> j = sgo_poly:-1:1
+0260             A(:,j) = [-nl:nr]' .* A(: , j+1);
+0261         <span class="keyword">end</span>
+0262         
+0263         <span class="keyword">try</span>
+0264             [Q,R] = qr(A);
+0265             c = Q(: , sgo_poly+1) / R(sgo_poly+1 , sgo_poly+1);
+0266         <span class="keyword">catch</span>
+0267             warndlg(<span class="string">'An error occured, try keeping the number of points more than the polynominal order'</span>,<span class="string">'Savitzky-Golay Error'</span>)
+0268         <span class="keyword">end</span>
+0269         
+0270         n = length(y5);
+0271         y6            = filter(c(nl+nr+1:-1:1) , 1 , y5);
+0272         y6(1:nl)      = y5(1:nl);
+0273         y6(nl+1:n-nr) = y6(nl+nr+1:n);
+0274         y6(n-nr+1:n)  = y5(n-nr+1:n);
+0275         
+0276         <span class="comment">% Remove the data points at the beginning and end as they will have</span>
+0277         <span class="comment">% been unable to be smoothed. By removing them here, the points</span>
+0278         <span class="comment">% still exist in the raw data file, they're just not plotted on</span>
+0279         <span class="comment">% screen</span>
+0280         
+0281         y6 = y6(1+nl:end-nr);
+0282         x3 = x3(1+nl:end-nr);
+0283         
+0284     <span class="keyword">case</span> 0
+0285         y6 = y5;
+0286         
+0287 <span class="keyword">end</span>
+0288 
+0289 <span class="comment">% Auto-zero wants to be the last function that is called in the plotting,</span>
+0290 <span class="comment">% for this reason we call everything first</span>
+0291 <span class="comment">%</span>
+0292 <span class="comment">% Use this to quickly variables when adding new functions before calling</span>
+0293 <span class="comment">% the auto-zero</span>
+0294 y98 = y6;
+0295 
+0296 <span class="comment">% Autozero</span>
+0297 <span class="comment">% ===================================================</span>
+0298 
+0299 <span class="keyword">switch</span> get(hMan.checkbox_auto_zero,<span class="string">'Value'</span>)
+0300     <span class="keyword">case</span> 1
+0301         <span class="keyword">for</span> k = 1:size(y98,2)
+0302             m = mean(y98(:,k));
+0303             y99(:,k) = y98(:,k) - (m);
+0304         <span class="keyword">end</span>
+0305     <span class="keyword">case</span> 0
+0306         y99 = y98;
+0307 <span class="keyword">end</span>
+0308 
+0309 <span class="comment">% Finally convert the value to variables x and y for plotting</span>
+0310 x = x3;
+0311 y = y99;
+0312 
+0313 <span class="comment">% Write the values back to the data variables</span>
+0314 data.([<span class="string">'File'</span> mat2str(fSelection)]).x_view = x;
+0315 data.([<span class="string">'File'</span> mat2str(fSelection)]).y_view = y;
+0316 
+0317 setappdata(cwview,<span class="string">'data'</span>,data);
+0318 
+0319 
+0320 <span class="comment">% Plot command</span>
+0321 <span class="comment">% --------------------------------------------------------------------</span>
+0322 
+0323 <span class="keyword">switch</span> exp.info.EXPT
+0324     
+0325     <span class="comment">% PULSE EXPERIMENTS</span>
+0326     <span class="comment">% =================</span>
+0327     <span class="keyword">case</span> <span class="string">'PLS'</span>
+0328         <span class="keyword">switch</span> exp.info.XNAM
+0329             <span class="comment">% For FSEs</span>
+0330             <span class="keyword">case</span> <span class="string">'''Field'''</span>
+0331                 plot(hcwView.viewer_axes,<span class="keyword">...</span>
+0332                      x/10, y.real, <span class="string">'k-'</span>,<span class="keyword">...</span>
+0333                      x/10, y.imag, <span class="string">'r-'</span>);
+0334                 xlabel(hcwView.viewer_axes,<span class="string">'Magnetic Field / mT'</span>);
+0335                 
+0336                 <span class="comment">% For FIDs</span>
+0337             <span class="keyword">case</span> <span class="string">'''Time'''</span>
+0338                 plot(hcwView.viewer_axes,<span class="keyword">...</span>
+0339                      x,     y.real, <span class="string">'k-'</span>,<span class="keyword">...</span>
+0340                      x,     y.imag, <span class="string">'r-'</span>);
+0341                 xlabel(hcwView.viewer_axes,<span class="string">'Time / ns'</span>);
+0342                 
+0343             <span class="keyword">otherwise</span>
+0344                 <span class="keyword">try</span>
+0345                     plot(hcwView.viewer_axes,<span class="keyword">...</span>
+0346                         x,y.real,<span class="string">'k-'</span> , x,y.imag,<span class="string">'r-'</span>);
+0347                 <span class="keyword">end</span>
+0348         <span class="keyword">end</span>
+0349         
+0350         legend(hcwView.viewer_axes,<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>)
+0351         
+0352        
+0353     <span class="comment">% CW EXPERIMENTS</span>
+0354     <span class="comment">% ==============</span>
+0355     <span class="keyword">case</span> <span class="string">'CW'</span>
+0356         
+0357         <span class="comment">% Viewing options window - PLOT TYPE</span>
+0358         <span class="comment">% ------------------------------------------------------------</span>
+0359         
+0360         <span class="comment">% If window is open</span>
+0361         <span class="keyword">if</span> isfield(Handles,<span class="string">'ViewingOptions'</span>) &amp;&amp; Visible.ViewingOptions == 1
+0362             <span class="comment">% Get plot type</span>
+0363             <span class="keyword">switch</span> Var.View.Plot_Button
+0364                 <span class="keyword">case</span> <span class="string">'Stacked'</span>
+0365                     
+0366                     <span class="comment">% Plot x (in mT) against y</span>
+0367                     plot(hcwView.viewer_axes,<span class="keyword">...</span>
+0368                         x,<span class="keyword">...</span>
+0369                         y);
+0370                     
+0371                     
+0372                 <span class="keyword">case</span> <span class="string">'Single'</span>
+0373                                         
+0374                     <span class="comment">% Plot x (in mT) against the y column that corresponds</span>
+0375                     <span class="comment">% to the slider position</span>
+0376                     <span class="keyword">if</span> isfield(Var.Slider , <span class="string">'Value'</span>) == 0
+0377                         Var.Slider.Value = 1;
+0378                     <span class="keyword">end</span>
+0379                     
+0380                     plot(hcwView.viewer_axes,<span class="keyword">...</span>
+0381                         x/10,<span class="keyword">...</span>
+0382                         y(: , round(Var.Slider.Value)));
+0383                     
+0384                 
+0385                 <span class="keyword">case</span> <span class="string">'Staggered'</span>
+0386                     
+0387                     <span class="comment">% Get offsets from the Viewing options window</span>
+0388                     
+0389                     <span class="keyword">switch</span> get(hView.checkbox_yaxis,<span class="string">'Value'</span>)
+0390                         <span class="keyword">case</span> 0
+0391                             y_offset = 0;
+0392                             
+0393                         <span class="keyword">case</span> 1
+0394                             y_offset = str2num(get(hView.edit_yaxis, <span class="string">'String'</span>));
+0395                     <span class="keyword">end</span>
+0396                     
+0397                     
+0398                     <span class="keyword">switch</span> get(hView.checkbox_xaxis,<span class="string">'Value'</span>)
+0399                         <span class="keyword">case</span> 0
+0400                             x_offset = 0;
+0401                             
+0402                         <span class="keyword">case</span> 1
+0403                             x_offset = str2num(get(hView.edit_xaxis, <span class="string">'String'</span>));
+0404                     <span class="keyword">end</span>
+0405                     
+0406                     <span class="comment">% Plot x (in mT) against the y. After the offset has</span>
+0407                     <span class="comment">% been applied</span>
+0408                     
+0409                     <span class="comment">% Many spectra in a *.YGF file will give a single</span>
+0410                     <span class="comment">% column of x data. Whereas several different files</span>
+0411                     <span class="comment">% will have many x</span>
+0412                     <span class="keyword">switch</span> size(x,2)
+0413                         <span class="keyword">case</span> 1
+0414                             cla(hcwView.viewer_axes);
+0415                             hold(hcwView.viewer_axes,<span class="string">'on'</span>);
+0416                             <span class="keyword">for</span> k = 1:c
+0417                                 plot(hcwView.viewer_axes,<span class="keyword">...</span>
+0418                                     (x(:,1)+(k*x_offset)),(y(:,k)+(y_offset*k)))
+0419                             <span class="keyword">end</span>
+0420                             hold(hcwView.viewer_axes,<span class="string">'off'</span>);
+0421                         <span class="keyword">otherwise</span>
+0422                             hold(hcwView.viewer_axes,<span class="string">'on'</span>);
+0423                             <span class="keyword">for</span> k = 1:c
+0424                                 plot(hcwView.viewer_axes,<span class="keyword">...</span>
+0425                                     (x(:,k)+(k*x_offset)),(y(:,k)+(y_offset*k)))
+0426                             <span class="keyword">end</span>
+0427                             hold(hcwView.viewer_axes,<span class="string">'off'</span>);
+0428                     <span class="keyword">end</span>
+0429                     
+0430             <span class="keyword">end</span>
+0431             
+0432         <span class="keyword">else</span>
+0433             plot(hcwView.viewer_axes,<span class="keyword">...</span>
+0434                     x,     y,    <span class="string">'k-'</span>);
+0435         <span class="keyword">end</span>
+0436         
+0437         <span class="keyword">switch</span> get(hView.checkbox_g,<span class="string">'Value'</span>)
+0438             <span class="keyword">case</span> 0
+0439                 xlabel(hcwView.viewer_axes,<span class="string">'Magnetic Field / mT'</span>);
+0440                 set(hcwView.viewer_axes,<span class="string">'XDir'</span>,<span class="string">'normal'</span>);
+0441                 
+0442             <span class="keyword">case</span> 1
+0443                 xlabel(hcwView.viewer_axes,<span class="string">'g'</span>);
+0444                 set(hcwView.viewer_axes,<span class="string">'XDir'</span>,<span class="string">'reverse'</span>);
+0445         
+0446         <span class="keyword">end</span>
+0447         
+0448 <span class="keyword">end</span>
+0449 
+0450 <span class="comment">% Figure formatting</span>
+0451 ylabel(hcwView.viewer_axes,<span class="string">'Intensity'</span>);
+0452 
+0453 
+0454 <span class="comment">% Viewing options window - AXES HANDLING</span>
+0455 <span class="comment">% --------------------------------------------------------------------</span>
+0456 
+0457 <span class="comment">% If viewing window is open then check to see the axes options. But if the</span>
+0458 <span class="comment">% window is not open then save computation time and default the axes to</span>
+0459 <span class="comment">% tight around the data.</span>
+0460 
+0461 <span class="keyword">if</span> isfield(Handles,<span class="string">'ViewingOptions'</span>) &amp;&amp; Visible.ViewingOptions == 1
+0462     
+0463     <span class="comment">% If this is the first time a plot command is called then the Viewing</span>
+0464     <span class="comment">% options Axes boxes will be blank ('-'). In which case we need to</span>
+0465     <span class="comment">% update them to the current axes such that if the user then selects</span>
+0466     <span class="comment">% Manual axes it makes sense.</span>
+0467     <span class="keyword">if</span>  strcmp(get(hView.edit_maglow,<span class="string">'String'</span>),<span class="string">'-'</span>) &amp;&amp;  strcmp(get(hView.edit_maghigh,<span class="string">'String'</span>),<span class="string">'-'</span>)
+0468         xLim = xlim(hcwView.viewer_axes);
+0469         yLim = ylim(hcwView.viewer_axes);
+0470         
+0471         set(hView.edit_maglow ,<span class="string">'String'</span>,xLim(1));
+0472         set(hView.edit_maghigh,<span class="string">'String'</span>,xLim(2));
+0473         set(hView.edit_intlow ,<span class="string">'String'</span>,yLim(1));
+0474         set(hView.edit_inthigh,<span class="string">'String'</span>,yLim(2));
+0475     <span class="keyword">end</span>
+0476     
+0477     <span class="comment">% Evaluate button and change axes accordingly</span>
+0478     <span class="keyword">switch</span> Var.View.Axes_Button
+0479         <span class="keyword">case</span> <span class="string">'Automatic'</span>
+0480             axis(hcwView.viewer_axes , <span class="string">'tight'</span>);
+0481             
+0482             xLim = xlim(hcwView.viewer_axes);
+0483             yLim = ylim(hcwView.viewer_axes);
+0484             
+0485             set(hView.edit_maglow ,<span class="string">'String'</span>,num2str(xLim(1),4.3));
+0486             set(hView.edit_maghigh,<span class="string">'String'</span>,num2str(xLim(2),4.3));
+0487             set(hView.edit_intlow ,<span class="string">'String'</span>,num2str(yLim(1),4.3));
+0488             set(hView.edit_inthigh,<span class="string">'String'</span>,num2str(yLim(2),4.3));
+0489             
+0490         <span class="keyword">case</span> <span class="string">'Manual'</span>
+0491             <span class="keyword">try</span>
+0492                 axis(hcwView.viewer_axes , <span class="keyword">...</span>
+0493                     [ str2num(get(hView.edit_maglow ,<span class="string">'String'</span>)) , <span class="keyword">...</span>
+0494                       str2num(get(hView.edit_maghigh,<span class="string">'String'</span>)) , <span class="keyword">...</span>
+0495                       str2num(get(hView.edit_intlow ,<span class="string">'String'</span>)) , <span class="keyword">...</span>
+0496                       str2num(get(hView.edit_inthigh,<span class="string">'String'</span>)) ])
+0497             <span class="keyword">catch</span>
+0498                 axis(hcwView.viewer_axes , <span class="string">'tight'</span>);
+0499                 disp(<span class="string">'Manual axes have been selected, but not all boxes are filled or contain numbers'</span>)
+0500             <span class="keyword">end</span>
+0501     <span class="keyword">end</span>
+0502     
+0503 <span class="keyword">else</span>
+0504     axis(hcwView.viewer_axes , <span class="string">'tight'</span>);
+0505 
+0506 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 12:00:44 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

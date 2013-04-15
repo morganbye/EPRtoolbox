@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MMM_rota_install</title>
+  <meta name="keywords" content="MMM_rota_install">
+  <meta name="description" content="Install MMM rotamer export to seperate PDBs">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">doc</a> &gt; <a href="index.html">MMM_functions</a> &gt; MMM_rota_install.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for doc/MMM_functions&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>MMM_rota_install
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Install MMM rotamer export to seperate PDBs</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Install MMM rotamer export to seperate PDBs
+ MMM_rota_install
+
+ This script makes a local copy of the original program files and saves
+ them to MMM_directory/old_files.
+
+ It then installs a custom set of scripts developed largely by Yevhen
+ Polyhach and Gunnar Jescke of ETH Zurich which allows for the exporting
+ of each and every rotamer as a seperate PDB rather than an ensemble
+ rotamer library.
+
+ For more information see:
+ http://morganbye.net/eprtoolbox/mmm-individual-rotamer-pdbs</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Install MMM rotamer export to seperate PDBs</span>
+0002 <span class="comment">% MMM_rota_install</span>
+0003 <span class="comment">%</span>
+0004 <span class="comment">% This script makes a local copy of the original program files and saves</span>
+0005 <span class="comment">% them to MMM_directory/old_files.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% It then installs a custom set of scripts developed largely by Yevhen</span>
+0008 <span class="comment">% Polyhach and Gunnar Jescke of ETH Zurich which allows for the exporting</span>
+0009 <span class="comment">% of each and every rotamer as a seperate PDB rather than an ensemble</span>
+0010 <span class="comment">% rotamer library.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% For more information see:</span>
+0013 <span class="comment">% http://morganbye.net/eprtoolbox/mmm-individual-rotamer-pdbs</span>
+0014 <span class="comment">%</span>
+0015 
+0016 <span class="comment">%                                        _                             _</span>
+0017 <span class="comment">%                                       | |                           | |</span>
+0018 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0019 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0020 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0021 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0022 <span class="comment">%                       __/ |                   __/ |</span>
+0023 <span class="comment">%                      |___/                   |___/</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% M. Bye v11.4</span>
+0027 
+0028 <span class="comment">% find current MMM install path</span>
+0029 MMM_loca = which(<span class="string">'MMM'</span>);
+0030 MMM_directory = fileparts(MMM_loca);
+0031 
+0032 <span class="comment">% create folders</span>
+0033 cd(MMM_directory)
+0034 mkdir(MMM_directory,<span class="string">'old_files'</span>)
+0035 mkdir([MMM_directory,<span class="string">'/'</span>,<span class="string">'old_files'</span>],<span class="string">'private'</span>)
+0036 
+0037 <span class="comment">% copy old files to back location</span>
+0038 copyfile(<span class="string">'MMM_prototype.m'</span> , <span class="string">'old_files/'</span>);
+0039 copyfile(<span class="string">'site_scan.m'</span> , <span class="string">'old_files/'</span>);
+0040 copyfile(<span class="string">'site_scan.fig'</span> , <span class="string">'old_files/'</span>);
+0041 
+0042 copyfile(<span class="string">'private/get_transformed_rotamers.m'</span> , <span class="string">'old_files/private/'</span>);
+0043 copyfile(<span class="string">'private/mk_pdb_rotamers.m'</span> , <span class="string">'old_files/private/'</span>);
+0044 copyfile(<span class="string">'private/put_pdb_coor.m'</span> , <span class="string">'old_files/private/'</span>);
+0045 copyfile(<span class="string">'private/transform_rotamers.m'</span> , <span class="string">'old_files/private/'</span>);
+0046 copyfile(<span class="string">'private/wr_sep_rot_pdb.m'</span> , <span class="string">'old_files/private/'</span>);
+0047 
+0048 <span class="comment">% copy new files and replace</span>
+0049 install_loca = which(<span class="string">'EPRtoolbox'</span>);
+0050 install_directory = fileparts(install_loca);
+0051 install_directory = [install_directory,<span class="string">'/'</span>,<span class="string">'MMM_rotamers'</span>];
+0052 
+0053 copyfile([install_directory,<span class="string">'/'</span>,<span class="string">'MMM_prototype.m'</span>] , [MMM_directory,<span class="string">'/'</span>,<span class="string">'MMM_prototype.m'</span>])
+0054 copyfile([install_directory,<span class="string">'/'</span>,<span class="string">'site_scan.m'</span>] , [MMM_directory,<span class="string">'/'</span>,<span class="string">'site_scan.m'</span>])
+0055 copyfile([install_directory,<span class="string">'/'</span>,<span class="string">'site_scan.fig'</span>] , [MMM_directory,<span class="string">'/'</span>,<span class="string">'site_scan.fig'</span>])
+0056 
+0057 copyfile([install_directory,<span class="string">'/private/get_transformed_rotamers.m'</span>] , [MMM_directory,<span class="string">'/'</span>,<span class="string">'old_files/private/'</span>]);
+0058 copyfile([install_directory,<span class="string">'/private/mk_pdb_rotamers.m'</span>] , [MMM_directory,<span class="string">'/'</span>,<span class="string">'old_files/private/'</span>]);
+0059 copyfile([install_directory,<span class="string">'/private/put_pdb_coor.m'</span>] , [MMM_directory,<span class="string">'/'</span>,<span class="string">'old_files/private/'</span>]);
+0060 copyfile([install_directory,<span class="string">'/private/transform_rotamers.m'</span>] , [MMM_directory,<span class="string">'/'</span>,<span class="string">'old_files/private/'</span>]);
+0061 copyfile([install_directory,<span class="string">'/private/wr_sep_rot_pdb.m'</span>] , [MMM_directory,<span class="string">'/'</span>,<span class="string">'old_files/private/'</span>]);
+0062 
+0063 cd(matlabroot)
+0064 
+0065 sprintf(<span class="string">'The rotamer export function was successfully installed\n\nMMM should still function as normal, if you experience problems you can uninstall at time\n\n'</span>)</pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 12:00:44 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

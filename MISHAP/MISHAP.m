@@ -9,6 +9,8 @@ function MISHAP
 %
 % This program needs to be called from MMM (Predict > Quaternary > HADDOCK)
 %
+% Please refer to http://morganbye.net/mishap for 
+%
 % Inputs:       n/a
 %
 % Outputs:
@@ -18,7 +20,7 @@ function MISHAP
 % Example:
 %    see http://morganbye.net/mishap
 %
-% Other m-files required:   /MISHAP folder
+% Other m-files required:   /_private folder
 %
 % Subfunctions:             none
 %
@@ -46,7 +48,7 @@ function MISHAP
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.04
+% M. Bye v13.05
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -116,6 +118,11 @@ global MISHAP
 MS_loca = which('MISHAP');
 MS_directory = fileparts(MS_loca);
 MISHAP.pref = load([MS_directory '/_private/preferences.mat']);
+
+if ~exist('MISHAP_dist','file')
+    warndlg('Cannot find all necessary MISHAP files, please check that the MISHAP/_private folder is added to your path','Function not found');
+    return
+end
 
 % Start MISHAP
 switch MISHAP.pref.installed

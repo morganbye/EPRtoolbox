@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PS_PlotPS_CalculatePoints</title>
+  <meta name="keywords" content="PS_PlotPS_CalculatePoints">
+  <meta name="description" content="PS_PLOTPS Plot the power saturation curves">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">cw</a> &gt; <a href="../index.html">PowerSat</a> &gt; <a href="index.html">_private</a> &gt; PS_PlotPS_CalculatePoints.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for cw/PowerSat/_private&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>PS_PlotPS_CalculatePoints
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>PS_PLOTPS Plot the power saturation curves</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [sqrtPower , Y] = PS_PlotPS_CalculatePoints(handles,exp,x,y,mwPower,maxpeak,minpeak) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PS_PLOTPS Plot the power saturation curves
+
+ Syntax:  PS_PLOTPS(handles)
+
+ Inputs:
+    input1 - handles
+               graphical handles
+    input2 - exp
+               the experiment Oxy/N2/Ni
+    input2 - x
+               magnetic field (from cw experiment)
+    input3 - y
+               intensity of each experiment
+    input4 - mwPower
+               the microwave power of each experiment
+    input5 - maxpeak
+               the magnetic field position of the high peak
+    input6 - minpeak
+               the magnetic field position of the low peak
+    
+
+ Outputs:
+    output1 - sqrtPower
+               the square root of the microwave power
+    output2 - Y
+               Y' (y-axis of the power saturation plot)
+
+ Example: 
+    see http://morganbye.net/PowerSat
+
+ Other m-files required:
+    PowerSat.m
+
+ Subfunctions:         none
+
+ MAT-files required:   none</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="PS_Pi_DPPH.html" class="code" title="function PS_Pi_DPPH(handles)">PS_Pi_DPPH</a>	PS_PI_DPPH Calculate ΔH_half for the DPPH standard</li><li><a href="PS_PlotPS_Plot.html" class="code" title="function PS_PlotPS_Plot(handles,exp,color)">PS_PlotPS_Plot</a>	PS_PLOTPS_Plot Plot the power saturation curves</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [sqrtPower , Y] = PS_PlotPS_CalculatePoints(handles,exp,x,y,mwPower,maxpeak,minpeak)</a>
+0002 
+0003 <span class="comment">% PS_PLOTPS Plot the power saturation curves</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Syntax:  PS_PLOTPS(handles)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%    input1 - handles</span>
+0009 <span class="comment">%               graphical handles</span>
+0010 <span class="comment">%    input2 - exp</span>
+0011 <span class="comment">%               the experiment Oxy/N2/Ni</span>
+0012 <span class="comment">%    input2 - x</span>
+0013 <span class="comment">%               magnetic field (from cw experiment)</span>
+0014 <span class="comment">%    input3 - y</span>
+0015 <span class="comment">%               intensity of each experiment</span>
+0016 <span class="comment">%    input4 - mwPower</span>
+0017 <span class="comment">%               the microwave power of each experiment</span>
+0018 <span class="comment">%    input5 - maxpeak</span>
+0019 <span class="comment">%               the magnetic field position of the high peak</span>
+0020 <span class="comment">%    input6 - minpeak</span>
+0021 <span class="comment">%               the magnetic field position of the low peak</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Outputs:</span>
+0025 <span class="comment">%    output1 - sqrtPower</span>
+0026 <span class="comment">%               the square root of the microwave power</span>
+0027 <span class="comment">%    output2 - Y</span>
+0028 <span class="comment">%               Y' (y-axis of the power saturation plot)</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Example:</span>
+0031 <span class="comment">%    see http://morganbye.net/PowerSat</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% Other m-files required:</span>
+0034 <span class="comment">%    PowerSat.m</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% Subfunctions:         none</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% MAT-files required:   none</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%</span>
+0041 
+0042 <span class="comment">%                                        _                             _</span>
+0043 <span class="comment">%                                       | |                           | |</span>
+0044 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0045 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0046 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0047 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0048 <span class="comment">%                       __/ |                   __/ |</span>
+0049 <span class="comment">%                      |___/                   |___/</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% M. Bye v12.8</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% Author:       Morgan Bye</span>
+0055 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0056 <span class="comment">%               University of East Anglia</span>
+0057 <span class="comment">%               NORWICH, UK</span>
+0058 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0059 <span class="comment">% Website:      http://www.morganbye.net/PowerSat</span>
+0060 <span class="comment">% Aug 2012;     Last revision: 15-August-2012</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% Version history:</span>
+0063 <span class="comment">% Aug 12        &gt; Change from Gaussian tickbox to a fitting dropdown menu</span>
+0064 <span class="comment">%                   for Lorentzian fitting</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">% Jul 12        &gt; Switch introduced for Gaussian curve handling</span>
+0067 <span class="comment">%</span>
+0068 <span class="comment">% Jun 12        &gt; Switch introduced for handling of single file / folder of</span>
+0069 <span class="comment">%                   files handling</span>
+0070 <span class="comment">%</span>
+0071 <span class="comment">% Oct 11        &gt; ~ removal for Windows compatibility</span>
+0072 <span class="comment">%               &gt; Renaming and reformating for clarity</span>
+0073 <span class="comment">%               &gt; Help functions added</span>
+0074 <span class="comment">%</span>
+0075 <span class="comment">% Sept 11       &gt; Initial release</span>
+0076 
+0077 <span class="comment">% mW powers</span>
+0078 <span class="comment">% ===================================================</span>
+0079 
+0080 c = size(y,2);
+0081 
+0082 sqrtPower = sqrt(mwPower)';
+0083 
+0084 
+0085 <span class="comment">% Intensity</span>
+0086 <span class="comment">% ===================================================</span>
+0087 
+0088 <span class="keyword">switch</span> get(handles.dropdown_fitting,<span class="string">'Value'</span>)
+0089     
+0090     <span class="comment">% GAUSSIAN</span>
+0091     <span class="keyword">case</span> 1
+0092         
+0093         <span class="comment">% Note that the function still calls in the values for peak and</span>
+0094         <span class="comment">% trough from the GUI but the Gaussian uses these as a starting</span>
+0095         <span class="comment">% point and then fits for accurately. So in actual fact here we use</span>
+0096         <span class="comment">% the Gaussian &quot;a&quot; coefficient instead</span>
+0097         
+0098         <span class="keyword">global</span> vars
+0099         
+0100         Fitting = vars.(exp).FitGaussian;
+0101  
+0102         <span class="keyword">for</span> k = 1:c
+0103             Y(k) = Fitting.Peak.Coeff{k}(1) - Fitting.Trough.Coeff{k}(1);
+0104         <span class="keyword">end</span>
+0105     
+0106     <span class="comment">% LORENTZIAN</span>
+0107     <span class="keyword">case</span> 2
+0108         
+0109         <span class="keyword">global</span> vars
+0110         
+0111         Fitting = vars.(exp).FitLorentzian;
+0112  
+0113         <span class="keyword">for</span> k = 1:c
+0114             Y(k) = Fitting.Peak.Coeff{k}(1) - Fitting.Trough.Coeff{k}(1);
+0115         <span class="keyword">end</span>
+0116     
+0117         
+0118     <span class="comment">% SINGLE POINT</span>
+0119     <span class="keyword">case</span> 3
+0120 
+0121         <span class="comment">% find mag_field value closest to p2p_high</span>
+0122         [arb, index_high] = min(abs(x-maxpeak));
+0123         
+0124         [arb, index_low] = min(abs(x-minpeak));
+0125         
+0126         <span class="keyword">switch</span> size(x,2)
+0127             <span class="keyword">case</span> 1
+0128                 <span class="keyword">for</span> k=1:c
+0129                     Inten_pos(k) = y(index_high,k);
+0130                     Inten_neg(k) = y(index_low,k);
+0131                 <span class="keyword">end</span>
+0132                 
+0133             <span class="keyword">otherwise</span>
+0134                 <span class="keyword">for</span> k=1:c
+0135                     Inten_pos(k) = y(index_high(k),k);
+0136                     Inten_neg(k) = y(index_low(k),k);
+0137                 <span class="keyword">end</span>
+0138         <span class="keyword">end</span>
+0139         
+0140         Y = Inten_pos - Inten_neg;
+0141         
+0142     <span class="comment">% GAUSSIAN DERIVATIVE</span>
+0143     <span class="keyword">case</span> 4
+0144                 
+0145         <span class="keyword">global</span> vars
+0146         
+0147         Fitting = vars.(exp).FitGaussianDeriv;
+0148  
+0149         <span class="keyword">for</span> k = 1:c
+0150             Y(k) = Fitting.PeakInt(k) - Fitting.TroughInt(k);
+0151         <span class="keyword">end</span>
+0152     
+0153     <span class="comment">% LORENTZIAN DERIVATIVE</span>
+0154     <span class="keyword">case</span> 5
+0155         
+0156         <span class="keyword">global</span> vars
+0157         
+0158         Fitting = vars.(exp).FitLorentzianDeriv;
+0159  
+0160         <span class="keyword">for</span> k = 1:c
+0161             Y(k) = Fitting.PeakInt(k) - Fitting.TroughInt(k);
+0162         <span class="keyword">end</span>
+0163 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Fri 05-Apr-2013 12:00:44 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

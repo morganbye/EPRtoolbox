@@ -46,7 +46,7 @@ function varargout = MISHAP_dist(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.04
+% M. Bye v13.05
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -54,7 +54,7 @@ function varargout = MISHAP_dist(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/mishap/
-% Mar 2013;     Last revision: 22-March-2013
+% Apr 2013;     Last revision: 15-April-2013
 %
 % Version history:
 % Mar 13        Initial release
@@ -95,7 +95,7 @@ function MISHAP_dist_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
 % Name the figure
-set(gcf,'Name','MISHAP - v13.04')
+set(gcf,'Name','MISHAP - v13.05 - BETA')
 movegui('east');
 
 % Create MISHAP global variables
@@ -141,8 +141,27 @@ for k = 1:numel(figs)
                 
         MISHAP_pro;
         MISHAP.pro = 1;
+        
+    else 
+        MISHAP.MMM = 0;
+    end
+    
+    if regexp(fig_name, 'DeerAnalysis')
+        % Register DA as open
+        MISHAP.DeerAnalysis = 1;
+        
+    else
+        MISHAP.DeerAnalysis = 0;
     end
 end
+
+% Set input text
+set(handles.text_edit_dd,'String','--- No distance loaded ---');
+
+% Set output text field
+out = [pwd '/MISHAP.tbl'];
+set(handles.text_output_path,'String',out);
+MISHAP.outpath = out;
 
 % Update handles structure
 guidata(hObject, handles);
@@ -166,57 +185,38 @@ varargout{1} = handles.output;
 %  | |__| | \__ \ || (_| | | | | (_|  __/
 %  |_____/|_|___/\__\__,_|_| |_|\___\___|
 
+% --- Executes during object creation, after setting all properties.
+function menu_dd_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
 % --- Executes on selection change in menu_dd.
 function menu_dd_Callback(hObject, eventdata, handles)
-% hObject    handle to menu_dd (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns menu_dd contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from menu_dd
 
 
-% --- Executes during object creation, after setting all properties.
-function menu_dd_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to menu_dd (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
 % --- Executes on button press in button_load_dd.
 function button_load_dd_Callback(hObject, eventdata, handles)
-% hObject    handle to button_load_dd (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
+MISHAP_dist_load_dd;
 
-
-function text_edit_dd_Callback(hObject, eventdata, handles)
-% hObject    handle to text_edit_dd (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of text_edit_dd as text
-%        str2double(get(hObject,'String')) returns contents of text_edit_dd as a double
 
 
 % --- Executes during object creation, after setting all properties.
 function text_edit_dd_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to text_edit_dd (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+function text_edit_dd_Callback(hObject, eventdata, handles)
+
+
+
 
 
 %                           
@@ -314,6 +314,20 @@ end
 % --- Executes on button press in button_output_select.
 function button_output_select_Callback(hObject, eventdata, handles)
 
+global MISHAP
+
+[fname,pname] = uiputfile( ...
+{'*.tbl',...
+ 'HADDOCK parameter file (*.tbl)';
+ '*.*',  'All Files (*.*)'},...
+ 'Save as',['MISHAP-' datestr(now,'yyyymmdd-HH:MM')]);
+
+if isequal(fname,0)
+    set(MISHAP.handles.dist.text_output_path , 'String', MISHAP.outpath);
+else
+    MISHAP.outpath = [pname fname];
+    set(MISHAP.handles.dist.text_output_path , 'String', MISHAP.outpath);
+end
 
 
 %   _____  _    _ _   _ _ 
@@ -342,8 +356,10 @@ function figure1_CloseRequestFcn(hObject, eventdata, handles)
 
 global MISHAP
 
-if MISHAP.pro == 1
-    close(MISHAP.handles.pro.figure1);
+if exist('MISHAP.pro','var')
+    if MISHAP.pro == 1
+        close(MISHAP.handles.pro.figure1);
+    end
 end
 
 delete(hObject);
