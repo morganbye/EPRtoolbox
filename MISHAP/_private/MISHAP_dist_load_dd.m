@@ -79,6 +79,15 @@ switch get(MISHAP.handles.dist.menu_dd,'Value')
                 % if user cancels command nothing happens
                 if isequal(file,0) %|| isequal(directory,0)
                     set(MISHAP.handles.dist.text_edit_dd,'String','--- No distance loaded ---');
+%                     axis(MISHAP.handles.dist.axes_dd,'XTickLabel','');
+%                     xlabel(MISHAP.handles.dist.axes_dd,'');
+%                     text(.5,.5,MISHAP.splash,...
+%                         'HorizontalAlignment','center',...
+%                         'Interpreter','none',...
+%                         'FontName','FixedWidth',...
+%                         'FontSize',16,...
+%                         'Color','w',...
+%                         'EdgeColor','w');
                     return
                 end
                 
@@ -86,8 +95,14 @@ switch get(MISHAP.handles.dist.menu_dd,'Value')
                 
                 raw = importdata(address);
                 
-                MISHAP.data.dd.DA.x = raw(:,1);
-                MISHAP.data.dd.DA.y = raw(:,2);
+                % Normalize the distance distribtion to 1
+                max_y = max(raw(:,2));
+                min_y = min(raw(:,2));
+                        
+                y = (raw(:,2) - min_y)/(max_y - min_y);
+                
+                MISHAP.data.dd.x = raw(:,1);
+                MISHAP.data.dd.y = y;
                 
                 set(MISHAP.handles.dist.text_edit_dd,'String',file);
                 
@@ -123,8 +138,15 @@ switch get(MISHAP.handles.dist.menu_dd,'Value')
                 % Line 4: solid blue vertical line at window min (1.5 nm)
                 % Line 5: curve
                 
-                MISHAP.data.dd.DA.x = get(lDD(5), 'xdata')';
-                MISHAP.data.dd.DA.y = get(lDD(5), 'ydata')';
+                MISHAP.data.dd.x = get(lDD(5), 'xdata')';
+                
+                y = get(lDD(5), 'ydata')';
+                
+                 % Normalize the distance distribtion to 1
+                max_y = max(y);
+                min_y = min(y);
+                        
+                MISHAP.data.dd.y = (y - min_y)/(max_y - min_y);
                 
                 set(MISHAP.handles.dist.text_edit_dd,'String','Open DeerAnalysis window');
                         
@@ -144,32 +166,48 @@ switch get(MISHAP.handles.dist.menu_dd,'Value')
                     'Load DeerAnalysis distance distribution file');
                 
                 % if user cancels command nothing happens
+                
                 if isequal(file,0) %|| isequal(directory,0)
                     set(MISHAP.handles.dist.text_edit_dd,'String','--- No distance loaded ---');
                     return
                 end
                 
+                
                 address = [directory,file];
                 
                 raw = importdata(address);
                 
+                % Normalize the distance distribtion to 1
+                max_y = max(raw(:,2));
+                min_y = min(raw(:,2));
+                        
+                y = (raw(:,2) - min_y)/(max_y - min_y);
+                
                 switch size(raw,2)
                     
                     case 2
-                        MISHAP.data.dd.MMM.x = raw(:,1);
-                        MISHAP.data.dd.MMM.y = raw(:,2);
+                                            
+                        MISHAP.data.dd.x = raw(:,1);
+                        MISHAP.data.dd.y = y;
                         
                     case 3
                         
                         % DeerAnalysis (real data) is plotted before MMM curve
-                        MISHAP.data.dd.MMM.DAx = raw(:,1);
-                        MISHAP.data.dd.MMM.DAy = raw(:,2);
-                        MISHAP.data.dd.MMM.x = raw(:,1);
-                        MISHAP.data.dd.MMM.y = raw(:,3);
+                        MISHAP.data.dd.x = raw(:,1);
+                        MISHAP.data.dd.y = y;
+                        
+                        % Normalize MMMy
+                        max_yMMM = max(raw(:,3));
+                        min_yMMM = min(raw(:,3));
+                        
+                        yMMM = (raw(:,3) - min_yMMM)/(max_yMMM - min_yMMM);
+                        
+                        MISHAP.data.dd.MMMx = raw(:,1);
+                        MISHAP.data.dd.MMMy = yMMM;
                         
                 end
                 
-                set(MISHAP.handles.text_edit_dd,'String',file);
+                set(MISHAP.handles.dist.text_edit_dd,'String',file);
               
 % FUTURE IMPLEMENTATION - if MMM window exists then extract the model
 %                            information from MMM global variable
@@ -187,4 +225,7 @@ switch get(MISHAP.handles.dist.menu_dd,'Value')
 %        end
 end
         
+
+MISHAP_peakfinder;
+MISHAP_auto_table_filling;
 MISHAP_dist_plot;

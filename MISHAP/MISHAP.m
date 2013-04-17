@@ -1,6 +1,6 @@
 function MISHAP
 
-% MISHAP - MMM Interfacing of Spin labels to HADDOCK program
+% MISHAP MMM Interfacing of Spin labels to HADDOCK program
 %
 %   MISHAP
 %
@@ -11,11 +11,13 @@ function MISHAP
 %
 % Please refer to http://morganbye.net/mishap for 
 %
-% Inputs:       n/a
+% Inputs:
+%    input1     - MMM model
+%    input2     - MMM or DeerAnalysis distance distribution
 %
 % Outputs:
 %    output1    - PDB(/s)
-%    output2    - 
+%    output2    - HADDOCK parameter file
 %
 % Example:
 %    see http://morganbye.net/mishap
@@ -56,10 +58,14 @@ function MISHAP
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/mishap/
-% Mar 2013;     Last revision: 23-March-2013
+% Apr 2013;     Last revision: 17-April-2013
 %
 % Version history:
-% Mar 13        Initial release
+% Apr 13        Better splash closing handling
+%
+% Mar 13        Initial beta
+
+global MISHAP
 
 % Create splash screen
 h=figure;
@@ -74,7 +80,7 @@ screen_size = get(0,'MonitorPositions');
 switch size(screen_size,1)
     % For one monitor
     case 1
-        movegui('center')
+        movegui('east')
     % For multi-monitor systems, use monitor 1
     otherwise
         set(h,'Position',[...
@@ -87,7 +93,7 @@ end
 axis off
 axis equal
 
-splash = [...
+MISHAP.splashfull = [...
 '              __  __ _____  _____ _    _          _____                   ';...
 '             |  \/  |_   _|/ ____| |  | |   /\   |  __ \                  ';...
 '             | \  / | | | | (___ | |__| |  /  \  | |__) |                 ';...
@@ -105,7 +111,7 @@ splash = [...
 '                       __/ |                   __/ |                      ';...
 '                      |___/                   |___/                       ';...
 '                                                                          '];
-text(.4,.5,splash,...
+text(.4,.5,MISHAP.splashfull,...
     'HorizontalAlignment','center',...
     'Interpreter','none',...
     'FontName','FixedWidth',...
@@ -114,13 +120,13 @@ text(.4,.5,splash,...
     'EdgeColor','w');
 
 % Load preferences
-global MISHAP
 MS_loca = which('MISHAP');
 MS_directory = fileparts(MS_loca);
 MISHAP.pref = load([MS_directory '/_private/preferences.mat']);
 
 if ~exist('MISHAP_dist','file')
     warndlg('Cannot find all necessary MISHAP files, please check that the MISHAP/_private folder is added to your path','Function not found');
+    close(h);
     return
 end
 
@@ -142,5 +148,5 @@ end
 
 pause(1);
 
-% Close MISHAP
+% Close MISHAP splash screen
 close(h);
