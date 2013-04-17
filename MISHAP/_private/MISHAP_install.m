@@ -46,7 +46,7 @@ function MISHAP_install
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.04
+% M. Bye v13.05
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -57,6 +57,9 @@ function MISHAP_install
 % Mar 2013;     Last revision: 22-March-2013
 %
 % Version history:
+% Apr 13        Copy includes renaming such that there is no conflict with
+%               MISHAP origin MMM files or the MMM backup files.
+%
 % Mar 13        Initial release
 
 logo = [...
@@ -76,14 +79,18 @@ logo = [...
 '|_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|  ';...
 '                      __/ |                   __/ |                        ';...
 '                     |___/                   |___/                         '];
-fprintf('\n')
+fprintf('\n\n')
 disp(logo)
 
 fprintf('============================================\n')
 fprintf('STARTING INSTALLATION\n')
 fprintf('============================================\n\n')
-fprintf('Installer version - 13.04\n')
-fprintf('Build date        - 22nd March 2013\n\n')
+fprintf('Installer version - 13.05\n')
+fprintf('Build date        - 17th April 2013\n\n')
+fprintf('This installer will install\n')
+fprintf('MISHAP version    - 13.05\n')
+fprintf('Release date      - 17th April 2013\n\n')
+
 
 % find current MMM install path
 MMM_loca = which('MMM');
@@ -103,9 +110,9 @@ end
 
 % copy old files to back up location
 copyfile([MMM_directory,'/','MMM_prototype.m'] ,...
-         [MMM_directory,'/old_files/_private']);
-copyfile([MMM_directory,'/','MMM_prototype.m'] ,...
-         [MMM_directory,'/old_files/_private']);
+         [MMM_directory,'/old_files/_private/MMM_prototype.m.backup']);
+copyfile([MMM_directory,'/','MMM_prototype.fig'] ,...
+         [MMM_directory,'/old_files/_private/MMM_prototype.fig.backup']);
      
 fprintf('Files backed up!\n\nCopying across new files...\n');
 
@@ -114,8 +121,8 @@ MS_loca = which('MISHAP');
 MS_directory = fileparts(MS_loca);
 MS_from = [MS_directory '/_private'];
 
-copyfile([MS_from,'/','MMM_prototype.m']   , [MMM_directory,'/','MMM_prototype.m']);
-copyfile([MS_from,'/','MMM_prototype.fig'] , [MMM_directory,'/','MMM_prototype.fig']);
+copyfile([MS_from,'/','MMM_prototype.m.install']   , [MMM_directory,'/','MMM_prototype.m']);
+copyfile([MS_from,'/','MMM_prototype.fig.install'] , [MMM_directory,'/','MMM_prototype.fig']);
 
 fprintf('Files successfully copied!\n\nInstalling...\n\nConfiguring...\n\n')
 

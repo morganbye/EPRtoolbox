@@ -61,7 +61,7 @@ function varargout = MISHAP_pro(varargin)
 
 % Edit the above text to modify the response to help MISHAP_pro
 
-% Last Modified by GUIDE v2.5 25-Mar-2013 17:54:59
+% Last Modified by GUIDE v2.5 17-Apr-2013 16:55:45
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -123,41 +123,48 @@ set(handles.edit_seq2,'FontName','FixedWidth');
 
 global model
 
-NoStruct = size(model.structures,2);
-NoChains = size(model.structures{1},2);
+% Check that a structure has been loaded in MMM. Otherwise open without
+% searching for fields.
 
-% Get structure names
-for k = 1:model.structure_ids
-    NamesStruct(k,:) = regexprep(model.structure_tags(k,:),':','');
-end
+if isfield(model,'structure')
     
-% Set structure names
-set(handles.popupmenu_structure1,'String',NamesStruct);
-set(handles.popupmenu_structure2,'String',NamesStruct);
-
-NamesChain =  regexp(model.chain_tags(k,:),':','split');
-NamesChain{1}(strcmp('',NamesChain{1})) = [];
-
-set(handles.popupmenu_chain1,'String',NamesChain{1});
-set(handles.popupmenu_chain2,'String',NamesChain{1});
-
-if  size(get(handles.popupmenu_chain2,'String'),1) > 1
-    set(handles.popupmenu_chain2,'Value',2);
+    NoStruct = size(model.structures,2);
+    NoChains = size(model.structures{1},2);
+    
+    % Get structure names
+    for k = 1:model.structure_ids
+        NamesStruct(k,:) = regexprep(model.structure_tags(k,:),':','');
+    end
+    
+    % Set structure names
+    set(handles.popupmenu_structure1,'String',NamesStruct);
+    set(handles.popupmenu_structure2,'String',NamesStruct);
+    
+    NamesChain =  regexp(model.chain_tags(k,:),':','split');
+    NamesChain{1}(strcmp('',NamesChain{1})) = [];
+    
+    set(handles.popupmenu_chain1,'String',NamesChain{1});
+    set(handles.popupmenu_chain2,'String',NamesChain{1});
+    
+    if  size(get(handles.popupmenu_chain2,'String'),1) > 1
+        set(handles.popupmenu_chain2,'Value',2);
+    end
+    
+    % % With chains and structures found show sequence preview
+    % seq = sprintf('%c%c%c%c%c ',model.structures{1}(1).sequence);
+    % seq = linewrap(seq,30);
+    % seq = textwrap(handles.edit_seq1,seq);
+    % set(handles.edit_seq1,'String',seq);
+    %
+    % seq = sprintf('%c%c%c%c%c ',model.structures{1}(2).sequence);
+    % seq = linewrap(seq,30);
+    % seq = textwrap(handles.edit_seq1,seq);
+    % set(handles.edit_seq2,'String',seq);
+    
+    MISHAP_pro_sequence(1,1,1);
+    MISHAP_pro_sequence(2,1,1);
+    
 end
-
-% % With chains and structures found show sequence preview
-% seq = sprintf('%c%c%c%c%c ',model.structures{1}(1).sequence);
-% seq = linewrap(seq,30);
-% seq = textwrap(handles.edit_seq1,seq);
-% set(handles.edit_seq1,'String',seq);
-% 
-% seq = sprintf('%c%c%c%c%c ',model.structures{1}(2).sequence);
-% seq = linewrap(seq,30);
-% seq = textwrap(handles.edit_seq1,seq);
-% set(handles.edit_seq2,'String',seq);
-
-MISHAP_pro_sequence(1,1,1);
-MISHAP_pro_sequence(2,1,1);
 
 % Update handles structure
 guidata(hObject, handles);
@@ -452,4 +459,53 @@ function edit_seq2_CreateFcn(hObject, eventdata, handles)
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in button_refresh.
+function button_refresh_Callback(hObject, eventdata, handles)
+
+global model
+
+% Check that a structure has been loaded in MMM. Otherwise open without
+% searching for fields.
+
+if isfield(model,'structure')
+    
+    NoStruct = size(model.structures,2);
+    NoChains = size(model.structures{1},2);
+    
+    % Get structure names
+    for k = 1:model.structure_ids
+        NamesStruct(k,:) = regexprep(model.structure_tags(k,:),':','');
+    end
+    
+    % Set structure names
+    set(handles.popupmenu_structure1,'String',NamesStruct);
+    set(handles.popupmenu_structure2,'String',NamesStruct);
+    
+    NamesChain =  regexp(model.chain_tags(k,:),':','split');
+    NamesChain{1}(strcmp('',NamesChain{1})) = [];
+    
+    set(handles.popupmenu_chain1,'String',NamesChain{1});
+    set(handles.popupmenu_chain2,'String',NamesChain{1});
+    
+    if  size(get(handles.popupmenu_chain2,'String'),1) > 1
+        set(handles.popupmenu_chain2,'Value',2);
+    end
+    
+    % % With chains and structures found show sequence preview
+    % seq = sprintf('%c%c%c%c%c ',model.structures{1}(1).sequence);
+    % seq = linewrap(seq,30);
+    % seq = textwrap(handles.edit_seq1,seq);
+    % set(handles.edit_seq1,'String',seq);
+    %
+    % seq = sprintf('%c%c%c%c%c ',model.structures{1}(2).sequence);
+    % seq = linewrap(seq,30);
+    % seq = textwrap(handles.edit_seq1,seq);
+    % set(handles.edit_seq2,'String',seq);
+    
+    MISHAP_pro_sequence(1,1,1);
+    MISHAP_pro_sequence(2,1,1);
+    
 end
