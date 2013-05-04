@@ -1,4 +1,4 @@
-function seq = MISHAP_pro_sequence(partner,structure,chain)
+function MISHAP_pro_wr_PDB(structure,chain)
 
 % MISHAP - MMM Interfacing of Spin labels to HADDOCK progam
 %
@@ -46,7 +46,7 @@ function seq = MISHAP_pro_sequence(partner,structure,chain)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.04
+% M. Bye v13.05
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -54,42 +54,11 @@ function seq = MISHAP_pro_sequence(partner,structure,chain)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/mishap/
-% Mar 2013;     Last revision: 22-March-2013
+% Apr 2013;     Last revision: 15-April-2013
 %
 % Version history:
 % Mar 13        Initial release
 
-% Load variables
-global model
 global MISHAP
+global model
 
-editbox = MISHAP.handles.pro.(['edit_seq' num2str(partner)]);
-
-% With chains and structures found show sequence preview
-seq = sprintf('%c%c%c%c%c ',model.structures{structure}(chain).sequence);
-seq = linewrap(seq,30);
-seq = textwrap(editbox,seq);
-set(editbox,'String',seq);
-
-
-
-
-function c = linewrap(s, maxchars)
-
-% Simple script to wrap strings to a desired length.
-
-if nargin < 2
-   % Default value for second input argument.
-   maxchars = 80;
-end
-
-s = strtrim(s);
-
-exp = sprintf('(\\S\\S{%d,}|.{1,%d})(?:\\s+|$)', maxchars, maxchars);
-
-tokens = regexp(s, exp, 'tokens').';
-
-get_contents = @(f) f{1};
-c = cellfun(get_contents, tokens, 'UniformOutput', false);
-
-c = deblank(c);

@@ -61,7 +61,7 @@ function varargout = MISHAP_pro(varargin)
 
 % Edit the above text to modify the response to help MISHAP_pro
 
-% Last Modified by GUIDE v2.5 17-Apr-2013 16:55:45
+% Last Modified by GUIDE v2.5 18-Apr-2013 17:20:07
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -121,50 +121,12 @@ set(handles.edit_seq1,'FontName','FixedWidth');
 set(handles.edit_seq2,'Max',2);
 set(handles.edit_seq2,'FontName','FixedWidth');
 
-global model
+set(handles.edit_save1,'String',...
+    ['ProteinA_' datestr(now,'yymmdd_HH-MM') '.pdb']);
+set(handles.edit_save2,'String',...
+    ['ProteinB_' datestr(now,'yymmdd_HH-MM') '.pdb']);
 
-% Check that a structure has been loaded in MMM. Otherwise open without
-% searching for fields.
-
-if isfield(model,'structure')
-    
-    NoStruct = size(model.structures,2);
-    NoChains = size(model.structures{1},2);
-    
-    % Get structure names
-    for k = 1:model.structure_ids
-        NamesStruct(k,:) = regexprep(model.structure_tags(k,:),':','');
-    end
-    
-    % Set structure names
-    set(handles.popupmenu_structure1,'String',NamesStruct);
-    set(handles.popupmenu_structure2,'String',NamesStruct);
-    
-    NamesChain =  regexp(model.chain_tags(k,:),':','split');
-    NamesChain{1}(strcmp('',NamesChain{1})) = [];
-    
-    set(handles.popupmenu_chain1,'String',NamesChain{1});
-    set(handles.popupmenu_chain2,'String',NamesChain{1});
-    
-    if  size(get(handles.popupmenu_chain2,'String'),1) > 1
-        set(handles.popupmenu_chain2,'Value',2);
-    end
-    
-    % % With chains and structures found show sequence preview
-    % seq = sprintf('%c%c%c%c%c ',model.structures{1}(1).sequence);
-    % seq = linewrap(seq,30);
-    % seq = textwrap(handles.edit_seq1,seq);
-    % set(handles.edit_seq1,'String',seq);
-    %
-    % seq = sprintf('%c%c%c%c%c ',model.structures{1}(2).sequence);
-    % seq = linewrap(seq,30);
-    % seq = textwrap(handles.edit_seq1,seq);
-    % set(handles.edit_seq2,'String',seq);
-    
-    MISHAP_pro_sequence(1,1,1);
-    MISHAP_pro_sequence(2,1,1);
-    
-end
+get_from_MMM;
 
 % Update handles structure
 guidata(hObject, handles);
@@ -181,24 +143,26 @@ function varargout = MISHAP_pro_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
+%  ____  _           _ _               __ 
+% |  _ \(_)         | (_)             /_ |
+% | |_) |_ _ __   __| |_ _ __   __ _   | |
+% |  _ <| | '_ \ / _` | | '_ \ / _` |  | |
+% | |_) | | | | | (_| | | | | | (_| |  | |
+% |____/|_|_| |_|\__,_|_|_| |_|\__, |  |_|
+%                               __/ |     
+%                              |___/      
+
+
+
 % --- Executes on selection change in popupmenu_structure1.
 function popupmenu_structure1_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu_structure1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu_structure1 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu_structure1
+update_sequence;
 
 
 % --- Executes during object creation, after setting all properties.
 function popupmenu_structure1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenu_structure1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -206,98 +170,69 @@ end
 
 % --- Executes on selection change in popupmenu_chain1.
 function popupmenu_chain1_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu_chain1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu_chain1 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu_chain1
+update_sequence;
 
 
 % --- Executes during object creation, after setting all properties.
 function popupmenu_chain1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenu_chain1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
+function edit_seq1_Callback(hObject, eventdata, handles)
+
+% --- Executes during object creation, after setting all properties.
+function edit_seq1_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
 
 function edit_save1_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_save1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit_save1 as text
-%        str2double(get(hObject,'String')) returns contents of edit_save1 as a double
 
 
 % --- Executes during object creation, after setting all properties.
 function edit_save1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit_save1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
+% --- Executes on button press in button_save1.
+function button_save1_Callback(hObject, eventdata, handles)
 
-function edit_savepath_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_savepath (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+global MISHAP
 
-% Hints: get(hObject,'String') returns contents of edit_savepath as text
-%        str2double(get(hObject,'String')) returns contents of edit_savepath as a double
+s1 = get(MISHAP.handles.pro.popupmenu_structure1,'Value');
+s2 = get(MISHAP.handles.pro.popupmenu_structure2,'Value');
 
+c1 = get(MISHAP.handles.pro.popupmenu_chain1,'Value');
+c2 = get(MISHAP.handles.pro.popupmenu_chain2,'Value');
 
-% --- Executes during object creation, after setting all properties.
-function edit_savepath_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit_savepath (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in pushbutton1.
-function pushbutton1_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
+MISHAP_pro_wr_PDB(s1,c1);
+ 
+%   ____  _           _ _               ___  
+%  |  _ \(_)         | (_)             |__ \ 
+%  | |_) |_ _ __   __| |_ _ __   __ _     ) |
+%  |  _ <| | '_ \ / _` | | '_ \ / _` |   / / 
+%  | |_) | | | | | (_| | | | | | (_| |  / /_ 
+%  |____/|_|_| |_|\__,_|_|_| |_|\__, | |____|
+%                                __/ |       
+%                               |___/        
 
 % --- Executes on selection change in popupmenu_structure2.
 function popupmenu_structure2_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu_structure2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu_structure2 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu_structure2
-
+update_sequence;
 
 % --- Executes during object creation, after setting all properties.
 function popupmenu_structure2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenu_structure2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -305,86 +240,119 @@ end
 
 % --- Executes on selection change in popupmenu_chain2.
 function popupmenu_chain2_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu_chain2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu_chain2 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu_chain2
-
+update_sequence;
 
 % --- Executes during object creation, after setting all properties.
 function popupmenu_chain2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenu_chain2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
 
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
-
-function edit2_Callback(hObject, eventdata, handles)
-% hObject    handle to edit2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit2 as text
-%        str2double(get(hObject,'String')) returns contents of edit2 as a double
+function edit_seq2_Callback(hObject, eventdata, handles)
 
 
 % --- Executes during object creation, after setting all properties.
-function edit2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
+function edit_seq2_CreateFcn(hObject, eventdata, handles)
 
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
-% --- Executes on button press in button_save_both.
-function button_save_both_Callback(hObject, eventdata, handles)
-% hObject    handle to button_save_both (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+function edit_save2_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_save2_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
 
 
 % --- Executes on button press in button_save2.
 function button_save2_Callback(hObject, eventdata, handles)
-% hObject    handle to button_save2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+
+global MISHAP
+
+s2 = get(MISHAP.handles.pro.popupmenu_structure2,'Value');
+c2 = get(MISHAP.handles.pro.popupmenu_chain2,'Value');
+
+MISHAP_pro_wr_PDB(s2,c2);
+
+%   ____        _   _                  
+%  |  _ \      | | | |                 
+%  | |_) | ___ | |_| |_ ___  _ __ ___  
+%  |  _ < / _ \| __| __/ _ \| '_ ` _ \ 
+%  | |_) | (_) | |_| || (_) | | | | | |
+%  |____/ \___/ \__|\__\___/|_| |_| |_|
+                                     
+
+function edit_savepath_Callback(hObject, eventdata, handles)
+
+% --- Executes during object creation, after setting all properties.
+function edit_savepath_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
 
 
-% --- Executes on button press in button_save1.
-function button_save1_Callback(hObject, eventdata, handles)
-% hObject    handle to button_save1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+% --- Executes on button press in button_change_path.
+function button_change_path_Callback(hObject, eventdata, handles)
+
+global MISHAP
+
+[fname,pname] = uiputfile( ...
+{'*.pdb',...
+ 'HADDOCK compatible PDB file (*.pdb)';
+ '*.*',  'All Files (*.*)'},...
+ 'Save as',['MISHAP_' datestr(now,'yyyymmdd-HH:MM') '.pdb']);
+
+if isequal(fname,0)
+    set(MISHAP.handles.dist.text_output_path , 'String', MISHAP.outpath);
+else
+    MISHAP.outpath = [pname fname];
+    set(MISHAP.handles.dist.text_output_path , 'String', MISHAP.outpath);
+end
 
 
-% --- If Enable == 'on', executes on mouse press in 5 pixel border.
-% --- Otherwise, executes on mouse press in 5 pixel border or over text_URL.
+% --- Executes on button press in button_refresh.
+function button_refresh_Callback(hObject, eventdata, handles)
+
+get_from_MMM;
+
+
+% --- Executes on button press in button_save_both.
+function button_save_both_Callback(hObject, eventdata, handles)
+
+global MISHAP
+
+s1 = get(MISHAP.handles.pro.popupmenu_structure1,'Value');
+s2 = get(MISHAP.handles.pro.popupmenu_structure2,'Value');
+
+c1 = get(MISHAP.handles.pro.popupmenu_chain1,'Value');
+c2 = get(MISHAP.handles.pro.popupmenu_chain2,'Value');
+
+MISHAP_pro_wr_PDB(s1,c1);
+MISHAP_pro_wr_PDB(s2,c2);
+
+
 function text_URL_ButtonDownFcn(hObject, eventdata, handles)
-% hObject    handle to text_URL (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 web http://morganbye.net/mishap -browser
 
-% --- Executes on button press in pushbutton9.
-function pushbutton9_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton9 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
+%    ____  _   _                  _____ _    _ _____ 
+%   / __ \| | | |                / ____| |  | |_   _|
+%  | |  | | |_| |__   ___ _ __  | |  __| |  | | | |  
+%  | |  | | __| '_ \ / _ \ '__| | | |_ | |  | | | |  
+%  | |__| | |_| | | |  __/ |    | |__| | |__| |_| |_ 
+%   \____/ \__|_| |_|\___|_|     \_____|\____/|_____|
+%                                                    
+%                                                    
 
 % --- Executes when user attempts to close figure1.
 function figure1_CloseRequestFcn(hObject, eventdata, handles)
@@ -398,79 +366,27 @@ delete(hObject);
 
 
 
-function edit_seq1_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_seq1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+%   ______                _   _                 
+%  |  ____|              | | (_)                
+%  | |__ _   _ _ __   ___| |_ _  ___  _ __  ___ 
+%  |  __| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+%  | |  | |_| | | | | (__| |_| | (_) | | | \__ \
+%  |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
+%                                               
+%                                               
 
-% Hints: get(hObject,'String') returns contents of edit_seq1 as text
-%        str2double(get(hObject,'String')) returns contents of edit_seq1 as a double
+function get_from_MMM
 
-
-% --- Executes during object creation, after setting all properties.
-function edit_seq1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit_seq1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-function c = linewrap(s, maxchars)
-
-if nargin < 2
-   % Default value for second input argument.
-   maxchars = 80;
-end
-
-s = strtrim(s);
-
-exp = sprintf('(\\S\\S{%d,}|.{1,%d})(?:\\s+|$)', maxchars, maxchars);
-
-tokens = regexp(s, exp, 'tokens').';
-
-get_contents = @(f) f{1};
-c = cellfun(get_contents, tokens, 'UniformOutput', false);
-
-c = deblank(c);
-
-
-
-function edit_seq2_Callback(hObject, eventdata, handles)
-% hObject    handle to edit_seq2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit_seq2 as text
-%        str2double(get(hObject,'String')) returns contents of edit_seq2 as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function edit_seq2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit_seq2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --- Executes on button press in button_refresh.
-function button_refresh_Callback(hObject, eventdata, handles)
+% Pull details for MMM. Mainly used for updating the structure and chain
+% dropdown menus
 
 global model
+global MISHAP
 
 % Check that a structure has been loaded in MMM. Otherwise open without
 % searching for fields.
 
-if isfield(model,'structure')
+if isfield(model,'structure_ids')
     
     NoStruct = size(model.structures,2);
     NoChains = size(model.structures{1},2);
@@ -481,31 +397,34 @@ if isfield(model,'structure')
     end
     
     % Set structure names
-    set(handles.popupmenu_structure1,'String',NamesStruct);
-    set(handles.popupmenu_structure2,'String',NamesStruct);
+    set(MISHAP.handles.pro.popupmenu_structure1,'String',NamesStruct);
+    set(MISHAP.handles.pro.popupmenu_structure2,'String',NamesStruct);
     
     NamesChain =  regexp(model.chain_tags(k,:),':','split');
     NamesChain{1}(strcmp('',NamesChain{1})) = [];
     
-    set(handles.popupmenu_chain1,'String',NamesChain{1});
-    set(handles.popupmenu_chain2,'String',NamesChain{1});
+    set(MISHAP.handles.pro.popupmenu_chain1,'String',NamesChain{1});
+    set(MISHAP.handles.pro.popupmenu_chain2,'String',NamesChain{1});
     
-    if  size(get(handles.popupmenu_chain2,'String'),1) > 1
-        set(handles.popupmenu_chain2,'Value',2);
+    if  size(get(MISHAP.handles.pro.popupmenu_chain2,'String'),1) > 1
+        set(MISHAP.handles.pro.popupmenu_chain2,'Value',2);
     end
     
-    % % With chains and structures found show sequence preview
-    % seq = sprintf('%c%c%c%c%c ',model.structures{1}(1).sequence);
-    % seq = linewrap(seq,30);
-    % seq = textwrap(handles.edit_seq1,seq);
-    % set(handles.edit_seq1,'String',seq);
-    %
-    % seq = sprintf('%c%c%c%c%c ',model.structures{1}(2).sequence);
-    % seq = linewrap(seq,30);
-    % seq = textwrap(handles.edit_seq1,seq);
-    % set(handles.edit_seq2,'String',seq);
-    
-    MISHAP_pro_sequence(1,1,1);
-    MISHAP_pro_sequence(2,1,1);
+    update_sequence;
     
 end
+
+function update_sequence
+
+% Update the sequence edit boxes
+
+global MISHAP
+
+s1 = get(MISHAP.handles.pro.popupmenu_structure1,'Value');
+s2 = get(MISHAP.handles.pro.popupmenu_structure2,'Value');
+
+c1 = get(MISHAP.handles.pro.popupmenu_chain1,'Value');
+c2 = get(MISHAP.handles.pro.popupmenu_chain2,'Value');
+
+MISHAP_pro_sequence(1,s1,c1);
+MISHAP_pro_sequence(2,s2,c2);

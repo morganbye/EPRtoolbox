@@ -1,0 +1,5 @@
+SET ECHO=TRUE END
+
+link  B14  head - *   tail + *   end
+
+SET ECHO=TRUE END

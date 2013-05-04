@@ -226,7 +226,6 @@ MS_from2 = [MS_directory '/_private/install_HADDOCK'];
 
 fprintf('Files successfully copied!\n\nInstalling...\n\nConfiguring...\n')
 fprintf('HADDOCK configured!\n\n')
-fprintf('============================================\n\n')
 
 
 % case {'n','N','no','NO'}
@@ -239,14 +238,12 @@ installed = 1;
 save([MS_directory '/_private/preferences.mat'],'installed');
 fprintf('MatLab configured!\n\n')
 
-fprintf('============================================\n\n')
-
 fprintf('I hope you find MISHAP useful.\n\n')
 
 fprintf('Documentation can be found at:\n')
-disp('<a href="http://morganbye.net/mishap">morganbye.net/mishap</a>');
+disp('<a href="http://www.google.com">Google</a>
 
-fprintf('\nPlease address any feedback to:\n')
+fprintf('Please address any feedback to:\n')
 fprintf('morgan.bye@uea.ac.uk\n\n')
 
 fprintf('============================================\n')
