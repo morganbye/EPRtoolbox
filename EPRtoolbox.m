@@ -1,6 +1,6 @@
 function varargout = EPRtoolbox(varargin)
-% EPRTOOLBOX A toolbox for the opening, viewing and manipulation Electron
-%       Paramagnetic Resonance (EPR).
+% EPRTOOLBOX A toolbox for the opening, viewing and manipulation of Electron
+%       Paramagnetic Resonance (EPR) experiments.
 %
 %       EPRTOOLBOX remains very much a work in progress and is under
 %       constant development and should not be considered to be anything
@@ -20,12 +20,11 @@ function varargout = EPRtoolbox(varargin)
 % Other m-files required: none
 %
 % Subfunctions:
-%   PowerSat
-%   cwviewer
+%
 %
 % MAT-files required: none
 %
-% See also: POWERSAT CWVIEWER MISHAP_MISHAP
+% See also: CW_POWERSAT CW_VIEWER MISHAP
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -37,7 +36,7 @@ function varargout = EPRtoolbox(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.04
+% M. Bye v13.05
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -45,15 +44,17 @@ function varargout = EPRtoolbox(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/EPRtoolbox
-% Mar 2013;     Last revision: 18-March-2013
+% May 2013;     Last revision: 04-May-2013
 %
 % Approximate coding time of file:
-%               3 hours
+%               4 hours
+%
+% May 13        v13.05 - spring clean of menus, added documentation to help
 %
 % Mar 13        v13.04 release
 %               v13.03 release
 %
-% Feb 13        v13.02 release: EasyRefiner to cw menu
+% Feb 13        v13.02 release: cw_EasyRefiner to cw menu
 %
 % Oct 12        v12.10 release: e2af added to File menu
 %
@@ -63,11 +64,11 @@ function varargout = EPRtoolbox(varargin)
 %
 % Oct 11        Minor updates for v11.11 release
 %
-% July11        Initial release
+% Jul 11        Initial release
 
 % Edit the above text to modify the response to help EPRtoolbox
 
-% Last Modified by GUIDE v2.5 05-Apr-2013 11:43:17
+% Last Modified by GUIDE v2.5 04-May-2013 18:48:00
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -125,14 +126,14 @@ Warning = ' ';
 Status  = sprintf('Status:\t\tUp-to-date');
 
 % Check the version number
-if now > datenum('2013-10-01')
+if now > datenum('2013-11-01')
     Status  = sprintf('Status:\t\tProbably out-of-date');
     Warning = sprintf('EPR Toolbox is updated frequently with new features and bug fixes.\nYour version is over 3 months old, please consider upgrading.\n\nFor more information please see:\nmorganbye.net/eprtoolbox\n');
 end
 
 % Startup message
-Version = sprintf('Version:\t\tv13.04');
-Release = sprintf('Release date:\t5th Apr 2013');
+Version = sprintf('Version:\t\tv13.05');
+Release = sprintf('Release date:\t5th May 2013');
 Info    = sprintf('User interfaces are available from the menus above\n\nFor more scripts please explore the downloaded folder');
 
 startup_text = strvcat(Version, Release, Status, Warning, Info);
@@ -161,122 +162,6 @@ end
 
 
 % --------------------------------------------------------------------
-function cw_Callback(hObject, eventdata, handles)
-
-
-
-% --------------------------------------------------------------------
-function PDB_Callback(hObject, eventdata, handles)
-
-
-
-% --------------------------------------------------------------------
-function MMM_Callback(hObject, eventdata, handles)
-
-
-% --------------------------------------------------------------------
-function pulsed_Callback(hObject, eventdata, handles)
-
-
-% --------------------------------------------------------------------
-function Misc_Callback(hObject, eventdata, handles)
-
-
-% --------------------------------------------------------------------
-function AAconverter_Callback(hObject, eventdata, handles)
-
-AAconverter
-
-% --------------------------------------------------------------------
-function DEER_Callback(hObject, eventdata, handles)
-
-
-
-% --------------------------------------------------------------------
-function MMM_PDBs_Callback(hObject, eventdata, handles)
-
-
-% --------------------------------------------------------------------
-function MMMplotter_Callback(hObject, eventdata, handles)
-
-
-% --------------------------------------------------------------------
-function PDBSplitter_Callback(hObject, eventdata, handles)
-
-PDBSplitter
-
-
-% --------------------------------------------------------------------
-function MMMtoPDB_Callback(hObject, eventdata, handles)
-
-MMMRotamerToPDB
-
-% --------------------------------------------------------------------
-function PowerSat_Callback(hObject, eventdata, handles)
-
-PowerSat
-
-
-% --------------------------------------------------------------------
-function cwViewer_Callback(hObject, eventdata, handles)
-
-cwViewer
-
-% --------------------------------------------------------------------
-function EasyRefiner_Callback(hObject, eventdata, handles)
-
-EasyRefiner
-
-% --------------------------------------------------------------------
-function MMMplotter_2_Callback(hObject, eventdata, handles)
-
-MMMplotter_2SLs
-
-% --------------------------------------------------------------------
-function MMMplotter_3_Callback(hObject, eventdata, handles)
-
-MMMplotter_3SLs
-
-% --------------------------------------------------------------------
-function MMM_install_Callback(hObject, eventdata, handles)
-
-MMM_rota_install
-
-% --------------------------------------------------------------------
-function MMM_uninstall_Callback(hObject, eventdata, handles)
-
-MMM_rota_uninstall
-
-
-% --------------------------------------------------------------------
-function DEERtoMatrix_Callback(hObject, eventdata, handles)
-
-DEERconverter
-
-% --------------------------------------------------------------------
-function MISHAP_Callback(hObject, eventdata, handles)
-
-% --------------------------------------------------------------------
-function MISHAP_MISHAP_Callback(hObject, eventdata, handles)
-
-% MISHAP
-
-
-% --------------------------------------------------------------------
-function test_Callback(hObject, eventdata, handles)
-% hObject    handle to test (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% handles.output.x = 1;
-% handles.output.y = 2;
-% 
-% EPRtoolbox_OutputFcn(hObject, eventdata, handles)
-
-assignin('base','x',[1 2 3])
-
-
-% --------------------------------------------------------------------
 function File_Callback(hObject, eventdata, handles)
 % hObject    handle to File (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -294,21 +179,119 @@ assignin('base','info',z)
 
 
 % --------------------------------------------------------------------
-function file_convert_Callback(hObject, eventdata, handles)
-% hObject    handle to file_convert (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+function File_convert1_Callback(hObject, eventdata, handles)
+
+e2a;
+
+% --------------------------------------------------------------------
+function file_convertmany_Callback(hObject, eventdata, handles)
 
 e2af;
 
 
 
 % --------------------------------------------------------------------
-function Help_Callback(hObject, eventdata, handles)
-% hObject    handle to Help (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+function cw_Callback(hObject, eventdata, handles)
 
+% --------------------------------------------------------------------
+function cw_PowerSat_Callback(hObject, eventdata, handles)
+
+PowerSat
+
+% --------------------------------------------------------------------
+function cw_Viewer_Callback(hObject, eventdata, handles)
+
+cwViewer
+
+% --------------------------------------------------------------------
+function cw_EasyRefiner_Callback(hObject, eventdata, handles)
+
+EasyRefiner
+
+
+
+
+% --------------------------------------------------------------------
+function PDB_Callback(hObject, eventdata, handles)
+
+% --------------------------------------------------------------------
+function PDB_Splitter_Callback(hObject, eventdata, handles)
+
+PDBSplitter
+
+% --------------------------------------------------------------------
+function PDB_MMMtoPDB_Callback(hObject, eventdata, handles)
+
+MMMRotamerToPDB
+
+
+
+
+% --------------------------------------------------------------------
+function MMM_Callback(hObject, eventdata, handles)
+
+% --------------------------------------------------------------------
+function MMM_PDBs_Callback(hObject, eventdata, handles)
+
+% --------------------------------------------------------------------
+function MMMplotter_2_Callback(hObject, eventdata, handles)
+
+MMMplotter_2SLs
+
+% --------------------------------------------------------------------
+function MMMplotter_3_Callback(hObject, eventdata, handles)
+
+MMMplotter_3SLs
+
+
+
+% --------------------------------------------------------------------
+function Pulsed_Callback(hObject, eventdata, handles)
+
+% --------------------------------------------------------------------
+function Pulsed_DA_Callback(hObject, eventdata, handles)
+
+% --------------------------------------------------------------------
+function Pulsed_DA_Extract_Callback(hObject, eventdata, handles)
+
+DeerConverter
+
+% --------------------------------------------------------------------
+function Pulsed_DA_Copy_Callback(hObject, eventdata, handles)
+
+DeerExtract
+
+
+
+
+% --------------------------------------------------------------------
+function Misc_Callback(hObject, eventdata, handles)
+
+% --------------------------------------------------------------------
+function misc_AAconverter_Callback(hObject, eventdata, handles)
+
+AAconverter
+
+
+
+
+
+% --------------------------------------------------------------------
+function MISHAP_Callback(hObject, eventdata, handles)
+
+% --------------------------------------------------------------------
+function MISHAP_MISHAP_Callback(hObject, eventdata, handles)
+
+% MISHAP
+
+
+
+
+
+
+
+% --------------------------------------------------------------------
+function Help_Callback(hObject, eventdata, handles)
 
 % --------------------------------------------------------------------
 function Help_use_Callback(hObject, eventdata, handles)
@@ -318,6 +301,13 @@ l1 = sprintf('The EPR Toolbox has been designed to be as helpful and easy to use
 set(handles.editbox,'Max',2)
 set(handles.editbox,'String',l1);
 
+% --------------------------------------------------------------------
+function Help_Doc_Callback(hObject, eventdata, handles)
+
+loca = which('EPRtoolbox');
+directory = fileparts(loca);
+
+web([directory '/doc/index.html'],'-helpbrowser');
 
 % --------------------------------------------------------------------
 function Help_about_Callback(hObject, eventdata, handles)
@@ -328,5 +318,3 @@ Links = sprintf('\n<a href="http://morganbye.net/eprtoolbox">morganbye.net/eprto
 
 set(handles.editbox,'Max',2)
 set(handles.editbox,'String',l1);
-
-

@@ -22,7 +22,7 @@ EPRtoolbox
                                                  developed at the         
                                                  University of East Anglia
 
- M. Bye v13.05
+ M. Bye v13.04
 
 
 INSTALLATION:
@@ -39,8 +39,8 @@ Type "PowerSat" to start the power saturation tool
 
 The toolbox contains many useful scripts that are not contained within the
 main graphical user interface. Feel free to browse these at your leisure.
-Each has an extensive help header section and will have a link to the online
-help with examples of how to use the script.
+Each has an extensive help header section and most contain a weblink to
+examples of how to use the script.
 
 
 FOR MORE INFORMATION:
@@ -49,8 +49,7 @@ For the most up-to-date information please see:
 morganbye.net/eprtoolbox
 and
 morganbye.net/eprtoolbox/version-history
-
-Prominent applications with their own webpages:
+as well as
 morganbye.net/PowerSat
 morganbye.net/cwViewer
 
@@ -92,10 +91,10 @@ Gunnar Jeschke - ETH Zurich, Switzerland
 Peter Meadows - Jeol (UK) Ltd, UK
 	File format discussion
 Alexander Morley - UEA, UK
-    	cwViewer and PowerSat error reporting
+    cwViewer and PowerSat error reporting
 David Mulder - National Renewable Energy Laboratory, USA
-    	cwViewer error reporting
-    	e2af inspiration
+    cwViewer error reporting
+    e2af inspiration
 Patrick Pennington - Dartmouth, USA
 	Concept development
 Yevhen Polyhach - ETH Zurich, Switzerland
