@@ -46,7 +46,7 @@ function varargout = MISHAP_pro(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.04
+% M. Bye v13.06
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -54,14 +54,16 @@ function varargout = MISHAP_pro(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/mishap/
-% Mar 2013;     Last revision: 22-March-2013
+% May 2013;     Last revision: 05-May-2013
 %
 % Version history:
-% Mar 13        Initial release
+% May 13        Major write
+%
+% Mar 13        Initial write
 
 % Edit the above text to modify the response to help MISHAP_pro
 
-% Last Modified by GUIDE v2.5 18-Apr-2013 17:20:07
+% Last Modified by GUIDE v2.5 05-May-2013 18:09:33
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -95,7 +97,7 @@ function MISHAP_pro_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
 % Name the figure
-set(gcf,'Name','MISHAP - PDB creator')
+set(gcf,'Name','MISHAP - v13.06 - ALPHA - PDB creator')
 
 global MISHAP
 MISHAP.handles.pro = handles;
@@ -113,20 +115,20 @@ set(gcf,'OuterPosition',[...
 % ====================
 
 % Change default save path to current path
-set(handles.edit_savepath,'String',pwd);
+set(handles.edit_output,'String',pwd);
 
 set(handles.edit_seq1,'Max',2);
 set(handles.edit_seq1,'FontName','FixedWidth');
 
-set(handles.edit_seq2,'Max',2);
-set(handles.edit_seq2,'FontName','FixedWidth');
+% set(handles.edit_seq2,'Max',2);
+% set(handles.edit_seq2,'FontName','FixedWidth');
 
 set(handles.edit_save1,'String',...
-    ['ProteinA_' datestr(now,'yymmdd_HH-MM') '.pdb']);
+    ['ProteinA_' datestr(now,'yymmdd') '.pdb']);
 set(handles.edit_save2,'String',...
-    ['ProteinB_' datestr(now,'yymmdd_HH-MM') '.pdb']);
+    ['ProteinB_' datestr(now,'yymmdd') '.pdb']);
 
-get_from_MMM;
+% get_from_MMM;
 
 % Update handles structure
 guidata(hObject, handles);
@@ -152,12 +154,17 @@ varargout{1} = handles.output;
 %                               __/ |     
 %                              |___/      
 
+% --- Executes on button press in pushbutton_loadpdb_file1.
+function pushbutton_loadpdb_file1_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes on button press in pushbutton_loadpdb_web1.
+function pushbutton_loadpdb_web1_Callback(hObject, eventdata, handles)
 
 
 % --- Executes on selection change in popupmenu_structure1.
 function popupmenu_structure1_Callback(hObject, eventdata, handles)
-
-update_sequence;
 
 
 % --- Executes during object creation, after setting all properties.
@@ -166,7 +173,6 @@ function popupmenu_structure1_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
 
 % --- Executes on selection change in popupmenu_chain1.
 function popupmenu_chain1_Callback(hObject, eventdata, handles)
@@ -192,6 +198,74 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
+% --- Executes on selection change in pushbutton_loadmmm_file1.
+function pushbutton_loadmmm_file1_Callback(hObject, eventdata, handles)
+
+update_sequence;
+
+
+% --- Executes during object creation, after setting all properties.
+function pushbutton_loadmmm_file1_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton_loadmmm_mmm1.
+function pushbutton_loadmmm_mmm1_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes on button press in pushbutton_loadpdb_mmm1.
+function pushbutton_loadpdb_mmm1_Callback(hObject, eventdata, handles)
+
+
+
+function edit_label1_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_label1_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit_temp1_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_temp1_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit_resid1_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_resid1_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on selection change in popupmenu_rot1.
+function popupmenu_rot1_Callback(hObject, eventdata, handles)
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu_rot1_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
 function edit_save1_Callback(hObject, eventdata, handles)
 
 
@@ -201,20 +275,6 @@ function edit_save1_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
-
-% --- Executes on button press in button_save1.
-function button_save1_Callback(hObject, eventdata, handles)
-
-global MISHAP
-
-s1 = get(MISHAP.handles.pro.popupmenu_structure1,'Value');
-s2 = get(MISHAP.handles.pro.popupmenu_structure2,'Value');
-
-c1 = get(MISHAP.handles.pro.popupmenu_chain1,'Value');
-c2 = get(MISHAP.handles.pro.popupmenu_chain2,'Value');
-
-MISHAP_pro_wr_PDB(s1,c1);
  
 %   ____  _           _ _               ___  
 %  |  _ \(_)         | (_)             |__ \ 
@@ -225,10 +285,22 @@ MISHAP_pro_wr_PDB(s1,c1);
 %                                __/ |       
 %                               |___/        
 
+
+% --- Executes on button press in pushbutton_loadpdb_file2.
+function pushbutton_loadpdb_file2_Callback(hObject, eventdata, handles)
+
+
+% --- Executes on button press in pushbutton_loadpdb_web2.
+function pushbutton_loadpdb_web2_Callback(hObject, eventdata, handles)
+
+% --- Executes on button press in pushbutton_loadpdb_mmm2.
+function pushbutton_loadpdb_mmm2_Callback(hObject, eventdata, handles)
+
+
+
 % --- Executes on selection change in popupmenu_structure2.
 function popupmenu_structure2_Callback(hObject, eventdata, handles)
 
-update_sequence;
 
 % --- Executes during object creation, after setting all properties.
 function popupmenu_structure2_CreateFcn(hObject, eventdata, handles)
@@ -241,14 +313,13 @@ end
 % --- Executes on selection change in popupmenu_chain2.
 function popupmenu_chain2_Callback(hObject, eventdata, handles)
 
-update_sequence;
-
 % --- Executes during object creation, after setting all properties.
 function popupmenu_chain2_CreateFcn(hObject, eventdata, handles)
 
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
 
 
 function edit_seq2_Callback(hObject, eventdata, handles)
@@ -262,6 +333,62 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
+
+
+% --- Executes on button press in pushbutton_loadmmm_file2.
+function pushbutton_loadmmm_file2_Callback(hObject, eventdata, handles)
+
+
+
+% --- Executes on button press in pushbutton_loadmmm_mmm2.
+function pushbutton_loadmmm_mmm2_Callback(hObject, eventdata, handles)
+
+
+
+function edit_label2_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_label2_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_temp2_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_temp2_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_resid2_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_resid2_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu_rot2_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
 function edit_save2_Callback(hObject, eventdata, handles)
 
 
@@ -273,15 +400,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on button press in button_save2.
-function button_save2_Callback(hObject, eventdata, handles)
-
-global MISHAP
-
-s2 = get(MISHAP.handles.pro.popupmenu_structure2,'Value');
-c2 = get(MISHAP.handles.pro.popupmenu_chain2,'Value');
-
-MISHAP_pro_wr_PDB(s2,c2);
 
 %   ____        _   _                  
 %  |  _ \      | | | |                 
@@ -291,54 +409,47 @@ MISHAP_pro_wr_PDB(s2,c2);
 %  |____/ \___/ \__|\__\___/|_| |_| |_|
                                      
 
-function edit_savepath_Callback(hObject, eventdata, handles)
+% 
+% % --- Executes on button press in button_save_both.
+% function button_save_both_Callback(hObject, eventdata, handles)
+% 
+% global MISHAP
+% 
+% s1 = get(MISHAP.handles.pro.popupmenu_structure1,'Value');
+% s2 = get(MISHAP.handles.pro.popupmenu_structure2,'Value');
+% 
+% c1 = get(MISHAP.handles.pro.popupmenu_chain1,'Value');
+% c2 = get(MISHAP.handles.pro.popupmenu_chain2,'Value');
+% 
+% MISHAP_pro_wr_PDB(s1,c1);
+% MISHAP_pro_wr_PDB(s2,c2);
+
+
+function edit_output_Callback(hObject, eventdata, handles)
+
 
 % --- Executes during object creation, after setting all properties.
-function edit_savepath_CreateFcn(hObject, eventdata, handles)
+function edit_output_CreateFcn(hObject, eventdata, handles)
 
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
 
 
-% --- Executes on button press in button_change_path.
-function button_change_path_Callback(hObject, eventdata, handles)
-
-global MISHAP
-
-[fname,pname] = uiputfile( ...
-{'*.pdb',...
- 'HADDOCK compatible PDB file (*.pdb)';
- '*.*',  'All Files (*.*)'},...
- 'Save as',['MISHAP_' datestr(now,'yyyymmdd-HH:MM') '.pdb']);
-
-if isequal(fname,0)
-    set(MISHAP.handles.dist.text_output_path , 'String', MISHAP.outpath);
-else
-    MISHAP.outpath = [pname fname];
-    set(MISHAP.handles.dist.text_output_path , 'String', MISHAP.outpath);
-end
+% --- Executes on button press in pushbutton_RUN.
+function pushbutton_RUN_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_RUN (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in button_refresh.
-function button_refresh_Callback(hObject, eventdata, handles)
 
-get_from_MMM;
+% --- Executes on button press in pushbutton_output.
+function pushbutton_output_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton_output (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
-
-% --- Executes on button press in button_save_both.
-function button_save_both_Callback(hObject, eventdata, handles)
-
-global MISHAP
-
-s1 = get(MISHAP.handles.pro.popupmenu_structure1,'Value');
-s2 = get(MISHAP.handles.pro.popupmenu_structure2,'Value');
-
-c1 = get(MISHAP.handles.pro.popupmenu_chain1,'Value');
-c2 = get(MISHAP.handles.pro.popupmenu_chain2,'Value');
-
-MISHAP_pro_wr_PDB(s1,c1);
-MISHAP_pro_wr_PDB(s2,c2);
 
 
 function text_URL_ButtonDownFcn(hObject, eventdata, handles)

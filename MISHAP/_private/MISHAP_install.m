@@ -164,11 +164,21 @@ fprintf('though this should change shortly, MISHAP must be run locally in the me
 % Have to use base level find command as HADDOCK wont be able to be
 % detected from MatLab.
 
-dlg = input('Are you going to be using HADDOCK locally? Y/N [Y]: ','s');
+tic;
+while toc < 10
+    dlg = input('Are you going to be using HADDOCK locally? Y/N [Y]: ','s');
+
+    break
+end
+
+if exist(dlg,'var')
+    fprintf('\nNo input detected, continuing with HADDOCK installation...');
+end
 
 if isempty(dlg)
-  dlg = 'y';
+        dlg = 'y';
 end
+
 
 % switch dlg
 %   case {'y','Y','yes','YES'}
@@ -235,8 +245,12 @@ fprintf('============================================\n\n')
 
 % Write preferences file, confirm installation
 fprintf('Writing changes to MatLab...\n')
-installed = 1;
-save([MS_directory '/_private/preferences.mat'],'installed');
+
+installed = 1;              % Is MISHAP installed
+inst_dir  = MS_directory;   % MISHAP location 
+PDB_creator = 0;            % Has PDB creator been used before
+
+save([MS_directory '/_private/preferences.mat'],'installed','inst_dir','PDB_creator');
 fprintf('MatLab configured!\n\n')
 
 fprintf('============================================\n\n')

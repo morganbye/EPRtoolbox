@@ -95,7 +95,7 @@ function MISHAP_dist_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
 % Name the figure
-set(gcf,'Name','MISHAP - v13.05 - BETA')
+set(gcf,'Name','MISHAP - v13.06 - ALPHA - Distance distributions')
 movegui('east');
 
 % Create MISHAP global variables
@@ -270,18 +270,28 @@ function button_pdb_loadB_Callback(hObject, eventdata, handles)
 function button_pdb_generate_Callback(hObject, eventdata, handles)
 
 % Check that MMM is open
-global model
-
-if isfield(model,'structures') == 0
-    warndlg(sprintf('Could not find MMM variables to generate the PDB from.\n\nYou have probably called MISHAP without MMM open.\n\nPlease open MMM and call MISHAP using \n> Predict menu\n   > Quaternary \n     > HADDOCK \n       > MISHAP'),...
-        'MISHAP')
-    return
-end
+% global model
+% 
+% if isfield(model,'structures') == 0
+%     warndlg(sprintf('Could not find MMM variables to generate the PDB from.\n\nYou have probably called MISHAP without MMM open.\n\nPlease open MMM and call MISHAP using \n> Predict menu\n   > Quaternary \n     > HADDOCK \n       > MISHAP'),...
+%         'MISHAP')
+%     return
+% end
 
 global MISHAP
 MISHAP.PosDist = get(gcf,'OuterPosition');
+MISHAP.pro = 1;
 
 MISHAP_pro;
+
+% If PDB has not been used before launch help
+if MISHAP.pref.PDB_creator == 0
+    web([MISHAP.pref.inst_dir '/_private/html/PDB_creator.html'],'-helpbrowser')
+    
+    % Update preferences file so help is not shown again
+    PDB_creator = 1;
+    save([MS_directory '/_private/preferences.mat'],'PDB_creator')
+end
 
 
 
