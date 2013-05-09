@@ -1,4 +1,4 @@
-function structure = pdbimport(varargin)
+function structure = MISHAP_pdbimport(varargin)
 
 % PDBIMPORT loads a PDB file into MATLAB
 %
@@ -60,21 +60,24 @@ function structure = pdbimport(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v12.9
+% M. Bye v13.06
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/
-% Aug 2012;     Last revision: 23-August-2012
+% Website:      http://www.morganbye.net/mishap/
+% May 2013;     Last revision: 06-May-2013
 %
 % Approximate coding time of file:
 %               12 hours
 %
 %
 % Version history:
+% May 13        > Removed messaging to command window
+%               > Handles PDBs without a sequence
+%
 % Aug 12        > After initial load, text is split using the \t delimiter
 %                   rather than assuming that the PDB is true to the PDB
 %                   format and uses exactly 80 characters per line
@@ -103,7 +106,7 @@ switch nargin
         [file, directory] = uigetfile({'*.pdb','PDB file (*.pdb)'},'Load PDB file');
         
         if file == 0
-            error(sprintf('\nFile load canceled by user'))
+            error('\nFile load canceled by user')
         end
         
         path = fullfile(directory, file);
@@ -138,7 +141,7 @@ switch nargin
             
             % Catch error if they dont have Java correctly set up
             if (~usejava('jvm'))
-                error(sprintf('\nLoading from an online source requires Java'))
+                error('\nLoading from an online source requires Java')
             end
             
             % Try to get PDB from provided URL
@@ -198,7 +201,7 @@ switch nargin
             fclose(fid);
         
         else
-            error(sprintf('\nFile does not exist or the URL was not recognised'))
+            error('\nFile does not exist or the URL was not recognised')
         end
         
 end
@@ -208,8 +211,6 @@ end
 % ===================================================
 
 r = size(fullPDB{1},1);
-
-disp(sprintf('PDB loaded!\nNow reading through the file...'))
 
 for k = 1:r
       
@@ -344,7 +345,6 @@ for k = 1:r
 end
 
 
-
 for k = 1:r
     if strncmpi(fullPDB{1}(k,:),'ORIGX',5) == 1
         structure.Origin.(char(strtok(fullPDB{1}(k,:)))) = char((fullPDB{1}(k,:)));
@@ -379,8 +379,6 @@ for k = 1:size(x,1)
                 % high enough to not have a space between columns
 end
 
-disp(sprintf('%d lines were read\nNow sorting the atoms...',r))
-
 for k = 1:numel(Atoms.Preformated)
     structure.Model.Atom(k).AtomSerNo = str2num(Atoms.Preformated{k}{1}{2});
     structure.Model.Atom(k).AtomName  = Atoms.Preformated{k}{1}{3};
@@ -397,45 +395,48 @@ end
 
 clear structure.Atom
 
-disp(sprintf('%d atoms were sorted!\nFinal tidy up...',numel(Atoms.Preformated)))
-
 % Sequence sorting
 % ===================================================
 
-% Make all fields the same length
-q = strcat(structure.Sequence);
-% Remove any blank fields
-w = char(q(~cellfun(@isempty,q)));
 
-% Split each line of the sequence into individual strings
-for k = 1:size(w,1)
-    Sequence.Preformated{k} = textscan(w(k,:),'%s');
-end
-
-highestChain = Sequence.Preformated{end}{1}{3};
-
-% Convert Chain "Letter" to Chain "Number" through ASCII number
-ChainMax = double(highestChain)-64;
-
-% Find where each chain ends
-for k = 1:numel(Sequence.Preformated)
-    Chains(k) = Sequence.Preformated{k}{1}{3};
-end
-
-[~,b] = unique(Chains,'first');      % gives row number of each new Chain
-[~,c] = unique(Chains,'last');       % gives row of last
-
-warning off
-
-for k = 1:ChainMax
-
-    % Remove header lines
-    for l = b(k) : c(k)
-        Sequence.Formating{l} = Sequence.Preformated{l}(5:end);
+if isfield(structure,'Sequence')
+    % Make all fields the same length
+    q = strcat(structure.Sequence);
+    % Remove any blank fields
+    w = char(q(~cellfun(@isempty,q)));
+    
+    % Split each line of the sequence into individual strings
+    for k = 1:size(w,1)
+        Sequence.Preformated{k} = textscan(w(k,:),'%s');
     end
     
-    % Split the chains and merge them into single column of text
-    structure.Sequence.(['Chain' (char(k-1+'A'))]) = (cat(1,Sequence.Formating{b(k):c(k)}));
+    highestChain = Sequence.Preformated{end}{1}{3};
+    
+    % Convert Chain "Letter" to Chain "Number" through ASCII number
+    ChainMax = double(highestChain)-64;
+    
+    % Find where each chain ends
+    for k = 1:numel(Sequence.Preformated)
+        Chains(k) = Sequence.Preformated{k}{1}{3};
+    end
+    
+    [~,b] = unique(Chains,'first');      % gives row number of each new Chain
+    [~,c] = unique(Chains,'last');       % gives row of last
+    
+    warning off
+    
+    for k = 1:ChainMax
+        
+        % Remove header lines
+        for l = b(k) : c(k)
+            Sequence.Formating{l} = Sequence.Preformated{l}(5:end);
+        end
+        
+        % Split the chains and merge them into single column of text
+        structure.Sequence.(['Chain' (char(k-1+'A'))]) = (cat(1,Sequence.Formating{b(k):c(k)}));
+    end
+else
+    % Do nothing. Sequence probably not needed
 end
 
 warning on
@@ -582,5 +583,3 @@ end
 if isfield(structure,'Connectivity')
     structure.Connectivity = char(structure.Connectivity(~cellfun(@isempty,structure.Connectivity)));
 end
-
-disp(sprintf('Tidy up complete!\nPDB has been loaded.'))

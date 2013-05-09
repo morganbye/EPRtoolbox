@@ -1,4 +1,4 @@
-function [structure,ID,Chain,Residue] = pdbimportMMM(varargin)
+function [structure,ID,Chain,Model,Residue,Label,Temp] = pdbimportMMM(varargin)
 
 % PDBIMPORT loads a MMM rotamers PDB file into MATLAB
 %
@@ -27,6 +27,19 @@ function [structure,ID,Chain,Residue] = pdbimportMMM(varargin)
 % Outputs:
 %    output1    - a structure containing all the PDB information
 %
+%    output2    - ID
+%                   the MMM model name
+%    output3    - Chain
+%                   the chain of the attached rotamer
+%    output4    - Model
+%                   the model of the attached rotamer
+%    output5    - Residue
+%                   the residue number of the rotamer
+%    output6    - Label
+%                   the type of label added - R1A/IA1
+%    output7    - Temp
+%                   the labelling temperature - 175/298 K
+%
 % Example:
 %    proteinA = pdbimport
 %                   GUI import of file
@@ -52,21 +65,23 @@ function [structure,ID,Chain,Residue] = pdbimportMMM(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v12.9
+% M. Bye v13.06
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/brukerread
-% Aug 2012;     Last revision: 23-August-2012
-%
-% Approximate coding time of file:
-%               12 hours
-%
+% Website:      http://www.morganbye.net/eprtoolbox/
+% May 2013;     Last revision: 06-May-2013
 %
 % Version history:
+% May 13        > Removed progress bar
+%               > Header, title and remark lines are saved
+%               > Structure information is gained from header section not
+%                   from file name, in case user renamed the file.
+%               > File load error handling
+%
 % Aug 12        Initial release
 
 % Arguments in
@@ -78,7 +93,7 @@ switch nargin
         [file, directory] = uigetfile({'*.pdb','PDB file (*.pdb)'},'Load MMM rotamer file');
         
         if file == 0
-            error(sprintf('\nFile load canceled by user'))
+            return
         end
         
         path = fullfile(directory, file);
@@ -86,17 +101,17 @@ switch nargin
     case 1
         
         path = varargin{1};
-        [directory,file,~] = fileparts(path);
-        
         
 end
 
-progress = waitbar(0.2,'Opening file');
-
 % Read only, open file
-fid = fopen(path,'r');
+try
+    fid = fopen(path,'r');
+catch
+    error('Selected file could not be opened')
+end
 
-% 80 characters doesn't work 
+% 80 characters doesn't work due to MMM's pdb write functionality
 % fullPDB = textscan(fid,'%80c','delimiter',' ');
 fullPDB = textscan(fid,'%s','Delimiter','\t');
 
@@ -107,29 +122,47 @@ fclose(fid);
 % File splitting
 % ===================================================
 
-progress = waitbar(0.4,progress,'Reading file line by line...');
-
 NoLines = size(fullPDB{1},1);
 
-% Start at line 5 to ignore the MMM header section
-for k = 5:NoLines
+for k = 1:NoLines
     
     switch char(strtok(fullPDB{1}(k,:)))
+        
+        case 'HEADER'
+            structure.Header(k,:)        = (fullPDB{1}(k,:));
+            
+        case 'TITLE'
+            structure.Title(k,:)         = (fullPDB{1}(k,:));
+            
+        case 'REMARK'
+            structure.Remark(k,:)        = (fullPDB{1}(k,:));
         
         case 'HETATM'
             structure.HeterogenAtom(k,:) = (fullPDB{1}(k,:));
             
         case 'CONECT'
-            structure.Connectivity(k,:) = (fullPDB{1}(k,:));
+            structure.Connectivity(k,:)  = (fullPDB{1}(k,:));
 
     end
 end
 
+% HEADER SECTION
+% ===================================================
+
+% Get rotamer info from file name
+rotamerInfo = textscan(structure.Title{2},...
+    'TITLE [%4c](%1c){%d}%d  LABELED WITH %3c AT %d K');
+
+ID =        rotamerInfo(1);
+Chain =     rotamerInfo(2);
+Model =     rotamerInfo{3};
+Residue =   rotamerInfo{4};
+Label =     rotamerInfo(5);
+Temp =      rotamerInfo{6};
+
 
 % ATOM SORTING
 % ===================================================
-
-progress = waitbar(0.6,progress,'Analyzing atoms...');
 
 % Atoms
 if ~isfield(structure,'HeterogenAtom')
@@ -168,31 +201,21 @@ end
 % CONNECTIVITY
 % ===================================================
 
-progress = waitbar(0.8,progress,'Analyzing connectivity between atoms...');
-
 % Remove blank cells and then string them back
 structure.Connectivity = char(structure.Connectivity(~cellfun(@isempty,structure.Connectivity)));
 
-% MMM rotamer file ~ 100 rotamers each with 41 atoms
-for k = 1:size(structure.Connectivity,1)/41
-    structure.RotCon{k} = structure.Connectivity((k*41)-40:k*41,:);
+switch Label{1}
+    case 'R1A'
+        % MMM rotamer file ~ 100 rotamers each with 36 atoms
+        for k = 1:size(structure.Connectivity,1)/36
+            structure.RotCon{k} = structure.Connectivity((k*36)-35:k*36,:);
+        end
+
+    case 'IA1'
+        % MMM rotamer file ~ 100 rotamers each with 41 atoms
+        for k = 1:size(structure.Connectivity,1)/41
+            structure.RotCon{k} = structure.Connectivity((k*41)-40:k*41,:);
+        end
 end
 
 
-% OUTPUTS
-% ===================================================
-
-progress = waitbar(1.0,progress,'Finalizing...');
-
-% Get rotamer info from file name
-rotamerInfo = textscan(file,'rotamers_[%4c](%1c){%d}');
-
-ID =        rotamerInfo(1);
-Chain =     rotamerInfo(2);
-Residue =   rotamerInfo(3);
-
-% Tidy up structure
-clear structure.Connectivity;
-clear structure.HeterogenAtom;
-
-close(progress);
