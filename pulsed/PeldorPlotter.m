@@ -2,9 +2,7 @@ function PeldorPlotter
 
 % PELDORPLOTTER take a set of PELDOR experiments and plot them quickly
 %
-% FUNCTION ()
-% FUNCTION ('/path/to/file')
-% [x, y] = FUNCTION (...)
+% PELDORPLOTTER ()
 %
 % PELDORPLOTTER files must be saved with the file format:
 %       YYMM-FREQ-EXP-TEMP-SAMPLE.DTA
@@ -12,12 +10,11 @@ function PeldorPlotter
 %       eg 1305-X-4PEL-050-MTSL.DTA
 %
 % Inputs:
-%    input1     - 
-%    input2     - 
+%    input1     - graphical interface to select a file
 %
 % Outputs:
-%    output1    - 
-%    output2    - 
+%    output1    - a PDF file of the selected files
+%
 % Example:
 %
 %

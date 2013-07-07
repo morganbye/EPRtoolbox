@@ -4,7 +4,8 @@ function e2af(varargin)
 % ASCII data files
 %
 % Converts a folder of EPR data files from the spectrometer to usable
-% ASCII data format for data manipulation
+% ASCII data format for data manipulation. Pulsed files will have 3 columns
+% in the format x, y.real, y.imaginary
 %
 % Syntax:
 %       E2AF
@@ -67,7 +68,7 @@ function e2af(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.04
+% M. Bye v13.07
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -82,6 +83,9 @@ function e2af(varargin)
 %
 %
 % Version history:
+% Jul 13        e2af now handles pulsed experiments with real and imaginary
+%                   data channels
+%
 % Mar 13        Updates reflecting changes to e2a, allowing interval
 %                   interpolation and noheader options
 %
@@ -267,7 +271,11 @@ if noFiles ~= 0
             z = [x1' y1'];
             
         else
-            z = [x y];
+            if isfield(y,'real')
+                z = [x y.real y.imag];
+            else
+                z = [x y];
+            end
         end
         
         % Write out results

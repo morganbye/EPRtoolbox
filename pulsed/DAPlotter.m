@@ -1,12 +1,13 @@
 function DAPlotter(varargin)
 
-% DAPLOTTER take a set of PELDOR experiments and plots them quickly
+% DAPLOTTER take a set of PELDOR experiments which have been analysed with
+%   DeerAnalysis and plot them quickly
 %
 % FUNCTION ()
-% FUNCTION ('/path/to/file')
-% [x, y] = FUNCTION (...)
+% FUNCTION ('export format')
 %
 % Inputs:
+%    input0     - a graphical interface for file selection
 %    input1     - image format
 %                   'pdf' or 'eps'
 %
@@ -138,7 +139,7 @@ else
     text(0.5,0.5,'File not found');
 end
 
-% Plot FSE
+% Plot distance distribution
 h3 = subplot(1,3,3);
 if exist('xdd','var')
     plot(xdd,ydd);

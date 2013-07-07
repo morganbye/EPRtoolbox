@@ -8,20 +8,28 @@ function e2af(varargin)
 %
 % Syntax:
 %       E2AF
-%       E2AF = ('path/to/file.DTA')
-%       E2AF = (delimiter)
-%       E2AF = ('path/to/file.DTA',delimiter)
-%       E2AF = ('path/to/file.DTA',delimiter, extension)
+%       E2AF ('path/to/folder')
+%       E2AF (delimiter)
+%       E2AF ('path/to/folder',delimiter)
+%       E2AF ('path/to/folder',delimiter, extension)
+%       E2AF ('path/to/folder',delimiter, extension, 'noheader')
+%       E2AF ('path/to/folder',delimiter, extension, interval)
+%       E2AF ('path/to/folder',delimiter, extension, 'noheader', interval)
 %
 % Inputs:
-%       input1      - The path to a file
+%       input1      - The path to folder of .DTA files
 %       input2      - Delimiter is the seperator in the file ',' for comma
-%                       ' ' for space, etc
+%                       ' ' for space, '\t' for tab, etc
 %       input3      - Extension is the file format to output
-%                       eg '.csv' , '.txt', etc
+%                       eg '.csv' , '.txt', '.dat', etc
+%       input4      - 'noheader'
+%                       This string turns off the header
+%       input5      - Desired magnetic field interval
+%                       eg 0.2 to use interpolation to give data points
+%                       every 0.2 Gauss
 %
 % Outputs:
-%       output      - a file
+%       output      - a file(s)
 %                       by default a common seperated value file (.csv)
 %
 % Example:
@@ -32,6 +40,9 @@ function e2af(varargin)
 %           Take the file "file.DTA" and convert it to "file.txt" where
 %           values are seperated with a space rather than the standard
 %           comma
+%
+%   For use with pyDipfit
+%        e2af('/folder/of/files','\t', '.dat', 'noheader', 0.2)
 %               
 %
 % For more information see:
@@ -44,7 +55,7 @@ function e2af(varargin)
 %
 % MAT-files required:   none
 %
-% See also: CWPLOT CWZERO CWNORM
+% See also: E2A BRUKERREAD
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -56,7 +67,7 @@ function e2af(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v12.10
+% M. Bye v13.04
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -64,13 +75,16 @@ function e2af(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/
-% Oct 2012;     Last revision: 25-October-2012
+% Mar 2013;     Last revision: 15-March-2013
 %
 % Approximate coding time of file:
 %               2 hours
 %
 %
 % Version history:
+% Mar 13        Updates reflecting changes to e2a, allowing interval
+%                   interpolation and noheader options
+%
 % Oct 12        Initial release
 
 % Input arguments
@@ -97,7 +111,7 @@ switch nargin
     case 1
         
         % For File
-        if exist(varargin{1},'file');
+        if exist(varargin{1},'dir');
             
             delimiter = ',';
             extension = '.csv';
@@ -124,20 +138,61 @@ switch nargin
     % File and delimiter selection
     
     case 2
-        if exist(varargin{1},'file');
+        if exist(varargin{1},'dir');
             folder = varargin{1};
+        else
+            error('e2af: Folder was not recognised')
         end
 
         delimiter = varargin{2};
         
     % File, delimiter and extension selection
     case 3
-        if exist(varargin{1},'file');
-            address = varargin{1};
+        if exist(varargin{1},'dir');
+            folder = varargin{1};
+        else
+            error('e2af: Folder was not recognised')
         end
         
         delimiter = varargin{2};
         extension = varargin{3};
+        
+        % File, delimiter, extension and 'noheader'/interval selection
+    case 4
+        if exist(varargin{1},'dir');
+            folder = varargin{1};
+        else
+            error('e2af: Folder was not recognised')
+        end
+        
+        delimiter = varargin{2};
+        extension = varargin{3};
+        
+        if isa(varargin{4},'char')
+            noheader  = varargin{4};
+            
+        elseif isa(varargin{4},'double')
+            interval = varargin{4};
+        end
+        
+        
+         % File, delimiter, extension and 'noheader'/interval selection
+    case 5
+        if exist(varargin{1},'dir');
+            folder = varargin{1};
+        else
+            error('e2af: Folder was not recognised')
+        end
+        
+        delimiter = varargin{2};
+        extension = varargin{3};
+        
+        if isa(varargin{4},'char')
+            noheader  = varargin{4};
+        end
+        if isa(varargin{5},'double')
+            interval  = varargin{5};
+        end
 end
 
 % Output arguments
@@ -174,33 +229,46 @@ if noFiles ~= 0
         % Create file name
         file = [outAddress '/' regexprep(dtaFiles(k).name,'.DTA',extension)];
         
-        % Create file and then create the header lines
-        fid = fopen(file,'w');
-
-        header = [...
-            '#                            ___        __                                 ';...
-            '#                           |__ \      / _|                                ';...
-            '#                        ___   ) |__ _| |_                                 ';...
-            '#                       / _ \ / /  _` |  _|                                ';...
-            '#                      |  __// /| (_| | |                                  ';...
-            '#                       \___|____\__,_|_|                                  ';...
-            '#                                                                          ';...
-            '#  Part of the EPR toolbox:                           developed at         ';...
-            '#  morganbye.net/eprtoolbox                    University of East Anglia   ';...
-            '#                                                                          ';...
-            '# This file has been created by e2af - v12.10 at:                          '];
-        
-        header = [header ; sprintf('%-75s', ['# ' datestr(now, 'dd mmmm yyyy - HH:MM')])];
-        
-        for j = 1:size(header,1)
+        if exist('noheader','var') && strcmp(noheader,'noheader')
+            % Do nothing
+        else
+           % Create file and then create the header lines
+            fid = fopen(file,'w');
+            
+            header = [...
+                '#                            ___        __                                 ';...
+                '#                           |__ \      / _|                                ';...
+                '#                        ___   ) |__ _| |_                                 ';...
+                '#                       / _ \ / /  _` |  _|                                ';...
+                '#                      |  __// /| (_| | |                                  ';...
+                '#                       \___|____\__,_|_|                                  ';...
+                '#                                                                          ';...
+                '#  Part of the EPR toolbox:                           developed at         ';...
+                '#  morganbye.net/eprtoolbox                    University of East Anglia   ';...
+                '#                                                                          ';...
+                '# This file has been created by e2af - v12.10 at:                          '];
+            
+            header = [header ; sprintf('%-75s', ['# ' datestr(now, 'dd mmmm yyyy - HH:MM')])];
+            
+            for j = 1:size(header,1)
                 fprintf(fid,'%-75s\n',header(j,:));
+            end
+            
+            % Close the file (for C language operations/memory freeing)
+            fclose(fid);
+            
         end
         
-        % Close the file (for C language operations/memory freeing)
-        fclose(fid);
-        
         % Create matrix for exporting
-        z = [x y];
+        if exist('interval','var')
+            x1 = (x(1):interval:x(end));
+            y1 = interp1(x,y,x1);
+            
+            z = [x1' y1'];
+            
+        else
+            z = [x y];
+        end
         
         % Write out results
         dlmwrite(file,...

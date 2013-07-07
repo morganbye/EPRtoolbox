@@ -9,6 +9,9 @@ function [x,y] = DeerExtract(varargin)
 % you'll get blank figures. Note that L-curves probably won't work - but
 % why would you want them?)
 %
+% The user will also be prompted if they want a convenient (ie A4) PDF
+% created showing what they currently have on-screen.
+%
 % Syntax:  [x,y] = DEEREXTRACT
 %
 % Inputs:
@@ -18,14 +21,19 @@ function [x,y] = DeerExtract(varargin)
 % Outputs:
 %    output0 - 3 figures
 %               figures from DeerAnalysis
+%            - a PDF file containing the 3 figures
+%            - a CSV file containing all the raw data
+%
 %    output1 - x
 %               with the following sub-arrays
 %                     DistanceDistribution
+%                       (SuppressedDistanceDistribution)
 %                     TimeDomain or Pake
 %                     OriginalData
 %    output2 - y
 %               with the following sub-arrays
 %                     DistanceDistribution
+%                       (SuppressedDistanceDistribution)
 %                     TimeDomain or Pake
 %                     OriginalData
 %
@@ -56,7 +64,7 @@ function [x,y] = DeerExtract(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v12.12
+% M. Bye v13.07
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -64,12 +72,20 @@ function [x,y] = DeerExtract(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox
-% Dec 2012;     Last revision: 06-December-2012
+% Jul 2013;     Last revision: 07-July-2013
 %
 % Approximate coding time of file:
 %               4 hours
 %
 % Version history:
+% Jul 13        > Update for DA 2013 compatibility
+%               > If suppression of peaks has been used in the distance
+%                   distribution figure then these will also be saved
+%               > Generation of a combined PDF now possible, very similar
+%                   in function to DAPlotter
+%               > Generation of a single CSV file now possible which
+%                   contains all of the data on one spreadsheet.
+%
 % Dec 12        > Automatic plotting functionality added
 %
 % Jun 12        > Complete rework so that handles are pulled straight from
@@ -117,11 +133,18 @@ lDD = findall(hDD.Children, 'Type', 'Line');
 % Line 4: solid blue vertical line at window min (1.5 nm)
 % Line 5: curve
 
-x.DistanceDistribution = get(lDD(5), 'xdata');
-x.DistanceDistribution = x.DistanceDistribution';
-y.DistanceDistribution = get(lDD(5), 'ydata');
-y.DistanceDistribution = y.DistanceDistribution';
+switch size(lDD,1)
+    case 5
+        x.DistanceDistribution = (get(lDD(5), 'xdata'))';
+        y.DistanceDistribution = (get(lDD(5), 'ydata'))';
         
+    case 6
+        x.DistanceDistribution = (get(lDD(5), 'xdata'))';
+        y.DistanceDistribution = (get(lDD(5), 'ydata'))';
+        
+        x.SuppressedDistanceDistribution = (get(lDD(6), 'xdata'))';
+        y.SuppressedDistanceDistribution = (get(lDD(6), 'ydata'))';
+end
         
 % Form factor
 hFF = get(hAxes(2));
@@ -141,10 +164,8 @@ switch get(hFF.XLabel,'String')
         switch size(lFF,1);
             
             case 1              % Pre fitting
-                x.Pake = get(lFF(1), 'xdata');
-                x.Pake = x.Pake';
-                y.Pake = get(lFF(1), 'ydata');
-                y.Pake = y.Pake';
+                x.Pake.real = (get(lFF(1), 'xdata'))';
+                y.Pake.real = (get(lFF(1), 'ydata'))';
                 
             case 3              % After fitting
                 x.Pake.real = get(lFF(1), 'xdata');
@@ -180,10 +201,8 @@ switch get(hFF.XLabel,'String')
                 y.TimeDomain.fit = y.TimeDomain.fit';
                 
             otherwise
-                x.TimeDomain = get(lFF(3), 'xdata');
-                x.TimeDomain = x.TimeDomain';
-                y.TimeDomain = get(lFF(3), 'ydata');
-                y.TimeDomain = y.TimeDomain';
+                x.TimeDomain.real = (get(lFF(3), 'xdata'))';
+                y.TimeDomain.real = (get(lFF(3), 'ydata'))';
         end
 end
 
@@ -200,36 +219,74 @@ lOD = findall(hOD.Children, 'Type', 'Line');
 % Line 7: Horizontal dotted pink line at 0
 % Line 8: Imaginary data set (solid pink line)
 
-x.OriginalData.real = get(lOD(1), 'xdata');
-x.OriginalData.real = x.OriginalData.real';
-y.OriginalData.real = get(lOD(1), 'ydata');
-y.OriginalData.real = y.OriginalData.real';
-
-x.OriginalData.imag = get(lOD(8), 'xdata');
-x.OriginalData.imag = x.OriginalData.imag';
-y.OriginalData.imag = get(lOD(8), 'ydata');
-y.OriginalData.imag = y.OriginalData.imag';
+% If imaginary option is off then line 8 does not exist
+switch size(lFF,1)
+    case 8
+        x.OriginalData.real = get(lOD(1), 'xdata');
+        x.OriginalData.real = x.OriginalData.real';
+        y.OriginalData.real = get(lOD(1), 'ydata');
+        y.OriginalData.real = y.OriginalData.real';
+        
+        x.OriginalData.imag = get(lOD(8), 'xdata');
+        x.OriginalData.imag = x.OriginalData.imag';
+        y.OriginalData.imag = get(lOD(8), 'ydata');
+        y.OriginalData.imag = y.OriginalData.imag';
+        
+      % case 7
+    otherwise
+        x.OriginalData.real = get(lOD(1), 'xdata');
+        x.OriginalData.real = x.OriginalData.real';
+        y.OriginalData.real = get(lOD(1), 'ydata');
+        y.OriginalData.real = y.OriginalData.real';
+        
+end
 
 % Plotting commands - used if there are no input arguments, or if the first
 % argument is 'noplot'
 if nargin == 0 || (nargin == 1 && strcmp(varargin{1},'noplot') == 0)
+    
+    % ORIGINAL DATA
+    % =============
+    
     figure('name' , 'DeerExtract: Original data', 'NumberTitle','off');
     movegui(gcf,'northwest');
-    plot(x.OriginalData.real , y.OriginalData.real,'k-', ...
-        x.OriginalData.imag , y.OriginalData.imag,'r-');
-    legend('Real','Imaginary')
+    
+    switch size(lFF,1);
+        case 7
+            plot(x.OriginalData.real , y.OriginalData.real,'k-');
+        case 8
+            plot(x.OriginalData.real , y.OriginalData.real,'k-', ...
+                x.OriginalData.imag , y.OriginalData.imag,'r-');
+            legend('Real','Imaginary')
+    end
+    
     xlabel('Time / \mus');
     ylabel('');
     set(gcf,'color', 'white');
     axis tight;
     
+    % FORM FACTOR
+    % ===========
+    
     figure('name' , 'DeerExtract: Form factor', 'NumberTitle','off');
     movegui(gcf,'west');
     
     if isfield(x,'TimeDomain')
-        plot(x.TimeDomain.real , y.TimeDomain.real,'k-', ...
-            x.TimeDomain.fit , y.TimeDomain.fit,'r-');
-        legend('Real','Fit')
+        
+        if isfield(x.TimeDomain , 'real')
+            plot(x.TimeDomain.real , y.TimeDomain.real,'k-')
+            
+            if isfield(x.TimeDomain , 'fit')
+                hold on
+                plot(x.TimeDomain.fit , y.TimeDomain.fit,'r-');
+                hold off
+                legend('Real','Fit');
+            end
+        
+        else
+            plot(x.TimeDomain , y.TimeDomain,'k-')
+        end
+        
         xlabel('Time / \mus');
         ylabel('');
         set(gcf,'color', 'white');
@@ -246,6 +303,9 @@ if nargin == 0 || (nargin == 1 && strcmp(varargin{1},'noplot') == 0)
         set(gca,'YTick',[]);
     end
     
+    % DISTANCE DISTRIBUTION
+    % =====================
+    
     figure('name' , 'DeerExtract: Distance distribution ', 'NumberTitle','off');
     movegui(gcf,'southwest');
     plot(x.DistanceDistribution , y.DistanceDistribution,'k-');
@@ -254,5 +314,216 @@ if nargin == 0 || (nargin == 1 && strcmp(varargin{1},'noplot') == 0)
     set(gcf,'color', 'white');
     axis tight;
     set(gca,'YTick',[]);
+    
+    % SUPPRESSED DISTANCE DISTRIBUTION
+    % ================================
+    
+    if isfield(x,'SuppressedDistanceDistribution')
+        figure('name' , 'DeerExtract: Suppressed Distance Distribution', 'NumberTitle','off');
+        movegui(gcf,'west');
+        
+        plot(x.SuppressedDistanceDistribution , y.SuppressedDistanceDistribution,'k-');
+        xlabel('Distance / nm');
+        ylabel('');
+        set(gcf,'color', 'white');
+        axis tight;
+        set(gca,'YTick',[]);
+    end
+end
+
+% Prompt user if they want the PDF
+genPDF = questdlg('Would you like a combined PDF of the figures?','Generate PDF?','Yes','No','Yes');
+
+switch genPDF
+    case 'Yes'
+        
+        [filename, pathname] = uiputfile({ '*.pdf','Portable document format (*.pdf)'},... 
+        'Save file as','DeerExtract');
+        filePDF = [pathname filename];
+        
+        hF = figure('pos',[0 0 900 300]);
+        
+        % Plot raw data
+        h1 = subplot(1,3,1);
+        if isfield(x,'DistanceDistribution')
+            plot(x.OriginalData.real,y.OriginalData.real);
+        else
+            set(h1,'Color',[20,43,140]/255)
+            axis off
+            text(0.5,0.5,'File not found');
+        end
+        
+        % Plot background subtracted
+        h2 = subplot(1,3,2);
+        
+        if isfield(x,'TimeDomain')
+            
+            if isfield(x.TimeDomain , 'real')
+                plot(x.TimeDomain.real , y.TimeDomain.real)
+                
+                if isfield(x.TimeDomain , 'fit')
+                    hold on
+                    plot(x.TimeDomain.fit , y.TimeDomain.fit,'r-');
+                    hold off
+                    legend('Real','Fit');
+                end
+            else
+                plot(x.TimeDomain , y.TimeDomain)
+            end
+            
+            xlabel('Time / \mus');
+            ylabel('');
+            set(gcf,'color', 'white');
+            axis tight;
+            
+        else
+            set(h2,'Color',[20,43,140]/255)
+            axis off
+            text(0.5,0.5,'File not found');
+        end
+        
+        % Plot distance distribution
+        h3 = subplot(1,3,3);
+        if isfield(x,'SuppressedDistanceDistribution')
+            plot(x.SuppressedDistanceDistribution,y.SuppressedDistanceDistribution);
+            
+        elseif isfield(x,'DistanceDistribution')
+            plot(x.DistanceDistribution,y.DistanceDistribution);
+        else
+            set(h3,'Color',[20,43,140]/255)
+            axis off
+            text(0.5,0.5,'File not found');
+        end
+        
+        axis(h1,'tight');
+        axis(h2,'tight');
+        axis(h3,'tight');
+        
+        title(h1,'4 Pulse PELDOR experiment','FontSize',12);
+        title(h2,'Background subtracted PELDOR trace','FontSize',12);
+        title(h3,'Distance distribution','FontSize',12);
+        
+        xlabel(h1,'Time / \mus');
+        xlabel(h2,'Time / \mus');
+        xlabel(h3,'Distance / nm');
+        
+        set(h1,'YTick',[]);
+        set(h3,'YTick',[]);
+        
+        set(hF,'PaperUnits','centimeters');
+        set(hF,'PaperSize',[30 10]);
+        set(hF,'PaperPosition', [0 0 30 10]);
+        print(gcf, '-dpdf',  filePDF);
+        
+        close(hF);
+    case 'No'
+end
+
+genCSV = questdlg('Would you like a combined .CSV file of all the data for easy plotting in Excel/Origin/etc?',...
+    'Generate CSV?','Yes','No','Yes');
+
+switch genCSV
+    case 'Yes'
+        
+        [filename, pathname] = uiputfile({ '*.csv','Comma seperated value (*.csv)'},... 
+        'Save file as','DeerExtract');
+        fileCSV = [pathname filename];
+        
+        fid = fopen(fileCSV,'w');
+            
+            header = [...
+                '#                                                                          ';...
+                '#  _____                 ______      _                  _                  ';...
+                '# |  __ \               |  ____|    | |                | |                 ';...
+                '# | |  | | ___  ___ _ __| |__  __  _| |_ _ __ __ _  ___| |_                ';...
+                '# | |  | |/ _ \/ _ \ ''__|  __| \ \/ / __| ''__/ _` |/ __| __|               ';...
+                '# | |__| |  __/  __/ |  | |____ >  <| |_| | | (_| | (__| |_                ';...
+                '# |_____/ \___|\___|_|  |______/_/\_\\__|_|  \__,_|\___|\__|               ';...
+                '#                                                                          ';...
+                '#  Part of the EPR toolbox:                           developed at         ';...
+                '#  morganbye.net/eprtoolbox                    University of East Anglia   ';...
+                '#                                                                          ';...
+                '# Columns in this file are in the following order:                         ';...
+                '# Original data (x, y(real), y(imaginary))                                 ';...
+                '# Time domain (x, y(real), y(fitted))                                      ';...
+                '# Pake pattern / Frequency (x,y(real), y(fitted))                          ';...
+                '# Distance distribution (x,y)                                              ';...
+                '# Suppressed distance distribution (x,y)                                   ';...
+                '#                                                                          ';...
+                '# Data that cannot be found returns columns of zeros                       ';...
+                '#                                                                          ';...
+                '# This file has been created by DeerExtract - v13.07 at:                   '];
+            
+            header = [header ; sprintf('%-75s', ['# ' datestr(now, 'dd mmmm yyyy - HH:MM')])];
+            
+            for j = 1:size(header,1)
+                fprintf(fid,'%-75s\n',header(j,:));
+            end
+            
+            % Close the file (for C language operations/memory freeing)
+            fclose(fid);
+        
+        
+            % Create output array
+            output = zeros(size(x.OriginalData.real,1),13);
+            
+            if isfield(x,'OriginalData')             
+                if isfield(x.OriginalData,'real')
+                    output(1:length(x.OriginalData.real),1) = x.OriginalData.real;
+                end
+                if isfield(y.OriginalData,'real')
+                    output(1:length(y.OriginalData.real),2) = y.OriginalData.real;
+                end
+                if isfield(y.OriginalData,'imag')
+                    output(1:length(x.OriginalData.imag),3) = y.OriginalData.imag;
+                end
+            end
+            
+            if isfield(x,'TimeDomain')
+                if isfield(x.TimeDomain,'real')
+                    output(1:length(x.TimeDomain.real),4) = x.TimeDomain.real;
+                end
+                if isfield(y.TimeDomain,'real')
+                    output(1:length(y.TimeDomain.real),5) = y.TimeDomain.real;
+                end
+                if isfield(y.TimeDomain,'fit')
+                    output(1:length(y.TimeDomain.fit),6) = y.TimeDomain.fit;
+                end
+            end
+            
+            if isfield(x,'Pake')
+                if isfield(x.Pake,'real')
+                    output(1:length(x.Pake.real),7) = x.Pake.real;
+                end
+                if isfield(y.Pake,'real')
+                    output(1:length(y.Pake.real),8) = y.Pake.real;
+                end
+                if isfield(y.Pake,'fit')
+                    output(1:length(y.Pake.fit),9) = y.Pake.fit;
+                end
+            end
+            
+            if isfield(x,'DistanceDistribution')
+                output(1:length(x.DistanceDistribution),10) = x.DistanceDistribution;
+            end
+            if isfield(y,'DistanceDistribution')
+                output(1:length(y.DistanceDistribution),11) = y.DistanceDistribution;
+            end
+            
+            if isfield(x,'SuppressedDistanceDistribution')
+                output(1:length(x.SuppressedDistanceDistribution),12) = x.SuppressedDistanceDistribution;
+            end
+            if isfield(y,'SuppressedDistanceDistribution')
+                output(1:length(y.SuppressedDistanceDistribution),13) = y.SuppressedDistanceDistribution;
+            end
+            
+            dlmwrite(fileCSV,...
+                output,...
+                '-append',...
+                'delimiter', ',',...
+                'precision', '%.13f');
+            
+    case 'No'
+        
 end
 
