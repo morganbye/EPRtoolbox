@@ -106,8 +106,7 @@ Namely enforcing 80 character lines.
 
 EasyRefiner
 ===========
-> Added a "Run later" button, so that the start of a fitting run can be
- 	defined as an exact date and time in the future.
+> Added a "Run later" button, so that the start of a fitting run can be 	defined as an exact date and time in the future.
 > Better error handling
 > Supports long file names
 > Closing waitbar cancels queue at end of current fit
