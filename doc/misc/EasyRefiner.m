@@ -15,10 +15,33 @@ function varargout = EasyRefiner(varargin)
 % Syntax:  EASYREFINER
 %
 % Inputs:
-%    input1     - n/a
+%    input1     - Files
+%                   selectable using "Load file" and "Load folder"
+%    input2     - System
+%                   System properties for EasySpin. Anything can be used,
+%                   but it is recommend to use "Sys.Variable"
+%    input3     - Experiment
+%                   Experiment properties for EasySpin. You must use
+%                   "Exp.Variable" as the experiment frequency and magnetic
+%                   field range are imported automatically from the file
+%    input4,5,6 - Variables
+%                   Variable properties for EasySpin. Anything can be used,
+%                   but it is recommend to use "Var.Variable"
+%    input7     - Fitting options
+%                   Fitting properties for EasySpin. You must use
+%                   "FitOpt.Variable" or "SimOpt.Variable" here
 %
 % Outputs:
-%    output1    - n/a
+%    output1    - Command window
+%                   EasySpin results are printed out
+%    output2    - EasyRefiner_Results (structure)
+%                   Fitting results
+%    output2    - Figures
+%                   EasySpin fitting figures
+%    output3    - DD-MM-YY_hh:mm_EasyRefiner_Log.txt
+%                   Log file from fitting
+%    output4    - DD-MM-YY_hh:mm_EasyRefiner_Results.mat
+%                   Matlab array of fitting results
 %
 % Example: 
 %    see http://morganbye.net/eprtoolbox/easyrefiner
@@ -44,7 +67,7 @@ function varargout = EasyRefiner(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.02
+% M. Bye v13.03
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -52,18 +75,26 @@ function varargout = EasyRefiner(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/cwviewer
-% Feb 2013;     Last revision: 03-February-2013
+% Mar 2013;     Last revision: 14-March-2013
 %
 % Approximate coding time of file:
-%               1 hours
+%               20 hours
 %
 %
 % Version history:
+% Mar 13        "Run later" button added
+%               Better error handling
+%               Supports long file names
+%               Closing waitbar cancels queue
+%               Seperating of fitting in command window using file name
+%               Add fit results to the output
+%               Handling of non-valid file name characters in file title
+%
 % Feb 13        Initial release
 
 % Edit the above text to modify the response to help EasyRefiner
 
-% Last Modified by GUIDE v2.5 06-Feb-2013 09:21:15
+% Last Modified by GUIDE v2.5 12-Feb-2013 16:04:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -100,7 +131,7 @@ handles.output = hObject;
 guidata(hObject, handles);
 
 % Name the window
-set(gcf,'Name','EasyRefiner - v13.02');
+set(gcf,'Name','EasyRefiner - v13.03');
 
 % Update output location edit box to current folder
 set(handles.edit_outputAddress,'String',pwd);
@@ -567,26 +598,31 @@ set(handles.edit_var3,'String','');
 switch get(handles.popupmenu_defaults,'Value')
     case 1  % Nitroxide
         set(handles.edit_system,'String',[...
-        'Sys.g = [2.025 2.005 1.985];';...
+        'Sys.g = [2.02 2.01 2.00];   ';...
         'Sys.Nucs = ''14N'';           ';...
-        'Sys.A = 45;                 ';...
+        'Sys.A = [20 20 85];         ';...
         'Sys.n = 1;                  ';...
         'Sys.lwpp = 0.25;            ']);
     
         set(handles.edit_var1,'String',[...
-        'Var.g = [0.005 0.005 0.005];';...
-        'Var.A = 0.5;                ';...
+        'Var.g = [0.01 0.01 0.01];   ';...
+        'Var.A = [2 2 2];            ';...
         'Var.lwpp = 0.05;            ']);
     
         set(handles.edit_var2,'String',[...
         'Var.g = [0.001 0.001 0.001];';...
-        'Var.A = 0.1;                ';...
+        'Var.A = [0.5 0.5 0.5];      ';...
         'Var.lwpp = 0.01;            ']);
     
         set(handles.edit_var3,'String',[...
         'Var.g = [0.0005 0.0005 0.0005];';...
-        'Var.A = 0.001;                 ';...
+        'Var.A = [0.001 0.001 0.001];   ';...
         'Var.lwpp = 0.001;              ']);
+    
+        set(handles.edit_opt,'String',[...
+            'FitOpt.PopulationSize = 80;';...
+            'FitOpt.maxGenerations = 80;']);
+            
     
     case 2  % Fremy's
         set(handles.edit_system,'String',[...
@@ -701,11 +737,11 @@ set(handles.edit_info,'String',info(end-2:end , :));
 info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Beginning fitting...'])];
 set(handles.edit_info,'String',info(end-2:end , :));
 
-files = numel(ER.fileNum);
+files = ER.fileNum;
 
 % Start timers
 timeBegin = tic;
-wb = waitbar(0,sprintf('Completed 0 of %1d',files));
+wb = waitbar(0,sprintf('Completed 0 of %1d',files),'Name','Close to cancel queue');
 
 % Begin fitting    
 for k = 1:files
@@ -729,8 +765,9 @@ for k = 1:files
     eval(['Exp.Range = [' num2str(ER.data.(strcat('File',num2str(k))).x(1)/10) ' ' num2str(ER.data.(strcat('File',num2str(k))).x(end)/10) '];']);
    
     timeVar1 = tic;
-    
-    info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Beginning file ' ER.data.(strcat('File',num2str(k))).info.TITL])];
+   
+    str = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Beginning file ' ER.data.(strcat('File',num2str(k))).info.TITL]);
+    info = [info ; str(1:50)];
     set(handles.edit_info,'String',info(end-2:end , :));
     
     switch var1On
@@ -751,14 +788,20 @@ for k = 1:files
             ER.data.(strcat('File',num2str(k))).y(:,1) = ER.data.(strcat('File',num2str(k))).y(:,1) - (m);
                        
             % Call EasySpin
+            disp([datestr(now, 'dd-mm-yy HH:MM:SS ') 'File ' ER.data.(strcat('File',num2str(k))).info.TITL , 'round 1']);
+            
             try
-                eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , Sys, Var, Exp , Opt, FitOpt);'])
+                eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , Sys, Var, Exp , Opt, FitOpt);']);
             catch
-                info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'FAILED round 1 of ' ER.data.(strcat('File',num2str(k))).info.TITL])];
+                fail = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'FAILED round 1 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
+                info = [info ; fail(1:50)];
+                set(handles.edit_info,'String',info(end-2:end , :));
                 continue
             end
             
-            info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed round 1 of ' ER.data.(strcat('File',num2str(k))).info.TITL])];
+            str2 = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed round 1 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
+            
+            info = [info ; str2(1:50)];
             info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Round 1 time taken: ' num2str(round(toc(timeVar1))) ' s'])];
             set(handles.edit_info,'String',info(end-2:end , :));
             
@@ -810,12 +853,22 @@ for k = 1:files
             for l = 1:size(sVar2,1)
                 eval(sVar2(l,:));
             end
-            
+                      
             % Call EasySpin
-            eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , bestsys, Var, Exp , Opt, FitOpt);'])
+            disp([datestr(now, 'dd-mm-yy HH:MM:SS ') 'File ' ER.data.(strcat('File',num2str(k))).info.TITL , 'round 2']);
+            
+            try
+                eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , bestsys, Var, Exp , Opt, FitOpt);']);
+            catch
+                fail = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'FAILED round 2 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
+                info = [info ; fail(1:50)];
+                set(handles.edit_info,'String',info(end-2:end , :));
+                continue
+            end
             
             % Report to user
-            info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed round 2 of ' ER.data.(strcat('File',num2str(k))).info.TITL])];
+            str3 = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed round 2 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
+            info = [info ; str3(1:50)];
             info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Round 2 time taken: ' num2str(round(toc(timeVar2))) ' s'])];
             set(handles.edit_info,'String',info(end-2:end , :));
             
@@ -868,16 +921,26 @@ for k = 1:files
             end
             
             % Call EasySpin
-            eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , bestsys, Var, Exp , Opt, FitOpt);'])
+            disp([datestr(now, 'dd-mm-yy HH:MM:SS ') 'File ' ER.data.(strcat('File',num2str(k))).info.TITL , 'round 3']);
+            
+            try
+                eval(['[bestsys,bestspc] = esfit(''' Fit ''', ER.data.File' num2str(k) '.y , bestsys, Var, Exp , Opt, FitOpt);'])
+            catch
+                fail = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'FAILED round 3 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
+                info = [info ; fail(1:50)];
+                set(handles.edit_info,'String',info(end-2:end , :));
+                continue
+            end
             
             % Report to user
-            info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed round 3 of ' ER.data.(strcat('File',num2str(k))).info.TITL])];
+            str4 = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed round 3 of ' ER.data.(strcat('File',num2str(k))).info.TITL]);
+            info = [info ; str4(1:50)];
             info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Round 3 time taken: ' num2str(round(toc(timeVar3))) ' s'])];
             set(handles.edit_info,'String',info(end-2:end , :));
             
             % Save variables
-            Results.(strcat('File',num2str(k))).r2.bestsys = bestsys;
-            Results.(strcat('File',num2str(k))).r2.bestspc = bestspc;
+            Results.(strcat('File',num2str(k))).r3.bestsys = bestsys;
+            Results.(strcat('File',num2str(k))).r3.bestspc = bestspc;
             
             % Save the figure?
             switch figSave
@@ -909,12 +972,18 @@ for k = 1:files
     end
      
     % Message user for file completion
-    info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed file ' ER.data.(strcat('File',num2str(k))).info.TITL])];
+    str5 = sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Completed file ' ER.data.(strcat('File',num2str(k))).info.TITL]);
+    info = [info ; str5(1:50)];
     info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'File time taken: ' num2str(round(toc(timeVar1))) ' s'])];
     set(handles.edit_info,'String',info(end-2:end , :));
     
     % Update progress bar
-    wb = waitbar((k/files)-(1/files),wb,sprintf('Completed %1d of %1d',k,files));
+    try
+        wb = waitbar((k/files)-(1/files),wb,sprintf('Completed %1d of %1d',k,files));
+    catch
+        msgbox('Fitting canceled by user','EasyRefiner','error') ;
+        return
+    end
     
 end
 
@@ -924,7 +993,8 @@ delete(wb);
 out =[];
 
 for k = 1:files
-    % Create nice array of data for plotting
+    
+    % Create nice array of data for plotting & copy EasySpin results
     
     % Column 1 and 2 are original data
     ER.data.(strcat('File',num2str(k))).Plots(:,1) = ER.data.(strcat('File',num2str(k))).x;
@@ -933,20 +1003,31 @@ for k = 1:files
     ER.data.(strcat('File',num2str(k))).Plots(:,3) = ER.data.(strcat('File',num2str(k))).x;
     ER.data.(strcat('File',num2str(k))).Plots(:,4) = (Results.(strcat('File',num2str(k))).r1.bestspc)';
     
+    ER.data.(strcat('File',num2str(k))).Fits.r1    = Results.(strcat('File',num2str(k))).r1.bestsys;
+    
     if isfield(Results.(strcat('File',num2str(k))),'r2')
         % Column 5 and 6 is round 2
         ER.data.(strcat('File',num2str(k))).Plots(:,5) = ER.data.(strcat('File',num2str(k))).x;
         ER.data.(strcat('File',num2str(k))).Plots(:,6) = (Results.(strcat('File',num2str(k))).r2.bestspc)';
         
+        ER.data.(strcat('File',num2str(k))).Fits.r2    = Results.(strcat('File',num2str(k))).r2.bestsys;
+        
         if isfield(Results.(strcat('File',num2str(k))),'r3')
             % Column 7 and 8 is round 3
             ER.data.(strcat('File',num2str(k))).Plots(:,7) = ER.data.(strcat('File',num2str(k))).x;
             ER.data.(strcat('File',num2str(k))).Plots(:,8) = (Results.(strcat('File',num2str(k))).r3.bestspc)';
+            
+            ER.data.(strcat('File',num2str(k))).Fits.r3    = Results.(strcat('File',num2str(k))).r3.bestsys;
         end
     end
     
     % Rename FileX to out.{FileTitle}
-    out.(regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'''','')) = ER.data.(strcat('File',num2str(k)));
+    try
+        out.(regexprep(ER.data.(strcat('File',num2str(k))).info.TITL,'[- \/'']','')) = ER.data.(strcat('File',num2str(k)));
+    catch
+        error('%s is not a valid file name and will be skipped', ER.data.(strcat('File',num2str(k))).info.TITL);
+        continue
+    end
 end
 
 % Save the results
@@ -974,3 +1055,30 @@ switch log
 end
 
 
+% --- Executes on button press in button_RunLater.
+function button_RunLater_Callback(hObject, eventdata, handles)
+
+timenow = datevec(now);
+
+prompt = 'When would like the queue to start? (dd-mm-yy HH:MM:SS)';
+dlg_title = 'Delay queue start';
+num_lines = 1;
+def = {[num2str(timenow(3)) '-' num2str(timenow(2)) '-' num2str(timenow(1)) ' ',...
+    num2str(timenow(4)) ':' num2str(timenow(5)+5) ':00']};
+
+start = inputdlg(prompt,dlg_title,num_lines,def);
+
+
+t1 = datevec(start,'dd-mm-yy HH:MM:SS');
+t2 = clock;
+
+diff = etime(t1,t2);
+
+info = [sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'EasyRefiner has been queued:' ])];
+info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Starting at:' datestr(t1, 'dd-mm-yy HH:MM:SS ')])];
+info = [info ; sprintf('%-50s',[datestr(now, 'dd-mm-yy HH:MM:SS ') 'Waiting: ' num2str(round(diff)) ' s'])];
+set(handles.edit_info,'String',info);
+
+pause(diff);
+
+button_RUN_Callback(hObject, eventdata, handles);

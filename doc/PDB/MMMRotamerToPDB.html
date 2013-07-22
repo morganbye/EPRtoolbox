@@ -61,13 +61,13 @@
 
  MAT-files required:   none
 
- See also: <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">PDBIMPORT</a> <a href="pdbexport.html" class="code" title="function pdbexport(varargin)">PDBEXPORT</a> MMM</pre></div>
+ See also: <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">PDBIMPORT</a> <a href="pdbexport.html" class="code" title="function pdbexport(varargin)">PDBEXPORT</a> MMM</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="pdbexport.html" class="code" title="function pdbexport(varargin)">pdbexport</a>	PDBEXPORT exports a PDB-like structure in MATLAB to a .pdb file</li><li><a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>	PDBIMPORT loads a PDB file into MATLAB</li></ul>
+<li><a href="pdbexport.html" class="code" title="function pdbexport(varargin)">pdbexport</a>	PDBEXPORT exports a PDB-like structure in MATLAB to a .pdb file</li><li><a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">pdbimport</a>	PDBIMPORT loads a PDB file into MATLAB</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 </ul>
@@ -166,13 +166,13 @@ This function is called by:
 0088                 PDBName = fullfile(directory, file);
 0089                 [~, name, extension] = fileparts(file);
 0090                 disp(<span class="string">'Loading PDB...(this may take some time)'</span>)
-0091                 input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>(PDBName);
+0091                 input = <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">pdbimport</a>(PDBName);
 0092                 
 0093             <span class="keyword">case</span> <span class="string">'Online'</span>
 0094                 PDBcode = inputdlg(<span class="string">'What is the PDB code for the protein?'</span>, <span class="string">'PDB code'</span>,1,{<span class="string">'xxxx'</span>});
 0095                 PDBcode = char(PDBcode);
 0096                 disp(<span class="string">'Fetching PDB...(this may take some time)'</span>)
-0097                 input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> PDBcode <span class="string">''''</span>]);
+0097                 input = <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> PDBcode <span class="string">''''</span>]);
 0098                 name = PDBcode;
 0099                 
 0100                 directory = pwd;
@@ -196,13 +196,13 @@ This function is called by:
 0118                     PDBName = fullfile(directory, file);
 0119                     [~, name, extension] = fileparts(file);
 0120                     disp(<span class="string">'Loading PDB...(this may take some time)'</span>)
-0121                     input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>(PDBName);
+0121                     input = <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">pdbimport</a>(PDBName);
 0122                     
 0123                 <span class="keyword">case</span> <span class="string">'Online'</span>
 0124                     PDBcode = inputdlg(<span class="string">'What is the PDB code for the protein?'</span>, <span class="string">'PDB code'</span>,1,{<span class="string">'xxxx'</span>});
 0125                     PDBcode = char(PDBcode);
 0126                     disp(<span class="string">'Fetching PDB...(this may take some time)'</span>)
-0127                     input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> PDBcode <span class="string">''''</span>]);
+0127                     input = <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> PDBcode <span class="string">''''</span>]);
 0128                     name = PDBcode;
 0129                     
 0130                     directory = pwd;
@@ -218,7 +218,7 @@ This function is called by:
 0140             <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
 0141                 
 0142                 disp(<span class="string">'Loading PDB...(this may take some time)'</span>)
-0143                 input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>(file);
+0143                 input = <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">pdbimport</a>(file);
 0144                 [directory, name, extension] = fileparts(file);
 0145                 
 0146                 <span class="comment">% Web address</span>
@@ -230,7 +230,7 @@ This function is called by:
 0152                     error(sprintf(<span class="string">'\nLoading from an online source requires Java'</span>))
 0153                 <span class="keyword">end</span>
 0154                 
-0155                 input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
+0155                 input = <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
 0156                 
 0157                 directory = pwd;
 0158                 
@@ -238,7 +238,7 @@ This function is called by:
 0160                 <span class="comment">% ========</span>
 0161             <span class="keyword">elseif</span> ischar(varargin{1}) &amp;&amp; length(varargin{1}) == 4
 0162                 
-0163                 input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
+0163                 input = <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
 0164                 
 0165                 directory = pwd;
 0166                 
@@ -258,7 +258,7 @@ This function is called by:
 0180         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);    
 0181                     
 0182             disp(<span class="string">'Loading PDB...(this may take some time)'</span>)
-0183             input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>(file);
+0183             input = <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">pdbimport</a>(file);
 0184             [directory, name, extension] = fileparts(file);
 0185             
 0186         <span class="comment">% Web address</span>
@@ -270,7 +270,7 @@ This function is called by:
 0192                 error(sprintf(<span class="string">'\nLoading from an online source requires Java'</span>))
 0193             <span class="keyword">end</span>
 0194             
-0195             input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
+0195             input = <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
 0196             
 0197             directory = pwd;
 0198             
@@ -278,7 +278,7 @@ This function is called by:
 0200         <span class="comment">% ========</span>
 0201         <span class="keyword">elseif</span> ischar(varargin{1}) &amp;&amp; length(varargin{1}) == 4
 0202             
-0203             input = <a href="pdbimport.html" class="code" title="function structure = pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
+0203             input = <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">pdbimport</a>([<span class="string">''''</span> file <span class="string">''''</span>]);
 0204             
 0205             directory = pwd;
 0206             
@@ -566,6 +566,6 @@ This function is called by:
 0488 <a href="pdbexport.html" class="code" title="function pdbexport(varargin)">pdbexport</a>(output , <span class="string">'basic'</span> , fullfile(out_path,out_name));
 0489     
 0490</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 12:00:44 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

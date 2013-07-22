@@ -1,4 +1,4 @@
-function [ASCII] = e2a(varargin)
+function e2a(varargin)
 
 % E2A Convert EPR file (Bruker format) to ASCII data file
 %
@@ -7,17 +7,21 @@ function [ASCII] = e2a(varargin)
 %
 % Syntax:
 %       E2A
-%       E2A = ('path/to/file.DTA')
-%       E2A = (delimiter)
-%       E2A = ('path/to/file.DTA',delimiter)
-%       E2A = ('path/to/file.DTA',delimiter, extension)
+%       E2A ('path/to/file.DTA')
+%       E2A (delimiter)
+%       E2A ('path/to/file.DTA',delimiter)
+%       E2A ('path/to/file.DTA',delimiter, extension)
+%       E2A ('path/to/file.DTA',delimiter, extension, interval)
 %
 % Inputs:
 %       input1      - The path to a file
 %       input2      - Delimiter is the seperator in the file ',' for comma
-%                       ' ' for space, etc
+%                       ' ' for space, '\t' for tab, etc
 %       input3      - Extension is the file format to output
-%                       eg '.csv' , '.txt', etc
+%                       eg '.csv' , '.txt', '.dat', etc
+%       input4      - Desired magnetic field interval
+%                       eg 0.2 to use interpolation to give data points
+%                       every 0.2 Gauss
 %
 % Outputs:
 %       output      - a file
@@ -43,7 +47,7 @@ function [ASCII] = e2a(varargin)
 %
 % MAT-files required:   none
 %
-% See also: CWPLOT CWZERO CWNORM
+% See also: E2AF BRUKERREAD
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -55,7 +59,7 @@ function [ASCII] = e2a(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v12.2
+% M. Bye v13.04
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -63,13 +67,21 @@ function [ASCII] = e2a(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/epr-converter-e2a
-% Feb 2012;     Last revision: 08-February-2012
+% Mar 2013;     Last revision: 15-March-2013
 %
 % Approximate coding time of file:
 %               3 hours
 %
 %
 % Version history:
+% Mar 13        Update for file errors.
+%                   Changed input address - removes conflict with address
+%                   command
+%                   Added switch for output to the same folder - so that if
+%                   the folder is the current folder it still works
+%               Added an interpolation function so that the output data
+%               files can have set interval between data-points
+%
 % Feb 12        Update for file load error and inputs have changed allowing
 %               for a command line file selection.
 %
@@ -91,9 +103,9 @@ switch nargin
             return
         end
         
-        address = [directory,file];
+        in_address = [directory,file];
         
-        [mag_field, abs] = BrukerRead(address);
+        [mag_field, abs] = BrukerRead(in_address);
     
         % File selected via command line
     case 1
@@ -107,10 +119,10 @@ switch nargin
             delimiter = ',';
             extension = '.csv';
             
-            address = varargin{1};
-            [~,f,e] = fileparts(address);
+            in_address = varargin{1};
+            [~,f,e] = fileparts(in_address);
             file = [f e];
-            [mag_field, abs] = BrukerRead(address);
+            [mag_field, abs] = BrukerRead(in_address);
             
             % For delimiter
         elseif ischar(varargin{1}) && length(varargin{1}) == 1
@@ -127,18 +139,18 @@ switch nargin
                 return
             end
             
-            address = [directory,file];
+            in_address = [directory,file];
             
-            [mag_field, abs] = BrukerRead(address);
+            [mag_field, abs] = BrukerRead(in_address);
         end
        
         % File and delimiter selection
     case 2
         if exist(varargin{1},'file');
-            address = varargin{1};
-            [~,f,e] = fileparts(address);
+            in_address = varargin{1};
+            [~,f,e] = fileparts(in_address);
             file = [f e];
-            [mag_field, abs] = BrukerRead(address);
+            [mag_field, abs] = BrukerRead(in_address);
         end
 
         delimiter = varargin{2};
@@ -146,22 +158,49 @@ switch nargin
         % File, delimiter and extension selection
     case 3
         if exist(varargin{1},'file');
-            address = varargin{1};
-            [~,f,e] = fileparts(address);
+            in_address = varargin{1};
+            [~,f,e] = fileparts(in_address);
             file = [f e];
-            [mag_field, abs] = BrukerRead(address);
+            [mag_field, abs] = BrukerRead(in_address);
         end
         
         delimiter = varargin{2};
         extension = varargin{3};
+        
+        % File, delimiter, extension and interval selection
+    case 4
+        if exist(varargin{1},'file');
+            in_address = varargin{1};
+            [~,f,e] = fileparts(in_address);
+            file = [f e];
+            [mag_field, abs] = BrukerRead(in_address);
+        end
+        
+        delimiter = varargin{2};
+        extension = varargin{3};
+        interval  = varargin{4};
 end
 
 % File loaded details
-[directory,name,~] = fileparts(address);
+[directory,name,~] = fileparts(in_address);
 
+% ========================================================================
+% Data step
+% ========================================================================
 
+if exist('interval','var')
+    x = (mag_field(1):interval:mag_field(end));
+    y = interp1(mag_field,abs,x);
 
-z = [mag_field abs];
+    z = [x' y'];
+    
+else
+    z = [mag_field abs];
+end
+
+% ========================================================================
+% Output arguments
+% ========================================================================
 
 % select ouput method
 prompt = questdlg('Do you wish to convert to the same folder?','Export','Yes','No','Yes');
@@ -170,7 +209,13 @@ prompt = questdlg('Do you wish to convert to the same folder?','Export','Yes','N
 % output according to choice
 switch prompt,
     case 'Yes'
-        dlmwrite([directory,'/',name,extension], z, 'delimiter', delimiter,'precision', '%.13f');
+        % If doing from the current folder, using CLI file entry, then
+        % directory is blank and we have a leading '/'
+        if size(directory,1) == 0
+            dlmwrite([name,extension], z, 'delimiter', delimiter,'precision', '%.13f');
+        else
+            dlmwrite([directory,'/',name,extension], z, 'delimiter', delimiter,'precision', '%.13f');
+        end
 
     case 'No'
               
@@ -209,9 +254,16 @@ switch prompt,
                 out_add = fullfile(out_path,out_name);
                 
                 dlmwrite(out_add, z, 'delimiter', delimiter,'precision', '%.13f');
+                
+            case 4
+                [out_name, out_path] = uiputfile(['*' delimiter], 'Save output as...');
+                out_add = fullfile(out_path,out_name);
+                
+                dlmwrite(out_add, z, 'delimiter', delimiter,'precision', '%.13f');
+                
         end
-       name = out_name;
+
 end
 
 % Message user
-fprintf('File %s has been successfully converted to %s%s \n \n', file, name, extension)
+fprintf('File %s has been successfully converted to %s%s \n \n', file, out_name, extension)

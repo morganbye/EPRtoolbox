@@ -24,7 +24,7 @@
 <div class="box"><strong>PDBIMPORT loads a MMM rotamers PDB file into MATLAB</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>function [structure,ID,Chain,Residue] = pdbimportMMM(varargin) </strong></div>
+<div class="box"><strong>function [structure,ID,Chain,Model,Residue,Label,Temp] = pdbimportMMM(varargin) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> PDBIMPORT loads a MMM rotamers PDB file into MATLAB
@@ -53,6 +53,19 @@
 
  Outputs:
     output1    - a structure containing all the PDB information
+
+    output2    - ID
+                   the MMM model name
+    output3    - Chain
+                   the chain of the attached rotamer
+    output4    - Model
+                   the model of the attached rotamer
+    output5    - Residue
+                   the residue number of the rotamer
+    output6    - Label
+                   the type of label added - R1A/IA1
+    output7    - Temp
+                   the labelling temperature - 175/298 K
 
  Example:
     proteinA = pdbimport
@@ -83,7 +96,7 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [structure,ID,Chain,Residue] = pdbimportMMM(varargin)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [structure,ID,Chain,Model,Residue,Label,Temp] = pdbimportMMM(varargin)</a>
 0002 
 0003 <span class="comment">% PDBIMPORT loads a MMM rotamers PDB file into MATLAB</span>
 0004 <span class="comment">%</span>
@@ -112,175 +125,198 @@ This function is called by:
 0027 <span class="comment">% Outputs:</span>
 0028 <span class="comment">%    output1    - a structure containing all the PDB information</span>
 0029 <span class="comment">%</span>
-0030 <span class="comment">% Example:</span>
-0031 <span class="comment">%    proteinA = pdbimport</span>
-0032 <span class="comment">%                   GUI import of file</span>
-0033 <span class="comment">%</span>
-0034 <span class="comment">%    proteinB = pdbimport('1QTJ')</span>
-0035 <span class="comment">%                   load PDB: 1QTJ directly from pdb.org</span>
-0036 <span class="comment">%</span>
-0037 <span class="comment">% Other m-files required:   BrukerRead</span>
-0038 <span class="comment">%</span>
-0039 <span class="comment">% Subfunctions:             none</span>
-0040 <span class="comment">%</span>
-0041 <span class="comment">% MAT-files required:       none</span>
+0030 <span class="comment">%    output2    - ID</span>
+0031 <span class="comment">%                   the MMM model name</span>
+0032 <span class="comment">%    output3    - Chain</span>
+0033 <span class="comment">%                   the chain of the attached rotamer</span>
+0034 <span class="comment">%    output4    - Model</span>
+0035 <span class="comment">%                   the model of the attached rotamer</span>
+0036 <span class="comment">%    output5    - Residue</span>
+0037 <span class="comment">%                   the residue number of the rotamer</span>
+0038 <span class="comment">%    output6    - Label</span>
+0039 <span class="comment">%                   the type of label added - R1A/IA1</span>
+0040 <span class="comment">%    output7    - Temp</span>
+0041 <span class="comment">%                   the labelling temperature - 175/298 K</span>
 0042 <span class="comment">%</span>
-0043 <span class="comment">%</span>
-0044 <span class="comment">% See also: EPRTOOLBOX PDBSPLITTER</span>
-0045 
-0046 <span class="comment">%                                        _                             _</span>
-0047 <span class="comment">%                                       | |                           | |</span>
-0048 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
-0049 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
-0050 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
-0051 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
-0052 <span class="comment">%                       __/ |                   __/ |</span>
-0053 <span class="comment">%                      |___/                   |___/</span>
-0054 <span class="comment">%</span>
-0055 <span class="comment">% M. Bye v12.9</span>
+0043 <span class="comment">% Example:</span>
+0044 <span class="comment">%    proteinA = pdbimport</span>
+0045 <span class="comment">%                   GUI import of file</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">%    proteinB = pdbimport('1QTJ')</span>
+0048 <span class="comment">%                   load PDB: 1QTJ directly from pdb.org</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% Other m-files required:   BrukerRead</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% Subfunctions:             none</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% MAT-files required:       none</span>
+0055 <span class="comment">%</span>
 0056 <span class="comment">%</span>
-0057 <span class="comment">% Author:       Morgan Bye</span>
-0058 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
-0059 <span class="comment">%               University of East Anglia</span>
-0060 <span class="comment">%               NORWICH, UK</span>
-0061 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
-0062 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/brukerread</span>
-0063 <span class="comment">% Aug 2012;     Last revision: 23-August-2012</span>
-0064 <span class="comment">%</span>
-0065 <span class="comment">% Approximate coding time of file:</span>
-0066 <span class="comment">%               12 hours</span>
+0057 <span class="comment">% See also: EPRTOOLBOX PDBSPLITTER</span>
+0058 
+0059 <span class="comment">%                                        _                             _</span>
+0060 <span class="comment">%                                       | |                           | |</span>
+0061 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0062 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0063 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0064 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0065 <span class="comment">%                       __/ |                   __/ |</span>
+0066 <span class="comment">%                      |___/                   |___/</span>
 0067 <span class="comment">%</span>
-0068 <span class="comment">%</span>
-0069 <span class="comment">% Version history:</span>
-0070 <span class="comment">% Aug 12        Initial release</span>
-0071 
-0072 <span class="comment">% Arguments in</span>
-0073 <span class="comment">% ===================================================</span>
-0074 
-0075 <span class="keyword">switch</span> nargin
-0076     <span class="keyword">case</span> 0
-0077         
-0078         [file, directory] = uigetfile({<span class="string">'*.pdb'</span>,<span class="string">'PDB file (*.pdb)'</span>},<span class="string">'Load MMM rotamer file'</span>);
-0079         
-0080         <span class="keyword">if</span> file == 0
-0081             error(sprintf(<span class="string">'\nFile load canceled by user'</span>))
-0082         <span class="keyword">end</span>
-0083         
-0084         path = fullfile(directory, file);
-0085         
-0086     <span class="keyword">case</span> 1
-0087         
-0088         path = varargin{1};
-0089         [directory,file,~] = fileparts(path);
-0090         
-0091         
-0092 <span class="keyword">end</span>
-0093 
-0094 progress = waitbar(0.2,<span class="string">'Opening file'</span>);
-0095 
-0096 <span class="comment">% Read only, open file</span>
-0097 fid = fopen(path,<span class="string">'r'</span>);
-0098 
-0099 <span class="comment">% 80 characters doesn't work</span>
-0100 <span class="comment">% fullPDB = textscan(fid,'%80c','delimiter',' ');</span>
-0101 fullPDB = textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
-0102 
-0103 <span class="comment">% Close the file to save memory</span>
-0104 fclose(fid);
-0105 
+0068 <span class="comment">% M. Bye v13.06</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% Author:       Morgan Bye</span>
+0071 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0072 <span class="comment">%               University of East Anglia</span>
+0073 <span class="comment">%               NORWICH, UK</span>
+0074 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0075 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/</span>
+0076 <span class="comment">% May 2013;     Last revision: 06-May-2013</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">% Version history:</span>
+0079 <span class="comment">% May 13        &gt; Removed progress bar</span>
+0080 <span class="comment">%               &gt; Header, title and remark lines are saved</span>
+0081 <span class="comment">%               &gt; Structure information is gained from header section not</span>
+0082 <span class="comment">%                   from file name, in case user renamed the file.</span>
+0083 <span class="comment">%               &gt; File load error handling</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">% Aug 12        Initial release</span>
+0086 
+0087 <span class="comment">% Arguments in</span>
+0088 <span class="comment">% ===================================================</span>
+0089 
+0090 <span class="keyword">switch</span> nargin
+0091     <span class="keyword">case</span> 0
+0092         
+0093         [file, directory] = uigetfile({<span class="string">'*.pdb'</span>,<span class="string">'PDB file (*.pdb)'</span>},<span class="string">'Load MMM rotamer file'</span>);
+0094         
+0095         <span class="keyword">if</span> file == 0
+0096             <span class="keyword">return</span>
+0097         <span class="keyword">end</span>
+0098         
+0099         path = fullfile(directory, file);
+0100         
+0101     <span class="keyword">case</span> 1
+0102         
+0103         path = varargin{1};
+0104         
+0105 <span class="keyword">end</span>
 0106 
-0107 <span class="comment">% File splitting</span>
-0108 <span class="comment">% ===================================================</span>
-0109 
-0110 progress = waitbar(0.4,progress,<span class="string">'Reading file line by line...'</span>);
-0111 
-0112 NoLines = size(fullPDB{1},1);
+0107 <span class="comment">% Read only, open file</span>
+0108 <span class="keyword">try</span>
+0109     fid = fopen(path,<span class="string">'r'</span>);
+0110 <span class="keyword">catch</span>
+0111     error(<span class="string">'Selected file could not be opened'</span>)
+0112 <span class="keyword">end</span>
 0113 
-0114 <span class="comment">% Start at line 5 to ignore the MMM header section</span>
-0115 <span class="keyword">for</span> k = 5:NoLines
-0116     
-0117     <span class="keyword">switch</span> char(strtok(fullPDB{1}(k,:)))
-0118         
-0119         <span class="keyword">case</span> <span class="string">'HETATM'</span>
-0120             structure.HeterogenAtom(k,:) = (fullPDB{1}(k,:));
-0121             
-0122         <span class="keyword">case</span> <span class="string">'CONECT'</span>
-0123             structure.Connectivity(k,:) = (fullPDB{1}(k,:));
+0114 <span class="comment">% 80 characters doesn't work due to MMM's pdb write functionality</span>
+0115 <span class="comment">% fullPDB = textscan(fid,'%80c','delimiter',' ');</span>
+0116 fullPDB = textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
+0117 
+0118 <span class="comment">% Close the file to save memory</span>
+0119 fclose(fid);
+0120 
+0121 
+0122 <span class="comment">% File splitting</span>
+0123 <span class="comment">% ===================================================</span>
 0124 
-0125     <span class="keyword">end</span>
-0126 <span class="keyword">end</span>
-0127 
-0128 
-0129 <span class="comment">% ATOM SORTING</span>
-0130 <span class="comment">% ===================================================</span>
-0131 
-0132 progress = waitbar(0.6,progress,<span class="string">'Analyzing atoms...'</span>);
-0133 
-0134 <span class="comment">% Atoms</span>
-0135 <span class="keyword">if</span> ~isfield(structure,<span class="string">'HeterogenAtom'</span>)
-0136     structure.HeterogenAtom = [];
-0137 <span class="keyword">end</span>
-0138 
-0139 <span class="comment">% Make all the same length</span>
-0140 z = strcat(structure.HeterogenAtom);
-0141 
-0142 <span class="comment">% Remove blank cells, and string the result back</span>
-0143 x = char(z(~cellfun(@isempty,z)));
-0144 
-0145 <span class="comment">% Split each string into several strings</span>
-0146 <span class="keyword">for</span> k = 1:size(x,1)
-0147     Atoms.Preformated{k} = strread(x(k,:),<span class="string">'%s'</span>);
-0148                 <span class="comment">% This is a lazy split as the rotamer file will never go</span>
-0149                 <span class="comment">% high enough to not have a space between columns</span>
-0150 <span class="keyword">end</span>
+0125 NoLines = size(fullPDB{1},1);
+0126 
+0127 <span class="keyword">for</span> k = 1:NoLines
+0128     
+0129     <span class="keyword">switch</span> char(strtok(fullPDB{1}(k,:)))
+0130         
+0131         <span class="keyword">case</span> <span class="string">'HEADER'</span>
+0132             structure.Header(k,:)        = (fullPDB{1}(k,:));
+0133             
+0134         <span class="keyword">case</span> <span class="string">'TITLE'</span>
+0135             structure.Title(k,:)         = (fullPDB{1}(k,:));
+0136             
+0137         <span class="keyword">case</span> <span class="string">'REMARK'</span>
+0138             structure.Remark(k,:)        = (fullPDB{1}(k,:));
+0139         
+0140         <span class="keyword">case</span> <span class="string">'HETATM'</span>
+0141             structure.HeterogenAtom(k,:) = (fullPDB{1}(k,:));
+0142             
+0143         <span class="keyword">case</span> <span class="string">'CONECT'</span>
+0144             structure.Connectivity(k,:)  = (fullPDB{1}(k,:));
+0145 
+0146     <span class="keyword">end</span>
+0147 <span class="keyword">end</span>
+0148 
+0149 <span class="comment">% HEADER SECTION</span>
+0150 <span class="comment">% ===================================================</span>
 0151 
-0152 <span class="comment">% Convert the unformatted strings into actual fields</span>
-0153 <span class="keyword">for</span> k = 1:numel(Atoms.Preformated)
-0154     structure.Model.Atom(k).AtomSerNo = str2num(cell2mat(Atoms.Preformated{k}(2)));
-0155     structure.Model.Atom(k).AtomName  = cell2mat(Atoms.Preformated{k}(3));
-0156     structure.Model.Atom(k).resName   = cell2mat(Atoms.Preformated{k}(4));
-0157     structure.Model.Atom(k).chainID   = cell2mat(Atoms.Preformated{k}(5));
-0158     structure.Model.Atom(k).resSeq    = str2num(cell2mat(Atoms.Preformated{k}(6)));
-0159     structure.Model.Atom(k).X         = str2num(cell2mat(Atoms.Preformated{k}(7)));
-0160     structure.Model.Atom(k).Y         = str2num(cell2mat(Atoms.Preformated{k}(8)));
-0161     structure.Model.Atom(k).Z         = str2num(cell2mat(Atoms.Preformated{k}(9)));
-0162     structure.Model.Atom(k).occupancy = str2num(cell2mat(Atoms.Preformated{k}(10)));
-0163     structure.Model.Atom(k).tempFactor= str2num(cell2mat(Atoms.Preformated{k}(11)));
-0164     structure.Model.Atom(k).element   = cell2mat(Atoms.Preformated{k}(12));
-0165 <span class="keyword">end</span>
+0152 <span class="comment">% Get rotamer info from file name</span>
+0153 rotamerInfo = textscan(structure.Title{2},<span class="keyword">...</span>
+0154     <span class="string">'TITLE [%4c](%1c){%d}%d  LABELED WITH %3c AT %d K'</span>);
+0155 
+0156 ID =        rotamerInfo(1);
+0157 Chain =     rotamerInfo(2);
+0158 Model =     rotamerInfo{3};
+0159 Residue =   rotamerInfo{4};
+0160 Label =     rotamerInfo(5);
+0161 Temp =      rotamerInfo{6};
+0162 
+0163 
+0164 <span class="comment">% ATOM SORTING</span>
+0165 <span class="comment">% ===================================================</span>
 0166 
-0167 
-0168 <span class="comment">% CONNECTIVITY</span>
-0169 <span class="comment">% ===================================================</span>
-0170 
-0171 progress = waitbar(0.8,progress,<span class="string">'Analyzing connectivity between atoms...'</span>);
-0172 
-0173 <span class="comment">% Remove blank cells and then string them back</span>
-0174 structure.Connectivity = char(structure.Connectivity(~cellfun(@isempty,structure.Connectivity)));
-0175 
-0176 <span class="comment">% MMM rotamer file ~ 100 rotamers each with 41 atoms</span>
-0177 <span class="keyword">for</span> k = 1:size(structure.Connectivity,1)/41
-0178     structure.RotCon{k} = structure.Connectivity((k*41)-40:k*41,:);
-0179 <span class="keyword">end</span>
-0180 
-0181 
-0182 <span class="comment">% OUTPUTS</span>
-0183 <span class="comment">% ===================================================</span>
+0167 <span class="comment">% Atoms</span>
+0168 <span class="keyword">if</span> ~isfield(structure,<span class="string">'HeterogenAtom'</span>)
+0169     structure.HeterogenAtom = [];
+0170 <span class="keyword">end</span>
+0171 
+0172 <span class="comment">% Make all the same length</span>
+0173 z = strcat(structure.HeterogenAtom);
+0174 
+0175 <span class="comment">% Remove blank cells, and string the result back</span>
+0176 x = char(z(~cellfun(@isempty,z)));
+0177 
+0178 <span class="comment">% Split each string into several strings</span>
+0179 <span class="keyword">for</span> k = 1:size(x,1)
+0180     Atoms.Preformated{k} = strread(x(k,:),<span class="string">'%s'</span>);
+0181                 <span class="comment">% This is a lazy split as the rotamer file will never go</span>
+0182                 <span class="comment">% high enough to not have a space between columns</span>
+0183 <span class="keyword">end</span>
 0184 
-0185 progress = waitbar(1.0,progress,<span class="string">'Finalizing...'</span>);
-0186 
-0187 <span class="comment">% Get rotamer info from file name</span>
-0188 rotamerInfo = textscan(file,<span class="string">'rotamers_[%4c](%1c){%d}'</span>);
-0189 
-0190 ID =        rotamerInfo(1);
-0191 Chain =     rotamerInfo(2);
-0192 Residue =   rotamerInfo(3);
-0193 
-0194 <span class="comment">% Tidy up structure</span>
-0195 clear structure.Connectivity;
-0196 clear structure.HeterogenAtom;
-0197 
-0198 close(progress);</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 12:00:44 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0185 <span class="comment">% Convert the unformatted strings into actual fields</span>
+0186 <span class="keyword">for</span> k = 1:numel(Atoms.Preformated)
+0187     structure.Model.Atom(k).AtomSerNo = str2num(cell2mat(Atoms.Preformated{k}(2)));
+0188     structure.Model.Atom(k).AtomName  = cell2mat(Atoms.Preformated{k}(3));
+0189     structure.Model.Atom(k).resName   = cell2mat(Atoms.Preformated{k}(4));
+0190     structure.Model.Atom(k).chainID   = cell2mat(Atoms.Preformated{k}(5));
+0191     structure.Model.Atom(k).resSeq    = str2num(cell2mat(Atoms.Preformated{k}(6)));
+0192     structure.Model.Atom(k).X         = str2num(cell2mat(Atoms.Preformated{k}(7)));
+0193     structure.Model.Atom(k).Y         = str2num(cell2mat(Atoms.Preformated{k}(8)));
+0194     structure.Model.Atom(k).Z         = str2num(cell2mat(Atoms.Preformated{k}(9)));
+0195     structure.Model.Atom(k).occupancy = str2num(cell2mat(Atoms.Preformated{k}(10)));
+0196     structure.Model.Atom(k).tempFactor= str2num(cell2mat(Atoms.Preformated{k}(11)));
+0197     structure.Model.Atom(k).element   = cell2mat(Atoms.Preformated{k}(12));
+0198 <span class="keyword">end</span>
+0199 
+0200 
+0201 <span class="comment">% CONNECTIVITY</span>
+0202 <span class="comment">% ===================================================</span>
+0203 
+0204 <span class="comment">% Remove blank cells and then string them back</span>
+0205 structure.Connectivity = char(structure.Connectivity(~cellfun(@isempty,structure.Connectivity)));
+0206 
+0207 <span class="keyword">switch</span> Label{1}
+0208     <span class="keyword">case</span> <span class="string">'R1A'</span>
+0209         <span class="comment">% MMM rotamer file ~ 100 rotamers each with 36 atoms</span>
+0210         <span class="keyword">for</span> k = 1:size(structure.Connectivity,1)/36
+0211             structure.RotCon{k} = structure.Connectivity((k*36)-35:k*36,:);
+0212         <span class="keyword">end</span>
+0213 
+0214     <span class="keyword">case</span> <span class="string">'IA1'</span>
+0215         <span class="comment">% MMM rotamer file ~ 100 rotamers each with 41 atoms</span>
+0216         <span class="keyword">for</span> k = 1:size(structure.Connectivity,1)/41
+0217             structure.RotCon{k} = structure.Connectivity((k*41)-40:k*41,:);
+0218         <span class="keyword">end</span>
+0219 <span class="keyword">end</span>
+0220 
+0221</pre></div>
+<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

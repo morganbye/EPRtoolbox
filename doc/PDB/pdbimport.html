@@ -24,7 +24,7 @@
 <div class="box"><strong>PDBIMPORT loads a PDB file into MATLAB</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>function structure = pdbimport(varargin) </strong></div>
+<div class="box"><strong>function structure = MISHAP_pdbimport(varargin) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> PDBIMPORT loads a PDB file into MATLAB
@@ -91,7 +91,7 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function structure = pdbimport(varargin)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function structure = MISHAP_pdbimport(varargin)</a>
 0002 
 0003 <span class="comment">% PDBIMPORT loads a PDB file into MATLAB</span>
 0004 <span class="comment">%</span>
@@ -153,289 +153,289 @@ This function is called by:
 0060 <span class="comment">%                       __/ |                   __/ |</span>
 0061 <span class="comment">%                      |___/                   |___/</span>
 0062 <span class="comment">%</span>
-0063 <span class="comment">% M. Bye v12.9</span>
+0063 <span class="comment">% M. Bye v13.06</span>
 0064 <span class="comment">%</span>
 0065 <span class="comment">% Author:       Morgan Bye</span>
 0066 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
 0067 <span class="comment">%               University of East Anglia</span>
 0068 <span class="comment">%               NORWICH, UK</span>
 0069 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
-0070 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/</span>
-0071 <span class="comment">% Aug 2012;     Last revision: 23-August-2012</span>
+0070 <span class="comment">% Website:      http://www.morganbye.net/mishap/</span>
+0071 <span class="comment">% May 2013;     Last revision: 06-May-2013</span>
 0072 <span class="comment">%</span>
 0073 <span class="comment">% Approximate coding time of file:</span>
 0074 <span class="comment">%               12 hours</span>
 0075 <span class="comment">%</span>
 0076 <span class="comment">%</span>
 0077 <span class="comment">% Version history:</span>
-0078 <span class="comment">% Aug 12        &gt; After initial load, text is split using the \t delimiter</span>
-0079 <span class="comment">%                   rather than assuming that the PDB is true to the PDB</span>
-0080 <span class="comment">%                   format and uses exactly 80 characters per line</span>
-0081 <span class="comment">%               &gt; Better file handling/closing to reduce memory load</span>
-0082 <span class="comment">%               &gt; Replacement of strfind with textscan commands for</span>
-0083 <span class="comment">%                   MATLAB futureproofing</span>
-0084 <span class="comment">%               &gt; Removed the progress bar, as it actually was massively</span>
-0085 <span class="comment">%                   slowing down the file load. Replaced with display</span>
-0086 <span class="comment">%                   commands to the command window, which better informs</span>
-0087 <span class="comment">%                   user of what is happening</span>
-0088 <span class="comment">%</span>
-0089 <span class="comment">% Feb 12        Complete reworking of function</span>
-0090 <span class="comment">%               - URL read added</span>
-0091 <span class="comment">%               - direct download from pdb.org added</span>
-0092 <span class="comment">%               - complete reworking of atom and sequence handling</span>
-0093 <span class="comment">%               - better progress bar functionality</span>
-0094 <span class="comment">%</span>
-0095 <span class="comment">% Jun 11        Initial release</span>
-0096 
-0097 <span class="comment">% Arguments in</span>
-0098 <span class="comment">% ===================================================</span>
+0078 <span class="comment">% May 13        &gt; Removed messaging to command window</span>
+0079 <span class="comment">%               &gt; Handles PDBs without a sequence</span>
+0080 <span class="comment">%</span>
+0081 <span class="comment">% Aug 12        &gt; After initial load, text is split using the \t delimiter</span>
+0082 <span class="comment">%                   rather than assuming that the PDB is true to the PDB</span>
+0083 <span class="comment">%                   format and uses exactly 80 characters per line</span>
+0084 <span class="comment">%               &gt; Better file handling/closing to reduce memory load</span>
+0085 <span class="comment">%               &gt; Replacement of strfind with textscan commands for</span>
+0086 <span class="comment">%                   MATLAB futureproofing</span>
+0087 <span class="comment">%               &gt; Removed the progress bar, as it actually was massively</span>
+0088 <span class="comment">%                   slowing down the file load. Replaced with display</span>
+0089 <span class="comment">%                   commands to the command window, which better informs</span>
+0090 <span class="comment">%                   user of what is happening</span>
+0091 <span class="comment">%</span>
+0092 <span class="comment">% Feb 12        Complete reworking of function</span>
+0093 <span class="comment">%               - URL read added</span>
+0094 <span class="comment">%               - direct download from pdb.org added</span>
+0095 <span class="comment">%               - complete reworking of atom and sequence handling</span>
+0096 <span class="comment">%               - better progress bar functionality</span>
+0097 <span class="comment">%</span>
+0098 <span class="comment">% Jun 11        Initial release</span>
 0099 
-0100 <span class="keyword">switch</span> nargin
-0101     <span class="keyword">case</span> 0
-0102         
-0103         [file, directory] = uigetfile({<span class="string">'*.pdb'</span>,<span class="string">'PDB file (*.pdb)'</span>},<span class="string">'Load PDB file'</span>);
-0104         
-0105         <span class="keyword">if</span> file == 0
-0106             error(sprintf(<span class="string">'\nFile load canceled by user'</span>))
-0107         <span class="keyword">end</span>
-0108         
-0109         path = fullfile(directory, file);
-0110         
-0111         fid = fopen(path,<span class="string">'r'</span>);
-0112         
-0113         fullPDB = textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
-0114         
-0115         fclose(fid);
-0116 
-0117     <span class="keyword">case</span> 1
-0118         
-0119         <span class="comment">% Find out what has been input and act accordingly.</span>
-0120         
-0121         <span class="comment">% File</span>
-0122         <span class="comment">% ====</span>
-0123         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
-0124             
-0125             path = varargin{1};
-0126             [address,filename,~] = fileparts(path);
+0100 <span class="comment">% Arguments in</span>
+0101 <span class="comment">% ===================================================</span>
+0102 
+0103 <span class="keyword">switch</span> nargin
+0104     <span class="keyword">case</span> 0
+0105         
+0106         [file, directory] = uigetfile({<span class="string">'*.pdb'</span>,<span class="string">'PDB file (*.pdb)'</span>},<span class="string">'Load PDB file'</span>);
+0107         
+0108         <span class="keyword">if</span> file == 0
+0109             error(<span class="string">'\nFile load canceled by user'</span>)
+0110         <span class="keyword">end</span>
+0111         
+0112         path = fullfile(directory, file);
+0113         
+0114         fid = fopen(path,<span class="string">'r'</span>);
+0115         
+0116         fullPDB = textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
+0117         
+0118         fclose(fid);
+0119 
+0120     <span class="keyword">case</span> 1
+0121         
+0122         <span class="comment">% Find out what has been input and act accordingly.</span>
+0123         
+0124         <span class="comment">% File</span>
+0125         <span class="comment">% ====</span>
+0126         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
 0127             
-0128             fid = fopen(path,<span class="string">'r'</span>);
-0129             
-0130             fullPDB = textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
-0131             
-0132             fclose(fid);
-0133 
+0128             path = varargin{1};
+0129             [address,filename,~] = fileparts(path);
+0130             
+0131             fid = fopen(path,<span class="string">'r'</span>);
+0132             
+0133             fullPDB = textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
 0134             
-0135         <span class="comment">% Web address</span>
-0136         <span class="comment">% ===========</span>
-0137         <span class="keyword">elseif</span> ~isempty(strfind(varargin{1},<span class="string">'://'</span>))
-0138             
-0139             <span class="comment">% Catch error if they dont have Java correctly set up</span>
-0140             <span class="keyword">if</span> (~usejava(<span class="string">'jvm'</span>))
-0141                 error(sprintf(<span class="string">'\nLoading from an online source requires Java'</span>))
-0142             <span class="keyword">end</span>
-0143             
-0144             <span class="comment">% Try to get PDB from provided URL</span>
-0145             <span class="keyword">try</span>
-0146                 disp(<span class="string">'Fetching PDB...'</span>)
-0147                 file = urlread(varargin{1});
-0148                 
-0149                 <span class="comment">% Replace HTML &quot;&amp;&quot; into MATLAB format</span>
-0150                 file = strrep(file,<span class="string">'&amp;amp;'</span>,<span class="string">'&amp;'</span>);
+0135             fclose(fid);
+0136 
+0137             
+0138         <span class="comment">% Web address</span>
+0139         <span class="comment">% ===========</span>
+0140         <span class="keyword">elseif</span> ~isempty(strfind(varargin{1},<span class="string">'://'</span>))
+0141             
+0142             <span class="comment">% Catch error if they dont have Java correctly set up</span>
+0143             <span class="keyword">if</span> (~usejava(<span class="string">'jvm'</span>))
+0144                 error(<span class="string">'\nLoading from an online source requires Java'</span>)
+0145             <span class="keyword">end</span>
+0146             
+0147             <span class="comment">% Try to get PDB from provided URL</span>
+0148             <span class="keyword">try</span>
+0149                 disp(<span class="string">'Fetching PDB...'</span>)
+0150                 file = urlread(varargin{1});
 0151                 
-0152                 <span class="comment">% Test that something has been returned that resembles a</span>
-0153                 <span class="comment">% PDB file format, and produce error otherwise</span>
-0154                 <span class="keyword">if</span> isempty(strfind(s,<span class="string">'HEADER'</span>))
-0155                     error(<span class="string">'No PDB matching your input could be imported.'</span>)
-0156                 <span class="keyword">end</span>
-0157                 
-0158                 disp(<span class="string">'PDB found! Loading...'</span>)
-0159                 
-0160                 <span class="comment">% Find length of file by searching for the END term</span>
-0161                 [~, ending] = regexp(file,<span class="string">'\nEND\s.*\n'</span>);
-0162 
-0163                 fullPDB = textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
-0164                 
-0165             <span class="keyword">catch</span>
-0166                 error(<span class="string">'No PDB matching your input could be imported.'</span>)
-0167             <span class="keyword">end</span>
-0168             
-0169             fclose(fid);
-0170         
-0171         <span class="comment">% PDB code</span>
-0172         <span class="comment">% ========</span>
-0173         <span class="keyword">elseif</span> ischar(varargin{1}) &amp;&amp; (length(varargin{1}) == 4 || length(varargin{1}) == 6)
-0174             
-0175             <span class="comment">% Simple edit, encase the function has been handed a string in</span>
-0176             <span class="comment">% quotes ie. '1A2C'</span>
-0177             <span class="keyword">if</span> length(varargin{1}) == 6
-0178                 varargin{1} = varargin{1}(2:5);
-0179             <span class="keyword">end</span>
-0180             
-0181             <span class="comment">% Put together address to download</span>
-0182             pdbaddress = [<span class="string">'http://www.rcsb.org/pdb/downloadFile.do?fileFormat=pdb&amp;compression=NO&amp;structureId='</span> varargin{1}];
+0152                 <span class="comment">% Replace HTML &quot;&amp;&quot; into MATLAB format</span>
+0153                 file = strrep(file,<span class="string">'&amp;amp;'</span>,<span class="string">'&amp;'</span>);
+0154                 
+0155                 <span class="comment">% Test that something has been returned that resembles a</span>
+0156                 <span class="comment">% PDB file format, and produce error otherwise</span>
+0157                 <span class="keyword">if</span> isempty(strfind(s,<span class="string">'HEADER'</span>))
+0158                     error(<span class="string">'No PDB matching your input could be imported.'</span>)
+0159                 <span class="keyword">end</span>
+0160                 
+0161                 disp(<span class="string">'PDB found! Loading...'</span>)
+0162                 
+0163                 <span class="comment">% Find length of file by searching for the END term</span>
+0164                 [~, ending] = regexp(file,<span class="string">'\nEND\s.*\n'</span>);
+0165 
+0166                 fullPDB = textscan(fid,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
+0167                 
+0168             <span class="keyword">catch</span>
+0169                 error(<span class="string">'No PDB matching your input could be imported.'</span>)
+0170             <span class="keyword">end</span>
+0171             
+0172             fclose(fid);
+0173         
+0174         <span class="comment">% PDB code</span>
+0175         <span class="comment">% ========</span>
+0176         <span class="keyword">elseif</span> ischar(varargin{1}) &amp;&amp; (length(varargin{1}) == 4 || length(varargin{1}) == 6)
+0177             
+0178             <span class="comment">% Simple edit, encase the function has been handed a string in</span>
+0179             <span class="comment">% quotes ie. '1A2C'</span>
+0180             <span class="keyword">if</span> length(varargin{1}) == 6
+0181                 varargin{1} = varargin{1}(2:5);
+0182             <span class="keyword">end</span>
 0183             
-0184             disp(<span class="string">'Fetching PDB...'</span>)
-0185             
-0186             file = urlread(pdbaddress);              <span class="comment">% Get file</span>
-0187             
-0188             file = strrep(file,<span class="string">'&amp;amp;'</span>,<span class="string">'&amp;'</span>);         <span class="comment">% Replace HTML &quot;&amp;&quot; into MATLAB format</span>
-0189 
-0190             <span class="keyword">if</span> isempty(strfind(file,<span class="string">'HEADER'</span>))       <span class="comment">% Test that something has been returned</span>
-0191                 error(<span class="string">'No PDB matching your input could be imported.'</span>)
-0192             <span class="keyword">end</span>
-0193             
-0194             disp(<span class="string">'PDB found! Loading...'</span>)
-0195             
-0196             fullPDB = textscan(file,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
-0197             
-0198             fclose(fid);
-0199         
-0200         <span class="keyword">else</span>
-0201             error(sprintf(<span class="string">'\nFile does not exist or the URL was not recognised'</span>))
-0202         <span class="keyword">end</span>
-0203         
-0204 <span class="keyword">end</span>
-0205     
-0206 
-0207 <span class="comment">% File splitting</span>
-0208 <span class="comment">% ===================================================</span>
+0184             <span class="comment">% Put together address to download</span>
+0185             pdbaddress = [<span class="string">'http://www.rcsb.org/pdb/downloadFile.do?fileFormat=pdb&amp;compression=NO&amp;structureId='</span> varargin{1}];
+0186             
+0187             disp(<span class="string">'Fetching PDB...'</span>)
+0188             
+0189             file = urlread(pdbaddress);              <span class="comment">% Get file</span>
+0190             
+0191             file = strrep(file,<span class="string">'&amp;amp;'</span>,<span class="string">'&amp;'</span>);         <span class="comment">% Replace HTML &quot;&amp;&quot; into MATLAB format</span>
+0192 
+0193             <span class="keyword">if</span> isempty(strfind(file,<span class="string">'HEADER'</span>))       <span class="comment">% Test that something has been returned</span>
+0194                 error(<span class="string">'No PDB matching your input could be imported.'</span>)
+0195             <span class="keyword">end</span>
+0196             
+0197             disp(<span class="string">'PDB found! Loading...'</span>)
+0198             
+0199             fullPDB = textscan(file,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>,<span class="string">'\t'</span>);
+0200             
+0201             fclose(fid);
+0202         
+0203         <span class="keyword">else</span>
+0204             error(<span class="string">'\nFile does not exist or the URL was not recognised'</span>)
+0205         <span class="keyword">end</span>
+0206         
+0207 <span class="keyword">end</span>
+0208     
 0209 
-0210 r = size(fullPDB{1},1);
-0211 
-0212 disp(sprintf(<span class="string">'PDB loaded!\nNow reading through the file...'</span>))
-0213 
-0214 <span class="keyword">for</span> k = 1:r
-0215       
-0216     <span class="keyword">switch</span> char(strtok(fullPDB{1}(k,:)))
-0217         
-0218         <span class="keyword">case</span> <span class="string">'HEADER'</span>
-0219             structure.Header(k,:) = (fullPDB{1}(k,:));
-0220             
-0221         <span class="keyword">case</span> <span class="string">'OBSLTE'</span>
-0222             structure.Obsolete(k,:) = (fullPDB{1}(k,:));
-0223             
-0224         <span class="keyword">case</span> <span class="string">'TITLE'</span>
-0225             structure.Title(k,:) = (fullPDB{1}(k,:));
-0226             
-0227         <span class="keyword">case</span> <span class="string">'CAVEAT'</span>
-0228             structure.Caveat(k,:) = (fullPDB{1}(k,:));
-0229             
-0230         <span class="keyword">case</span> <span class="string">'COMPND'</span>
-0231             structure.Compound(k,:) = (fullPDB{1}(k,:));
-0232             
-0233         <span class="keyword">case</span> <span class="string">'SOURCE'</span>
-0234             structure.Source(k,:) = (fullPDB{1}(k,:));
-0235             
-0236         <span class="keyword">case</span> <span class="string">'KEYWDS'</span>
-0237             structure.Keywords(k,:) = (fullPDB{1}(k,:));
-0238             
-0239         <span class="keyword">case</span> <span class="string">'EXPDTA'</span>
-0240             structure.ExperimentalData(k,:) = (fullPDB{1}(k,:));
-0241             
-0242         <span class="keyword">case</span> <span class="string">'AUTHOR'</span>
-0243             structure.Authors(k,:) = (fullPDB{1}(k,:));
-0244             
-0245         <span class="keyword">case</span> <span class="string">'REVDAT'</span>
-0246             structure.RevisionDate(k,:) = (fullPDB{1}(k,:));
-0247             
-0248         <span class="keyword">case</span> <span class="string">'SPRSDE'</span>
-0249             structure.Superseded(k,:) = (fullPDB{1}(k,:));
-0250             
-0251         <span class="keyword">case</span> <span class="string">'JRNL'</span>
-0252             structure.Journal(k,:) = (fullPDB{1}(k,:));
-0253             
-0254         <span class="keyword">case</span> <span class="string">'REMARK'</span>
-0255             structure.Remark(k,:) = (fullPDB{1}(k,:));
-0256             
-0257         <span class="keyword">case</span> <span class="string">'DBREF'</span>
-0258             structure.DBReferences(k,:) = (fullPDB{1}(k,:));
-0259             
-0260         <span class="keyword">case</span> <span class="string">'SEQADV'</span>
-0261             structure.SequenceConflicts(k,:) = (fullPDB{1}(k,:));
-0262             
-0263         <span class="keyword">case</span> <span class="string">'SEQRES'</span>
-0264             structure.Sequence(k,:) = (fullPDB{1}(k,:));
-0265             
-0266         <span class="keyword">case</span> <span class="string">'FTNOTE'</span>
-0267             structure.Footnote(k,:) = (fullPDB{1}(k,:));
-0268             
-0269         <span class="keyword">case</span> <span class="string">'MODRES'</span>
-0270             structure.ModifiedResidues(k,:) = (fullPDB{1}(k,:));
-0271             
-0272         <span class="keyword">case</span> <span class="string">'HET'</span>
-0273             structure.Heterogen(k,:) = (fullPDB{1}(k,:));
-0274             
-0275         <span class="keyword">case</span> <span class="string">'HETNAM'</span>
-0276             structure.HeterogenName(k,:) = (fullPDB{1}(k,:));
-0277             
-0278         <span class="keyword">case</span> <span class="string">'HETSYN'</span>
-0279             structure.HeterogenSynonym(k,:) = (fullPDB{1}(k,:));
-0280             
-0281         <span class="keyword">case</span> <span class="string">'FORMUL'</span>
-0282             structure.Formula(k,:) = (fullPDB{1}(k,:));
-0283             
-0284         <span class="keyword">case</span> <span class="string">'HELIX'</span>
-0285             structure.Helix(k,:) = (fullPDB{1}(k,:));
-0286             
-0287         <span class="keyword">case</span> <span class="string">'SHEET'</span>
-0288             structure.Sheet(k,:) = (fullPDB{1}(k,:));
-0289             
-0290         <span class="keyword">case</span> <span class="string">'TURN'</span>
-0291             structure.Turn(k,:) = (fullPDB{1}(k,:));
-0292             
-0293         <span class="keyword">case</span> <span class="string">'SSBOND'</span>
-0294             structure.SSBond(k,:) = (fullPDB{1}(k,:));
-0295             
-0296         <span class="keyword">case</span> <span class="string">'LINK'</span>
-0297             structure.Link(k,:) = (fullPDB{1}(k,:));
-0298             
-0299         <span class="keyword">case</span> <span class="string">'HYDBND'</span>
-0300             structure.HydrogenBond(k,:) = (fullPDB{1}(k,:));
-0301             
-0302         <span class="keyword">case</span> <span class="string">'SLTBRG'</span>
-0303             structure.SaltBridge(k,:) = (fullPDB{1}(k,:));
-0304             
-0305         <span class="keyword">case</span> <span class="string">'CISPEP'</span>
-0306             structure.CISPeptide(k,:) = (fullPDB{1}(k,:));
-0307             
-0308         <span class="keyword">case</span> <span class="string">'SITE'</span>
-0309             structure.Site(k,:) = (fullPDB{1}(k,:));
-0310             
-0311         <span class="keyword">case</span> <span class="string">'CRYST1'</span>
-0312             structure.Cryst1(k,:) = (fullPDB{1}(k,:));
-0313             
-0314         <span class="keyword">case</span> <span class="string">'TVECT'</span>
-0315             structure.TranslationVector(k,:) = (fullPDB{1}(k,:));
-0316             
-0317         <span class="keyword">case</span> <span class="string">'MODEL'</span>
-0318             structure.Model(k,:) = (fullPDB{1}(k,:));
-0319             
-0320         <span class="keyword">case</span> <span class="string">'ATOM'</span>
-0321             structure.Atom(k,:) = (fullPDB{1}(k,:));
-0322                         
-0323         <span class="keyword">case</span> <span class="string">'SIGATM'</span>
-0324             structure.AtomSD(k,:) = (fullPDB{1}(k,:));
-0325             
-0326         <span class="keyword">case</span> <span class="string">'ANISOU'</span>
-0327             structure.AnisotropicTemp(k,:) = (fullPDB{1}(k,:));
-0328             
-0329         <span class="keyword">case</span> <span class="string">'SIGUIJ'</span>
-0330             structure.AnisotropicTempSD(k,:) = (fullPDB{1}(k,:));
-0331             
-0332         <span class="keyword">case</span> <span class="string">'TER'</span>
-0333             structure.Terminal(k,:) = (fullPDB{1}(k,:));
-0334             <span class="comment">% structure.Terminal = strcat(structure.Terminal);</span>
-0335             
-0336         <span class="keyword">case</span> <span class="string">'HETATM'</span>
-0337             structure.HeterogenAtom(k,:) = (fullPDB{1}(k,:));
-0338             
-0339         <span class="keyword">case</span> <span class="string">'CONECT'</span>
-0340             structure.Connectivity(k,:) = (fullPDB{1}(k,:));
-0341             
+0210 <span class="comment">% File splitting</span>
+0211 <span class="comment">% ===================================================</span>
+0212 
+0213 r = size(fullPDB{1},1);
+0214 
+0215 <span class="keyword">for</span> k = 1:r
+0216       
+0217     <span class="keyword">switch</span> char(strtok(fullPDB{1}(k,:)))
+0218         
+0219         <span class="keyword">case</span> <span class="string">'HEADER'</span>
+0220             structure.Header(k,:) = (fullPDB{1}(k,:));
+0221             
+0222         <span class="keyword">case</span> <span class="string">'OBSLTE'</span>
+0223             structure.Obsolete(k,:) = (fullPDB{1}(k,:));
+0224             
+0225         <span class="keyword">case</span> <span class="string">'TITLE'</span>
+0226             structure.Title(k,:) = (fullPDB{1}(k,:));
+0227             
+0228         <span class="keyword">case</span> <span class="string">'CAVEAT'</span>
+0229             structure.Caveat(k,:) = (fullPDB{1}(k,:));
+0230             
+0231         <span class="keyword">case</span> <span class="string">'COMPND'</span>
+0232             structure.Compound(k,:) = (fullPDB{1}(k,:));
+0233             
+0234         <span class="keyword">case</span> <span class="string">'SOURCE'</span>
+0235             structure.Source(k,:) = (fullPDB{1}(k,:));
+0236             
+0237         <span class="keyword">case</span> <span class="string">'KEYWDS'</span>
+0238             structure.Keywords(k,:) = (fullPDB{1}(k,:));
+0239             
+0240         <span class="keyword">case</span> <span class="string">'EXPDTA'</span>
+0241             structure.ExperimentalData(k,:) = (fullPDB{1}(k,:));
+0242             
+0243         <span class="keyword">case</span> <span class="string">'AUTHOR'</span>
+0244             structure.Authors(k,:) = (fullPDB{1}(k,:));
+0245             
+0246         <span class="keyword">case</span> <span class="string">'REVDAT'</span>
+0247             structure.RevisionDate(k,:) = (fullPDB{1}(k,:));
+0248             
+0249         <span class="keyword">case</span> <span class="string">'SPRSDE'</span>
+0250             structure.Superseded(k,:) = (fullPDB{1}(k,:));
+0251             
+0252         <span class="keyword">case</span> <span class="string">'JRNL'</span>
+0253             structure.Journal(k,:) = (fullPDB{1}(k,:));
+0254             
+0255         <span class="keyword">case</span> <span class="string">'REMARK'</span>
+0256             structure.Remark(k,:) = (fullPDB{1}(k,:));
+0257             
+0258         <span class="keyword">case</span> <span class="string">'DBREF'</span>
+0259             structure.DBReferences(k,:) = (fullPDB{1}(k,:));
+0260             
+0261         <span class="keyword">case</span> <span class="string">'SEQADV'</span>
+0262             structure.SequenceConflicts(k,:) = (fullPDB{1}(k,:));
+0263             
+0264         <span class="keyword">case</span> <span class="string">'SEQRES'</span>
+0265             structure.Sequence(k,:) = (fullPDB{1}(k,:));
+0266             
+0267         <span class="keyword">case</span> <span class="string">'FTNOTE'</span>
+0268             structure.Footnote(k,:) = (fullPDB{1}(k,:));
+0269             
+0270         <span class="keyword">case</span> <span class="string">'MODRES'</span>
+0271             structure.ModifiedResidues(k,:) = (fullPDB{1}(k,:));
+0272             
+0273         <span class="keyword">case</span> <span class="string">'HET'</span>
+0274             structure.Heterogen(k,:) = (fullPDB{1}(k,:));
+0275             
+0276         <span class="keyword">case</span> <span class="string">'HETNAM'</span>
+0277             structure.HeterogenName(k,:) = (fullPDB{1}(k,:));
+0278             
+0279         <span class="keyword">case</span> <span class="string">'HETSYN'</span>
+0280             structure.HeterogenSynonym(k,:) = (fullPDB{1}(k,:));
+0281             
+0282         <span class="keyword">case</span> <span class="string">'FORMUL'</span>
+0283             structure.Formula(k,:) = (fullPDB{1}(k,:));
+0284             
+0285         <span class="keyword">case</span> <span class="string">'HELIX'</span>
+0286             structure.Helix(k,:) = (fullPDB{1}(k,:));
+0287             
+0288         <span class="keyword">case</span> <span class="string">'SHEET'</span>
+0289             structure.Sheet(k,:) = (fullPDB{1}(k,:));
+0290             
+0291         <span class="keyword">case</span> <span class="string">'TURN'</span>
+0292             structure.Turn(k,:) = (fullPDB{1}(k,:));
+0293             
+0294         <span class="keyword">case</span> <span class="string">'SSBOND'</span>
+0295             structure.SSBond(k,:) = (fullPDB{1}(k,:));
+0296             
+0297         <span class="keyword">case</span> <span class="string">'LINK'</span>
+0298             structure.Link(k,:) = (fullPDB{1}(k,:));
+0299             
+0300         <span class="keyword">case</span> <span class="string">'HYDBND'</span>
+0301             structure.HydrogenBond(k,:) = (fullPDB{1}(k,:));
+0302             
+0303         <span class="keyword">case</span> <span class="string">'SLTBRG'</span>
+0304             structure.SaltBridge(k,:) = (fullPDB{1}(k,:));
+0305             
+0306         <span class="keyword">case</span> <span class="string">'CISPEP'</span>
+0307             structure.CISPeptide(k,:) = (fullPDB{1}(k,:));
+0308             
+0309         <span class="keyword">case</span> <span class="string">'SITE'</span>
+0310             structure.Site(k,:) = (fullPDB{1}(k,:));
+0311             
+0312         <span class="keyword">case</span> <span class="string">'CRYST1'</span>
+0313             structure.Cryst1(k,:) = (fullPDB{1}(k,:));
+0314             
+0315         <span class="keyword">case</span> <span class="string">'TVECT'</span>
+0316             structure.TranslationVector(k,:) = (fullPDB{1}(k,:));
+0317             
+0318         <span class="keyword">case</span> <span class="string">'MODEL'</span>
+0319             structure.Model(k,:) = (fullPDB{1}(k,:));
+0320             
+0321         <span class="keyword">case</span> <span class="string">'ATOM'</span>
+0322             structure.Atom(k,:) = (fullPDB{1}(k,:));
+0323                         
+0324         <span class="keyword">case</span> <span class="string">'SIGATM'</span>
+0325             structure.AtomSD(k,:) = (fullPDB{1}(k,:));
+0326             
+0327         <span class="keyword">case</span> <span class="string">'ANISOU'</span>
+0328             structure.AnisotropicTemp(k,:) = (fullPDB{1}(k,:));
+0329             
+0330         <span class="keyword">case</span> <span class="string">'SIGUIJ'</span>
+0331             structure.AnisotropicTempSD(k,:) = (fullPDB{1}(k,:));
+0332             
+0333         <span class="keyword">case</span> <span class="string">'TER'</span>
+0334             structure.Terminal(k,:) = (fullPDB{1}(k,:));
+0335             <span class="comment">% structure.Terminal = strcat(structure.Terminal);</span>
+0336             
+0337         <span class="keyword">case</span> <span class="string">'HETATM'</span>
+0338             structure.HeterogenAtom(k,:) = (fullPDB{1}(k,:));
+0339             
+0340         <span class="keyword">case</span> <span class="string">'CONECT'</span>
+0341             structure.Connectivity(k,:) = (fullPDB{1}(k,:));
 0342             
-0343     <span class="keyword">end</span>
-0344 <span class="keyword">end</span>
-0345 
+0343             
+0344     <span class="keyword">end</span>
+0345 <span class="keyword">end</span>
 0346 
 0347 
 0348 <span class="keyword">for</span> k = 1:r
@@ -472,211 +472,210 @@ This function is called by:
 0379                 <span class="comment">% high enough to not have a space between columns</span>
 0380 <span class="keyword">end</span>
 0381 
-0382 disp(sprintf(<span class="string">'%d lines were read\nNow sorting the atoms...'</span>,r))
-0383 
-0384 <span class="keyword">for</span> k = 1:numel(Atoms.Preformated)
-0385     structure.Model.Atom(k).AtomSerNo = str2num(Atoms.Preformated{k}{1}{2});
-0386     structure.Model.Atom(k).AtomName  = Atoms.Preformated{k}{1}{3};
-0387     structure.Model.Atom(k).resName   = Atoms.Preformated{k}{1}{4};
-0388     structure.Model.Atom(k).chainID   = Atoms.Preformated{k}{1}{5};
-0389     structure.Model.Atom(k).resSeq    = str2num(Atoms.Preformated{k}{1}{6});
-0390     structure.Model.Atom(k).X         = str2num(Atoms.Preformated{k}{1}{7});
-0391     structure.Model.Atom(k).Y         = str2num(Atoms.Preformated{k}{1}{8});
-0392     structure.Model.Atom(k).Z         = str2num(Atoms.Preformated{k}{1}{9});
-0393     structure.Model.Atom(k).occupancy = str2num(Atoms.Preformated{k}{1}{10});
-0394     structure.Model.Atom(k).tempFactor= str2num(Atoms.Preformated{k}{1}{11});
-0395     structure.Model.Atom(k).element   = Atoms.Preformated{k}{1}{12};
-0396 <span class="keyword">end</span>
+0382 <span class="keyword">for</span> k = 1:numel(Atoms.Preformated)
+0383     structure.Model.Atom(k).AtomSerNo = str2num(Atoms.Preformated{k}{1}{2});
+0384     structure.Model.Atom(k).AtomName  = Atoms.Preformated{k}{1}{3};
+0385     structure.Model.Atom(k).resName   = Atoms.Preformated{k}{1}{4};
+0386     structure.Model.Atom(k).chainID   = Atoms.Preformated{k}{1}{5};
+0387     structure.Model.Atom(k).resSeq    = str2num(Atoms.Preformated{k}{1}{6});
+0388     structure.Model.Atom(k).X         = str2num(Atoms.Preformated{k}{1}{7});
+0389     structure.Model.Atom(k).Y         = str2num(Atoms.Preformated{k}{1}{8});
+0390     structure.Model.Atom(k).Z         = str2num(Atoms.Preformated{k}{1}{9});
+0391     structure.Model.Atom(k).occupancy = str2num(Atoms.Preformated{k}{1}{10});
+0392     structure.Model.Atom(k).tempFactor= str2num(Atoms.Preformated{k}{1}{11});
+0393     structure.Model.Atom(k).element   = Atoms.Preformated{k}{1}{12};
+0394 <span class="keyword">end</span>
+0395 
+0396 clear structure.Atom
 0397 
-0398 clear structure.Atom
-0399 
-0400 disp(sprintf(<span class="string">'%d atoms were sorted!\nFinal tidy up...'</span>,numel(Atoms.Preformated)))
+0398 <span class="comment">% Sequence sorting</span>
+0399 <span class="comment">% ===================================================</span>
+0400 
 0401 
-0402 <span class="comment">% Sequence sorting</span>
-0403 <span class="comment">% ===================================================</span>
-0404 
-0405 <span class="comment">% Make all fields the same length</span>
-0406 q = strcat(structure.Sequence);
-0407 <span class="comment">% Remove any blank fields</span>
-0408 w = char(q(~cellfun(@isempty,q)));
-0409 
-0410 <span class="comment">% Split each line of the sequence into individual strings</span>
-0411 <span class="keyword">for</span> k = 1:size(w,1)
-0412     Sequence.Preformated{k} = textscan(w(k,:),<span class="string">'%s'</span>);
-0413 <span class="keyword">end</span>
-0414 
-0415 highestChain = Sequence.Preformated{end}{1}{3};
-0416 
-0417 <span class="comment">% Convert Chain &quot;Letter&quot; to Chain &quot;Number&quot; through ASCII number</span>
-0418 ChainMax = double(highestChain)-64;
-0419 
-0420 <span class="comment">% Find where each chain ends</span>
-0421 <span class="keyword">for</span> k = 1:numel(Sequence.Preformated)
-0422     Chains(k) = Sequence.Preformated{k}{1}{3};
-0423 <span class="keyword">end</span>
-0424 
-0425 [~,b] = unique(Chains,<span class="string">'first'</span>);      <span class="comment">% gives row number of each new Chain</span>
-0426 [~,c] = unique(Chains,<span class="string">'last'</span>);       <span class="comment">% gives row of last</span>
-0427 
-0428 warning off
-0429 
-0430 <span class="keyword">for</span> k = 1:ChainMax
-0431 
-0432     <span class="comment">% Remove header lines</span>
-0433     <span class="keyword">for</span> l = b(k) : c(k)
-0434         Sequence.Formating{l} = Sequence.Preformated{l}(5:end);
-0435     <span class="keyword">end</span>
-0436     
-0437     <span class="comment">% Split the chains and merge them into single column of text</span>
-0438     structure.Sequence.([<span class="string">'Chain'</span> (char(k-1+<span class="string">'A'</span>))]) = (cat(1,Sequence.Formating{b(k):c(k)}));
-0439 <span class="keyword">end</span>
-0440 
-0441 warning on
-0442 
-0443 <span class="comment">% Finally look at each string field and remove any blank lines created</span>
-0444 <span class="comment">% during the reading in of fields</span>
-0445 
-0446 <span class="keyword">if</span> isfield(structure,<span class="string">'Obsolete'</span>)
-0447     structure.Obsolete = char(structure.Obsolete(~cellfun(@isempty,structure.Obsolete)));
-0448 <span class="keyword">end</span>
-0449 
-0450 <span class="keyword">if</span> isfield(structure,<span class="string">'Title'</span>)
-0451     structure.Title = char(structure.Title(~cellfun(@isempty,structure.Title)));
-0452 <span class="keyword">end</span>
-0453 
-0454 <span class="keyword">if</span> isfield(structure,<span class="string">'Caveat'</span>)
-0455     structure.Caveat = char(structure.Caveat(~cellfun(@isempty,structure.Caveat)));
-0456 <span class="keyword">end</span>
-0457 
-0458 <span class="keyword">if</span> isfield(structure,<span class="string">'Compound'</span>)
-0459     structure.Compound = char(structure.Compound(~cellfun(@isempty,structure.Compound)));
-0460 <span class="keyword">end</span>
-0461 
-0462 <span class="keyword">if</span> isfield(structure,<span class="string">'Source'</span>)
-0463     structure.Source = char(structure.Source(~cellfun(@isempty,structure.Source)));
-0464 <span class="keyword">end</span>
-0465 
-0466 <span class="keyword">if</span> isfield(structure,<span class="string">'Keywords'</span>)
-0467     structure.Keywords = char(structure.Keywords(~cellfun(@isempty,structure.Keywords)));
-0468 <span class="keyword">end</span>
-0469 
-0470 <span class="keyword">if</span> isfield(structure,<span class="string">'ExperimentalData'</span>)
-0471     structure.ExperimentalData = char(structure.ExperimentalData(~cellfun(@isempty,structure.ExperimentalData)));
-0472 <span class="keyword">end</span>
-0473 
-0474 <span class="keyword">if</span> isfield(structure,<span class="string">'Authors'</span>)
-0475     structure.Authors = char(structure.Authors(~cellfun(@isempty,structure.Authors)));
-0476 <span class="keyword">end</span>
-0477 
-0478 <span class="keyword">if</span> isfield(structure,<span class="string">'RevisionDate'</span>)
-0479     structure.RevisionDate = char(structure.RevisionDate(~cellfun(@isempty,structure.RevisionDate)));
-0480 <span class="keyword">end</span>
-0481 
-0482 <span class="keyword">if</span> isfield(structure,<span class="string">'Superseded'</span>)
-0483     structure.Superseded = char(structure.Superseded(~cellfun(@isempty,structure.Superseded)));
-0484 <span class="keyword">end</span>
-0485 
-0486 <span class="keyword">if</span> isfield(structure,<span class="string">'Journal'</span>)
-0487     structure.Journal = char(structure.Journal(~cellfun(@isempty,structure.Journal)));
-0488 <span class="keyword">end</span>
-0489 
-0490 <span class="keyword">if</span> isfield(structure,<span class="string">'Remark'</span>)
-0491     structure.Remark = char(structure.Remark(~cellfun(@isempty,structure.Remark)));
-0492 <span class="keyword">end</span>
-0493 
-0494 <span class="keyword">if</span> isfield(structure,<span class="string">'DBReferences'</span>)
-0495     structure.DBReferences = char(structure.DBReferences(~cellfun(@isempty,structure.DBReferences)));
-0496 <span class="keyword">end</span>
-0497 
-0498 <span class="keyword">if</span> isfield(structure,<span class="string">'SequenceConflicts'</span>)
-0499     structure.SequenceConflicts = char(structure.SequenceConflicts(~cellfun(@isempty,structure.SequenceConflicts)));
-0500 <span class="keyword">end</span>
-0501 
-0502 <span class="keyword">if</span> isfield(structure,<span class="string">'Footnote'</span>)
-0503     structure.Footnote = char(structure.Footnote(~cellfun(@isempty,structure.Footnote)));
-0504 <span class="keyword">end</span>
-0505 
-0506 <span class="keyword">if</span> isfield(structure,<span class="string">'MODRES'</span>)
-0507     structure.MODRES = char(structure.MODRES(~cellfun(@isempty,structure.MODRES)));
-0508 <span class="keyword">end</span>
-0509 
-0510 <span class="keyword">if</span> isfield(structure,<span class="string">'Heterogen'</span>)
-0511     structure.Heterogen = char(structure.Heterogen(~cellfun(@isempty,structure.Heterogen)));
-0512 <span class="keyword">end</span>
-0513 
-0514 <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenName'</span>)
-0515     structure.HeterogenName = char(structure.HeterogenName(~cellfun(@isempty,structure.HeterogenName)));
-0516 <span class="keyword">end</span>
-0517 
-0518 <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenSynonym'</span>)
-0519     structure.HeterogenSynonym = char(structure.HeterogenSynonym(~cellfun(@isempty,structure.HeterogenSynonym)));
-0520 <span class="keyword">end</span>
-0521 
-0522 <span class="keyword">if</span> isfield(structure,<span class="string">'Formula'</span>)
-0523     structure.Formula = char(structure.Formula(~cellfun(@isempty,structure.Formula)));
-0524 <span class="keyword">end</span>
-0525 
-0526 <span class="keyword">if</span> isfield(structure,<span class="string">'Helix'</span>)
-0527     structure.Helix = char(structure.Helix(~cellfun(@isempty,structure.Helix)));
-0528 <span class="keyword">end</span>
-0529 
-0530 <span class="keyword">if</span> isfield(structure,<span class="string">'Sheet'</span>)
-0531     structure.Sheet = char(structure.Sheet(~cellfun(@isempty,structure.Sheet)));
-0532 <span class="keyword">end</span>
-0533 
-0534 <span class="keyword">if</span> isfield(structure,<span class="string">'SSBond'</span>)
-0535     structure.SSBond = char(structure.SSBond(~cellfun(@isempty,structure.SSBond)));
-0536 <span class="keyword">end</span>
-0537 
-0538 <span class="keyword">if</span> isfield(structure,<span class="string">'Link'</span>)
-0539     structure.Link = char(structure.Link(~cellfun(@isempty,structure.Link)));
-0540 <span class="keyword">end</span>
-0541 
-0542 <span class="keyword">if</span> isfield(structure,<span class="string">'HydrogenBond'</span>)
-0543     structure.HydrogenBond = char(structure.HydrogenBond(~cellfun(@isempty,structure.HydrogenBond)));
-0544 <span class="keyword">end</span>
-0545 
-0546 <span class="keyword">if</span> isfield(structure,<span class="string">'SaltBridge'</span>)
-0547     structure.SaltBridge = char(structure.SaltBridge(~cellfun(@isempty,structure.SaltBridge)));
-0548 <span class="keyword">end</span>
-0549 
-0550 <span class="keyword">if</span> isfield(structure,<span class="string">'CISPeptide'</span>)
-0551     structure.CISPeptide = char(structure.CISPeptide(~cellfun(@isempty,structure.CISPeptide)));
-0552 <span class="keyword">end</span>
-0553 
-0554 <span class="keyword">if</span> isfield(structure,<span class="string">'Cryst1'</span>)
-0555     structure.Cryst1 = char(structure.Cryst1(~cellfun(@isempty,structure.Cryst1)));
-0556 <span class="keyword">end</span>
-0557 
-0558 <span class="keyword">if</span> isfield(structure,<span class="string">'TranslationVector'</span>)
-0559     structure.TranslationVector = char(structure.TranslationVector(~cellfun(@isempty,structure.TranslationVector)));
-0560 <span class="keyword">end</span>
-0561 
-0562 <span class="keyword">if</span> isfield(structure,<span class="string">'AtomSD'</span>)
-0563     structure.AtomSD = char(structure.AtomSD(~cellfun(@isempty,structure.AtomSD)));
-0564 <span class="keyword">end</span>
-0565 
-0566 <span class="keyword">if</span> isfield(structure,<span class="string">'AnisotropicTemp'</span>)
-0567     structure.AnisotropicTemp = char(structure.AnisotropicTemp(~cellfun(@isempty,structure.AnisotropicTemp)));
-0568 <span class="keyword">end</span>
-0569 
-0570 <span class="keyword">if</span> isfield(structure,<span class="string">'AnisotropicTempSD'</span>)
-0571     structure.AnisotropicTempSD = char(structure.AnisotropicTempSD(~cellfun(@isempty,structure.AnisotropicTempSD)));
-0572 <span class="keyword">end</span>
-0573 
-0574 <span class="keyword">if</span> isfield(structure,<span class="string">'Terminal'</span>)
-0575     structure.Terminal = char(structure.Terminal(~cellfun(@isempty,structure.Terminal)));
-0576 <span class="keyword">end</span>
-0577 
-0578 <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenAtom'</span>)
-0579     structure.HeterogenAtom = char(structure.HeterogenAtom(~cellfun(@isempty,structure.HeterogenAtom)));
-0580 <span class="keyword">end</span>
-0581 
-0582 <span class="keyword">if</span> isfield(structure,<span class="string">'Connectivity'</span>)
-0583     structure.Connectivity = char(structure.Connectivity(~cellfun(@isempty,structure.Connectivity)));
-0584 <span class="keyword">end</span>
-0585 
-0586 disp(sprintf(<span class="string">'Tidy up complete!\nPDB has been loaded.'</span>))</pre></div>
-<hr><address>Generated on Fri 05-Apr-2013 12:00:44 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0402 <span class="keyword">if</span> isfield(structure,<span class="string">'Sequence'</span>)
+0403     <span class="comment">% Make all fields the same length</span>
+0404     q = strcat(structure.Sequence);
+0405     <span class="comment">% Remove any blank fields</span>
+0406     w = char(q(~cellfun(@isempty,q)));
+0407     
+0408     <span class="comment">% Split each line of the sequence into individual strings</span>
+0409     <span class="keyword">for</span> k = 1:size(w,1)
+0410         Sequence.Preformated{k} = textscan(w(k,:),<span class="string">'%s'</span>);
+0411     <span class="keyword">end</span>
+0412     
+0413     highestChain = Sequence.Preformated{end}{1}{3};
+0414     
+0415     <span class="comment">% Convert Chain &quot;Letter&quot; to Chain &quot;Number&quot; through ASCII number</span>
+0416     ChainMax = double(highestChain)-64;
+0417     
+0418     <span class="comment">% Find where each chain ends</span>
+0419     <span class="keyword">for</span> k = 1:numel(Sequence.Preformated)
+0420         Chains(k) = Sequence.Preformated{k}{1}{3};
+0421     <span class="keyword">end</span>
+0422     
+0423     [~,b] = unique(Chains,<span class="string">'first'</span>);      <span class="comment">% gives row number of each new Chain</span>
+0424     [~,c] = unique(Chains,<span class="string">'last'</span>);       <span class="comment">% gives row of last</span>
+0425     
+0426     warning off
+0427     
+0428     <span class="keyword">for</span> k = 1:ChainMax
+0429         
+0430         <span class="comment">% Remove header lines</span>
+0431         <span class="keyword">for</span> l = b(k) : c(k)
+0432             Sequence.Formating{l} = Sequence.Preformated{l}(5:end);
+0433         <span class="keyword">end</span>
+0434         
+0435         <span class="comment">% Split the chains and merge them into single column of text</span>
+0436         structure.Sequence.([<span class="string">'Chain'</span> (char(k-1+<span class="string">'A'</span>))]) = (cat(1,Sequence.Formating{b(k):c(k)}));
+0437     <span class="keyword">end</span>
+0438 <span class="keyword">else</span>
+0439     <span class="comment">% Do nothing. Sequence probably not needed</span>
+0440 <span class="keyword">end</span>
+0441 
+0442 warning on
+0443 
+0444 <span class="comment">% Finally look at each string field and remove any blank lines created</span>
+0445 <span class="comment">% during the reading in of fields</span>
+0446 
+0447 <span class="keyword">if</span> isfield(structure,<span class="string">'Obsolete'</span>)
+0448     structure.Obsolete = char(structure.Obsolete(~cellfun(@isempty,structure.Obsolete)));
+0449 <span class="keyword">end</span>
+0450 
+0451 <span class="keyword">if</span> isfield(structure,<span class="string">'Title'</span>)
+0452     structure.Title = char(structure.Title(~cellfun(@isempty,structure.Title)));
+0453 <span class="keyword">end</span>
+0454 
+0455 <span class="keyword">if</span> isfield(structure,<span class="string">'Caveat'</span>)
+0456     structure.Caveat = char(structure.Caveat(~cellfun(@isempty,structure.Caveat)));
+0457 <span class="keyword">end</span>
+0458 
+0459 <span class="keyword">if</span> isfield(structure,<span class="string">'Compound'</span>)
+0460     structure.Compound = char(structure.Compound(~cellfun(@isempty,structure.Compound)));
+0461 <span class="keyword">end</span>
+0462 
+0463 <span class="keyword">if</span> isfield(structure,<span class="string">'Source'</span>)
+0464     structure.Source = char(structure.Source(~cellfun(@isempty,structure.Source)));
+0465 <span class="keyword">end</span>
+0466 
+0467 <span class="keyword">if</span> isfield(structure,<span class="string">'Keywords'</span>)
+0468     structure.Keywords = char(structure.Keywords(~cellfun(@isempty,structure.Keywords)));
+0469 <span class="keyword">end</span>
+0470 
+0471 <span class="keyword">if</span> isfield(structure,<span class="string">'ExperimentalData'</span>)
+0472     structure.ExperimentalData = char(structure.ExperimentalData(~cellfun(@isempty,structure.ExperimentalData)));
+0473 <span class="keyword">end</span>
+0474 
+0475 <span class="keyword">if</span> isfield(structure,<span class="string">'Authors'</span>)
+0476     structure.Authors = char(structure.Authors(~cellfun(@isempty,structure.Authors)));
+0477 <span class="keyword">end</span>
+0478 
+0479 <span class="keyword">if</span> isfield(structure,<span class="string">'RevisionDate'</span>)
+0480     structure.RevisionDate = char(structure.RevisionDate(~cellfun(@isempty,structure.RevisionDate)));
+0481 <span class="keyword">end</span>
+0482 
+0483 <span class="keyword">if</span> isfield(structure,<span class="string">'Superseded'</span>)
+0484     structure.Superseded = char(structure.Superseded(~cellfun(@isempty,structure.Superseded)));
+0485 <span class="keyword">end</span>
+0486 
+0487 <span class="keyword">if</span> isfield(structure,<span class="string">'Journal'</span>)
+0488     structure.Journal = char(structure.Journal(~cellfun(@isempty,structure.Journal)));
+0489 <span class="keyword">end</span>
+0490 
+0491 <span class="keyword">if</span> isfield(structure,<span class="string">'Remark'</span>)
+0492     structure.Remark = char(structure.Remark(~cellfun(@isempty,structure.Remark)));
+0493 <span class="keyword">end</span>
+0494 
+0495 <span class="keyword">if</span> isfield(structure,<span class="string">'DBReferences'</span>)
+0496     structure.DBReferences = char(structure.DBReferences(~cellfun(@isempty,structure.DBReferences)));
+0497 <span class="keyword">end</span>
+0498 
+0499 <span class="keyword">if</span> isfield(structure,<span class="string">'SequenceConflicts'</span>)
+0500     structure.SequenceConflicts = char(structure.SequenceConflicts(~cellfun(@isempty,structure.SequenceConflicts)));
+0501 <span class="keyword">end</span>
+0502 
+0503 <span class="keyword">if</span> isfield(structure,<span class="string">'Footnote'</span>)
+0504     structure.Footnote = char(structure.Footnote(~cellfun(@isempty,structure.Footnote)));
+0505 <span class="keyword">end</span>
+0506 
+0507 <span class="keyword">if</span> isfield(structure,<span class="string">'MODRES'</span>)
+0508     structure.MODRES = char(structure.MODRES(~cellfun(@isempty,structure.MODRES)));
+0509 <span class="keyword">end</span>
+0510 
+0511 <span class="keyword">if</span> isfield(structure,<span class="string">'Heterogen'</span>)
+0512     structure.Heterogen = char(structure.Heterogen(~cellfun(@isempty,structure.Heterogen)));
+0513 <span class="keyword">end</span>
+0514 
+0515 <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenName'</span>)
+0516     structure.HeterogenName = char(structure.HeterogenName(~cellfun(@isempty,structure.HeterogenName)));
+0517 <span class="keyword">end</span>
+0518 
+0519 <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenSynonym'</span>)
+0520     structure.HeterogenSynonym = char(structure.HeterogenSynonym(~cellfun(@isempty,structure.HeterogenSynonym)));
+0521 <span class="keyword">end</span>
+0522 
+0523 <span class="keyword">if</span> isfield(structure,<span class="string">'Formula'</span>)
+0524     structure.Formula = char(structure.Formula(~cellfun(@isempty,structure.Formula)));
+0525 <span class="keyword">end</span>
+0526 
+0527 <span class="keyword">if</span> isfield(structure,<span class="string">'Helix'</span>)
+0528     structure.Helix = char(structure.Helix(~cellfun(@isempty,structure.Helix)));
+0529 <span class="keyword">end</span>
+0530 
+0531 <span class="keyword">if</span> isfield(structure,<span class="string">'Sheet'</span>)
+0532     structure.Sheet = char(structure.Sheet(~cellfun(@isempty,structure.Sheet)));
+0533 <span class="keyword">end</span>
+0534 
+0535 <span class="keyword">if</span> isfield(structure,<span class="string">'SSBond'</span>)
+0536     structure.SSBond = char(structure.SSBond(~cellfun(@isempty,structure.SSBond)));
+0537 <span class="keyword">end</span>
+0538 
+0539 <span class="keyword">if</span> isfield(structure,<span class="string">'Link'</span>)
+0540     structure.Link = char(structure.Link(~cellfun(@isempty,structure.Link)));
+0541 <span class="keyword">end</span>
+0542 
+0543 <span class="keyword">if</span> isfield(structure,<span class="string">'HydrogenBond'</span>)
+0544     structure.HydrogenBond = char(structure.HydrogenBond(~cellfun(@isempty,structure.HydrogenBond)));
+0545 <span class="keyword">end</span>
+0546 
+0547 <span class="keyword">if</span> isfield(structure,<span class="string">'SaltBridge'</span>)
+0548     structure.SaltBridge = char(structure.SaltBridge(~cellfun(@isempty,structure.SaltBridge)));
+0549 <span class="keyword">end</span>
+0550 
+0551 <span class="keyword">if</span> isfield(structure,<span class="string">'CISPeptide'</span>)
+0552     structure.CISPeptide = char(structure.CISPeptide(~cellfun(@isempty,structure.CISPeptide)));
+0553 <span class="keyword">end</span>
+0554 
+0555 <span class="keyword">if</span> isfield(structure,<span class="string">'Cryst1'</span>)
+0556     structure.Cryst1 = char(structure.Cryst1(~cellfun(@isempty,structure.Cryst1)));
+0557 <span class="keyword">end</span>
+0558 
+0559 <span class="keyword">if</span> isfield(structure,<span class="string">'TranslationVector'</span>)
+0560     structure.TranslationVector = char(structure.TranslationVector(~cellfun(@isempty,structure.TranslationVector)));
+0561 <span class="keyword">end</span>
+0562 
+0563 <span class="keyword">if</span> isfield(structure,<span class="string">'AtomSD'</span>)
+0564     structure.AtomSD = char(structure.AtomSD(~cellfun(@isempty,structure.AtomSD)));
+0565 <span class="keyword">end</span>
+0566 
+0567 <span class="keyword">if</span> isfield(structure,<span class="string">'AnisotropicTemp'</span>)
+0568     structure.AnisotropicTemp = char(structure.AnisotropicTemp(~cellfun(@isempty,structure.AnisotropicTemp)));
+0569 <span class="keyword">end</span>
+0570 
+0571 <span class="keyword">if</span> isfield(structure,<span class="string">'AnisotropicTempSD'</span>)
+0572     structure.AnisotropicTempSD = char(structure.AnisotropicTempSD(~cellfun(@isempty,structure.AnisotropicTempSD)));
+0573 <span class="keyword">end</span>
+0574 
+0575 <span class="keyword">if</span> isfield(structure,<span class="string">'Terminal'</span>)
+0576     structure.Terminal = char(structure.Terminal(~cellfun(@isempty,structure.Terminal)));
+0577 <span class="keyword">end</span>
+0578 
+0579 <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenAtom'</span>)
+0580     structure.HeterogenAtom = char(structure.HeterogenAtom(~cellfun(@isempty,structure.HeterogenAtom)));
+0581 <span class="keyword">end</span>
+0582 
+0583 <span class="keyword">if</span> isfield(structure,<span class="string">'Connectivity'</span>)
+0584     structure.Connectivity = char(structure.Connectivity(~cellfun(@isempty,structure.Connectivity)));
+0585 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

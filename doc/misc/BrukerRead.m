@@ -818,6 +818,13 @@ if isequal(graph,'plot')
         case 'CW'
             plot(x/10,y);
             xlabel('Magnetic Field / mT');
+            
+        otherwise
+            try
+                plot(x/10,y);
+                xlabel('Magnetic Field / mT');
+            end
+            
     end
     
 end
