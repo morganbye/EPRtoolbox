@@ -22,50 +22,9 @@ EPRtoolbox
                                                      developed at the         
                                                  University of East Anglia
 
-M. Bye v13.07
+M. Bye v13.05
 
-v13.07
-
-Minor edits throughout the EPR toolbox
-
-PeldorPlotter
-===========
-A complete setup of a PELDOR experiment includes a T1, T2 and field swept
-echo before the PELDOR trace.
-
-By pointing PeldorPlotter at one of these files in a folder it will
-automatically plot all 4 experiments as a single figure of subplots. The
-figure is then automatically saved to the same location as a PDF for quick
-printing.
-
-Files must be saved with the file format:
-	YYMM-FREQ-EXP-TEMP-SAMPLE.DTA
-
-For example the folder might look like:
-1307-X-4PEL-050-MTSL.DTA
-1307-X-FSE-050-MTSL.DTA
-1307-X-T1-050-MTSL.DTA
-1307-X-T2-050-MTSL.DTA
-
-
-DAPlotter - DeerAnalysis Plotter
-================================
-Takes the saved files from a DeerAnalysis analysis and plots the raw data,
-background subtracted PELDOR trace with fit and the distance distribution
-as a single figure of subplots. The figure is then automatically saved to
-the same location as a PDF for quick printing.
-
-e2af
-====
-The Bruker EPR (folder of) data to ASCII tools now supports pulsed
-experiments. Data is outputted with 3 columns for x, y (real) and 
-y(imaginary).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v13.06 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Minor edits and bug fixes - not a general release
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v13.05 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+v13.05
 
 --- EPRtoolbox passes 150,000 lines of code ---
 
@@ -147,8 +106,7 @@ Namely enforcing 80 character lines.
 
 EasyRefiner
 ===========
-> Added a "Run later" button, so that the start of a fitting run can be
- 	defined as an exact date and time in the future.
+> Added a "Run later" button, so that the start of a fitting run can be 	defined as an exact date and time in the future.
 > Better error handling
 > Supports long file names
 > Closing waitbar cancels queue at end of current fit
