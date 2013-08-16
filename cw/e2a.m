@@ -59,7 +59,7 @@ function e2a(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.04
+% M. Bye v13.07
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -67,13 +67,16 @@ function e2a(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/epr-converter-e2a
-% Mar 2013;     Last revision: 15-March-2013
+% Jul 2013;     Last revision: 17-July-2013
 %
 % Approximate coding time of file:
 %               3 hours
 %
 %
 % Version history:
+% Jul 13        Removal of tilde "~" from input arguments for better
+%               compatibility with old Windows versions of MatLab
+%
 % Mar 13        Update for file errors.
 %                   Changed input address - removes conflict with address
 %                   command
@@ -148,8 +151,8 @@ switch nargin
     case 2
         if exist(varargin{1},'file');
             in_address = varargin{1};
-            [~,f,e] = fileparts(in_address);
-            file = [f e];
+            [directory,name,ext] = fileparts(in_address);
+            file = [name ext];
             [mag_field, abs] = BrukerRead(in_address);
         end
 
@@ -159,8 +162,8 @@ switch nargin
     case 3
         if exist(varargin{1},'file');
             in_address = varargin{1};
-            [~,f,e] = fileparts(in_address);
-            file = [f e];
+            [directory,name,ext] = fileparts(in_address);
+            file = [name ext];
             [mag_field, abs] = BrukerRead(in_address);
         end
         
@@ -171,8 +174,8 @@ switch nargin
     case 4
         if exist(varargin{1},'file');
             in_address = varargin{1};
-            [~,f,e] = fileparts(in_address);
-            file = [f e];
+            [directory,name,ext] = fileparts(in_address);
+            file = [name ext];
             [mag_field, abs] = BrukerRead(in_address);
         end
         

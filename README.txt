@@ -19,7 +19,7 @@ EPRtoolbox
                       |___/                   |___/                       
 
 
-                                                 developed at the         
+                                                     developed at the         
                                                  University of East Anglia
 
  M. Bye v13.07

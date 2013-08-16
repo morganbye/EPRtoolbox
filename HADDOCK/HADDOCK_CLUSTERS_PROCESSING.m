@@ -69,7 +69,7 @@ function varargout = HADDOCK_CLUSTERS_PROCESSING(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v12.11
+% M. Bye v13.08
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -77,13 +77,20 @@ function varargout = HADDOCK_CLUSTERS_PROCESSING(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/
-% Dec 2011;     Last revision: 22-November-2012
+% Aug 2013;     Last revision: 16-August-2013
 %
 % Approximate coding time of file:
 %               8 hours
 %
 %
 % Version history:
+% Aug 13        > Change of figure axes to latex, means that the angstrom
+%                   A-ring character will export correct if the figure is
+%                   saved as a PDF or EPS
+%               > Changed X axes range from round(0 to max) to ceil(0 to
+%                   max), as round could round down to nearest interger and
+%                   cut off data, ceil will always go up
+%
 % Nov 12        First release
 
 % Input arguments
@@ -264,55 +271,55 @@ hold off
 
 % Adjust presentation
 box on
-ylabel('Haddock score / arb. unit');
+ylabel('\textsf{HADDOCK score}','interpreter','latex');
 set(gcf,'color', 'white');
 
 switch parameter
     case 'rmsd-Emin'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('RMSD from average (average HADDOCK structure) / Å');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{RMSD from average HADDOCK structure / }\r{A}','interpreter','latex');
     case 'bsa'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Buried surface from average (average HADDOCK structure) / Å^2');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Buried surface from average (average HADDOCK structure) / }\r{A}^2','interpreter','latex');
     case 'dH'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Total energy difference from average (average HADDOCK structure)');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Total energy difference from average (average HADDOCK structure)}','interpreter','latex');
     case 'Edesolv'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Desolvation energy from average (average HADDOCK structure)');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Desolvation energy from average (average HADDOCK structure)}','interpreter','latex');
     case 'rmsd'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('RMSD from cluster best / Å');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{RMSD from cluster best / }\r{A}','interpreter','latex');
     case 'ener'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Energy from average (all energy terms) / Å');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Energy from average (all energy terms) / }\r{A}','interpreter','latex');
     case 'ener-Einter'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Internal energy from average (average HADDOCK structure)');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Internal energy from average (average HADDOCK structure)}','interpreter','latex');
     case 'ener-Enb'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Buried energy from average (average HADDOCK structure)');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Buried energy from average (average HADDOCK structure)}','interpreter','latex');
     case 'ener-Evdw'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Van der Waal energies from average (average HADDOCK structure)');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Van der Waal energies from average (average HADDOCK structure)}','interpreter','latex');
     case 'ener-Eelec'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Electrostatic energies from average (average HADDOCK structure)');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Electrostatic energies from average (average HADDOCK structure)}','interpreter','latex');
     case 'ener-Eair'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('AIR energies from average (average HADDOCK structure)');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{AIR energies from average (average HADDOCK structure)}','interpreter','latex');
     case 'ener-Ecdih'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Ecdih from average (average HADDOCK structure)');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Ecdih from average (average HADDOCK structure)}','interpreter','latex');
     case 'ener-Ecoup'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Ecoup from average (average HADDOCK structure)');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Ecoup from average (average HADDOCK structure)}','interpreter','latex');
     case 'ener-Esani'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Esani from average (average HADDOCK structure)');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Esani from average (average HADDOCK structure)}','interpreter','latex');
     case 'ener-Evean'
-        xlim([0 round(max(avgscin(:,1)))]);
-        xlabel('Evean from average (average HADDOCK structure)');
+        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlabel('\textsf{Evean from average (average HADDOCK structure)}','interpreter','latex');
     case 'ener-Edani'
         
 end

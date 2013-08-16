@@ -164,8 +164,8 @@ for k = 1:noClust
 end
     
 % Create file for loading into PyMOL
-fprintf('Creating PyMOL initialisation script...')
-PyMOL_launch = fopen([folder 'HADDOCKtoPYMOL.pml'],'w');
+fprintf('Creating PyMOL initialisation script...\n')
+PyMOL_launch = fopen([folder '/HADDOCKtoPYMOL.pml'],'w');
 
 header = [...
 '#                                        _                             _   ';...

@@ -89,7 +89,7 @@ function varargout = PowerSat(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.04
+% M. Bye v13.08
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -97,9 +97,18 @@ function varargout = PowerSat(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/PowerSat
-% Mar 2013;     Last revision: 18-March-2013
+% Aug 2013;     Last revision: 05-August-2013
 %
 % Version history:
+% Aug 13        > Added web URL to title bar
+%               > Help option opens web browser to PowerSat page
+%
+% Jul 13        Added an "Export to Origin" option in the PowerSat Curves
+%                   menu. This will export the current power saturation
+%                   curves into an Origin friendly file that includes the
+%                   data points, error bars and fit lines.
+%
+%
 % Mar 13        > When loading a file, check added to see if file has already
 %               been loaded. If so, erases previous file, preventing errors
 %               and allows for better file comparison.
@@ -164,7 +173,7 @@ function varargout = PowerSat(varargin)
 %               > Error bars added to Power Saturation curve data points,
 %               calculated by a standard deviation of the noise.
 
-% Last Modified by GUIDE v2.5 06-Aug-2012 15:46:18
+% Last Modified by GUIDE v2.5 17-Jul-2013 16:39:01
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 0;
@@ -202,7 +211,7 @@ end
 handles.statusbar = hObject;
 
 % Name the window
-set(gcf,'Name','PowerSat - v13.04');
+set(gcf,'Name','PowerSat - v13.08 - morganbye.net/PowerSat');
 
 % Update handles structure
 % set(hObject,'toolbar','figure');
@@ -1268,6 +1277,11 @@ if isfield(vars,'Oxy')
 end
 
 
+% --------------------------------------------------------------------
+function menu_PS_Origin_Callback(hObject, eventdata, handles)
+
+PS_ExportToOrigin(handles);
+
 
 % --------------------------------------------------------------------
 function menu_PS_replot_Callback(hObject, eventdata, handles)
@@ -1309,3 +1323,4 @@ PS_Help_Help;
 function help_about_Callback(hObject, eventdata, handles)
 
 PS_Help_About;
+

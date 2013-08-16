@@ -203,6 +203,10 @@ switch get(hFF.XLabel,'String')
             otherwise
                 x.TimeDomain.real = (get(lFF(3), 'xdata'))';
                 y.TimeDomain.real = (get(lFF(3), 'ydata'))';
+                
+                try
+                    y.TimeDomain.fit = (get(lFF(4), 'ydata'))';
+                end
         end
 end
 
@@ -430,8 +434,13 @@ switch genCSV
         fileCSV = [pathname filename];
         
         fid = fopen(fileCSV,'w');
+        
+            fprintf(fid,'Raw data - time, Raw data - real, Raw data - imag, Time domain - time, Time domain - real, Time domain - imag, Pake pattern - frequency, Pake pattern - real, Pake pattern - imag, Distance distribution - distance, Distance distribution - intensity, Sup. DD - distance, Sup. DD - intensity\n');
+            fprintf(fid,'ns, , , ns, , , MHz, , , nm, , nm, \n');
             
             header = [...
+                '#                                                                          ';...
+                '# The above lines are for import into Origin                               ';...
                 '#                                                                          ';...
                 '#  _____                 ______      _                  _                  ';...
                 '# |  __ \               |  ____|    | |                | |                 ';...
