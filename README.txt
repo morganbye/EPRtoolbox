@@ -19,10 +19,11 @@ EPRtoolbox
                       |___/                   |___/                       
 
 
-                                                 developed at the         
-                                                 University of East Anglia
-
- M. Bye v13.07
+                                                   developed at the         
+                                               University of East Anglia
+                                                         &
+                                             Weizmann Institute of Science
+ M. Bye v13.09
 
 
 INSTALLATION:

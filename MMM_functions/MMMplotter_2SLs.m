@@ -14,7 +14,20 @@
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v11.2
+% M. Bye v13.09
+%
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
+%               University of East Anglia
+%               NORWICH, UK
+%
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/cwplot
 
 % get files from directory
 folder = uigetdir;

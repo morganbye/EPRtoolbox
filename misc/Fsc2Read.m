@@ -52,7 +52,6 @@ function varargout = Fsc2Read(varargin)
 %
 % See also: EPRTOOLBOX CWPLOTTER
 
-
 %                                        _                             _   
 %                                       | |                           | |  
 %  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_ 
@@ -62,23 +61,26 @@ function varargout = Fsc2Read(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.09
 %
-% M. Bye v12.1
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/brukerread
-% Dec 2011;     Last revision: 12-December-2011
 %
-% Approximate coding time of file:
-%               2 hours
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/cwplot
 %
+% Last updated  12-December-2011
 %
 % Version history:
 % Jan 12        Initial release
+%
 % Dec 11        Initial coding of arguments in/out
 
 %                             Inputs

@@ -29,7 +29,7 @@ function y = cwnorm(y,varargin)
 %       normalise array y between -100 and +100 back into array y
 %
 % More examples available at:
-% http://morganbye.net/eprtoolbox/cw-normaliser-cwnorm
+% http://morganbye.net/eprtoolbox/cwnorm
 %
 % Other m-files required:
 %       n/a
@@ -50,16 +50,24 @@ function y = cwnorm(y,varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v12.12
+% M. Bye v13.09
 %
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/cw-normaliser-cwnorm
-% Dec 2012;     Last revision: 7-December-2012
 %
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/cwplot
+%
+% Last updated  07-December-2012
+%              
+% Version history:
 % Dec 2012      > Update for quicker size determination, also better
 %                   compatibility with Windows systems
 %               > Switch from ifs to Switch statements

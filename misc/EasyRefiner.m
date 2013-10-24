@@ -66,20 +66,22 @@ function varargout = EasyRefiner(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.09
 %
-% M. Bye v13.03
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/cwviewer
-% Mar 2013;     Last revision: 14-March-2013
 %
-% Approximate coding time of file:
-%               20 hours
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/cwplot
 %
+% Last updated  14-March-2013
 %
 % Version history:
 % Mar 13        "Run later" button added

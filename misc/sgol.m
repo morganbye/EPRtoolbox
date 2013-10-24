@@ -2,7 +2,8 @@ function out = sgol(in,nl,nr,Poly)
 
 % SGOL A crude Savitzky-Golay smoothing function
 %
-% Syntax:       - 
+% Syntax:
+%    output = SGOL(input,digitsLeft,digitsRight,Poly)
 %
 % Inputs:
 %    input1     - array (the data to be smoothed)
@@ -43,20 +44,22 @@ function out = sgol(in,nl,nr,Poly)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.09
 %
-% M. Bye v12.6
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/cwviewer
-% May 2012;     Last revision: 30-May-2012
 %
-% Approximate coding time of file:
-%               > 1 hour
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/cwplot
 %
+% Last updated  Last revision: 30-May-2012
 %
 % Version history:
 % Jun 12        Initial release

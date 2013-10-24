@@ -19,12 +19,29 @@ EPRtoolbox
                       |___/                   |___/                       
 
 
-                                                     developed at the         
-                                                 University of East Anglia
+                                                   developed at the         
+                                               University of East Anglia
+                                                         &
+                                             Weizmann Institute of Science
 
-M. Bye v13.07
+M. Bye v13.09
 
-v13.07
+v13.09
+
+EPR toolbox
+===========
+Major update to all script help functions. Help function updates have been
+mirrored by a large update to the website as well.
+
+All scripts have been updated to reflect the change of jobs
+
+> Removed /cw/peakfinder - redundant
+> Removed /misc/arrow - redundant
+> Removed /PDB/MMMrotamertoPDB - functionality implemented better in MISHAP
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v13.07 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 Minor edits throughout the EPR toolbox
 

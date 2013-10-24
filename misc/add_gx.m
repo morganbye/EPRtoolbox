@@ -41,16 +41,22 @@ function add_gx(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.09
 %
-% M. Bye v11.9
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/
-% Sept 2011;    Last revision: 06-September-2011
+%
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/cwplot
+%
+% Last updated  06-September-2011
 
 switch nargin
     case 0

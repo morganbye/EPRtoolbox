@@ -44,7 +44,7 @@ function BrukerWrite(x,y,varargin)
 % MAT-files required:       none
 %
 %
-% See also: EPRTOOLBOX CWPLOTTER
+% See also: EPRTOOLBOX BRUKERREAD
 
 
 %                                        _                             _   
@@ -56,20 +56,22 @@ function BrukerWrite(x,y,varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.09
 %
-% M. Bye v12.05
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/
-% May 2012;     Last revision: 08-May-2012
 %
-% Approximate coding time of file:
-%               4 hours
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/cwplot
 %
+% Last updated  08-May-2012
 %
 % Version history:
 % May 12        Changed 3rd input argument so that if a file path is

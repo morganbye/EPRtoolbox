@@ -10,6 +10,7 @@ function cwplot(x,y,varargin)
 %
 % Offset allows you to create a staggered plot, offseting each plot by the
 % stated number of Gauss. Recommended value ~ 5.
+%
 % Inputs:
 %    input1     - x axis
 %                   Magnetic field
@@ -45,25 +46,28 @@ function cwplot(x,y,varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v11.12
+% M. Bye v13.09
 %
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
+%
+% Email:        morgan.bye@weizmann.ac.il
 % Website:      http://morganbye.net/eprtoolbox/cwplot
-% Dec 2011;     Last revision: 12-December-2011
 %
-% Approximate coding time of file:
-%               2 hours
-%
-%
+% Last updated  12-December-2011
+%              
 % Version history:
 % Dec 11        Help section added
 %
 % May 11        Initial release
-%
+
 
 
 [~,C] = size(x);
