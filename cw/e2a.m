@@ -60,6 +60,7 @@ function e2a(varargin)
 %
 % M. Bye v13.09
 %
+<<<<<<< HEAD
 % v13.09 - current
 %               Chemical Physics Department
 %               Weizmann Institute of Science
@@ -69,6 +70,20 @@ function e2a(varargin)
 %               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
+=======
+% M. Bye v13.07
+%
+% Author:       Morgan Bye
+% Work address: Henry Wellcome Unit for Biological EPR
+%               University of East Anglia
+%               NORWICH, UK
+% Email:        morgan.bye@uea.ac.uk
+% Website:      http://www.morganbye.net/eprtoolbox/epr-converter-e2a
+% Jul 2013;     Last revision: 17-July-2013
+%
+% Approximate coding time of file:
+%               3 hours
+>>>>>>> 684f6b8b8f23c7eda9464bdfefd0bac83a0ffb7d
 %
 % Email:        morgan.bye@weizmann.ac.il
 % Website:      http://morganbye.net/eprtoolbox/cwplot
@@ -76,6 +91,9 @@ function e2a(varargin)
 % Last updated 15-March-2013
 %              
 % Version history:
+% Jul 13        Removal of tilde "~" from input arguments for better
+%               compatibility with old Windows versions of MatLab
+%
 % Mar 13        Update for file errors.
 %                   Changed input address - removes conflict with address
 %                   command
@@ -150,8 +168,8 @@ switch nargin
     case 2
         if exist(varargin{1},'file');
             in_address = varargin{1};
-            [~,f,e] = fileparts(in_address);
-            file = [f e];
+            [directory,name,ext] = fileparts(in_address);
+            file = [name ext];
             [mag_field, abs] = BrukerRead(in_address);
         end
 
@@ -161,8 +179,8 @@ switch nargin
     case 3
         if exist(varargin{1},'file');
             in_address = varargin{1};
-            [~,f,e] = fileparts(in_address);
-            file = [f e];
+            [directory,name,ext] = fileparts(in_address);
+            file = [name ext];
             [mag_field, abs] = BrukerRead(in_address);
         end
         
@@ -173,8 +191,8 @@ switch nargin
     case 4
         if exist(varargin{1},'file');
             in_address = varargin{1};
-            [~,f,e] = fileparts(in_address);
-            file = [f e];
+            [directory,name,ext] = fileparts(in_address);
+            file = [name ext];
             [mag_field, abs] = BrukerRead(in_address);
         end
         

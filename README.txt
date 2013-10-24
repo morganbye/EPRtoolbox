@@ -19,11 +19,18 @@ EPRtoolbox
                       |___/                   |___/                       
 
 
+<<<<<<< HEAD
                                                    developed at the         
                                                University of East Anglia
                                                          &
                                              Weizmann Institute of Science
  M. Bye v13.09
+=======
+                                                     developed at the         
+                                                 University of East Anglia
+
+ M. Bye v13.07
+>>>>>>> 684f6b8b8f23c7eda9464bdfefd0bac83a0ffb7d
 
 
 INSTALLATION:

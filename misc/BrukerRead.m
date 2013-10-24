@@ -1,6 +1,6 @@
 function varargout = BrukerRead(varargin)
 
-% BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC , .spc / .par) into the
+% BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the
 % MATLAB workspace.
 %
 % BRUKERREAD ()
@@ -86,6 +86,7 @@ function varargout = BrukerRead(varargin)
 %
 % M. Bye v13.09
 %
+<<<<<<< HEAD
 % v13.09 - current
 %               Chemical Physics Department
 %               Weizmann Institute of Science
@@ -95,6 +96,17 @@ function varargout = BrukerRead(varargin)
 %               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
+=======
+% M. Bye v13.07
+%
+% Author:       Morgan Bye
+% Work address: Henry Wellcome Unit for Biological EPR
+%               University of East Anglia
+%               NORWICH, UK
+% Email:        morgan.bye@uea.ac.uk
+% Website:      http://www.morganbye.net/eprtoolbox/brukerread
+% Jul 2013;     Last revision: 17-July-2013
+>>>>>>> 684f6b8b8f23c7eda9464bdfefd0bac83a0ffb7d
 %
 % Email:        morgan.bye@weizmann.ac.il
 % Website:      http://morganbye.net/eprtoolbox/cwplot
@@ -102,6 +114,9 @@ function varargout = BrukerRead(varargin)
 % Last updated  18-March-2013
 %
 % Version history:
+% Jul 13        Removal of tilde "~" from input arguments for better
+%               compatibility with old Windows versions of MatLab
+%
 % Mar 13        > Minor edits to help compatibility with the EasySpin's
 %                   "eprsave". This is not a fix as the function does not
 %                   export several key components for a spectrum (such as
@@ -143,6 +158,12 @@ function varargout = BrukerRead(varargin)
 %               "Current Folder". Only a problem occasionally when called
 %               from another script.
 
+% TODO %
+% 4 argument output doesn't work
+%       info.z_axis has the information but it's not output correctly
+%       Should be a switch for CW/PLS. PowerSat is very different in the
+%       info to a 2D pulsed experiment
+
 %                         Input arguments
 % ========================================================================
 
@@ -160,7 +181,7 @@ switch nargin
                 
         % File name/path manipulation
         address = [directory,file];
-        [~, name,extension] = fileparts(address);
+        [dir, name,extension] = fileparts(address);
         
         graph = '';
         
@@ -182,7 +203,7 @@ switch nargin
                 
             % File name/path manipulation
             address = [directory,file];
-            [~, name,extension] = fileparts(address);
+            [dir, name,extension] = fileparts(address);
             
         % Or if input is a path
         else
@@ -721,12 +742,12 @@ switch nargout
         info.ELDORFreqWidth = strtrim(regexprep(parameters((strmatch('ELDORFreqWidth',parameters)),:),'ELDORFreqWidth',''));
         info.FTAcqModeSlct = strtrim(regexprep(parameters((strmatch('FTAcqModeSlct',parameters)),:),'FTAcqModeSlct',''));
         info.PPExtTrg = parameters((strmatch('PPExtTrg',parameters)),:);
-        info.PPExtTrg = strtrim(regexprep((info.PPExtTrg(1,:)),'PPExtTrg',''));
+%        info.PPExtTrg = strtrim(regexprep((info.PPExtTrg(1,:)),'PPExtTrg',''));
         info.PPExtTrgSlope = strtrim(regexprep(parameters((strmatch('PPExtTrgSlope',parameters)),:),'PPExtTrgSlope',''));
         info.PlsSPELEXPSlct = strtrim(regexprep(parameters((strmatch('PlsSPELEXPSlct',parameters)),:),'PlsSPELEXPSlct',''));
         info.ReplaceMode = parameters((strmatch('ReplaceMode',parameters)),:);
         info.ReplaceMode_ftEpr = strtrim(regexprep((info.ReplaceMode(1,:)),'ReplaceMode',''));
-        info.ReplaceMode_recorder = strtrim(regexprep((info.ReplaceMode(2,:)),'ReplaceMode',''));
+%        info.ReplaceMode_recorder = strtrim(regexprep((info.ReplaceMode(2,:)),'ReplaceMode',''));
         clear info.ReplaceMode
         info.ShotRepTime = strtrim(regexprep(parameters((strmatch('ShotRepTime',parameters)),:),'ShotRepTime',''));
         info.ShotsPLoop = strtrim(regexprep(parameters((strmatch('ShotsPLoop',parameters)),:),'ShotsPLoop',''));

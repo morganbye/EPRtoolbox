@@ -50,7 +50,7 @@ PeldorPlotter
 A complete setup of a PELDOR experiment includes a T1, T2 and field swept
 echo before the PELDOR trace.
 
-By pointing T1T2Plotter at one of these files in a folder it will
+By pointing PeldorPlotter at one of these files in a folder it will
 automatically plot all 4 experiments as a single figure of subplots. The
 figure is then automatically saved to the same location as a PDF for quick
 printing.

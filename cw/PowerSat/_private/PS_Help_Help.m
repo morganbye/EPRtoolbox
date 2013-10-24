@@ -32,7 +32,7 @@ function PS_Help_Help
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v12.7
+% M. Bye v13.08
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -40,13 +40,15 @@ function PS_Help_Help
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/PowerSat
-% Oct 2011;     Last revision: 17-October-2011
+% Aug 2013;     Last revision: 06-August-2013
 %
 % Version history:
+% Aug 13        > Inclusion of web browser opening and taking to website
+%
 % Oct 11        > Initial release
 
 about = [...
-' PowerSat v13.04                                                          ';...
+' PowerSat v13.08                                                          ';...
 ' ===============                                                          ';...
 '                                                                          ';...
 ' PowerSat is written by Morgan Bye at UEA, Norwich, UK                    ';...
@@ -59,4 +61,5 @@ about = [...
 ' Or email me:                                                             ';...
 ' morgan.bye@uea.ac.uk                                                     ';...
 '                                                                          '];
-helpdlg(about,'Help')
+helpdlg(about,'Help');
+web('http://morganbye.net/powersat','-browser');
