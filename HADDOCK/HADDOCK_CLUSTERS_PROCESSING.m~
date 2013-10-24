@@ -17,11 +17,7 @@ function varargout = HADDOCK_CLUSTERS_PROCESSING(varargin)
 %
 % Typically once the HADDOCK ana_clusters script is run the HADDOCK run
 % folder will be populated with files evaluating each model. Running the
-% script with default parameters generates a plot where each structure is
-% plotted with RMSD to the average structure against the HADDOCK score of
-% that structure. The top 4 (or whichever parameter selected in the
-% ana_clusters script) models for each cluster is plotted as a red circle
-% with errorbars.
+% script with default parameters generates a plot where each structure is 
 %
 % Inputs:
 %    input1     - path

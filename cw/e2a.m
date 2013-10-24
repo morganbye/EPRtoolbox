@@ -58,9 +58,8 @@ function e2a(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v13.09
+% M. Bye v13.10
 %
-<<<<<<< HEAD
 % v13.09 - current
 %               Chemical Physics Department
 %               Weizmann Institute of Science
@@ -70,23 +69,9 @@ function e2a(varargin)
 %               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-=======
-% M. Bye v13.07
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
-%               University of East Anglia
-%               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/epr-converter-e2a
-% Jul 2013;     Last revision: 17-July-2013
-%
-% Approximate coding time of file:
-%               3 hours
->>>>>>> 684f6b8b8f23c7eda9464bdfefd0bac83a0ffb7d
 %
 % Email:        morgan.bye@weizmann.ac.il
-% Website:      http://morganbye.net/eprtoolbox/cwplot
+% Website:      http://morganbye.net/eprtoolbox/e2a
 %
 % Last updated 15-March-2013
 %              

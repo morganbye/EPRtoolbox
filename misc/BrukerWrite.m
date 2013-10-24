@@ -70,9 +70,8 @@ function BrukerWrite(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v13.09
+% M. Bye v13.10
 %
-<<<<<<< HEAD
 % v13.09 - current
 %               Chemical Physics Department
 %               Weizmann Institute of Science
@@ -85,20 +84,6 @@ function BrukerWrite(varargin)
 %
 % Email:        morgan.bye@weizmann.ac.il
 % Website:      http://morganbye.net/eprtoolbox/cwplot
-=======
-% M. Bye v13.07
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
-%               University of East Anglia
-%               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/
-% Jul 2013;     Last revision: 25-July-2013
-%
-% Approximate coding time of file:
-%               6 hours
->>>>>>> 684f6b8b8f23c7eda9464bdfefd0bac83a0ffb7d
 %
 % Last updated  08-May-2012
 %

@@ -26,8 +26,7 @@ function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)
 %                   clusters named in input1
 %                   ie - 4 uses 4 structures from each cluster
 %
-%                   If one cluster has less than input then the number of
-%                   available structures is used instead for that cluster.
+%           
 %
 %
 % Outputs:
@@ -48,14 +47,10 @@ function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)
 %
 % Example: 
 %    HADDOCK_CLUSTERS_TO_PYMOL
-%               GUI load a folder, figure generated shows 16 (or less)
-%               structures, the top 4 scoring structures from the top 4
-%               scoring clusters
+%               GUI load a folder, figure generated shows 16 
 %
 %   HADDOCK_CLUSTERS_TO_PYMOL(16,1)
-%               GUI load a folder, figure generated shows 16 (or less)
-%               structures, the top 16 scoring structures from top scoring
-%               clusters
+%               load designated folder into variables hdScore and RMSD
 %
 % Other m-files required:   none
 %
@@ -64,7 +59,7 @@ function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)
 % MAT-files required:       none
 %
 %
-% See also: EPRTOOLBOX HADDOCK_CLUSTERS_PROCESSING
+% See also: EPRTOOLBOX
 
 %                                        _                             _   
 %                                       | |                           | |  

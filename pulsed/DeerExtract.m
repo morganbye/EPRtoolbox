@@ -64,7 +64,7 @@ function [x,y] = DeerExtract(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v13.09
+% M. Bye v13.10
 %
 % v13.09 - current
 %               Chemical Physics Department
@@ -465,7 +465,8 @@ switch genCSV
                 '#                                                                          ';...
                 '# Data that cannot be found returns columns of zeros                       ';...
                 '#                                                                          ';...
-                '# This file has been created by DeerExtract - v13.07 at:                   '];
+                '# This file has been created by DeerExtract - v13.07 at:                   ';...
+                '#                                                                          '];
             
             header = [header ; sprintf('%-75s', ['# ' datestr(now, 'dd mmmm yyyy - HH:MM')])];
             
