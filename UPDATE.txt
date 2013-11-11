@@ -26,7 +26,33 @@ EPRtoolbox
 
 M. Bye v13.09
 
-v13.09
+v13.11
+
+--- EPRtoolbox hits 1200 downloads ---
+
+NEW FEATURE: VarianRead
+=======================
+> Read Varian *.dat files into MatLab.
+
+NEW FEATURE: SpecManRead
+========================
+> Read SpecMan *.dat/*.exp/*.d01 files into MatLab.
+
+e2af
+====
+General update / bug fix
+
+e2a
+===
+> Added header to output file
+> Optional 'noheader' call
+> Input arguments tidied up
+> Removed extremely complex output argument and replaced
+    with smarter use of output arguments
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v13.09 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 EPR toolbox
 ===========
@@ -46,7 +72,7 @@ All scripts have been updated to reflect the change of jobs
 Minor edits throughout the EPR toolbox
 
 PeldorPlotter
-===========
+=============
 A complete setup of a PELDOR experiment includes a T1, T2 and field swept
 echo before the PELDOR trace.
 

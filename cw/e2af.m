@@ -67,7 +67,7 @@ function e2af(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v13.09
+% M. Bye v13.11
 %
 % v13.09 - current
 %               Chemical Physics Department
@@ -82,9 +82,11 @@ function e2af(varargin)
 % Email:        morgan.bye@weizmann.ac.il
 % Website:      http://morganbye.net/eprtoolbox/cwplot
 %
-% Last updated  15-March-2013
+% Last updated  11-November-2013
 %
 % Version history:
+% Nov 13        Header updated and improved
+%
 % Jul 13        e2af now handles pulsed experiments with real and imaginary
 %                   data channels
 %
@@ -251,8 +253,11 @@ if noFiles ~= 0
                 '#                                                                          ';...
                 '#  Part of the EPR toolbox:                           developed at         ';...
                 '#  morganbye.net/eprtoolbox                    University of East Anglia   ';...
+                '#                                                         &                ';...
+                '#                                             Weizmann Institue of Science ';...
                 '#                                                                          ';...
-                '# This file has been created by e2af - v12.10 at:                          '];
+                '#                                                                          ';...
+                '# This file has been created by e2af - v13.11 at:                          '];
             
             header = [header ; sprintf('%-75s', ['# ' datestr(now, 'dd mmmm yyyy - HH:MM')])];
             
