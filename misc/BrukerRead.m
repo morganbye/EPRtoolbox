@@ -48,7 +48,7 @@ function varargout = BrukerRead(varargin)
 %    output0    - plot
 %                   A new figure showing the data
 %    output1    - x axis
-%                   Magnetic field
+%                   Magnetic field / time
 %    output2    - y axis
 %                   Intensity
 %    output3    - information
