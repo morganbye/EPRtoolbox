@@ -1,27 +1,44 @@
 function varargout = SpecManRead(varargin)
 
-% SPECMANREAD Open Varian files
+% SPECMANREAD Open SpecMan format data files
 %
 % SPECMANREAD ()
 % SPECMANREAD ('/path/to/file.dat')
+% SPECMANREAD ('plot')
 % SPECMANREAD ('/path/to/file.dat','plot')
 % [x, y] = SPECMANREAD (...)
+% [x, y, info] = SPECMANREAD (...)
 %
-% SPECMANREad when run without any inputs, opens a GUI so that the user can
-% open the file themselves. SPECMANREAD can also accept a path to a file as
-% an input if the path is put in 'quotes'
+% SPECMANREAD opens SpecMan format data files (*.d01) and experiment
+% parameter files (*.exp) into the MatLab workspace. When run without any
+% inputs, a file selection graphical user interface is opened so that the
+% user can open the file themselves. SPECMANREAD can also accept a path to
+% a file as an input if the path is put in 'quotes'
 %
 % SPECMANREAD can be run with the optional 'plot' input, to plot the file
 % being loaded
 %
-% SPECMANREAD outputs a x matrix (magnetic field), a y matrix (intensity)
-% and an optional info field.
+% Due to the complex nautre of the SpecMan file format, data is returned in
+% matrices. Additional experiment information can be returned in an
+% optional output argument
 %
-% If no outputs are selected then the x and y values are plotted
-% With the graph option (graph is assigned value 1) the data is also
-% plotted
+% If no outputs are selected then the x and y values are plotted and will
+% be attempted to be written to the workspace as "x" and "y" - but only if
+% the variables are not in use.
+%
+% With the optional graph input (graph is assigned value 1) the data is
+% also automatically plotted.
+%
+% This script draws upon inspiration from:
+% SpecMan file format documentation - 
+%       specman4epr.com/Manual/exp_file_format.html
+% kv_d01read.m from Kazan Viewer
+%       sites.google.com/site/silakovalexey/kazan-viewer/
+% SpecManDataRead.m by Dr. Alberto Collauto
+%       weizmann.ac.il/chemphys/EPR_group/group-members/dr-alberto-collauto
 %
 % Inputs:
+%    input0     - a graphical user interface file selection
 %    input1     - a string input to the path of a file
 %    input2     - 'plot' draws a plot of the imported file
 %
@@ -31,7 +48,7 @@ function varargout = SpecManRead(varargin)
 %    output2    - y axis
 %                   Intensity
 %    output3    - info
-%                   Array of information about the loaded file
+%                   Structure of information about the loaded file
 %
 % Example: 
 %    [x,y] = SpecManRead
@@ -91,9 +108,25 @@ switch nargin
         [directory,name,extension] = fileparts(address);
         
     case 1
-        address = varargin{1};
-        [directory,name,extension] = fileparts(address);
+        if strcmp(varargin{1},'plot')
+            graph = 'plot';
+            
+            % GUI get file
+            [file , directory] = uigetfile({'*.d01','SpecMan File (*.d01)'; ...
+                '*.*',  'All Files (*.*)'},'Load SpecMan file');
+            
+            % if user cancels command nothing happens
+            if isequal(file,0) %|| isequal(directory,0)
+                return
+            end
+            
+            % File name/path manipulation
+            address = [directory,file];
+        else
+            address = varargin{1};
+        end
 
+        [directory,name,extension] = fileparts(address);
         
     case 2
         address = varargin{1};
@@ -103,61 +136,11 @@ switch nargin
 
 end
 
-%% Data files
-% ========================================================================
-
-% SpecMan file information from:
-% http://www.specman4epr.com/Manual/exp_file_format.html
-
-% Open file
-fid = fopen(address,'r','ieee-le');
-
-% Check the file was opened
-if fid < 1
-   error(['File ''',name,''' could not be opened'])
-   return
+% Check that file exists
+if ~exist(address,'file')
+    error('SpecManRead: File could not be found.')
+    return 
 end
-
-% Get data format of SpecMan file
-header = fread(fid,7,'uint32');
-
-nDimensions = header(1);
-
-% Data format
-switch header(2);
-    case 0
-        data_format = 'double';
-    case 1
-        data_format = 'float32';
-end
-
-% Field lengths
-switch nDimensions
-    case 1
-        Dimension1 = header(7);
-        
-    case 2
-        Dimension1 = header(7);
-        Dimension2 = header(6);
-        
-    case 3
-        Dimension1 = header(7);
-        Dimension2 = header(6);
-        Dimension3 = header(5);
-        
-    case 4
-        Dimension1 = header(7);
-        Dimension2 = header(6);
-        Dimension3 = header(5);
-        Dimension4 = header(4); 
-end
-
-
-
-raw_data = (fread(fid,[nDimensions,inf],'uint32'))';
-
-% Close file to save memory
-fclose(fid);
 
 %% Parameters file (*.exp) loading
 % ========================================================================
@@ -179,127 +162,217 @@ fclose(fid);
 %% Parameter sorting - required
 % ========================================================================
 
+% These parameters are defined as required and appear in every SpecMan file
+
 % Empty lines
 pEmptyLines      = find(not(cellfun('isempty',strfind(par,'                                                                                '))));
 
+% Generate parameters
+parameters = {};
 
-% Required General section
-pGeneralStart    = find(not(cellfun('isempty',strfind(par,'[general]'))));
-pGeneral         = par(pGeneralStart:pEmptyLines(1));
+parameters = ParameterLoad (par,pEmptyLines,'[general]'    ,parameters,'General');
+parameters = ParameterLoad (par,pEmptyLines,'[sweep]'      ,parameters,'Sweep');
+parameters = ParameterLoad (par,pEmptyLines,'[params]'     ,parameters,'Parameters');
+parameters = ParameterLoad (par,pEmptyLines,'[aquisition]' ,parameters,'Aquisition');
 
-% textscan(line,'%s = %s') wont work here if there are spaces in the
-% answer, so the inelegant solution of strtok and trimming is used instead
-
-for k = 2:numel(pGeneral)-1
-    [m,n] = strtok(pGeneral{k},'=');
-    m = strtok(m,' ');
-    [arb,n] = strtok(n,' ');
-    parameters.General.(m) = strtrim(n);
-end
-
-% Required Sweep section
-pSweepStart    = find(not(cellfun('isempty',strfind(par,'[sweep]'))));
-endLine        = find(pEmptyLines>pSweepStart,1,'first');
-pSweep         = par(pSweepStart:pEmptyLines(endLine));
-
-for k = 2:numel(pSweep)-1
-    [m,n] = strtok(pSweep{k},'=');
-    m = strtok(m,' ');
-    [arb,n] = strtok(n,' ');
-    parameters.Sweep.(m) = strtrim(n);
-end
-
-% Required Parameter section
-pParametersStart    = find(not(cellfun('isempty',strfind(par,'[params]'))));
-endLine        = find(pEmptyLines>pParametersStart,1,'first');
-pParameters         = par(pParametersStart:pEmptyLines(endLine));
-
-for k = 2:numel(pParameters)-1
-    [m,n] = strtok(pParameters{k},'=');
-    m = strtok(m,' ');
-    [arb,n] = strtok(n,' ');
-    parameters.Parameters.(m) = strtrim(n);
-end
-
-% Required Aquisition section
-pAcquisitionStart    = find(not(cellfun('isempty',strfind(par,'[aquisition]'))));
-endLine              = find(pEmptyLines>pAcquisitionStart,1,'first');
-pAcquisition         = par(pAcquisitionStart:pEmptyLines(endLine));
-
-for k = 2:numel(pAcquisition)-1
-    [m,n] = strtok(pAcquisition{k},'=');
-    m = strtok(m,' ');
-    [arb,n] = strtok(n,' ');
-    parameters.Acquisition.(m) = strtrim(n);
-end
 
 %% Parameter sorting - optional
 % ========================================================================
 
+% These parameters are defined as optional and will be machine dependent
+
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[text]'     ,parameters,'Text');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[decision]' ,parameters,'Decision');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[program]'  ,parameters,'Program');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[presetup]' ,parameters,'PreSetup');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[postsetup]',parameters,'PostSetup');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[pack]'     ,parameters,'Pack');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[warmup]'   ,parameters,'Warmup');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[System]'   ,parameters,'System');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[SOURCE]'   ,parameters,'Source1');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[SOURCE2]'  ,parameters,'Source2');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[SOURCE3]'  ,parameters,'Source3');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[PB400]'    ,parameters,'PB400');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[Aquiris]'  ,parameters,'Aquiris');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[Field]'    ,parameters,'Field');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[sample_info]',parameters,'SampleInfo');
+end
+try
+    parameters = ParameterLoad (par,pEmptyLines,'[exp_info]'    ,parameters,'ExpInfo');
+end
 
 
-pTextStart       = find(not(cellfun('isempty',strfind(par,'[text]'))));
-pSweepStart      = find(not(cellfun('isempty',strfind(par,'[sweep]'))));
-pDecisionStart   = find(not(cellfun('isempty',strfind(par,'[decision]'))));
-pProgramStart    = find(not(cellfun('isempty',strfind(par,'[program]'))));
-pPresetupStart   = find(not(cellfun('isempty',strfind(par,'[presetup]'))));
-pPostsetupStart  = find(not(cellfun('isempty',strfind(par,'[postsetup]'))));
-pPackStart       = find(not(cellfun('isempty',strfind(par,'[pack]'))));
-pWarmupStart     = find(not(cellfun('isempty',strfind(par,'[warmup]'))));
-pSystemStart     = find(not(cellfun('isempty',strfind(par,'[System]'))));
-pSource1Start    = find(not(cellfun('isempty',strfind(par,'[SOURCE]'))));
-pPB400Start      = find(not(cellfun('isempty',strfind(par,'[PB400]'))));
-pSource2Start    = find(not(cellfun('isempty',strfind(par,'[SOURCE2]'))));
-pAcquirisStart   = find(not(cellfun('isempty',strfind(par,'[Aquiris]'))));
-pFieldStart      = find(not(cellfun('isempty',strfind(par,'[Field]'))));
-pSource3Start    = find(not(cellfun('isempty',strfind(par,'[SOURCE3]'))));
-pSampleInfoStart = find(not(cellfun('isempty',strfind(par,'[sample_info]'))));
-pExpInfoStart    = find(not(cellfun('isempty',strfind(par,'[exp_info]'))));
+%% Data files - loading
+% ========================================================================
 
+% SpecMan file information from:
+% http://www.specman4epr.com/Manual/exp_file_format.html
 
+% Open file
+fid = fopen(address,'r','ieee-le');
 
+% Check the file was opened
+if fid < 1
+   error(['File ''',name,''' could not be opened'])
+   return
+end
 
+% Read initial parameters
+DataAmount = fread(fid,1,'uint32');
 
+% Get data format
+DataFormat = fread(fid,1,'uint32');
 
+% Data format
+switch DataFormat
+    case 0
+        DataType = 'double';
+    case 1
+        DataType = 'float';
+end
 
+% Setup data dimensions
+DataDimension       = cell(DataAmount,1);
+ArrayOfDimensions   = cell(DataAmount,1);
+OverallDataSize     = cell(DataAmount,1);
 
+% Get data dimensions for each data stream
+for n = 1:DataAmount
+    DataDimension{n}     = fread(fid,1,'int32');
+    ArrayOfDimensions{n} = fread(fid,4,'int32');
+    OverallDataSize{n}   = fread(fid,1,'int32');
+end
 
+% Create structure to read streams into
+Data = cell(DataAmount,1);
 
+% Read in the data
+for n = 1:DataAmount
+    Data{n} = fread(fid,OverallDataSize{n},DataType);
+end
 
-% Split file string into lines
-Data = textscan(str,'%[^\n\r]');
+% With data read, close file from memory
+fclose(fid);
 
-
-% Header lines start with text
-headers = regexp(Data{1}, '^[^A-Z].*$','ignorecase');
-
-headerlines = 0;
-for k = 1: numel(headers)
-    if isempty(headers{k});
-        headerlines = headerlines+1;
-    else
-        break
+% Manipulate data into proper cell arrays
+data = cell(DataAmount,1);
+for n = 1:DataAmount
+    imx = ArrayOfDimensions{n}(1);
+    jmx = ArrayOfDimensions{n}(2);
+    kmx = ArrayOfDimensions{n}(3);
+    lmx = ArrayOfDimensions{n}(4);
+    for l = 1:lmx
+        for k = 1:kmx
+            for j = 1:jmx
+                m1 = 1+((j-1)+((k-1)*jmx)+((l-1)*kmx*jmx))*imx;
+                m2 = m1+imx-1;
+                data{n}(:,j,k,l) = Data{n}(m1:m2);
+            end
+        end
     end
 end
 
-header = Data{1}(1:headerlines);
-header = strvcat(header);
+%% Data files - processing
+% ========================================================================
 
-% Split data into x and y
-data = Data{1}(headerlines+1:end);
+% Switch processing based upon experiment. This can only be done by
+% investigating what is being swept during the experiment
 
-for k = 1 : numel(data)
-    raw_data{k} = textscan(data{k}, ['%f' delimiter '%f']);
-end
-
-for k = 1 : numel(raw_data)
-    x(k) = raw_data{1,k}{1}(1);
-    y(k) = raw_data{1,k}{2}(1);
-end
-    
-x = x';
-y = y';
-
+% Is the data a transient spectrum?
+% switch isfield(parameters.Sweep,'transient')
+%     
+%     % No, normal spectrum
+%     case 0
+                
+        % What is being sweeped?
+        switch parameters.Sweep.sweep1(1)
+            case 'X'
+                
+                % Second dimension being scanned?
+                switch parameters.Sweep.sweep2(1)
+                    % 2-D experiment
+                    case 'Y'
+                        x = 1 : 1 : size(data,1);
+                        
+                    % 1-D experiment
+                    otherwise
+                        % Axis moves time axis
+                        if strfind(parameters.Sweep.sweep1,'tau') > 0
+                            tauLines = textscan(parameters.Parameters.tau,'%s ');
+                            tauStart = str2double(tauLines{1}{1});
+                            stepPos  = strfind(tauLines{1},'step');
+                            tauStep  = str2double(tauLines{1}{find(not(cellfun('isempty',stepPos)))+1});
+                            
+                            tauUnits = tauLines{1}{2};
+                            xlegend  = ['Time / ' tauUnits];
+                            
+                            x = tauStart : tauStep : tauStart+(tauStep*(imx-1));
+                            x = x';
+                            
+                            y = data{1};
+                            
+                        end
+                end
+                
+            case 'Y'
+                
+                % Axis moves field (ie field sweep)
+                if strfind(parameters.Sweep.sweep1,'Field') > 0
+                    fieldLines = textscan(parameters.Parameters.Field,'%s ');
+                    %                     fieldStart = str2double(fieldLines{1}{1});
+                    %                     stepPos    = strfind(fieldLines{1},'to');
+                    %                     fieldEnd   = str2double(fieldLines{1}{find(not(cellfun('isempty',stepPos)))+1});
+                    %                     fieldStep  = (fieldEnd-fieldStart)/imx;
+                    %
+                    %                     x = fieldStart : fieldStep : fieldEnd-1;
+                    
+                    fieldUnits = fieldLines{1}{2};
+                    xlegend    = ['Magnetic Field / ' fieldUnits];
+                    
+                    x = data{2};
+                    y = data{1};
+                    
+                end
+                
+            case 'Z'
+                
+            case 'S'
+                
+            case 'P'
+                
+        end
+        
+%     case 1
+% end
 
 %% Outputs
 % ========================================================================
@@ -313,10 +386,21 @@ y = y';
 
 switch nargout
     case 0
-        figure('name' , ['SpecManRead: ' name], 'NumberTitle','off');
-        plot(x,y);
-        xlabel('Magnetic Field / Gauss');
-        ylabel('Intensity');
+        try
+            h = figure('name' , ['SpecManRead: ' name], 'NumberTitle','off');
+            plot(x,y);
+            xlabel(xlegend);
+        catch
+            close(h);
+        end
+        
+        % try assigning to workspace if it's free
+        if exist('x','var') == 0
+            assignin('base','x',x)
+        end
+        if exist('y','var') == 0
+            assignin('base','y','y')
+        end
         
     case 1
         varargout{1} = y;
@@ -336,13 +420,45 @@ switch nargout
 end
 
 % Plot the figure if the input has been selected
-if nargin > 1
-    if isequal(graph,'plot')
-        figure('name' , ['SpecManRead: ' name], 'NumberTitle','off');
-        plot(x,y);
-        xlabel('Magnetic Field / Gauss');
-        ylabel('Intensity');
+if nargin > 0
+    if strcmp(graph,'plot')
+        try
+            h = figure('name' , ['SpecManRead: ' name], 'NumberTitle','off');
+            plot(x,y);
+            xlabel(xlegend);
+        catch
+            close(h);
+            disp('SpecManRead: Graphing error - graph could not be displayed')
+        end
     end
 end
 
+end
+
+
+%% 
+function parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)
+
+% Function to scan the parameter file for a term and output that section to
+% parameters.outputName with each lines as a field
+
+% Raw parameters list
+% empty lines list
+% Input string to find ie '[general]'
+% Output parameters structure
+% Output field name
+
+startline            = find(not(cellfun('isempty',strfind(par,inputString))));
+endLine              = find(emptyLines>startline,1,'first');
+rangeLine            = par(startline:emptyLines(endLine));
+
+for k = 2:numel(rangeLine)-1
+    % textscan(line,'%s = %s') wont work here if there are spaces in the
+    % answer, so the inelegant solution of strtok and trimming is used
+    % instead
+    [m,n] = strtok(rangeLine{k},'=');
+    m = strtok(m,' ');
+    [arb,n] = strtok(n,' ');
+    parameters.(outputName).(m) = strtrim(n);
+end
 end
