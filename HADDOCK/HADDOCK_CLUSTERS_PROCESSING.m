@@ -175,7 +175,17 @@ chsFiles = dir([folder '/cluster_haddock-score.txt_best4']);
 
 noClusters  = numel(hsFiles);
 
-avgHad  = dlmread('cluster_haddock-score.txt','',1,1);
+if noClusters == 0
+   error('No ''file.nam_clustX_haddock-score'' files could be found in that folder') 
+   return
+end
+
+try
+    avgHad  = dlmread('cluster_haddock-score.txt','',1,1);
+catch
+    error('The file ''cluster_haddock-score.txt'' could not be found in that folder')
+    return
+end
 
 % Parameter setup - this sets the cluster names to get the parameter from
 % each cluster and also reads in the average cluster file for that
@@ -276,7 +286,7 @@ set(gcf,'color', 'white');
 
 switch parameter
     case 'rmsd-Emin'
-        xlim([0 ceil(max(avgscin(:,1)))]);
+        xlim([0 ceil(max(scScores(:,1)))]);
         xlabel('\textsf{RMSD from average HADDOCK structure / }\r{A}','interpreter','latex');
     case 'bsa'
         xlim([0 ceil(max(avgscin(:,1)))]);
