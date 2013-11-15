@@ -1,20 +1,20 @@
-function varargout = Fsc2Read(varargin)
+function varargout = VarianRead(varargin)
 
-% FSC2READ Open Fsc2 files
+% VARIANREAD Open Varian files
 %
-% FSC2READ ()
-% FSC2READ ('/path/to/file.dat')
-% FSC2READ ('/path/to/file.dat','plot')
-% [x, y] = FSC2READ (...)
+% VARIANREAD ()
+% VARIANREAD ('/path/to/file.dat')
+% VARIANREAD ('/path/to/file.dat','plot')
+% [x, y] = VARIANREAD (...)
 %
-% FSC2READ when run without any inputs, opens a GUI so that the user can
-% open the file themselves. FSC2READ can also accept a path to a file as
-% an input if the path is put in 'quotes'.
+% VARIANREAD when run without any inputs, opens a GUI so that the user can
+% open the file themselves. VARIANREAD can also accept a path to a file as
+% an input if the path is put in 'quotes'
 %
-% FSC2READ can be run with the optional 'plot' input, to plot the file
+% VARIANREAD can be run with the optional 'plot' input, to plot the file
 % being loaded
 %
-% FSC2READ outputs a x matrix (magnetic field), a y matrix (intensity)
+% VARIANREAD outputs a x matrix (magnetic field), a y matrix (intensity)
 % and an optional info field.
 %
 % If no outputs are selected then the x and y values are plotted
@@ -34,10 +34,10 @@ function varargout = Fsc2Read(varargin)
 %                   Array of information about the loaded file
 %
 % Example: 
-%    [x,y] = Fsc2Read
+%    [x,y] = VarianRead
 %               GUI load a file
 %
-%    [x,y] = Fsc2Read('/path/to/file.dat','plot')
+%    [x,y] = VarianRead('/path/to/file.dat','plot')
 %               load x and y of file.dat with to the workspace and 
 %               plot x,y as a new figure
 %
@@ -48,7 +48,7 @@ function varargout = Fsc2Read(varargin)
 % MAT-files required:       none
 %
 %
-% See also: EPRTOOLBOX CWPLOTTER
+% See also: EPRTOOLBOX
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -59,27 +59,18 @@ function varargout = Fsc2Read(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v13.09
+% M. Bye v13.11
 %
-% v13.09 - current
 %               Chemical Physics Department
 %               Weizmann Institute of Science
 %               76100 REHOVOT, Israel
-% 
-% v11.06 - v13.08
-%               Henry Wellcome Unit for Biological EPR
-%               University of East Anglia
-%               NORWICH, UK
 %
 % Email:        morgan.bye@weizmann.ac.il
-% Website:      http://morganbye.net/eprtoolbox/cwplot
-%
-% Last updated  12-December-2011
+% Website:      http://morganbye.net/eprtoolbox/
 %
 % Version history:
-% Jan 12        Initial release
+% Nov 13        Initial release
 %
-% Dec 11        Initial coding of arguments in/out
 
 %                             Inputs
 % ========================================================================
@@ -87,8 +78,8 @@ function varargout = Fsc2Read(varargin)
 switch nargin
     case 0
         % GUI get file
-        [file , directory] = uigetfile({'*.dat','fsc2 File (*.*)'; ...
-            '*.*',  'All Files (*.*)'},'Load fsc2 file');
+        [file , directory] = uigetfile({'*.dat','Varian File (*.*)'; ...
+            '*.*',  'All Files (*.*)'},'Load Varian file');
         
         % if user cancels command nothing happens
         if isequal(file,0) %|| isequal(directory,0)
@@ -99,15 +90,30 @@ switch nargin
         address = [directory,file];
         [~, name,extension] = fileparts(address);
         
+        delimiter = ' ';
+        
         
     case 1
         address = varargin{1};
         [directory,name,extension] = fileparts(address);
         
+        delimiter = ' ';
+
+        
     case 2
         address = varargin{1};
         [directory,name,extension] = fileparts(address);
         graph = varargin{2};
+        
+        delimiter = ' ';
+        
+    case 3
+        address = varargin{1};
+        [directory,name,extension] = fileparts(address);
+        graph = varargin{2};
+        
+        delimiter = varargin{3};
+
 end
 
 %                            Data files
@@ -120,16 +126,16 @@ fclose(fid);
 % Split file string into lines
 Data = textscan(str,'%[^\n\r]');
 
-% Seperate header lines (lines that start with %)
-headers = strfind(Data{1},char('%'));
+
+% Header lines start with text
+headers = regexp(Data{1}, '^[^A-Z].*$','ignorecase');
 
 headerlines = 0;
 for k = 1: numel(headers)
     if isempty(headers{k});
-        break
-    else
         headerlines = headerlines+1;
-        
+    else
+        break
     end
 end
 
@@ -140,7 +146,7 @@ header = strvcat(header);
 data = Data{1}(headerlines+1:end);
 
 for k = 1 : numel(data)
-    raw_data{k} = textscan(data{k}, '%f %f');
+    raw_data{k} = textscan(data{k}, ['%f' delimiter '%f']);
 end
 
 for k = 1 : numel(raw_data)
@@ -164,7 +170,7 @@ y = y';
 
 switch nargout
     case 0
-        figure('name' , ['Fsc2Read: ' name], 'NumberTitle','off');
+        figure('name' , ['VarianRead: ' name], 'NumberTitle','off');
         plot(x,y);
         xlabel('Magnetic Field / Gauss');
         ylabel('Intensity');
@@ -187,9 +193,9 @@ switch nargout
 end
 
 % Plot the figure if the input has been selected
-if nargin == 2
+if nargin > 1
     if isequal(graph,'plot')
-        figure('name' , ['Fsc2Read: ' name], 'NumberTitle','off');
+        figure('name' , ['VarianRead: ' name], 'NumberTitle','off');
         plot(x,y);
         xlabel('Magnetic Field / Gauss');
         ylabel('Intensity');

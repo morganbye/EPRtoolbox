@@ -19,11 +19,11 @@ EPRtoolbox
                       |___/                   |___/                       
 
 
-                                                     developed at the         
-                                                 University of East Anglia
-
- M. Bye v13.07
-
+                                                   developed at the         
+                                               University of East Anglia
+                                                         &
+                                             Weizmann Institute of Science
+ M. Bye v13.10
 
 INSTALLATION:
 =============
@@ -64,7 +64,7 @@ CONTACT ME:
 ===========
 
 As always for any problems, suggestions or contributions please contact me:
-morgan.bye@uea.ac.uk
+morgan.bye@weizmann.ac.il
 Or via the contact page on the website:
 morganbye.net/contact
 
@@ -78,7 +78,7 @@ If you'd like to contribute to the toolbox - please email
 If you use the toolbox and feel like it's saved you time/effort/frustration
 please consider buying me a coffee as saying thanks:
 [there's a PayPal link at morganbye.net/eprtoolbox]
-Or buying me a beer at the next conference!
+Or buy me a beer at the next conference!
 
 
 ACKNOWLEDGEMENTS:
@@ -92,10 +92,11 @@ Gunnar Jeschke - ETH Zurich, Switzerland
 Peter Meadows - Jeol (UK) Ltd, UK
 	File format discussion
 Alexander Morley - UEA, UK
-    	cwViewer and PowerSat error reporting
+    cwViewer and PowerSat error reporting
 David Mulder - National Renewable Energy Laboratory, USA
-    	cwViewer error reporting
-    	e2af inspiration
+    cwViewer error reporting
+    e2af inspiration
+    Beer!
 Patrick Pennington - Dartmouth, USA
 	Concept development
 Yevhen Polyhach - ETH Zurich, Switzerland

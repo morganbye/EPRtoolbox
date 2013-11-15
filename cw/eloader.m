@@ -15,15 +15,22 @@ function [x,y] = eloader
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v11.10
+% M. Bye v13.09
 %
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/
-% Oct 2011;     Last revision: 11-October-2011
+%
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/cwplot
+%
+% Last updated  11-October-2011
 %
 % Version history:
 % Oct 12        Minor update, reflecting BrukerRead updates

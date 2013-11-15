@@ -15,7 +15,7 @@ function varargout = EPRtoolbox(varargin)
 %    output1 - n/a
 %
 % Example: 
-%    see http://morganbye.net/EPRtoolbox
+%    see http://morganbye.net/eprtoolbox
 %
 % Other m-files required: none
 %
@@ -24,7 +24,7 @@ function varargout = EPRtoolbox(varargin)
 %
 % MAT-files required: none
 %
-% See also: CW_POWERSAT CW_VIEWER MISHAP
+% See also: POWERSAT CWVIEWER MISHAP
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -35,21 +35,28 @@ function varargout = EPRtoolbox(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.10
 %
-% M. Bye v13.07
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/EPRtoolbox
-% Jul 2013;     Last revision: 07-July-2013
 %
-% Approximate coding time of file:
-%               4 hours
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/cwplot
 %
-% Jul 13	v13.07
+% Last updated  24-October-2013
+% Oct 13        v13.10 - big change to the load BrukerRead functionality.
+%               EPRtoolbox does the GUI call and passes the file path to
+%               BrukerRead. This is as a result of .spc files not
+%               outputting the 'info' variable properly
+%
+% Jul 13        v13.07
 %
 % May 13        v13.05 - spring clean of menus, added documentation to help
 %
@@ -128,14 +135,14 @@ Warning = ' ';
 Status  = sprintf('Status:\t\tUp-to-date');
 
 % Check the version number
-if now > datenum('2013-10-01')
+if now > datenum('2014-01-01')
     Status  = sprintf('Status:\t\tProbably out-of-date');
     Warning = sprintf('EPR Toolbox is updated frequently with new features and bug fixes.\nYour version is over 3 months old, please consider upgrading.\n\nFor more information please see:\nmorganbye.net/eprtoolbox\n');
 end
 
 % Startup message
-Version = sprintf('Version:\t\tv13.07');
-Release = sprintf('Release date:\t7th July 2013');
+Version = sprintf('Version:\t\tv13.10');
+Release = sprintf('Release date:\t24th October 2013');
 Info    = sprintf('User interfaces are available from the menus above\n\nFor more scripts please explore the downloaded folder');
 
 startup_text = strvcat(Version, Release, Status, Warning, Info);
@@ -173,11 +180,36 @@ function File_Callback(hObject, eventdata, handles)
 % --------------------------------------------------------------------
 function File_load_Callback(hObject, eventdata, handles)
 
-[x,y,z] = BrukerRead;
+% GUI get file
+[file , directory] = uigetfile({'*.DTA;*.spc','Bruker File (*.DTA,*.spc)'; ...
+    '*.*',  'All Files (*.*)'},...
+    'Load Bruker file');
 
-assignin('base','x',x)
-assignin('base','y',y)
-assignin('base','info',z)
+% if user cancels command nothing happens
+if isequal(file,0) %|| isequal(directory,0)
+    return
+end
+
+% File name/path manipulation
+address = [directory,file];
+[dir, name,extension] = fileparts(address);
+
+switch extension
+    case 'DTA'
+        [x,y,z] = BrukerRead(address);
+        assignin('base','x',x)
+        assignin('base','y',y)        
+        assignin('base','info',z)
+        
+    case 'spc'
+        [x,y] = BrukerRead(address);
+        assignin('base','x',x)
+        assignin('base','y',y)
+        
+end
+
+
+
 
 
 % --------------------------------------------------------------------
@@ -298,7 +330,7 @@ function Help_Callback(hObject, eventdata, handles)
 % --------------------------------------------------------------------
 function Help_use_Callback(hObject, eventdata, handles)
 
-l1 = sprintf('The EPR Toolbox has been designed to be as helpful and easy to use as is possible. For the most part users should be able to complete most tasks without the need for any former MATLAB knowledge.\n\nTo begin, select an item from one of the menus at the top of the window. The individual routines will then guide you through the process.\n\nFull documentation is available at morganbye.net/EPRtoolbox\n\nOr contact me at morgan.bye@uea.ac.uk');
+l1 = sprintf('The EPR Toolbox has been designed to be as helpful and easy to use as is possible. For the most part users should be able to complete most tasks without the need for any former MATLAB knowledge.\n\nTo begin, select an item from one of the menus at the top of the window. The individual routines will then guide you through the process.\n\nFull documentation is available at morganbye.net/EPRtoolbox\n\nOr contact me at morgan.bye@weizmann.ac.il');
 
 set(handles.editbox,'Max',2)
 set(handles.editbox,'String',l1);
@@ -314,7 +346,7 @@ web([directory '/doc/index.html'],'-helpbrowser');
 % --------------------------------------------------------------------
 function Help_about_Callback(hObject, eventdata, handles)
 
-l1 = sprintf('The EPR Toolbox has been developed by Morgan Bye during his time at the University of East Anglia. It is constantly in development and as such should be considered beta software\n\nThis software is distributed under a Creative Commons, non-commerical, share a-like license.\n\nPlease report any bugs, errors or requests to morgan.bye@uea.ac.uk\n\nMore information can be found at morganbye.net/eprtoolbox\n\nLatest releases can also be found at sourceforge.net/projects/eprtoolbox\n\nLinks in the Command Window\n\n');
+l1 = sprintf('The EPR Toolbox has been developed by Morgan Bye during his time at the University of East Anglia, UK and Weizmann Institute of Science, IL. It is constantly in development and as such should be considered beta software\n\nThis software is distributed under a Creative Commons, non-commerical, share a-like license.\n\nPlease report any bugs, errors or requests to morgan.bye@weizmann.ac.il\n\nMore information can be found at morganbye.net/eprtoolbox\n\nLatest releases can also be found at sourceforge.net/projects/eprtoolbox\n\nLinks in the Command Window\n\n');
 
 Links = sprintf('\n<a href="http://morganbye.net/eprtoolbox">morganbye.net/eprtoolbox</a>\n<a href="http://sourceforge.net/projects/eprtoolbox">sourceforge.net/projects/eprtoolbox</a>\n\n')
 

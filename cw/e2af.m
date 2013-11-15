@@ -67,22 +67,26 @@ function e2af(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.11
 %
-% M. Bye v13.07
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/
-% Mar 2013;     Last revision: 15-March-2013
 %
-% Approximate coding time of file:
-%               2 hours
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/cwplot
 %
+% Last updated  11-November-2013
 %
 % Version history:
+% Nov 13        Header updated and improved
+%
 % Jul 13        e2af now handles pulsed experiments with real and imaginary
 %                   data channels
 %
@@ -249,8 +253,11 @@ if noFiles ~= 0
                 '#                                                                          ';...
                 '#  Part of the EPR toolbox:                           developed at         ';...
                 '#  morganbye.net/eprtoolbox                    University of East Anglia   ';...
+                '#                                                         &                ';...
+                '#                                             Weizmann Institue of Science ';...
                 '#                                                                          ';...
-                '# This file has been created by e2af - v12.10 at:                          '];
+                '#                                                                          ';...
+                '# This file has been created by e2af - v13.11 at:                          '];
             
             header = [header ; sprintf('%-75s', ['# ' datestr(now, 'dd mmmm yyyy - HH:MM')])];
             

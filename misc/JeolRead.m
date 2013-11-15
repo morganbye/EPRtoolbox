@@ -49,8 +49,7 @@ function varargout = JeolRead(varargin)
 % MAT-files required:       none
 %
 %
-% See also: EPRTOOLBOX CWPLOTTER
-
+% See also: EPRTOOLBOX CWPLOTTER BRUKERREAD FSC2READ
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -61,20 +60,22 @@ function varargout = JeolRead(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.09
 %
-% M. Bye v11.12
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/jeolread
-% Dec 2011;     Last revision: 12-December-2011
 %
-% Approximate coding time of file:
-%               1 hour
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/cwplot
 %
+% Last updated  Last revision: 12-December-2011
 %
 % Version history:
 % Jan 11        Initial release

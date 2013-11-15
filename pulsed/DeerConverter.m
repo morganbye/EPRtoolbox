@@ -40,18 +40,22 @@ function [x,y] = DeerConverter(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v12.7
+% M. Bye v13.09
 %
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox
-% Jun 2012;     Last revision: 18-June-2011
 %
-% Approximate coding time of file:
-%               2 hours
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/
+%
+% Last updated  18-June-2012
 %
 % Version history:
 % Dec 12        > Fix for 0 arguments in error

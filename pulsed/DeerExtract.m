@@ -64,18 +64,22 @@ function [x,y] = DeerExtract(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v13.07
+% M. Bye v13.10
 %
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox
-% Jul 2013;     Last revision: 07-July-2013
 %
-% Approximate coding time of file:
-%               4 hours
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/
+%
+% Last updated  07-July-2013
 %
 % Version history:
 % Jul 13        > Update for DA 2013 compatibility
@@ -461,7 +465,8 @@ switch genCSV
                 '#                                                                          ';...
                 '# Data that cannot be found returns columns of zeros                       ';...
                 '#                                                                          ';...
-                '# This file has been created by DeerExtract - v13.07 at:                   '];
+                '# This file has been created by DeerExtract - v13.07 at:                   ';...
+                '#                                                                          '];
             
             header = [header ; sprintf('%-75s', ['# ' datestr(now, 'dd mmmm yyyy - HH:MM')])];
             

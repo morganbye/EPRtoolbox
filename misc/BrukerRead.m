@@ -48,7 +48,7 @@ function varargout = BrukerRead(varargin)
 %    output0    - plot
 %                   A new figure showing the data
 %    output1    - x axis
-%                   Magnetic field
+%                   Magnetic field / time
 %    output2    - y axis
 %                   Intensity
 %    output3    - information
@@ -72,7 +72,7 @@ function varargout = BrukerRead(varargin)
 % MAT-files required:       none
 %
 %
-% See also: EPRTOOLBOX CWPLOTTER
+% See also: EPRTOOLBOX BRUKERWRITE
 
 
 %                                        _                             _   
@@ -84,19 +84,20 @@ function varargout = BrukerRead(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.10
 %
-% M. Bye v13.07
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/brukerread
-% Jul 2013;     Last revision: 17-July-2013
 %
-% Approximate coding time of file:
-%               12 hours
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/brukerread
 %
 %
 % Version history:

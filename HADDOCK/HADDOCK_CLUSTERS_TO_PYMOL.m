@@ -1,26 +1,61 @@
 function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)
 
-% 
+% HADDOCK_CLUSTERS_TO_PYMOL takes the output from the HADDOCK ana_clusters
+% script and plots top scoring models in PyMOL
 %
-% HADDOCK_CLUSTERS_PROCESSING ()
-% HADDOCK_CLUSTERS_PROCESSING ('/path/to/folder')
-% [HADDOCK_score, RMSD_Emin_from_average] = HADDOCK_CLUSTERS_PROCESSING (...)
+% HADDOCK_CLUSTERS_TO_PYMOL ()
+% HADDOCK_CLUSTERS_TO_PYMOL (4,4)
 %
-% FUNCTION full description
+% By default (without any input calls) HADDOCK_CLUSTERS_TO_PYMOL will load
+% the top 4 structures from the top 4 clusters. Each will be aligned to
+% each other using a full chain RMSD refinement process (based upon chain
+% B).
+%
+% The top model of chain B is displayed as a cartoon model. The 16 chain
+% A's are displayed using colour coded line backbones, where blue is the
+% best scoring model and red is the 4th structure from the 4th cluster.
 %
 % Inputs:
-%    input1     - 
+%    input1     - number of clusters
+%                   the number of clusters to use, in descending HADDOCK
+%                   score order
+%                   ie - using 1, uses only the best cluster
+%
+%    input2     - number of structures
+%                   the number of top structures to use from each of the
+%                   clusters named in input1
+%                   ie - 4 uses 4 structures from each cluster
+%
+%                   If one cluster has less than input then the number of
+%                   available structures is used instead for that cluster.
 %
 %
 % Outputs:
-%    output0    - 
+%    output0    - HADDOCKtoPYMOL.pml
+%                   a PyMOL script file for the loading of each model and
+%                   setting of variables to correct display the structures.
+%                   Image is automatically centred, auto-rotated to
+%                   maximise data visualisation and ray-traced for
+%                   publication quality images
+%
+%                   File is saved into the same HADDOCK run directory
+%
+%    output1    - LINUX AND MAC ONLY
+%                   if PyMOL is already installed on the system and
+%                   accessible to the system path then HADDOCKtoPYMOL.pml
+%                   is automatically opened with PyMOL and the resulting
+%                   image is exported to HADDOCK_run/HADDOCKtoPYMOL.png
 %
 % Example: 
-%    HADDOCK_CLUSTERS_PROCESSING
-%               GUI load a folder, new figure created
+%    HADDOCK_CLUSTERS_TO_PYMOL
+%               GUI load a folder, figure generated shows 16 (or less)
+%               structures, the top 4 scoring structures from the top 4
+%               scoring clusters
 %
-%    [hdScore,RMSD] = HADDOCK_CLUSTERS_PROCESSING('/path/to/folder')
-%               load designated folder into variables hdScore and RMSD
+%   HADDOCK_CLUSTERS_TO_PYMOL(16,1)
+%               GUI load a folder, figure generated shows 16 (or less)
+%               structures, the top 16 scoring structures from top scoring
+%               clusters
 %
 % Other m-files required:   none
 %
@@ -29,8 +64,7 @@ function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)
 % MAT-files required:       none
 %
 %
-% See also: EPRTOOLBOX
-
+% See also: EPRTOOLBOX HADDOCK_CLUSTERS_PROCESSING
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -41,22 +75,26 @@ function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.10
 %
-% M. Bye v13.08
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/
-% Dec 2011;     Last revision: 22-November-2012
 %
-% Approximate coding time of file:
-%               8 hours
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/
 %
+% Last updated  Last revision: 24-October-2013
 %
 % Version history:
+% Oct 13        Added help
+%
 % Aug 13        > Removed error checking at start of script
 %               > Got properly operational
 %               > MAC and LINUX systems will perform pymol step
@@ -177,7 +215,7 @@ header = [...
 '#                      |___/                   |___/                       ';...
 '#                                                                          ';...
 '#                                                                          ';...
-'# M. Bye v13.08                                                            ';...
+'# M. Bye v13.10                                                            ';...
 '#                                                                          ';...
 '# Author:       Morgan Bye                                                 ';...
 '# Work address: Henry Wellcome Unit for Biological EPR                     ';...
@@ -189,6 +227,8 @@ header = [...
 '# File created at:                                                         '];
 
 header = [header ; sprintf('%-75s', ['# ' datestr(now, 'dd mmmm yyyy - HH:MM')])];
+
+header = [header ; '#                                                                          '];
 
 for k = 1:size(header,1)
     fprintf(PyMOL_launch,'%-75s\n',header(k,:));

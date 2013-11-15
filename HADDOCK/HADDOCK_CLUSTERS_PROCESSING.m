@@ -7,7 +7,21 @@ function varargout = HADDOCK_CLUSTERS_PROCESSING(varargin)
 % HADDOCK_CLUSTERS_PROCESSING ('/path/to/folder')
 % [HADDOCK_score, RMSD_Emin_from_average] = HADDOCK_CLUSTERS_PROCESSING (...)
 %
-% FUNCTION full description
+% HADDOCK_CLUSTERS_PROCESSING allows for the processing of HADDOCK clusters. It
+% allows the user to select a cluster or to operate on all the final
+% structures and present them as a figure plotting HADDOCK score against
+% any of the HADDOCK parameters (bsa, dH, Edesolv, rmsd, rmsd-Emin
+% (default), ener (by default this is Einter), ener-Einter, ener-Enb,
+% ener-Evdw, ener-Eelec, ener-Eair, ener-Ecdih, ener-Ecoup, ener-Esani,
+% ener-Evean, ener-Edani)
+%
+% Typically once the HADDOCK ana_clusters script is run the HADDOCK run
+% folder will be populated with files evaluating each model. Running the
+% script with default parameters generates a plot where each structure is
+% plotted with RMSD to the average structure against the HADDOCK score of
+% that structure. The top 4 (or whichever parameter selected in the
+% ana_clusters script) models for each cluster is plotted as a red circle
+% with errorbars.
 %
 % Inputs:
 %    input1     - path
@@ -49,7 +63,7 @@ function varargout = HADDOCK_CLUSTERS_PROCESSING(varargin)
 %    [hdScore,RMSD] = HADDOCK_CLUSTERS_PROCESSING('/path/to/folder')
 %               load designated folder into variables hdScore and RMSD
 %
-% Other m-files required:   none
+% Other m-files required:   errorbar_x
 %
 % Subfunctions:             none
 %
@@ -57,7 +71,6 @@ function varargout = HADDOCK_CLUSTERS_PROCESSING(varargin)
 %
 %
 % See also: EPRTOOLBOX
-
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -68,22 +81,26 @@ function varargout = HADDOCK_CLUSTERS_PROCESSING(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.09
 %
-% M. Bye v13.08
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/
-% Aug 2013;     Last revision: 16-August-2013
 %
-% Approximate coding time of file:
-%               8 hours
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/
 %
+% Last updated  Last revision: 22-November-2012
 %
 % Version history:
+% Oct 13        Help added
+%
 % Aug 13        > Change of figure axes to latex, means that the angstrom
 %                   A-ring character will export correct if the figure is
 %                   saved as a PDF or EPS

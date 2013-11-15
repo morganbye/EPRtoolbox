@@ -12,6 +12,7 @@ function e2a(varargin)
 %       E2A ('path/to/file.DTA',delimiter)
 %       E2A ('path/to/file.DTA',delimiter, extension)
 %       E2A ('path/to/file.DTA',delimiter, extension, interval)
+%       E2A ('path/to/file.DTA',delimiter, extension, interval, 'noheader')
 %
 % Inputs:
 %       input1      - The path to a file
@@ -58,22 +59,29 @@ function e2a(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
+% M. Bye v13.11
 %
-% M. Bye v13.07
-%
-% Author:       Morgan Bye
-% Work address: Henry Wellcome Unit for Biological EPR
+% v13.09 - current
+%               Chemical Physics Department
+%               Weizmann Institute of Science
+%               76100 REHOVOT, Israel
+% 
+% v11.06 - v13.08
+%               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
 %               NORWICH, UK
-% Email:        morgan.bye@uea.ac.uk
-% Website:      http://www.morganbye.net/eprtoolbox/epr-converter-e2a
-% Jul 2013;     Last revision: 17-July-2013
 %
-% Approximate coding time of file:
-%               3 hours
+% Email:        morgan.bye@weizmann.ac.il
+% Website:      http://morganbye.net/eprtoolbox/e2a
 %
-%
+% Last updated 11-November-2013
+%              
 % Version history:
+% Nov 13        > Added header to output file
+%               > Optional 'noheader' call
+%               > Removed extremely complex output argument and replaced
+%                   with smarter use of arguments
+%
 % Jul 13        Removal of tilde "~" from input arguments for better
 %               compatibility with old Windows versions of MatLab
 %
@@ -120,7 +128,6 @@ switch nargin
             end
             
             delimiter = ',';
-            extension = '.csv';
             
             in_address = varargin{1};
             [~,f,e] = fileparts(in_address);
@@ -130,7 +137,7 @@ switch nargin
             % For delimiter
         elseif ischar(varargin{1}) && length(varargin{1}) == 1
             delimiter = varargin{1};
-            extension = '.csv';
+            
             
             % Select the file
             [file , directory] = uigetfile({'*.DTA','Bruker BES3T File (*.DTA)'; ...
@@ -146,6 +153,9 @@ switch nargin
             
             [mag_field, abs] = BrukerRead(in_address);
         end
+        
+        extension = '.csv';
+        noheader  = '';
        
         % File and delimiter selection
     case 2
@@ -157,6 +167,7 @@ switch nargin
         end
 
         delimiter = varargin{2};
+        noheader  = '';
         
         % File, delimiter and extension selection
     case 3
@@ -169,6 +180,7 @@ switch nargin
         
         delimiter = varargin{2};
         extension = varargin{3};
+        noheader  = '';
         
         % File, delimiter, extension and interval selection
     case 4
@@ -182,6 +194,20 @@ switch nargin
         delimiter = varargin{2};
         extension = varargin{3};
         interval  = varargin{4};
+        noheader  = '';
+        
+    case 5
+                if exist(varargin{1},'file');
+            in_address = varargin{1};
+            [directory,name,ext] = fileparts(in_address);
+            file = [name ext];
+            [mag_field, abs] = BrukerRead(in_address);
+        end
+        
+        delimiter = varargin{2};
+        extension = varargin{3};
+        interval  = varargin{4};
+        noheader  = varargin{5};
 end
 
 % File loaded details
@@ -215,58 +241,63 @@ switch prompt,
         % If doing from the current folder, using CLI file entry, then
         % directory is blank and we have a leading '/'
         if size(directory,1) == 0
-            dlmwrite([name,extension], z, 'delimiter', delimiter,'precision', '%.13f');
+            % dlmwrite([name,extension], z, 'delimiter', delimiter,'precision', '%.13f');
+            
+            out_add = [name,extension];
+            
         else
-            dlmwrite([directory,'/',name,extension], z, 'delimiter', delimiter,'precision', '%.13f');
+            % dlmwrite([directory,'/',name,extension], z, 'delimiter', delimiter,'precision', '%.13f');
+            
+            out_add = [directory,'/',name,extension];
         end
 
     case 'No'
-              
-        switch nargin
-            case 0
-                % Get output address
-                [out_name, out_path] = uiputfile('*.csv', 'Save output as...');
-                out_add = fullfile(out_path,out_name);
-                
-                % Write file
-                dlmwrite(out_add, z, 'delimiter', ',','precision', '%.13f');
-          
-            case 1
-                % Get output address
-                [out_name, out_path] = uiputfile('*.csv', 'Save output as...');
-                out_add = fullfile(out_path,out_name);
-                                
-                % If argument was a file then output as normal
-                if exist(varargin{1},'file');
-                    dlmwrite(out_add, z, 'delimiter', ',','precision', '%.13f');
-                
-                % Output with user's selected delimiter
-                else
-                    dlmwrite(out_add, z, 'delimiter', delimiter,'precision', '%.13f');
-                end
-                
-            case 2
-                % Get output address
-                [out_name, out_path] = uiputfile('*.csv', 'Save output as...');
-                out_add = fullfile(out_path,out_name);
-                
-                dlmwrite(out_add, z, 'delimiter', delimiter,'precision', '%.13f');
-
-            case 3
-                [out_name, out_path] = uiputfile(['*' delimiter], 'Save output as...');
-                out_add = fullfile(out_path,out_name);
-                
-                dlmwrite(out_add, z, 'delimiter', delimiter,'precision', '%.13f');
-                
-            case 4
-                [out_name, out_path] = uiputfile(['*' delimiter], 'Save output as...');
-                out_add = fullfile(out_path,out_name);
-                
-                dlmwrite(out_add, z, 'delimiter', delimiter,'precision', '%.13f');
-                
-        end
-
+        
+        [out_name, out_path] = uiputfile('*.csv', 'Save output as...');
+        out_add = fullfile(out_path,out_name);
+        
 end
+
+% Generate header
+% ===============
+
+if strcmp(noheader,'noheader') == 0
+    
+    fid = fopen(out_add,'w');
+    
+    header = [...
+        '#                            ___                                           ';...
+        '#                           |__ \                                          ';...
+        '#                        ___   ) |__ _.                                    ';...
+        '#                       / _ \ / /  _` |                                    ';...
+        '#                      |  __// /| (_| |                                    ';...
+        '#                       \___|____\__,_|                                    ';...
+        '#                                                                          ';...
+        '#  Part of the EPR toolbox:                           developed at         ';...
+        '#  morganbye.net/eprtoolbox                    University of East Anglia   ';...
+        '#                                                         &                ';...
+        '#                                             Weizmann Institue of Science ';...
+        '#                                                                          ';...
+        '#                                                                          ';...
+        '# This file has been created by e2af - v13.11 at:                          '];
+    
+    header = [header ; sprintf('%-75s', ['# ' datestr(now, 'dd mmmm yyyy - HH:MM')])];
+    
+    for j = 1:size(header,1)
+        fprintf(fid,'%-75s\n',header(j,:));
+    end
+    
+    % Close the file (for C language operations/memory freeing)
+    fclose(fid);
+    
+end
+
+% Write out data
+dlmwrite(file,...
+            z,...
+            '-append',...
+            'delimiter', delimiter,...
+            'precision', '%.13f');
 
 % Message user
 fprintf('File %s has been successfully converted to %s%s \n \n', file, out_name, extension)
