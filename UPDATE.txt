@@ -24,19 +24,35 @@ EPRtoolbox
                                                          &
                                              Weizmann Institute of Science
 
-M. Bye v13.09
+M. Bye v13.12
 
-v13.11
+v13.12
 
 --- EPRtoolbox hits 1200 downloads ---
 
-NEW FEATURE: VarianRead
-=======================
-> Read Varian *.dat files into MatLab.
+NEW FEATURE: PulseGen
+=====================
+Dr. F. Mentink of the Weizmann Institute of Science, donated code for the 
+drawing of pulse sequences easily in MatLab.
+
+This code has been implemented as a graphical user interface and allows
+users to draw complex pulse sequences quickly and easily. The pulse
+sequence can then be exported in a number of image types.
 
 NEW FEATURE: SpecManRead
 ========================
 > Read SpecMan *.dat/*.exp/*.d01 files into MatLab.
+> So far tested with the following experiments:
+        > T2
+        > T1
+        > PELDOR/DEER
+        > FSE
+        > Transient datasets
+
+
+NEW FEATURE: VarianRead
+=======================
+> Read Varian *.dat files into MatLab.
 
 e2af
 ====
