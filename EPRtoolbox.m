@@ -35,7 +35,7 @@ function varargout = EPRtoolbox(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v13.10
+% M. Bye v13.12
 %
 % v13.09 - current
 %               Chemical Physics Department
@@ -135,14 +135,14 @@ Warning = ' ';
 Status  = sprintf('Status:\t\tUp-to-date');
 
 % Check the version number
-if now > datenum('2014-01-01')
+if now > datenum('2014-03-01')
     Status  = sprintf('Status:\t\tProbably out-of-date');
     Warning = sprintf('EPR Toolbox is updated frequently with new features and bug fixes.\nYour version is over 3 months old, please consider upgrading.\n\nFor more information please see:\nmorganbye.net/eprtoolbox\n');
 end
 
 % Startup message
-Version = sprintf('Version:\t\tv13.10');
-Release = sprintf('Release date:\t24th October 2013');
+Version = sprintf('Version:\t\tv13.12');
+Release = sprintf('Release date:\t10th December 2013');
 Info    = sprintf('User interfaces are available from the menus above\n\nFor more scripts please explore the downloaded folder');
 
 startup_text = strvcat(Version, Release, Status, Warning, Info);

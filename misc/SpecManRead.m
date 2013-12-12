@@ -76,7 +76,7 @@ function varargout = SpecManRead(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v13.11
+% M. Bye v13.12
 %
 %               Chemical Physics Department
 %               Weizmann Institute of Science
@@ -86,6 +86,8 @@ function varargout = SpecManRead(varargin)
 % Website:      http://morganbye.net/eprtoolbox/
 %
 % Version history:
+% Dec 13        S transient switch
+%
 % Nov 13        Initial release
 %
 
@@ -366,6 +368,14 @@ end
             case 'Z'
                 
             case 'S'
+                tauLines = strsplit(parameters.Sweep.transient,',');
+                tauStart = str2double(tauLines{2});
+                tauStep  = str2double(tauLines{3});
+                                            
+                x = tauStart : tauStep : tauStart+(tauStep*(imx-1));
+                x = x';
+                
+                y = data{1};
                 
             case 'P'
                 
@@ -395,11 +405,11 @@ switch nargout
         end
         
         % try assigning to workspace if it's free
-        if exist('x','var') == 0
+        if exist('x','var')
             assignin('base','x',x)
         end
-        if exist('y','var') == 0
-            assignin('base','y','y')
+        if exist('y','var')
+            assignin('base','y',y)
         end
         
     case 1
