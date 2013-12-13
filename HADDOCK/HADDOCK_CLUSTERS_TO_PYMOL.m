@@ -5,6 +5,9 @@ function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)
 %
 % HADDOCK_CLUSTERS_TO_PYMOL ()
 % HADDOCK_CLUSTERS_TO_PYMOL (4,4)
+% HADDOCK_CLUSTERS_TO_PYMOL ('path/to/folder',4,4)
+% HADDOCK_CLUSTERS_TO_PYMOL ('path/to/folder',4,4,'orient')
+% HADDOCK_CLUSTERS_TO_PYMOL ('path/to/folder',4,4,'reference','orient')
 %
 % By default (without any input calls) HADDOCK_CLUSTERS_TO_PYMOL will load
 % the top 4 structures from the top 4 clusters. Each will be aligned to
@@ -16,6 +19,8 @@ function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)
 % best scoring model and red is the 4th structure from the 4th cluster.
 %
 % Inputs:
+%    input0     - graphical user file selection
+%
 %    input1     - number of clusters
 %                   the number of clusters to use, in descending HADDOCK
 %                   score order
@@ -28,6 +33,24 @@ function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)
 %
 %                   If one cluster has less than input then the number of
 %                   available structures is used instead for that cluster.
+%
+%    input3     - command line folder selection
+%
+%    input4     - orient
+%                   in the final stage of visualisation the model is
+%                   orientated. By default, PyMOL will do this to display
+%                   the whole molecule in its best orientation. This can
+%                   also be set manually ie. '/1/B' will orient the model
+%                   so that focus is on structure 1, chain B. This is
+%                   useful for comparing multiple runs.
+%
+%    input5     - reference
+%                   if the docking run is being compared to a known
+%                   structure or model it may be useful to load it and
+%                   display it compared to the docking runs
+%
+%                   Enter the full path to file, ie.
+%                   'path/to/file.pdb'
 %
 %
 % Outputs:
@@ -75,7 +98,7 @@ function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v13.10
+% M. Bye v14.01
 %
 % v13.09 - current
 %               Chemical Physics Department
@@ -90,9 +113,13 @@ function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)
 % Email:        morgan.bye@weizmann.ac.il
 % Website:      http://morganbye.net/eprtoolbox/
 %
-% Last updated  Last revision: 24-October-2013
+% Last updated  Last revision: 13-December-2013
 %
 % Version history:
+% Dec 13        > New orientate commands, with single object selection
+%               > New ability to load a reference file on to the docking
+%                   run
+%
 % Oct 13        Added help
 %
 % Aug 13        > Removed error checking at start of script
@@ -117,6 +144,7 @@ switch nargin
         
         noClust  = 4;
         noStruct = 4;
+        orient   = 'all';
         disp('No structure restraints defined, using default parameters')
         
         
@@ -126,6 +154,7 @@ switch nargin
             folder   = varargin{1};
             noClust  = 4;
             noStruct = 4;
+            orient   = 'all';
             disp('No structure restraints defined, using default parameters')
             
         % Number of structures defined    
@@ -138,6 +167,7 @@ switch nargin
             end
             noClust  = varargin{1};
             noStruct = 4;
+            orient   = 'all';
         end
         
     case 2
@@ -158,13 +188,30 @@ switch nargin
             
             noClust  = varargin{1};
             noStruct = varargin{2};
+            orient   = 'all';
         end
         
     case 3
         folder   = varargin{1};
         noClust  = varargin{2};
         noStruct = varargin{3};
+        orient   = 'all';
+        
+    case 4
+        folder   = varargin{1};
+        noClust  = varargin{2};
+        noStruct = varargin{3};
+        orient   = varargin{4};
+        
+    case 5
+        folder   = varargin{1};
+        noClust  = varargin{2};
+        noStruct = varargin{3};
+        orient   = varargin{4};
+        refStruct= varargin{5};
 end
+
+orient = ['orient ' orient '\n'];
 
 if noClust == 1
     fprintf('Using top cluster only and using %d structures\n',noStruct)
@@ -202,7 +249,7 @@ list = list(~cellfun('isempty',list));
     
 % Create file for loading into PyMOL
 fprintf('Creating PyMOL initialisation script...\n')
-PyMOL_launch = fopen([folder '/HADDOCKtoPYMOL.pml'],'w');
+PyMOL_launch = fopen([folder '/HADDOCKtoPYMOLv14.pml'],'w');
 
 header = [...
 '#                                        _                             _   ';...
@@ -215,13 +262,13 @@ header = [...
 '#                      |___/                   |___/                       ';...
 '#                                                                          ';...
 '#                                                                          ';...
-'# M. Bye v13.10                                                            ';...
+'# M. Bye v14.01                                                            ';...
 '#                                                                          ';...
 '# Author:       Morgan Bye                                                 ';...
-'# Work address: Henry Wellcome Unit for Biological EPR                     ';...
-'#               University of East Anglia                                  ';...
-'#               NORWICH, UK                                                ';...
-'# Email:        morgan.bye@uea.ac.uk                                       ';...
+'# Work address: Department of Chemical Physics                             ';...
+'#               Weizmann Institute of Science                              ';...
+'#               REHOVOT, IL                                                ';...
+'# Email:        morgan.bye@weizmann.ac.il                                  ';...
 '# Website:      http://www.morganbye.net/eprtoolbox/                       ';...
 '#                                                                          ';...
 '# File created at:                                                         '];
@@ -254,6 +301,12 @@ for k = 1:numel(list)
     fprintf(PyMOL_launch,'align %d, sele\n',k);
 end
 
+% Load reference structure if required
+if nargin == 5
+    fprintf(PyMOL_launch,'load %s, reference\n',refStruct);
+    fprintf(PyMOL_launch,'align reference, selec\n');
+end
+
 % Show the original structure (chain B)
 fprintf(PyMOL_launch,'show cartoon,(sele)\n');
 fprintf(PyMOL_launch,'cartoon automatic,(sele)\n');
@@ -273,16 +326,26 @@ fprintf(PyMOL_launch,'util.chainbow\n');
 fprintf(PyMOL_launch,'select /1/B\n');
 fprintf(PyMOL_launch,'color grey60,(sele)\n');
 
+% Recolour the reference structure
+if nargin == 5
+    fprintf(PyMOL_launch,'select reference\n');
+    fprintf(PyMOL_launch,'show cartoon,(sele)\n');
+    fprintf(PyMOL_launch,'cartoon putty,(sele)\n');
+    fprintf(PyMOL_launch,'color black,(sele)\n');
+    fprintf(PyMOL_launch,'set transparency, 0.5,(sele)\n');
+end
+
 % Orientate and centre
-fprintf(PyMOL_launch,'orient all\n');
+fprintf(PyMOL_launch,orient);
 fprintf(PyMOL_launch,'center all\n');
+fprintf(PyMOL_launch,'zoom all\n');
 
 % Background colour
 fprintf(PyMOL_launch,'bg_color white\n');
 
 % Save out image
 fprintf(PyMOL_launch,'ray 1280,1024\n');
-fprintf(PyMOL_launch,'png %s/HADDOCKtoPYMOL.png\n',folder);
+fprintf(PyMOL_launch,'png %s/HADDOCKtoPYMOLv14.png\n',folder);
 
 % Message user
 fprintf('PyMOL initialisation script generated!\n')
@@ -291,7 +354,7 @@ fprintf('PyMOL initialisation script generated!\n')
 switch computer
     case 'GLNXA64'
         if system('which pymol') == 0
-            system(sprintf('pymol %s/HADDOCKtoPYMOL.pml',folder));
+            system(sprintf('pymol %s/HADDOCKtoPYMOLv14.pml',folder));
             fprintf('PyMOL image generated!\n')
         end
         
