@@ -246,10 +246,11 @@ end
 
 list = list(~cellfun('isempty',list));
 
+path = [folder '/HADDOCKtoPyMOL_' datestr(now, 'yymmdd-HHMM')];
     
 % Create file for loading into PyMOL
 fprintf('Creating PyMOL initialisation script...\n')
-PyMOL_launch = fopen([folder '/HADDOCKtoPYMOLv14.pml'],'w');
+PyMOL_launch = fopen([path '.pml'],'w');
 
 header = [...
 '#                                        _                             _   ';...
@@ -293,46 +294,79 @@ for k = 1:numel(list)
 end
 fprintf(PyMOL_launch,'hide all\n');
 
-% Select structure 1
-fprintf(PyMOL_launch,'select /1/B\n');
+% Reference structure switch
+switch nargin
+    case 5
+        % Load reference structure
+        fprintf(PyMOL_launch,'load %s, reference\n',refStruct);
+        
+        % Align docking structures to reference
+        fprintf(PyMOL_launch,'select /reference//B\n');
+        
+        % Align other structures to structure 1
+        for k = 1:numel(list)
+            fprintf(PyMOL_launch,'align %d, sele\n',k);
+        end
+        
+        fprintf(PyMOL_launch,'hide all\n');
 
-% Align other structures to structure 1
-for k = 1:numel(list)
-    fprintf(PyMOL_launch,'align %d, sele\n',k);
-end
+        % Display/colour the reference structure
+        fprintf(PyMOL_launch,'copy ref2, reference\n');
+        fprintf(PyMOL_launch,'select reference\n');
+        fprintf(PyMOL_launch,'show cartoon,(sele)\n');
+        fprintf(PyMOL_launch,'set transparency, 0.5,(sele)\n');
+        % fprintf(PyMOL_launch,'cartoon putty,(sele)\n');
+        
+        fprintf(PyMOL_launch,'deselect\n');
+        fprintf(PyMOL_launch,'select /reference//B\n');
+        fprintf(PyMOL_launch,'color grey60,(sele)\n');
 
-% Load reference structure if required
-if nargin == 5
-    fprintf(PyMOL_launch,'load %s, reference\n',refStruct);
-    fprintf(PyMOL_launch,'align reference, selec\n');
-end
+        fprintf(PyMOL_launch,'deselect\n');
+        fprintf(PyMOL_launch,'select /reference//A\n');
+        fprintf(PyMOL_launch,'color palecyan,(sele)\n');
+        
+        fprintf(PyMOL_launch,'deselect\n');
+        fprintf(PyMOL_launch,'select /ref2//B and name c+o+n+ca\n');
+        fprintf(PyMOL_launch,'show lines, sele\n');
+        fprintf(PyMOL_launch,'color black,(sele)\n');
+        
+        % Show the backbone of the binding partners as lines
+        fprintf(PyMOL_launch,'deselect\n');
+        fprintf(PyMOL_launch,'select //A and name c+o+n+ca\n');
+        fprintf(PyMOL_launch,'show lines, sele\n');
+        
+        % Colour chains using chainbow
+        fprintf(PyMOL_launch,'util.chainbow("sele")\n');
 
-% Show the original structure (chain B)
-fprintf(PyMOL_launch,'show cartoon,(sele)\n');
-fprintf(PyMOL_launch,'cartoon automatic,(sele)\n');
+        
+    otherwise
+        % Select structure 1
+        fprintf(PyMOL_launch,'select /1/B\n');
+        
+        % Align other structures to structure 1
+        for k = 1:numel(list)
+            fprintf(PyMOL_launch,'align %d, sele\n',k);
+        end
 
-% Deselect
-fprintf(PyMOL_launch,'deselect\n');
-
-% Show the backbone of the binding partners as lines
-fprintf(PyMOL_launch,'select //A and name c+o+n+ca\n');
-fprintf(PyMOL_launch,'show lines, sele\n');
-fprintf(PyMOL_launch,'deselect\n');
-
-% Colour chains using chainbow
-fprintf(PyMOL_launch,'util.chainbow\n');
-
-% Recolour centre
-fprintf(PyMOL_launch,'select /1/B\n');
-fprintf(PyMOL_launch,'color grey60,(sele)\n');
-
-% Recolour the reference structure
-if nargin == 5
-    fprintf(PyMOL_launch,'select reference\n');
-    fprintf(PyMOL_launch,'show cartoon,(sele)\n');
-    fprintf(PyMOL_launch,'cartoon putty,(sele)\n');
-    fprintf(PyMOL_launch,'color black,(sele)\n');
-    fprintf(PyMOL_launch,'set transparency, 0.5,(sele)\n');
+        % Show the original structure (chain B)
+        fprintf(PyMOL_launch,'show cartoon,(sele)\n');
+        fprintf(PyMOL_launch,'cartoon automatic,(sele)\n');
+        
+        % Deselect
+        fprintf(PyMOL_launch,'deselect\n');
+        
+        % Show the backbone of the binding partners as lines
+        fprintf(PyMOL_launch,'select //A and name c+o+n+ca\n');
+        fprintf(PyMOL_launch,'show lines, sele\n');
+        fprintf(PyMOL_launch,'deselect\n');
+        
+        % Colour chains using chainbow
+        fprintf(PyMOL_launch,'util.chainbow\n');
+        
+        % Recolour centre
+        fprintf(PyMOL_launch,'select /1/B\n');
+        fprintf(PyMOL_launch,'color grey60,(sele)\n');
+        
 end
 
 % Orientate and centre
@@ -343,36 +377,38 @@ fprintf(PyMOL_launch,'zoom all\n');
 % Background colour
 fprintf(PyMOL_launch,'bg_color white\n');
 
-% Save out image
+% Save out image and session
 fprintf(PyMOL_launch,'ray 1280,1024\n');
-fprintf(PyMOL_launch,'png %s/HADDOCKtoPYMOLv14.png\n',folder);
+fprintf(PyMOL_launch,'png %s.png\n',path);
+fprintf(PyMOL_launch,'save %s.pse\n',path);
 
 % Message user
 fprintf('PyMOL initialisation script generated!\n')
+
 
 % Try to run the script automatically
 switch computer
     case 'GLNXA64'
         if system('which pymol') == 0
-            system(sprintf('pymol %s/HADDOCKtoPYMOLv14.pml',folder));
+            system(sprintf('pymol %s.pml',path));
             fprintf('PyMOL image generated!\n')
         end
         
     case 'MACI64'
         if system('which pymol') == 0
-            system(sprintf('pymol %s/HADDOCKtoPYMOL.pml',folder));
+            system(sprintf('pymol %s.pml',path));
             fprintf('PyMOL image generated!\n')
         end
         
     case 'PCWIN'
-        fprintf('Open the PyMOL script HADDOCKtoPYMOL.pml in folder\n')
-        fprintf('%s\n',folder)
+        fprintf('Now open the PyMOL script:\n')
+        fprintf('%s.pml\n',path)
         fprintf('with PyMOL to complete')
 
         
     case 'PCWIN64'
-        fprintf('Open the PyMOL script HADDOCKtoPYMOL.pml in folder\n')
-        fprintf('%s\n',folder)
+        fprintf('Now open the PyMOL script:\n')
+        fprintf('%s.pml\n',path)
         fprintf('with PyMOL to complete')
 end
         
