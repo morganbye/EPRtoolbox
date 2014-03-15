@@ -205,19 +205,26 @@ x.OriginalData.real = x.OriginalData.real';
 y.OriginalData.real = get(lOD(1), 'ydata');
 y.OriginalData.real = y.OriginalData.real';
 
-x.OriginalData.imag = get(lOD(8), 'xdata');
-x.OriginalData.imag = x.OriginalData.imag';
-y.OriginalData.imag = get(lOD(8), 'ydata');
-y.OriginalData.imag = y.OriginalData.imag';
+try
+    x.OriginalData.imag = get(lOD(8), 'xdata');
+    x.OriginalData.imag = x.OriginalData.imag';
+    y.OriginalData.imag = get(lOD(8), 'ydata');
+    y.OriginalData.imag = y.OriginalData.imag';
+end
 
 % Plotting commands - used if there are no input arguments, or if the first
 % argument is 'noplot'
 if nargin == 0 || (nargin == 1 && strcmp(varargin{1},'noplot') == 0)
     figure('name' , 'DeerExtract: Original data', 'NumberTitle','off');
     movegui(gcf,'northwest');
-    plot(x.OriginalData.real , y.OriginalData.real,'k-', ...
-        x.OriginalData.imag , y.OriginalData.imag,'r-');
-    legend('Real','Imaginary')
+    try
+        plot(x.OriginalData.real , y.OriginalData.real,'k-', ...
+            x.OriginalData.imag , y.OriginalData.imag,'r-');
+        legend('Real','Imaginary')
+    catch
+       plot(x.OriginalData.real , y.OriginalData.real,'k-'); 
+    end
+    
     xlabel('Time / \mus');
     ylabel('');
     set(gcf,'color', 'white');

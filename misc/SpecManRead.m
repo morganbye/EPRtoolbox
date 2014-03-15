@@ -3,9 +3,9 @@ function varargout = SpecManRead(varargin)
 % SPECMANREAD Open SpecMan format data files
 %
 % SPECMANREAD ()
-% SPECMANREAD ('/path/to/file.dat')
+% SPECMANREAD ('/path/to/file.d01')
 % SPECMANREAD ('plot')
-% SPECMANREAD ('/path/to/file.dat','plot')
+% SPECMANREAD ('/path/to/file.d01','plot')
 % [x, y] = SPECMANREAD (...)
 % [x, y, info] = SPECMANREAD (...)
 %
@@ -13,12 +13,16 @@ function varargout = SpecManRead(varargin)
 % parameter files (*.exp) into the MatLab workspace. When run without any
 % inputs, a file selection graphical user interface is opened so that the
 % user can open the file themselves. SPECMANREAD can also accept a path to
-% a file as an input if the path is put in 'quotes'
+% a file as an input if the path is put in 'quotes'.
+%
+% Due to the complex nature of the SpecMan arguments, all time axes will be
+% converted to scientific notation of the SI unit - ie. 1 ns will be
+% returned as 1E-9. Please take this into account in any further scripts.
 %
 % SPECMANREAD can be run with the optional 'plot' input, to plot the file
 % being loaded
 %
-% Due to the complex nautre of the SpecMan file format, data is returned in
+% Due to the complex nature of the SpecMan file format, data is returned in
 % matrices. Additional experiment information can be returned in an
 % optional output argument
 %
@@ -32,7 +36,7 @@ function varargout = SpecManRead(varargin)
 % This script draws upon inspiration from:
 % SpecMan file format documentation - 
 %       specman4epr.com/Manual/exp_file_format.html
-% kv_d01read.m from Kazan Viewer
+% Kazan Viewer
 %       sites.google.com/site/silakovalexey/kazan-viewer/
 % SpecManDataRead.m by Dr. Alberto Collauto
 %       weizmann.ac.il/chemphys/EPR_group/group-members/dr-alberto-collauto
@@ -76,7 +80,7 @@ function varargout = SpecManRead(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v13.12
+% M. Bye v14.04
 %
 %               Chemical Physics Department
 %               Weizmann Institute of Science
@@ -86,6 +90,20 @@ function varargout = SpecManRead(varargin)
 % Website:      http://morganbye.net/eprtoolbox/
 %
 % Version history:
+% Mar 14        Complete rewrite of how the data is imported - now we scan
+%                   through the parameters section, find the variable that
+%                   changes, then look for that variable and see how it
+%                   increases. Based on whether it is a "x to y", "x step
+%                   y" or "x, y, z ..." experiment the axis is then
+%                   generated.
+%
+%               As this is terribly complicated there is a lot of
+%                   commenting for this section. It should now work for
+%                   almost all experiment types. But testing is the only
+%                   way to tell for sure.
+%
+% Jan 14        Made the x axis generation functional
+%
 % Dec 13        S transient switch
 %
 % Nov 13        Initial release
@@ -104,6 +122,8 @@ switch nargin
         if isequal(file,0) %|| isequal(directory,0)
             return
         end
+        
+        graph = 'plot';
                 
         % File name/path manipulation
         address = [directory,file];
@@ -126,6 +146,7 @@ switch nargin
             address = [directory,file];
         else
             address = varargin{1};
+            graph   = '';
         end
 
         [directory,name,extension] = fileparts(address);
@@ -149,6 +170,11 @@ end
 
 filepar = [ directory '/' name '.exp'];
 fid = fopen(filepar , 'r');
+
+if isequal(fid,-1)
+    error('SpecManRead: Could not open the desired *.exp file.')
+    return
+end
 
 % While there's remaining lines, write them
 tline = fgetl(fid);
@@ -175,6 +201,7 @@ parameters = {};
 parameters = ParameterLoad (par,pEmptyLines,'[general]'    ,parameters,'General');
 parameters = ParameterLoad (par,pEmptyLines,'[sweep]'      ,parameters,'Sweep');
 parameters = ParameterLoad (par,pEmptyLines,'[params]'     ,parameters,'Parameters');
+parameters = ParameterLoad (par,pEmptyLines,'[streams]'    ,parameters,'Streams');
 parameters = ParameterLoad (par,pEmptyLines,'[aquisition]' ,parameters,'Aquisition');
 
 
@@ -244,7 +271,7 @@ fid = fopen(address,'r','ieee-le');
 
 % Check the file was opened
 if fid < 1
-   error(['File ''',name,''' could not be opened'])
+   error(['File ''',name,''' could not be opened, both *.d01 and *.exp files are required to open the file.'])
    return
 end
 
@@ -303,89 +330,239 @@ for n = 1:DataAmount
     end
 end
 
-%% Data files - processing
+%% Data files - Processing - Finding the axes
 % ========================================================================
 
-% Switch processing based upon experiment. This can only be done by
-% investigating what is being swept during the experiment
+% NOTE: this section quickly gets very confusing. As SpecMan saves only the
+% experiment type by the name from the template file we have to investigate
+% the experiment description.
+%
+% In short we need to look at the parameters.Sweep section and observe what
+% is being sweeped and then try to build an x-axis from this.
+%
+% This is made slightly more complicated as SpecMan saves in SI prefixes
+% rather than using SI units and scientific numbering.
 
-% Is the data a transient spectrum?
-% switch isfield(parameters.Sweep,'transient')
-%     
-%     % No, normal spectrum
-%     case 0
+% Unit conversion
+prefix = [  'p',  'n',  'u',  'm', ' ', 'k', 'M', 'G',  'T'];
+coeff  = [1E-12, 1E-9, 1E-6, 1E-3, 1E1, 1E3, 1E6, 1E9, 1E12];
+
+
+% Get number of triggers
+triggers = parameters.Streams.triggers;
+
+% Transient format:
+% Axis type, Number of data points, Number of shots per point, Variables
+% eg 'I,500,50,a'
+
+% Setup the Sweep loop
+fieldName = 'transient';
+idx       = 0;
+sweepax   = {};
+
+% Begin loop - this is not the most elegant solution, but by using the
+% while loop we can set the loop to use transient on the first pass and
+% then on each additional pass use sweepX
+
+while isfield(parameters.Sweep, fieldName)
+
+    % Get the detection type
+    [ax.t, str]    = strtok(parameters.Sweep.(fieldName),',');
+    ax.t           = trim(ax.t);
+    
+    % Get the number of data points
+    [ax.size, str] = strtok(str(2:end), ',');
+    
+    % Determine axis size
+    if ax.t=='S' || ax.t=='I'
+        ax.size = 1;
+    else
+        ax.size = str2double(ax.size);
+    end
+    
+    % Get the number of reps
+    [ax.reps, str] = strtok(str(2:end), ',');
+    ax.reps        = str2double(ax.reps);
+    
+    % Get axis variables
+    % - create array
+    ax.var = {};
+    % - loop to fill array
+    while ~isempty(str)
+        [ax.var{end+1}, str] = strtok(str(2:end), ',');
+    end
+    
+    % Write axis to sweepax cell for multi-axes experiments
+    sweepax{end+1,1} = ax;
+    
+    % Update the axis that we're looking at
+    fieldName = ['sweep', num2str(idx)];
+    idx = idx +1;
+end
+
+% If we have multiple triggers then this needs to be reflected in the
+% transient size
+sweepax{1}.size=sweepax{1}.size*triggers;
+
+
+%% Data files - Processing - Generating the axes
+% ========================================================================
+
+% Start the loop
+% ==============
+
+% For the number of axis fields
+for k = 1:size(sweepax, 1)
+    
+    % Setup arrays
+    asize = sweepax{k}.size;
+    
+    % Error check to see that we have more than one axis
+    if asize > 1
+        % Switch according to the detection type
+        switch sweepax{k}.t
+            case 'I'
+                tempparam = 'trans';
                 
-        % What is being sweeped?
-        switch parameters.Sweep.sweep1(1)
-            case 'X'
+            case 'T'
+                tempparam = 'trans';
                 
-                % Second dimension being scanned?
-                switch parameters.Sweep.sweep2(1)
-                    % 2-D experiment
-                    case 'Y'
-                        x = 1 : 1 : size(data,1);
-                        
-                    % 1-D experiment
-                    otherwise
-                        % Axis moves time axis
-                        if strfind(parameters.Sweep.sweep1,'tau') > 0
-                            tauLines = textscan(parameters.Parameters.tau,'%s ');
-                            tauStart = str2double(tauLines{1}{1});
-                            stepPos  = strfind(tauLines{1},'step');
-                            tauStep  = str2double(tauLines{1}{find(not(cellfun('isempty',stepPos)))+1});
-                            
-                            tauUnits = tauLines{1}{2};
-                            xlegend  = ['Time / ' tauUnits];
-                            
-                            x = tauStart : tauStep : tauStart+(tauStep*(imx-1));
-                            x = x';
-                            
-                            y = data{1};
-                            
-                        end
-                end
-                
-            case 'Y'
-                
-                % Axis moves field (ie field sweep)
-                if strfind(parameters.Sweep.sweep1,'Field') > 0
-                    fieldLines = textscan(parameters.Parameters.Field,'%s ');
-                    %                     fieldStart = str2double(fieldLines{1}{1});
-                    %                     stepPos    = strfind(fieldLines{1},'to');
-                    %                     fieldEnd   = str2double(fieldLines{1}{find(not(cellfun('isempty',stepPos)))+1});
-                    %                     fieldStep  = (fieldEnd-fieldStart)/imx;
-                    %
-                    %                     x = fieldStart : fieldStep : fieldEnd-1;
-                    
-                    fieldUnits = fieldLines{1}{2};
-                    xlegend    = ['Magnetic Field / ' fieldUnits];
-                    
-                    x = data{2};
-                    y = data{1};
-                    
-                end
-                
-            case 'Z'
-                
-            case 'S'
-                tauLines = strsplit(parameters.Sweep.transient,',');
-                tauStart = str2double(tauLines{2});
-                tauStep  = str2double(tauLines{3});
-                                            
-                x = tauStart : tauStep : tauStart+(tauStep*(imx-1));
-                x = x';
-                
-                y = data{1};
-                
-            case 'P'
-                
+            otherwise
+                % temp. parameter = the last value of transient but we need
+                % to replace all non letter characters with '_'
+                tempparam = sweepax{k}.var{1};
+                tempparam(findstr(tempparam, ' ')) = '_';
+                tempparam(findstr(tempparam, '.')) = '_';
+                tempparam(findstr(tempparam, ',')) = '_';
         end
         
-%     case 1
-% end
+        % Now we have the temp parameter, we need to check if this is a
+        % parameter
+        
+        if isfield(parameters.Parameters,tempparam)
+           % If it is then we need to process it
+           
+           % Get the string of the field in Parameters
+           str = eval(['parameters.Parameters.' tempparam]);
+           
+           % Now split the string
+           splitstr = textscan(str,'%s','Delimiter', ',; ');
+           
+           % Now we have to build the axis based upon on how the experiment
+           % was set up
+           
+           switch splitstr{1}{3}
+               % Variable of kind 10 ns to 100 ns
+               case 'to'
+                   % Get numerical values
+                   axStart = str2double(splitstr{1}{1});
+                   axEnd   = str2double(splitstr{1}{4});
+                   
+                   % Get the unit prefix, but if there's no prefix in the
+                   % next step we only want to multiply by 1
+                   if size(splitstr{1}{2},2) > 1
+                       unitPrefixStart = findstr(prefix,splitstr{1}{2}(1));
+                   else
+                       unitPrefixStart = 1;
+                   end
+                   if size(splitstr{1}{5},2) > 1
+                       unitPrefixEnd   = findstr(prefix,splitstr{1}{5}(1));
+                   else
+                       unitPrefixEnd   = 1;
+                   end
+                   
+                   % Multiple the value by the unit
+                   axStart   = axStart * coeff(unitPrefixStart);
+                   axEnd     = axEnd   * coeff(unitPrefixEnd);
+                   
+                   % Calculate the step
+                   axStep  = (axEnd-axStart)/(imx-1);
+                            
+                   % Generate the axis
+                   ax = axStart : axStep : axEnd;
+                   x = ax';
+                   
+               % Variable of kind 10 ns step 50 ns    
+               case 'step'
+                   % Get numerical values
+                   axStart = str2double(splitstr{1}{1});
+                   axStep  = str2double(splitstr{1}{4});
+                   
+                   % Get the unit prefix, but if there's no prefix in the
+                   % next step we only want to multiply by 1
+                   if size(splitstr{1}{2},2) > 1
+                       unitPrefixStart = findstr(prefix,splitstr{1}{2}(1));
+                   else
+                       unitPrefixStart = 1;
+                   end
+                   if size(splitstr{1}{5},2) > 1
+                       unitPrefixStep  = findstr(prefix,splitstr{1}{5}(1));
+                   else
+                       unitPrefixStep  = 1;
+                   end
+                   
+                   % Multiple the value by the unit
+                   axStart   = axStart * coeff(unitPrefixStart);
+                   axStep    = axStep  * coeff(unitPrefixStep);
+                   
+                   % Generate the axis
+                   ax = axStart : axStep : axStart+(axStep*(imx-1));
+                   x = ax';
+                   
+               % Variable is a manual list
+               otherwise
+                   
+                   % Create array
+                   x = [];
+                   
+                   % Split the string at the first comma            
+                   [tk1, str1] = strtok(str1, ',');
+                   
+                   % Stick the remaining string in a "while not empty" loop
+                    while ~isempty(tk1)
+                        
+                        % Split the first comma value
+                        splitstr = strsplit(tk1);
+                        axStep   = str2double(splitstr{1});
+                        
+                        % Convert the unit if necessary
+                        if size(splitstr{2},2) > 1
+                            unitPrefixStep = findstr(prefix,splitstr{2}(1));
+                        else
+                            unitPrefixStep = 1;
+                        end
+                        
+                        % Multiple value by the unit
+                        x(end+1)    = axStep * coeff(unitPrefixStart);
+
+                        % Increment to the next loop value
+                        [tk1, str1] = gettoken(str1, ',');
+                        
+                        % If there is no remaining string then we need to
+                        % terminate the loop
+                        if isempty(tk1) && ~isempty(str1)
+                            tk1 = str1; str1 = [];
+                        end
+                    end
+                   
+           end
+           
+        end
+            
+        else
+            
+%     else
+%         % ERROR
+%         error('SpecManRead: The selected file could not be correctly loaded as the parameters file reports only one axis in the Parameters section')
+    end
+    
+end
+
 
 %% Outputs
 % ========================================================================
+
+y = data{1};
 
 % Number of outputs arguments
 %

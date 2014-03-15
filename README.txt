@@ -23,7 +23,7 @@ EPRtoolbox
                                                University of East Anglia
                                                          &
                                              Weizmann Institute of Science
- M. Bye v13.12
+ M. Bye v14.02
 
 INSTALLATION:
 =============
@@ -31,7 +31,7 @@ Extract the zip folder
 Add the folder to your MATLAB path
      File -> Set Path -> Add with Subfolders
      Save, Close.
-Type "EPRtoolbox" to start the main toolbox
+Type "EPRtoolbox" in the MatLab command window to start the main toolbox
 Type "PowerSat" to start the power saturation tool
     (also available through the main toolbox)
 
@@ -71,32 +71,43 @@ morganbye.net/contact
 
 CONTRIBUTE:
 ===========
-If you spot an error - please report them to me via
+If you spot an error - please report them to me via email
 
 If you'd like to contribute to the toolbox - please email
 
 If you use the toolbox and feel like it's saved you time/effort/frustration
-please consider buying me a coffee as saying thanks:
-[there's a PayPal link at morganbye.net/eprtoolbox]
-Or buy me a beer at the next conference!
+please consider buying me a coffee as saying thanks, or at least drop me an
+email to say thanks, they really mean a lot to me!
 
 
 ACKNOWLEDGEMENTS:
 =================
+Contributors
+------------
+
+Alberto Collauto - Weizmann Institute of Science, Israel
+	SpecMan file format
+
+Frederic Mentink - Weizmann Institute of Science, Israel
+        PulseGen script writter
+
+Help along the way
+------------------
+
 Müge Aksoyoglu - Uni. Freiburg, Germany
 	BrukerRead and PowerSat error reporting
 Ray Burton-Smith - Queen Mary, Uni. of London, UK
-	Concept development (over beer)
+	Concept development (Beer!)
 Gunnar Jeschke - ETH Zurich, Switzerland
 	DeerAnalysis and MMM questions
 Peter Meadows - Jeol (UK) Ltd, UK
 	File format discussion
 Alexander Morley - UEA, UK
-    cwViewer and PowerSat error reporting
+        cwViewer and PowerSat error reporting
 David Mulder - National Renewable Energy Laboratory, USA
-    cwViewer error reporting
-    e2af inspiration
-    Beer!
+        cwViewer error reporting
+        e2af inspiration
+        Beer!
 Patrick Pennington - Dartmouth, USA
 	Concept development
 Yevhen Polyhach - ETH Zurich, Switzerland

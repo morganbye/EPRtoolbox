@@ -35,7 +35,7 @@ function varargout = BrukerRead(varargin)
 % such as power saturation experiments. BRUKERREAD provides functionality
 % for pulsed experiments, it has been extensively tested with field swept
 % echoes, fourier induced decays and PELDOR traces. HYSCORE and ENDOR
-% functionality has been added in version 13.01 but has had little testing.
+% functionality was added in version 13.01 but has had little testing.
 % Other complex pulsed experiments are untested and may have varying
 % results but should yield complete arrays. Please email me if you come
 % across any errors.
@@ -84,7 +84,7 @@ function varargout = BrukerRead(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v13.10
+% M. Bye v14.03
 %
 % v13.09 - current
 %               Chemical Physics Department
@@ -101,6 +101,10 @@ function varargout = BrukerRead(varargin)
 %
 %
 % Version history:
+% Feb 14        > Better error reporting for when a file cannot be opened -
+%                   by file permission or missing file
+%               > Better parameter reporting for EMX files
+%
 % Jul 13        Removal of tilde "~" from input arguments for better
 %               compatibility with old Windows versions of MatLab
 %
@@ -212,16 +216,26 @@ end
 % ===================
 switch extension
     case '.spc'
-    filepar = [ directory '/' name '.par'];
-    fid = fopen( filepar , 'r');
-    
-    delimiter = 10;
-    
+        filepar = [ directory '/' name '.par'];
+        fid = fopen( filepar , 'r');
+        
+        if fid < 1
+            error(['File ''',name,'.par'' could not be opened, both *.spc and *.par files are required to open the file.'])
+            return
+        end
+        
+        delimiter = 10;
+        
     case '.DTA'
-    filedsc = [directory '/' name '.DSC'];
-    fid = fopen( filedsc , 'r');
-    
-    delimiter = 10;
+        filedsc = [directory '/' name '.DSC'];
+        fid = fopen( filedsc , 'r');
+        
+        if fid < 1
+            error(['File ''',name,'.DSC'' could not be opened, both *.spc and *.par files are required to open the file.'])
+            return
+        end
+        
+        delimiter = 10;
 end
 
 % Get characters from file
@@ -266,10 +280,22 @@ end
 switch extension
     case '.spc'
         fid   = fopen( [directory '/' name '.spc'], 'r');
+        
+        if fid < 1
+            error(['File ''',name,'.spc'' could not be opened, both *.spc and *.par files are required to open the file.'])
+            return
+        end
+        
         [y,n] = fread(fid,inf,'float');
         
     case '.DTA'
         fid   = fopen( [directory '/' name '.DTA'], 'r','ieee-be.l64');
+        
+        if fid < 1
+            error(['File ''',name,'.DTA'' could not be opened, both *.DTA and *.DSC files are required to open the file.'])
+            return
+        end
+        
         [y,n] = fread(fid,inf,'float64');
 end
 
@@ -400,6 +426,12 @@ if exist([directory name '.YGF'],'file')
     
     % if exist, load .YGF , convert to usable matrix
     fid = fopen( [directory name '.YGF'], 'r','ieee-be.l64');
+    
+    if isequal(fid,-1)
+        error('BrukerRead: a *.YGF file was found in the folder but could not be opened. BrukerRead will now abort. Please remove the file from the folder or check its permissions.')
+        return
+    end
+    
     [info.z_axis,info.z_axis_points] = fread(fid,inf,'float64');
     
     % find number of data points
@@ -431,11 +463,11 @@ switch nargout
         else
             switch extension
                 case '.spc'
-                    info.MWFQ = str2num(regexprep(parameters((strmatch('MF' ,parameters)),:),'MF' ,''));
-                    info.MWPW = str2num(regexprep(parameters((strmatch('MP' ,parameters)),:),'MP' ,''));
+                    info.MWFQ = str2num(regexprep(parameters((strmatch('MF ' ,parameters)),:),'MF' ,''));
+                    info.MWPW = str2num(regexprep(parameters((strmatch('MP ' ,parameters)),:),'MP' ,''));
                     
-                    info.CenterField    = str2num(regexprep(parameters((strmatch('HCF',parameters)),:),'HCF',''));
-                    info.SweepWidth     = str2num(regexprep(parameters((strmatch('HSW',parameters)),:),'HSW',''));
+                    info.CenterField    = str2num(regexprep(parameters((strmatch('HCF ',parameters)),:),'HCF',''));
+                    info.SweepWidth     = str2num(regexprep(parameters((strmatch('HSW ',parameters)),:),'HSW',''));
                     
                 case '.DTA'
                     

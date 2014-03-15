@@ -50,7 +50,7 @@ function varargout = PulseGen(varargin)
 
 % Edit the above text to modify the response to help PulseGen
 
-% Last Modified by GUIDE v2.5 10-Dec-2013 17:38:49
+% Last Modified by GUIDE v2.5 11-Dec-2013 10:26:13
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -186,7 +186,7 @@ function pushbutton_delays_add_Callback(hObject, eventdata, handles)
 
 tbl_delays_value = get(handles.tbl_delays,'Data');
 set(handles.tbl_delays,'Data',...
-    [tbl_delays_value;{'1' '0' '0' '0'}]);
+    [tbl_delays_value;{'1' '0'}]);
 
 % --- Executes on button press in pushbutton_delays_rm.
 function pushbutton_delays_rm_Callback(hObject, eventdata, handles)
@@ -225,18 +225,24 @@ function button_tbl_echoes_add_Callback(hObject, eventdata, handles)
 % hObject    handle to button_tbl_pulses_add (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-tbl_echoes_value = get(handles.tbl_echoes,'Data');
-set(handles.tbl_echoes,'Data',...
-    [tbl_echoes_value;{'1' '0' '0'}]);
+
+warndlg('In this version of PulseGen only 1 echo is supported','PulseGen: Echo error');
+
+% tbl_echoes_value = get(handles.tbl_echoes,'Data');
+% set(handles.tbl_echoes,'Data',...
+%     [tbl_echoes_value;{'1' '0' '0'}]);
 
 % --- Executes on button press in button_tbl_echoes_rm.
 function button_tbl_echoes_rm_Callback(hObject, eventdata, handles)
 % hObject    handle to button_tbl_echoes_rm (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-a = get(handles.tbl_echoes,'Data');
-tbl_echoes_value = a(1:(size(a,1)-1),:);
-set(handles.tbl_echoes,'Data',tbl_echoes_value);
+
+warndlg('In this version of PulseGen only 1 echo is supported','PulseGen: Echo error');
+
+% a = get(handles.tbl_echoes,'Data');
+% tbl_echoes_value = a(1:(size(a,1)-1),:);
+% set(handles.tbl_echoes,'Data',tbl_echoes_value);
 
 % --- Executes on button press in pushbutton_echo_help.
 function pushbutton_echo_help_Callback(hObject, eventdata, handles)
@@ -456,6 +462,35 @@ about = [...
 msgbox(about,'PulseGen: Help')
 
 
+%   _______          _ _                
+%  |__   __|        | | |               
+%     | | ___   ___ | | |__   __ _ _ __ 
+%     | |/ _ \ / _ \| | '_ \ / _` | '__|
+%     | | (_) | (_) | | |_) | (_| | |   
+%     |_|\___/ \___/|_|_.__/ \__,_|_|   
+%                                       
+%                                       
+
+% --------------------------------------------------------------------
+function toolbar_new_ClickedCallback(hObject, eventdata, handles)
+% hObject    handle to toolbar_new (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Set up the tables
+set(handles.tbl_pulses,'Data', {'1' '0' '0' '0'});
+                            
+set(handles.tbl_delays,'Data', {'1' '10'});
+                            
+set(handles.tbl_echoes,'Data', {'0' '10' '1'});
+
+% --------------------------------------------------------------------
+function toolbar_save_ClickedCallback(hObject, eventdata, handles)
+% hObject    handle to toolbar_save (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+menu_file_export_Callback(hObject, eventdata, handles);
 
 %   ______                _   _                 
 %  |  ____|              | | (_)                
@@ -541,15 +576,31 @@ function PulseGenPlot(hObject, eventdata, handles)
 axes(handles.axes_pulses);
 cla;
 
+%% Load tables
+pulse_def = get(handles.tbl_pulses,'Data');
+delay_def = get(handles.tbl_delays,'Data');
+echo_def  = get(handles.tbl_echoes,'Data');
 
 %% Pulses
-
-% Get pulses from table
-pulse_def = get(handles.tbl_pulses,'Data');
 
 % Get number of pulses and channels
 noPulses   = size(pulse_def,1);
 noChannels = max(str2double(pulse_def(:,1)));
+noDelays   = size(delay_def,1);
+
+% Safety catch, if a new channel is added, then add a new line to the
+% delays table
+if noChannels > noDelays
+    
+    % Add new row to table with the channel number
+    set(handles.tbl_delays,'Data',...
+        [delay_def;{num2str(noChannels) '10'}]);
+    
+    % Reload the table data
+    delay_def = get(handles.tbl_delays,'Data');  
+    
+    noDelays   = size(delay_def,1);
+end
 
 % For each pulse pulse
 for k = 1:noPulses
@@ -562,14 +613,12 @@ for k = 1:noPulses
     sequence{str2double(pulse_def{k,1})}(k,3) = str2double(pulse_def{k,4});
 end
 
-for k = 1:noChannels
-    sequence{1,k}(all(sequence{1,k}==0,2),:)=[];
-end
+% Remove blank rows from sequence - NOT NEEDED
+% for k = 1:noChannels
+%     sequence{1,k}(all(sequence{1,k}==0,2),:)=[];
+% end
 
 %% Delays
-delay_def = get(handles.tbl_delays,'Data');
-
-noDelays = size(delay_def,1);
 
 for k = 1:noDelays
    delay{str2double(delay_def{k,1})} = str2double(delay_def{k,2});
@@ -580,9 +629,6 @@ end
 
 % Echo only in channel 1 in current version
 channel_Detect=1;
-
-% Lookup table
-echo_def   =  get(handles.tbl_echoes,'Data');
 
 % Future versions may have mutli echo support
 % for k = 1:noEchoes
@@ -655,4 +701,5 @@ ylim([ylims(1)*1.1 ylims(2)*1.1]);
 set(gca, 'YTick', []);
 xlabel('Time / ns');
 hold off;
+
 

@@ -85,7 +85,7 @@ function varargout = BrukerRead(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v13.01
+% M. Bye v14.02
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -93,13 +93,19 @@ function varargout = BrukerRead(varargin)
 %               NORWICH, UK
 % Email:        morgan.bye@uea.ac.uk
 % Website:      http://www.morganbye.net/eprtoolbox/brukerread
-% Dec 2012;     Last revision: 20-December-2012
+% Dec 2012;     Last revision: 23-Feb-2014
 %
 % Approximate coding time of file:
 %               12 hours
 %
 %
 % Version history:
+% Feb 14        Better error reporting for when a file cannot be opened -
+%                   by file permission or missing file
+%
+% Dec 13        YUNI now uses a try statement - old Xepr versions will not
+%                   add it to the .dsc file automatically
+%
 % Dec 12        > Major update for HYSCORE experiment handling
 %               > Bug fixes and better handling for ENDOR, ESEEM, DONUT
 %                   experiment handling especially in figure plotting
@@ -195,17 +201,29 @@ end
 % ===================
 switch extension
     case '.spc'
-    filepar = [ directory '/' name '.par'];
-    fid = fopen( filepar , 'r');
-    
-    delimiter = 10;
-    
+        filepar = [ directory '/' name '.par'];
+        fid = fopen( filepar , 'r');
+        
+        if isequal(fid,-1)
+            error('BrukerRead: Could not open the desired *.spc file.')
+            return
+        end
+        
+        delimiter = 10;
+        
     case '.DTA'
-    filedsc = [directory '/' name '.DSC'];
-    fid = fopen( filedsc , 'r');
-    
-    delimiter = 10;
+        filedsc = [directory '/' name '.DSC'];
+        fid = fopen( filedsc , 'r');
+        
+        
+        if isequal(fid,-1)
+            error('BrukerRead: Could not open the desired *.DSC file.')
+            return
+        end
+        
+        delimiter = 10;
 end
+
 
 % Get characters from file
 [string , string_characters] = fscanf( fid , '%c' );
@@ -236,7 +254,11 @@ switch extension
         info.IRNAM = strtrim(regexprep(parameters((strmatch('IRNAM',parameters)),:),'IRNAM',''));
         info.XNAM  = strtrim(regexprep(parameters((strmatch('XNAM',parameters)),:),'XNAM',''));
         info.XUNI  = strtrim(regexprep(parameters((strmatch('XUNI',parameters)),:),'XUNI',''));
-        info.YUNI  = strtrim(regexprep(parameters((strmatch('YUNI',parameters)),:),'YUNI',''));
+        
+        % Old Xepr versions might not automatically add YUNI to .dsc
+        try
+            info.YUNI  = strtrim(regexprep(parameters((strmatch('YUNI',parameters)),:),'YUNI',''));
+        end
         info.TITL  = strtrim(regexprep(parameters((strmatch('TITL',parameters)),:),'TITL',''));
 end
 
@@ -511,7 +533,7 @@ switch nargout
                             info.SumAttenStart = strtrim(regexprep(parameters((strmatch('SumAttenStart',parameters)),:),'SumAttenStart',''));
                             info.SumAttenWidth = strtrim(regexprep(parameters((strmatch('SumAttenWidth',parameters)),:),'SumAttenWidth',''));
                             % fieldCtrl
-                            info.FieldResol = str2num(regexprep(parameters((strmatch('FieldResol',parameters)),:),'FieldResol',''));
+%                            info.FieldResol = str2num(regexprep(parameters((strmatch('FieldResol',parameters)),:),'FieldResol',''));
                             % ftBridge
                             info.Attenuation = strtrim(regexprep(parameters((strmatch('Attenuation',parameters)),:),'Attenuation',''));
                             info.ELDORAtt = strtrim(regexprep(parameters((strmatch('ELDORAtt',parameters)),:),'ELDORAtt',''));

@@ -81,15 +81,32 @@ samp = name(a(4)+1:end);
 % Load files
 try
     [xT2,yT2]       = BrukerRead([directory date '-' freq '-' 'T2' '-' temp '-' samp '.DTA']);
+catch
+    try
+        [xT2,yT2]       = BrukerRead([directory date '-' freq '-' exp '-' 'T2' '-' samp '.DTA']);
+    end
+        
 end
 try
     [xT1,yT1]       = BrukerRead([directory date '-' freq '-' 'T1' '-' temp '-' samp '.DTA']);
+catch
+    try
+        [xT1,yT1]       = BrukerRead([directory date '-' freq '-' exp '-' 'T1' '-' samp '.DTA']);
+    end
 end
 try
     [xFSE,yFSE]     = BrukerRead([directory date '-' freq '-' 'FSE' '-' temp '-' samp '.DTA']);
+catch
+    try
+        [xFSE,yFSE]     = BrukerRead([directory date '-' freq '-' exp '-' 'FSE' '-' samp '.DTA']);
+    end
 end
 try
     [x4PEL,y4PEL]   = BrukerRead([directory date '-' freq '-' '4PEL' '-' temp '-' samp '.DTA']);
+catch
+    try
+        [x4PEL,y4PEL]   = BrukerRead([directory date '-' freq '-' exp '-' '4PEL' '-' samp '.DTA']);
+    end
 end
 
 % Page setup
