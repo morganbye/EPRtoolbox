@@ -111,69 +111,141 @@ This function is called by:
 0040 <span class="comment">%                       __/ |                   __/ |</span>
 0041 <span class="comment">%                      |___/                   |___/</span>
 0042 <span class="comment">%</span>
-0043 <span class="comment">% M. Bye v12.7</span>
+0043 <span class="comment">% M. Bye v13.09</span>
 0044 <span class="comment">%</span>
-0045 <span class="comment">% Author:       Morgan Bye</span>
-0046 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
-0047 <span class="comment">%               University of East Anglia</span>
-0048 <span class="comment">%               NORWICH, UK</span>
-0049 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
-0050 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox</span>
-0051 <span class="comment">% Jun 2012;     Last revision: 18-June-2011</span>
-0052 <span class="comment">%</span>
-0053 <span class="comment">% Approximate coding time of file:</span>
-0054 <span class="comment">%               2 hours</span>
-0055 <span class="comment">%</span>
-0056 <span class="comment">% Version history:</span>
-0057 <span class="comment">% Dec 12        &gt; Fix for 0 arguments in error</span>
-0058 <span class="comment">%</span>
-0059 <span class="comment">% Jun 12        &gt; Error handling added if user cancels file loading through</span>
-0060 <span class="comment">%                   GUI, so as not to report error to command window</span>
-0061 <span class="comment">%</span>
-0062 <span class="comment">% Dec 11        &gt; Conversion to function. Allows for single file input and</span>
-0063 <span class="comment">%                   gives x and y outputs.</span>
-0064 <span class="comment">% May 11        &gt; Initial release</span>
-0065 
-0066 <span class="comment">% Load the data</span>
-0067 <span class="comment">% =============</span>
-0068 <span class="keyword">switch</span> nargin
-0069     <span class="keyword">case</span> 0
-0070         [name, path] = uigetfile({<span class="string">'*_distr.dat'</span>,<span class="string">'DeerAnalysis Distance Distribution File (*_distr.dat)'</span>},<span class="string">'Load DeerAnalysis file'</span>);
-0071         
-0072         <span class="comment">% if user cancels command nothing happens</span>
-0073         <span class="keyword">if</span> isequal(name,0) <span class="comment">%|| isequal(directory,0)</span>
-0074             <span class="keyword">return</span>
-0075         <span class="keyword">end</span>
-0076         
-0077         file = [path,<span class="string">'/'</span>,name];
-0078         data = importdata(file);
-0079         
-0080     <span class="keyword">case</span> 1
-0081         file = varargin{1};
-0082         <span class="keyword">try</span>
-0083             data = importdata(file);
-0084         <span class="keyword">catch</span>
-0085             error(<span class="string">'The file entered was not recognised, please try again'</span>)
-0086         <span class="keyword">end</span>
-0087 <span class="keyword">end</span>
-0088 
-0089 <span class="comment">% Plot the figure</span>
-0090 <span class="comment">% ===============</span>
-0091 h = figure(<span class="string">'name'</span> , <span class="string">'Imported DeerAnalysis result'</span>, <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
-0092 plot(data(:,1) , data(:,2));
-0093 xlabel(<span class="string">'Distance / Å'</span>);
-0094 ylabel(<span class="string">'Relative probability / arb. units'</span>);
-0095 set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
-0096 set(gca,<span class="string">'XGrid'</span>,<span class="string">'on'</span>);
-0097 
-0098 <span class="comment">% Convert line to data</span>
-0099 <span class="comment">% ====================</span>
-0100 line = findall(h, <span class="string">'Type'</span>, <span class="string">'Line'</span>);
-0101 
-0102 x = get(line(1), <span class="string">'xdata'</span>);
-0103 x = x';
-0104 y = get(line(1), <span class="string">'ydata'</span>);
-0105 y = y';</pre></div>
-<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0045 <span class="comment">% v13.09 - current</span>
+0046 <span class="comment">%               Chemical Physics Department</span>
+0047 <span class="comment">%               Weizmann Institute of Science</span>
+0048 <span class="comment">%               76100 REHOVOT, Israel</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% v11.06 - v13.08</span>
+0051 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0052 <span class="comment">%               University of East Anglia</span>
+0053 <span class="comment">%               NORWICH, UK</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0056 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% Last updated  18-June-2012</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">% Version history:</span>
+0061 <span class="comment">% Dec 12        &gt; Fix for 0 arguments in error</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">% Jun 12        &gt; Error handling added if user cancels file loading through</span>
+0064 <span class="comment">%                   GUI, so as not to report error to command window</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">% Dec 11        &gt; Conversion to function. Allows for single file input and</span>
+0067 <span class="comment">%                   gives x and y outputs.</span>
+0068 <span class="comment">% May 11        &gt; Initial release</span>
+0069 
+0070 <span class="comment">%% Inputs</span>
+0071 <span class="comment">% =======</span>
+0072 <span class="keyword">switch</span> nargin
+0073     <span class="keyword">case</span> 0
+0074         [name, path] = uigetfile({<span class="string">'*_distr.dat'</span>,<span class="string">'DeerAnalysis Distance Distribution File (*_distr.dat)'</span>},<span class="string">'Load DeerAnalysis file'</span>);
+0075         
+0076         <span class="comment">% if user cancels command nothing happens</span>
+0077         <span class="keyword">if</span> isequal(name,0) <span class="comment">%|| isequal(directory,0)</span>
+0078             <span class="keyword">return</span>
+0079         <span class="keyword">end</span>
+0080         
+0081         <span class="comment">% File name/path manipulation</span>
+0082         address = [path,name];
+0083         
+0084     <span class="keyword">case</span> 1
+0085         address = varargin{1};
+0086         
+0087         <span class="keyword">if</span> ~exist(address,<span class="string">'file'</span>)
+0088             error(<span class="string">'The file entered was not recognised, please try again'</span>)
+0089             <span class="keyword">return</span>
+0090         <span class="keyword">end</span>
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="comment">%% File loading</span>
+0094 <span class="comment">% =============</span>
+0095 
+0096 [dir,name,extension] = fileparts(address);
+0097 name = name(1:end-6);
+0098         
+0099 file_bckg   = [path <span class="string">'/'</span> name <span class="string">'_bckg.dat'</span>];
+0100 file_distr  = [path <span class="string">'/'</span> name <span class="string">'_distr.dat'</span>];
+0101 file_fit    = [path <span class="string">'/'</span> name <span class="string">'_fit.dat'</span>];
+0102 file_Lcurve = [path <span class="string">'/'</span> name <span class="string">'_Lcurve.dat'</span>];
+0103 
+0104 data_bckg   = importdata(file_bckg);
+0105 data_distr  = importdata(file_distr);
+0106 data_fit    = importdata(file_fit);
+0107 data_Lcurve = importdata(file_Lcurve);
+0108 
+0109 <span class="comment">%% Data processing</span>
+0110 x.raw.time = data_bckg(:,1);
+0111 y.raw.real = data_bckg(:,2);
+0112 y.raw.fit  = data_bckg(:,3);
+0113 <span class="keyword">try</span>
+0114     y.bckg.imag = data_bckg(:,4);
+0115 <span class="keyword">end</span>
+0116 
+0117 x.distr.distance    = data_distr(:,1);
+0118 y.distr.probability = data_distr(:,2);
+0119 
+0120 x.fit.time      = data_fit(:,1);
+0121 y.fit.intensity = data_fit(:,2);
+0122 y.fit.fit       = data_fit(:,3);
+0123 
+0124 x.Lcurve.p      = data_Lcurve(:,1);
+0125 y.Lcurve.n      = data_Lcurve(:,2);
+0126 y.Lcurve.RegPar = data_Lcurve(:,3);
+0127 
+0128 
+0129 <span class="comment">%% Figure plotting</span>
+0130 <span class="comment">% ================</span>
+0131 
+0132 hF = figure(<span class="string">'pos'</span>,[0 0 900 300]);
+0133         
+0134 <span class="comment">% Plot raw data</span>
+0135 h1 = subplot(2,2,1);
+0136 plot(x.raw.time,y.raw.real);
+0137 
+0138 h2 = subplot(2,2,2);
+0139 plot(x.fit.time,y.fit.intensity,x.fit.time,y.fit.fit,<span class="string">'r'</span>)
+0140 
+0141 h3 = subplot(2,2,3);
+0142 plot(x.Lcurve.p,y.Lcurve.n,<span class="string">'bo'</span>)
+0143 
+0144 h4 = subplot(2,2,4);
+0145 plot(x.distr.distance,y.distr.probability);
+0146 
+0147 xlabel(h1,<span class="string">'Time / \mus'</span>);
+0148 xlabel(h2,<span class="string">'Time / \mus'</span>);
+0149 xlabel(h3,<span class="string">'\it{log(\rho)}'</span>);
+0150 xlabel(h4,<span class="string">'r / nm'</span>);
+0151 
+0152 ylabel(h1,<span class="string">'Normalized Intensity / arb. unit'</span>);
+0153 ylabel(h2,<span class="string">'Normalized Intensity / arb. unit'</span>);
+0154 ylabel(h3,<span class="string">'\it{log(\eta)}'</span>);
+0155 ylabel(h4,<span class="string">'\it{p(r)}'</span>);
+0156 
+0157 axis(h1,<span class="string">'tight'</span>);
+0158 axis(h2,<span class="string">'tight'</span>);
+0159 axis(h3,<span class="string">'tight'</span>);
+0160 axis(h4,<span class="string">'tight'</span>);
+0161 
+0162 title(h1,<span class="string">'4-pulse PELDOR experiment'</span>,<span class="string">'FontSize'</span>,12);
+0163 title(h2,<span class="string">'Background subtracted PELDOR trace'</span>,<span class="string">'FontSize'</span>,12);
+0164 title(h3,<span class="string">'L-curve analysis from Tikhonov regularisation'</span>,<span class="string">'FontSize'</span>,12);
+0165 title(h4,<span class="string">'Distance distribution'</span>,<span class="string">'FontSize'</span>,12);
+0166 
+0167 set(h4,<span class="string">'YTick'</span>,[]);
+0168 
+0169 set(hF,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0170 
+0171 set(hF,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>);
+0172 set(hF,<span class="string">'PaperSize'</span>,[30 25]);
+0173 set(hF,<span class="string">'PaperPosition'</span>, [0 0 30 25]);
+0174 
+0175 print(gcf, <span class="string">'-dpdf'</span>,  [path <span class="string">'/'</span> name <span class="string">'-DC.pdf'</span>]);
+0176 
+0177 close(hF);</pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -34,7 +34,21 @@
  HADDOCK_CLUSTERS_PROCESSING ('/path/to/folder')
  [HADDOCK_score, RMSD_Emin_from_average] = HADDOCK_CLUSTERS_PROCESSING (...)
 
- FUNCTION full description
+ HADDOCK_CLUSTERS_PROCESSING allows for the processing of HADDOCK clusters. It
+ allows the user to select a cluster or to operate on all the final
+ structures and present them as a figure plotting HADDOCK score against
+ any of the HADDOCK parameters (bsa, dH, Edesolv, rmsd, rmsd-Emin
+ (default), ener (by default this is Einter), ener-Einter, ener-Enb,
+ ener-Evdw, ener-Eelec, ener-Eair, ener-Ecdih, ener-Ecoup, ener-Esani,
+ ener-Evean, ener-Edani)
+
+ Typically once the HADDOCK ana_clusters script is run the HADDOCK run
+ folder will be populated with files evaluating each model. Running the
+ script with default parameters generates a plot where each structure is
+ plotted with RMSD to the average structure against the HADDOCK score of
+ that structure. The top 4 (or whichever parameter selected in the
+ ana_clusters script) models for each cluster is plotted as a red circle
+ with errorbars.
 
  Inputs:
     input1     - path
@@ -76,7 +90,7 @@
     [hdScore,RMSD] = HADDOCK_CLUSTERS_PROCESSING('/path/to/folder')
                load designated folder into variables hdScore and RMSD
 
- Other m-files required:   none
+ Other m-files required:   errorbar_x
 
  Subfunctions:             none
 
@@ -109,439 +123,473 @@ This function is called by:
 0007 <span class="comment">% HADDOCK_CLUSTERS_PROCESSING ('/path/to/folder')</span>
 0008 <span class="comment">% [HADDOCK_score, RMSD_Emin_from_average] = HADDOCK_CLUSTERS_PROCESSING (...)</span>
 0009 <span class="comment">%</span>
-0010 <span class="comment">% FUNCTION full description</span>
-0011 <span class="comment">%</span>
-0012 <span class="comment">% Inputs:</span>
-0013 <span class="comment">%    input1     - path</span>
-0014 <span class="comment">%                   path to folder</span>
-0015 <span class="comment">%    input2     - cluster</span>
-0016 <span class="comment">%                   if only one cluster is required, it can specified here</span>
-0017 <span class="comment">%    input3     - parameter</span>
-0018 <span class="comment">%                   by default the script uses Emin, but any parameter can</span>
-0019 <span class="comment">%                   be used:</span>
-0020 <span class="comment">%                       bsa</span>
-0021 <span class="comment">%                       dH</span>
-0022 <span class="comment">%                       Edesolv</span>
-0023 <span class="comment">%                       rmsd</span>
-0024 <span class="comment">%                       rmsd-Emin       (default)</span>
-0025 <span class="comment">%                       ener            (by default this is Einter)</span>
-0026 <span class="comment">%                       ener-Einter</span>
-0027 <span class="comment">%                       ener-Enb</span>
-0028 <span class="comment">%                       ener-Evdw</span>
-0029 <span class="comment">%                       ener-Eelec</span>
-0030 <span class="comment">%                       ener-Eair</span>
-0031 <span class="comment">%                       ener-Ecdih</span>
-0032 <span class="comment">%                       ener-Ecoup</span>
-0033 <span class="comment">%                       ener-Esani</span>
-0034 <span class="comment">%                       ener-Evean</span>
-0035 <span class="comment">%                       ener-Edani</span>
-0036 <span class="comment">%</span>
-0037 <span class="comment">%</span>
-0038 <span class="comment">% Outputs:</span>
-0039 <span class="comment">%    output0    - figure</span>
-0040 <span class="comment">%                   Graphical representation</span>
-0041 <span class="comment">%    output1    - HADDOCK_score</span>
-0042 <span class="comment">%                   The haddock scores</span>
-0043 <span class="comment">%    output2    - RMSD_Emin_from_average</span>
-0044 <span class="comment">%                   RMSD Emin values</span>
-0045 <span class="comment">% Example:</span>
-0046 <span class="comment">%    HADDOCK_CLUSTERS_PROCESSING</span>
-0047 <span class="comment">%               GUI load a folder, new figure created</span>
-0048 <span class="comment">%</span>
-0049 <span class="comment">%    [hdScore,RMSD] = HADDOCK_CLUSTERS_PROCESSING('/path/to/folder')</span>
-0050 <span class="comment">%               load designated folder into variables hdScore and RMSD</span>
+0010 <span class="comment">% HADDOCK_CLUSTERS_PROCESSING allows for the processing of HADDOCK clusters. It</span>
+0011 <span class="comment">% allows the user to select a cluster or to operate on all the final</span>
+0012 <span class="comment">% structures and present them as a figure plotting HADDOCK score against</span>
+0013 <span class="comment">% any of the HADDOCK parameters (bsa, dH, Edesolv, rmsd, rmsd-Emin</span>
+0014 <span class="comment">% (default), ener (by default this is Einter), ener-Einter, ener-Enb,</span>
+0015 <span class="comment">% ener-Evdw, ener-Eelec, ener-Eair, ener-Ecdih, ener-Ecoup, ener-Esani,</span>
+0016 <span class="comment">% ener-Evean, ener-Edani)</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Typically once the HADDOCK ana_clusters script is run the HADDOCK run</span>
+0019 <span class="comment">% folder will be populated with files evaluating each model. Running the</span>
+0020 <span class="comment">% script with default parameters generates a plot where each structure is</span>
+0021 <span class="comment">% plotted with RMSD to the average structure against the HADDOCK score of</span>
+0022 <span class="comment">% that structure. The top 4 (or whichever parameter selected in the</span>
+0023 <span class="comment">% ana_clusters script) models for each cluster is plotted as a red circle</span>
+0024 <span class="comment">% with errorbars.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Inputs:</span>
+0027 <span class="comment">%    input1     - path</span>
+0028 <span class="comment">%                   path to folder</span>
+0029 <span class="comment">%    input2     - cluster</span>
+0030 <span class="comment">%                   if only one cluster is required, it can specified here</span>
+0031 <span class="comment">%    input3     - parameter</span>
+0032 <span class="comment">%                   by default the script uses Emin, but any parameter can</span>
+0033 <span class="comment">%                   be used:</span>
+0034 <span class="comment">%                       bsa</span>
+0035 <span class="comment">%                       dH</span>
+0036 <span class="comment">%                       Edesolv</span>
+0037 <span class="comment">%                       rmsd</span>
+0038 <span class="comment">%                       rmsd-Emin       (default)</span>
+0039 <span class="comment">%                       ener            (by default this is Einter)</span>
+0040 <span class="comment">%                       ener-Einter</span>
+0041 <span class="comment">%                       ener-Enb</span>
+0042 <span class="comment">%                       ener-Evdw</span>
+0043 <span class="comment">%                       ener-Eelec</span>
+0044 <span class="comment">%                       ener-Eair</span>
+0045 <span class="comment">%                       ener-Ecdih</span>
+0046 <span class="comment">%                       ener-Ecoup</span>
+0047 <span class="comment">%                       ener-Esani</span>
+0048 <span class="comment">%                       ener-Evean</span>
+0049 <span class="comment">%                       ener-Edani</span>
+0050 <span class="comment">%</span>
 0051 <span class="comment">%</span>
-0052 <span class="comment">% Other m-files required:   none</span>
-0053 <span class="comment">%</span>
-0054 <span class="comment">% Subfunctions:             none</span>
-0055 <span class="comment">%</span>
-0056 <span class="comment">% MAT-files required:       none</span>
-0057 <span class="comment">%</span>
-0058 <span class="comment">%</span>
-0059 <span class="comment">% See also: EPRTOOLBOX</span>
-0060 
-0061 
-0062 <span class="comment">%                                        _                             _</span>
-0063 <span class="comment">%                                       | |                           | |</span>
-0064 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
-0065 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
-0066 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
-0067 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
-0068 <span class="comment">%                       __/ |                   __/ |</span>
-0069 <span class="comment">%                      |___/                   |___/</span>
-0070 <span class="comment">%</span>
+0052 <span class="comment">% Outputs:</span>
+0053 <span class="comment">%    output0    - figure</span>
+0054 <span class="comment">%                   Graphical representation</span>
+0055 <span class="comment">%    output1    - HADDOCK_score</span>
+0056 <span class="comment">%                   The haddock scores</span>
+0057 <span class="comment">%    output2    - RMSD_Emin_from_average</span>
+0058 <span class="comment">%                   RMSD Emin values</span>
+0059 <span class="comment">% Example:</span>
+0060 <span class="comment">%    HADDOCK_CLUSTERS_PROCESSING</span>
+0061 <span class="comment">%               GUI load a folder, new figure created</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">%    [hdScore,RMSD] = HADDOCK_CLUSTERS_PROCESSING('/path/to/folder')</span>
+0064 <span class="comment">%               load designated folder into variables hdScore and RMSD</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">% Other m-files required:   errorbar_x</span>
+0067 <span class="comment">%</span>
+0068 <span class="comment">% Subfunctions:             none</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% MAT-files required:       none</span>
 0071 <span class="comment">%</span>
-0072 <span class="comment">% M. Bye v12.11</span>
-0073 <span class="comment">%</span>
-0074 <span class="comment">% Author:       Morgan Bye</span>
-0075 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
-0076 <span class="comment">%               University of East Anglia</span>
-0077 <span class="comment">%               NORWICH, UK</span>
-0078 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
-0079 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/</span>
-0080 <span class="comment">% Dec 2011;     Last revision: 22-November-2012</span>
-0081 <span class="comment">%</span>
-0082 <span class="comment">% Approximate coding time of file:</span>
-0083 <span class="comment">%               8 hours</span>
-0084 <span class="comment">%</span>
+0072 <span class="comment">%</span>
+0073 <span class="comment">% See also: EPRTOOLBOX</span>
+0074 
+0075 <span class="comment">%                                        _                             _</span>
+0076 <span class="comment">%                                       | |                           | |</span>
+0077 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0078 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0079 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0080 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0081 <span class="comment">%                       __/ |                   __/ |</span>
+0082 <span class="comment">%                      |___/                   |___/</span>
+0083 <span class="comment">%</span>
+0084 <span class="comment">% M. Bye v13.09</span>
 0085 <span class="comment">%</span>
-0086 <span class="comment">% Version history:</span>
-0087 <span class="comment">% Nov 12        First release</span>
-0088 
-0089 <span class="comment">% Input arguments</span>
-0090 <span class="comment">% ===============</span>
-0091 
-0092 <span class="keyword">switch</span> nargin
-0093     
-0094     <span class="keyword">case</span> 0
-0095         
-0096         folder = <a href="#_sub1" class="code" title="subfunction folder = loadfolder">loadfolder</a>;
-0097         cluster = <span class="string">'all'</span>;
-0098         parameter = <span class="string">'rmsd-Emin'</span>;
-0099         
-0100         
-0101     <span class="keyword">case</span> 1
-0102         <span class="comment">% If input is string</span>
-0103         <span class="keyword">if</span> ischar(varargin{1})
-0104             <span class="comment">% Check input is a folder</span>
-0105             <span class="keyword">if</span> exist(varargin{1},<span class="string">'dir'</span>);
-0106                 folder = varargin{1};
-0107                 cluster = <span class="string">'all'</span>;
-0108                 parameter = <span class="string">'rmsd-Emin'</span>;
-0109             
-0110             <span class="comment">% If not folder, then must be a paramter</span>
-0111             <span class="keyword">else</span>
-0112                 folder = <a href="#_sub1" class="code" title="subfunction folder = loadfolder">loadfolder</a>;
-0113                 cluster = <span class="string">'all'</span>;
-0114                 parameter = varargin{1};
-0115             <span class="keyword">end</span>
-0116             
-0117             <span class="comment">% Is input a number?</span>
-0118         <span class="keyword">elseif</span> isnumeric(varargin{1})
-0119             folder = <a href="#_sub1" class="code" title="subfunction folder = loadfolder">loadfolder</a>;
-0120             cluster = varargin{1};
-0121             parameter = <span class="string">'rmsd-Emin'</span>;
-0122             
-0123             
-0124             
-0125         <span class="keyword">else</span>
-0126             error(<span class="string">'The first input of HADDOCK_clusters_processing could not be recognized'</span>)
-0127         <span class="keyword">end</span>
-0128         
-0129     <span class="keyword">case</span> 2
-0130         <span class="keyword">if</span> ischar(varargin{1})
-0131             <span class="keyword">if</span> exist(varargin{1},<span class="string">'dir'</span>)
-0132                 <span class="keyword">if</span> isnumeric(varargin{2})
-0133                     folder    = varargin{1};
-0134                     cluster   = varargin{2};
-0135                     parameter = <span class="string">'rmsd_Emin'</span>;
-0136                     
-0137                 <span class="keyword">elseif</span> ischar(varargin{2})
-0138                     folder    = varargin{1};
-0139                     cluster   = <span class="string">'all'</span>;
-0140                     parameter = varargin{2};
-0141                 <span class="keyword">end</span>
-0142             <span class="keyword">else</span>
-0143                error(<span class="string">'Error in inputs for HADDOCK_clusters_processing'</span>)
-0144             <span class="keyword">end</span>
-0145             
-0146         <span class="keyword">elseif</span> isnumeric(varargin{1}) &amp;&amp; ischar(varargin{2})
-0147             folder = <a href="#_sub1" class="code" title="subfunction folder = loadfolder">loadfolder</a>;
-0148             cluster   = varargin{1};
-0149             parameter = varargin{2};
-0150             
-0151         <span class="keyword">else</span>
-0152             error(<span class="string">'Error in inputs for HADDOCK_clusters_processing'</span>)
-0153         <span class="keyword">end</span>
-0154        
-0155     <span class="keyword">case</span> 3
-0156         folder    = varargin{1};
-0157         cluster   = varargin{2};
-0158         parameter = varargin{3};
-0159 <span class="keyword">end</span>
-0160 
-0161 <span class="comment">% Processing</span>
-0162 <span class="comment">% ==========</span>
-0163 
-0164 <span class="comment">% HADDOCK scores</span>
-0165 <span class="comment">% --------------</span>
-0166 hsFiles = dir([folder <span class="string">'/file.nam_clust*_haddock-score'</span>]);
-0167 chsFiles = dir([folder <span class="string">'/cluster_haddock-score.txt_best4'</span>]);
-0168 
-0169 noClusters  = numel(hsFiles);
-0170 
-0171 avgHad  = dlmread(<span class="string">'cluster_haddock-score.txt'</span>,<span class="string">''</span>,1,1);
-0172 
-0173 <span class="comment">% Parameter setup - this sets the cluster names to get the parameter from</span>
-0174 <span class="comment">% each cluster and also reads in the average cluster file for that</span>
-0175 <span class="comment">% parameter</span>
-0176 
-0177 <span class="keyword">switch</span> parameter
-0178     <span class="keyword">case</span> <span class="string">'rmsd-Emin'</span>
-0179         scFiles = dir([folder <span class="string">'/file.nam_clust*_rmsd-Emin'</span>]);
-0180         
-0181         [hsScores scScores] = <a href="#_sub2" class="code" title="subfunction [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)">loadcluster</a>(cluster,noClusters,hsFiles,scFiles);
-0182         avgscin = dlmread(<span class="string">'cluster_rmsd-Emin.txt'</span>,<span class="string">''</span>,1,1);
-0183         
-0184     <span class="keyword">case</span> <span class="string">'bsa'</span>
-0185         scFiles = dir([folder <span class="string">'/file.nam_clust*_bsa'</span>]);
-0186         
-0187         [hsScores scScores] = <a href="#_sub2" class="code" title="subfunction [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)">loadcluster</a>(cluster,noClusters,hsFiles,scFiles);
-0188         avgscin = dlmread(<span class="string">'cluster_bsa.txt'</span>,<span class="string">''</span>,1,1);
-0189         
-0190     <span class="keyword">case</span> <span class="string">'dH'</span>
-0191         scFiles = dir([folder <span class="string">'/file.nam_clust*_dH'</span>]);
-0192         
-0193         [hsScores scScores] = <a href="#_sub2" class="code" title="subfunction [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)">loadcluster</a>(cluster,noClusters,hsFiles,scFiles);
-0194         avgscin = dlmread(<span class="string">'cluster_dH.txt'</span>,<span class="string">''</span>,1,1);
-0195         
-0196     <span class="keyword">case</span> <span class="string">'Edesolv'</span>
-0197         scFiles = dir([folder <span class="string">'/file.nam_clust*_Edesolv'</span>]);
-0198         
-0199         [hsScores scScores] = <a href="#_sub2" class="code" title="subfunction [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)">loadcluster</a>(cluster,noClusters,hsFiles,scFiles);
-0200         avgscin = dlmread(<span class="string">'cluster_Edesolv.txt'</span>,<span class="string">''</span>,1,1);
-0201         
-0202     <span class="keyword">case</span> <span class="string">'rmsd'</span>
-0203         scFiles = dir([folder <span class="string">'/file.nam_clust*_rmsd'</span>]);
-0204         
-0205         [hsScores scScores] = <a href="#_sub2" class="code" title="subfunction [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)">loadcluster</a>(cluster,noClusters,hsFiles,scFiles);
-0206         avgscin = dlmread(<span class="string">'cluster_rmsd.txt'</span>,<span class="string">''</span>,1,1);
-0207     
-0208         
-0209         <span class="comment">% Energy terms are all kept within one file, so special processing</span>
-0210         <span class="comment">% is needed to open the file and then sort the columns so that the</span>
-0211         <span class="comment">% correct one is read</span>
-0212         
-0213         <span class="comment">%If no 'ener' is defined then Einter is used by default</span>
+0086 <span class="comment">% v13.09 - current</span>
+0087 <span class="comment">%               Chemical Physics Department</span>
+0088 <span class="comment">%               Weizmann Institute of Science</span>
+0089 <span class="comment">%               76100 REHOVOT, Israel</span>
+0090 <span class="comment">%</span>
+0091 <span class="comment">% v11.06 - v13.08</span>
+0092 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0093 <span class="comment">%               University of East Anglia</span>
+0094 <span class="comment">%               NORWICH, UK</span>
+0095 <span class="comment">%</span>
+0096 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0097 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
+0098 <span class="comment">%</span>
+0099 <span class="comment">% Last updated  Last revision: 22-November-2012</span>
+0100 <span class="comment">%</span>
+0101 <span class="comment">% Version history:</span>
+0102 <span class="comment">% Oct 13        Help added</span>
+0103 <span class="comment">%</span>
+0104 <span class="comment">% Aug 13        &gt; Change of figure axes to latex, means that the angstrom</span>
+0105 <span class="comment">%                   A-ring character will export correct if the figure is</span>
+0106 <span class="comment">%                   saved as a PDF or EPS</span>
+0107 <span class="comment">%               &gt; Changed X axes range from round(0 to max) to ceil(0 to</span>
+0108 <span class="comment">%                   max), as round could round down to nearest interger and</span>
+0109 <span class="comment">%                   cut off data, ceil will always go up</span>
+0110 <span class="comment">%</span>
+0111 <span class="comment">% Nov 12        First release</span>
+0112 
+0113 <span class="comment">% Input arguments</span>
+0114 <span class="comment">% ===============</span>
+0115 
+0116 <span class="keyword">switch</span> nargin
+0117     
+0118     <span class="keyword">case</span> 0
+0119         
+0120         folder = <a href="#_sub1" class="code" title="subfunction folder = loadfolder">loadfolder</a>;
+0121         cluster = <span class="string">'all'</span>;
+0122         parameter = <span class="string">'rmsd-Emin'</span>;
+0123         
+0124         
+0125     <span class="keyword">case</span> 1
+0126         <span class="comment">% If input is string</span>
+0127         <span class="keyword">if</span> ischar(varargin{1})
+0128             <span class="comment">% Check input is a folder</span>
+0129             <span class="keyword">if</span> exist(varargin{1},<span class="string">'dir'</span>);
+0130                 folder = varargin{1};
+0131                 cluster = <span class="string">'all'</span>;
+0132                 parameter = <span class="string">'rmsd-Emin'</span>;
+0133             
+0134             <span class="comment">% If not folder, then must be a paramter</span>
+0135             <span class="keyword">else</span>
+0136                 folder = <a href="#_sub1" class="code" title="subfunction folder = loadfolder">loadfolder</a>;
+0137                 cluster = <span class="string">'all'</span>;
+0138                 parameter = varargin{1};
+0139             <span class="keyword">end</span>
+0140             
+0141             <span class="comment">% Is input a number?</span>
+0142         <span class="keyword">elseif</span> isnumeric(varargin{1})
+0143             folder = <a href="#_sub1" class="code" title="subfunction folder = loadfolder">loadfolder</a>;
+0144             cluster = varargin{1};
+0145             parameter = <span class="string">'rmsd-Emin'</span>;
+0146             
+0147             
+0148             
+0149         <span class="keyword">else</span>
+0150             error(<span class="string">'The first input of HADDOCK_clusters_processing could not be recognized'</span>)
+0151         <span class="keyword">end</span>
+0152         
+0153     <span class="keyword">case</span> 2
+0154         <span class="keyword">if</span> ischar(varargin{1})
+0155             <span class="keyword">if</span> exist(varargin{1},<span class="string">'dir'</span>)
+0156                 <span class="keyword">if</span> isnumeric(varargin{2})
+0157                     folder    = varargin{1};
+0158                     cluster   = varargin{2};
+0159                     parameter = <span class="string">'rmsd_Emin'</span>;
+0160                     
+0161                 <span class="keyword">elseif</span> ischar(varargin{2})
+0162                     folder    = varargin{1};
+0163                     cluster   = <span class="string">'all'</span>;
+0164                     parameter = varargin{2};
+0165                 <span class="keyword">end</span>
+0166             <span class="keyword">else</span>
+0167                error(<span class="string">'Error in inputs for HADDOCK_clusters_processing'</span>)
+0168             <span class="keyword">end</span>
+0169             
+0170         <span class="keyword">elseif</span> isnumeric(varargin{1}) &amp;&amp; ischar(varargin{2})
+0171             folder = <a href="#_sub1" class="code" title="subfunction folder = loadfolder">loadfolder</a>;
+0172             cluster   = varargin{1};
+0173             parameter = varargin{2};
+0174             
+0175         <span class="keyword">else</span>
+0176             error(<span class="string">'Error in inputs for HADDOCK_clusters_processing'</span>)
+0177         <span class="keyword">end</span>
+0178        
+0179     <span class="keyword">case</span> 3
+0180         folder    = varargin{1};
+0181         cluster   = varargin{2};
+0182         parameter = varargin{3};
+0183 <span class="keyword">end</span>
+0184 
+0185 <span class="comment">% Processing</span>
+0186 <span class="comment">% ==========</span>
+0187 
+0188 <span class="comment">% HADDOCK scores</span>
+0189 <span class="comment">% --------------</span>
+0190 hsFiles = dir([folder <span class="string">'/file.nam_clust*_haddock-score'</span>]);
+0191 chsFiles = dir([folder <span class="string">'/cluster_haddock-score.txt_best4'</span>]);
+0192 
+0193 noClusters  = numel(hsFiles);
+0194 
+0195 <span class="keyword">if</span> noClusters == 0
+0196    error(<span class="string">'No ''file.nam_clustX_haddock-score'' files could be found in that folder'</span>) 
+0197    <span class="keyword">return</span>
+0198 <span class="keyword">end</span>
+0199 
+0200 <span class="keyword">try</span>
+0201     avgHad  = dlmread(<span class="string">'cluster_haddock-score.txt'</span>,<span class="string">''</span>,1,1);
+0202 <span class="keyword">catch</span>
+0203     error(<span class="string">'The file ''cluster_haddock-score.txt'' could not be found in that folder'</span>)
+0204     <span class="keyword">return</span>
+0205 <span class="keyword">end</span>
+0206 
+0207 <span class="comment">% Parameter setup - this sets the cluster names to get the parameter from</span>
+0208 <span class="comment">% each cluster and also reads in the average cluster file for that</span>
+0209 <span class="comment">% parameter</span>
+0210 
+0211 <span class="keyword">switch</span> parameter
+0212     <span class="keyword">case</span> <span class="string">'rmsd-Emin'</span>
+0213         scFiles = dir([folder <span class="string">'/file.nam_clust*_rmsd-Emin'</span>]);
 0214         
-0215     <span class="keyword">otherwise</span>
-0216         
-0217         scFiles = dir([folder <span class="string">'/file.nam_clust*_ener'</span>]);
-0218         avgscin = dlmread(<span class="string">'cluster_ener.txt'</span>,<span class="string">''</span>,1,1);
-0219         
-0220         <span class="comment">% This will resize cluster_ener to appropiate columns</span>
-0221         <span class="keyword">switch</span> parameter
-0222             <span class="keyword">case</span> <span class="string">'ener'</span>
-0223                 avgscin = avgscin(:,[2 3]);
-0224             <span class="keyword">case</span> <span class="string">'ener-Einter'</span>
-0225                 avgscin = avgscin(:,[2 3]);
-0226             <span class="keyword">case</span> <span class="string">'ener-Enb'</span>
-0227                 avgscin = avgscin(:,[4 5]);
-0228             <span class="keyword">case</span> <span class="string">'ener-Evdw'</span>
-0229                 avgscin = avgscin(:,[6 7]);
-0230             <span class="keyword">case</span> <span class="string">'ener-Eelec'</span>
-0231                 avgscin = avgscin(:,[8 9]);
-0232             <span class="keyword">case</span> <span class="string">'ener-Eair'</span>
-0233                 avgscin = avgscin(:,[10 11]);
-0234             <span class="keyword">case</span> <span class="string">'ener-Ecdih'</span>
-0235                 avgscin = avgscin(:,[12 13]);
-0236             <span class="keyword">case</span> <span class="string">'ener-Ecoup'</span>
-0237                 avgscin = avgscin(:,[14 15]);
-0238             <span class="keyword">case</span> <span class="string">'ener-Esani'</span>
-0239                 avgscin = avgscin(:,[16 17]);
-0240             <span class="keyword">case</span> <span class="string">'ener-Evean'</span>
-0241                 avgscin = avgscin(:,[18 19]);
-0242             <span class="keyword">case</span> <span class="string">'ener-Edani'</span>
-0243                 avgscin = avgscin(:,[20 21]);
-0244         <span class="keyword">end</span>
-0245 <span class="keyword">end</span>
-0246 
-0247 <span class="comment">% Figure creation</span>
-0248 <span class="comment">% ===============</span>
-0249 
-0250 <span class="comment">% Create figure</span>
-0251 figure(<span class="string">'name'</span> , <span class="string">'HADDOCK Cluster Processing'</span> , <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
-0252 
-0253 <span class="comment">% Plot the data</span>
-0254 hold on
-0255 scatter(gca,scScores,hsScores,<span class="string">'b'</span>);
-0256 
-0257 <span class="comment">% If only plotting one cluster, do not plot cluster averages. And make sure</span>
-0258 <span class="comment">% that errorbar_x is installed</span>
-0259 <span class="keyword">if</span> isnumeric(cluster) == 0 &amp;&amp; exist(<span class="string">'errorbar_x'</span>) == 2
-0260     <a href="errorbar_x.html" class="code" title="function hh = errorbar_x(x, y, l,u,symbol)">errorbar_x</a>(avgscin(:,1),avgHad(:,1),avgscin(:,2),<span class="string">'or'</span>);
-0261     errorbar(avgscin(:,1),avgHad(:,1),avgHad(:,2),<span class="string">'or'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>);
-0262 <span class="keyword">end</span>
-0263 hold off
-0264 
-0265 <span class="comment">% Adjust presentation</span>
-0266 box on
-0267 ylabel(<span class="string">'Haddock score / arb. unit'</span>);
-0268 set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
-0269 
-0270 <span class="keyword">switch</span> parameter
-0271     <span class="keyword">case</span> <span class="string">'rmsd-Emin'</span>
-0272         xlim([0 round(max(avgscin(:,1)))]);
-0273         xlabel(<span class="string">'RMSD from average (average HADDOCK structure) / Å'</span>);
-0274     <span class="keyword">case</span> <span class="string">'bsa'</span>
-0275         xlim([0 round(max(avgscin(:,1)))]);
-0276         xlabel(<span class="string">'Buried surface from average (average HADDOCK structure) / Å^2'</span>);
-0277     <span class="keyword">case</span> <span class="string">'dH'</span>
-0278         xlim([0 round(max(avgscin(:,1)))]);
-0279         xlabel(<span class="string">'Total energy difference from average (average HADDOCK structure)'</span>);
-0280     <span class="keyword">case</span> <span class="string">'Edesolv'</span>
-0281         xlim([0 round(max(avgscin(:,1)))]);
-0282         xlabel(<span class="string">'Desolvation energy from average (average HADDOCK structure)'</span>);
-0283     <span class="keyword">case</span> <span class="string">'rmsd'</span>
-0284         xlim([0 round(max(avgscin(:,1)))]);
-0285         xlabel(<span class="string">'RMSD from cluster best / Å'</span>);
-0286     <span class="keyword">case</span> <span class="string">'ener'</span>
-0287         xlim([0 round(max(avgscin(:,1)))]);
-0288         xlabel(<span class="string">'Energy from average (all energy terms) / Å'</span>);
-0289     <span class="keyword">case</span> <span class="string">'ener-Einter'</span>
-0290         xlim([0 round(max(avgscin(:,1)))]);
-0291         xlabel(<span class="string">'Internal energy from average (average HADDOCK structure)'</span>);
-0292     <span class="keyword">case</span> <span class="string">'ener-Enb'</span>
-0293         xlim([0 round(max(avgscin(:,1)))]);
-0294         xlabel(<span class="string">'Buried energy from average (average HADDOCK structure)'</span>);
-0295     <span class="keyword">case</span> <span class="string">'ener-Evdw'</span>
-0296         xlim([0 round(max(avgscin(:,1)))]);
-0297         xlabel(<span class="string">'Van der Waal energies from average (average HADDOCK structure)'</span>);
-0298     <span class="keyword">case</span> <span class="string">'ener-Eelec'</span>
-0299         xlim([0 round(max(avgscin(:,1)))]);
-0300         xlabel(<span class="string">'Electrostatic energies from average (average HADDOCK structure)'</span>);
-0301     <span class="keyword">case</span> <span class="string">'ener-Eair'</span>
-0302         xlim([0 round(max(avgscin(:,1)))]);
-0303         xlabel(<span class="string">'AIR energies from average (average HADDOCK structure)'</span>);
-0304     <span class="keyword">case</span> <span class="string">'ener-Ecdih'</span>
-0305         xlim([0 round(max(avgscin(:,1)))]);
-0306         xlabel(<span class="string">'Ecdih from average (average HADDOCK structure)'</span>);
-0307     <span class="keyword">case</span> <span class="string">'ener-Ecoup'</span>
-0308         xlim([0 round(max(avgscin(:,1)))]);
-0309         xlabel(<span class="string">'Ecoup from average (average HADDOCK structure)'</span>);
-0310     <span class="keyword">case</span> <span class="string">'ener-Esani'</span>
-0311         xlim([0 round(max(avgscin(:,1)))]);
-0312         xlabel(<span class="string">'Esani from average (average HADDOCK structure)'</span>);
-0313     <span class="keyword">case</span> <span class="string">'ener-Evean'</span>
-0314         xlim([0 round(max(avgscin(:,1)))]);
-0315         xlabel(<span class="string">'Evean from average (average HADDOCK structure)'</span>);
-0316     <span class="keyword">case</span> <span class="string">'ener-Edani'</span>
-0317         
-0318 <span class="keyword">end</span>
-0319 
-0320 
-0321 <span class="comment">% Output arguments</span>
-0322 <span class="comment">% ================</span>
-0323 
-0324 <span class="keyword">switch</span> nargout
-0325     <span class="keyword">case</span> 0
-0326         <span class="keyword">return</span>
-0327     <span class="keyword">case</span> 1
-0328         varargout{1} = hsScores;
-0329     <span class="keyword">case</span> 2
-0330         varargout{1} = hsScores;
-0331         varargout{2} = scScores;
-0332 <span class="keyword">end</span>
-0333 <span class="keyword">end</span>
-0334 
-0335 
-0336 <span class="comment">%                               Subfunctions</span>
-0337 <span class="comment">% ========================================================================</span>
-0338 
-0339 <a name="_sub1" href="#_subfunctions" class="code">function folder = loadfolder</a>
-0340 
-0341 <span class="comment">% This function is called from the inputs section. It is used to load</span>
-0342 <span class="comment">% folders and removes duplication</span>
-0343 
-0344 folder = uigetdir(<span class="string">''</span>,<span class="string">'HCE: Select a folder to load'</span>);
-0345 
-0346 <span class="comment">% if user cancels command nothing happens</span>
-0347 <span class="keyword">if</span> isequal(folder,0)
-0348     <span class="keyword">return</span>
-0349 <span class="keyword">end</span>
-0350 <span class="keyword">end</span>
-0351 
-0352 
+0215         [hsScores scScores] = <a href="#_sub2" class="code" title="subfunction [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)">loadcluster</a>(cluster,noClusters,hsFiles,scFiles);
+0216         avgscin = dlmread(<span class="string">'cluster_rmsd-Emin.txt'</span>,<span class="string">''</span>,1,1);
+0217         
+0218     <span class="keyword">case</span> <span class="string">'bsa'</span>
+0219         scFiles = dir([folder <span class="string">'/file.nam_clust*_bsa'</span>]);
+0220         
+0221         [hsScores scScores] = <a href="#_sub2" class="code" title="subfunction [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)">loadcluster</a>(cluster,noClusters,hsFiles,scFiles);
+0222         avgscin = dlmread(<span class="string">'cluster_bsa.txt'</span>,<span class="string">''</span>,1,1);
+0223         
+0224     <span class="keyword">case</span> <span class="string">'dH'</span>
+0225         scFiles = dir([folder <span class="string">'/file.nam_clust*_dH'</span>]);
+0226         
+0227         [hsScores scScores] = <a href="#_sub2" class="code" title="subfunction [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)">loadcluster</a>(cluster,noClusters,hsFiles,scFiles);
+0228         avgscin = dlmread(<span class="string">'cluster_dH.txt'</span>,<span class="string">''</span>,1,1);
+0229         
+0230     <span class="keyword">case</span> <span class="string">'Edesolv'</span>
+0231         scFiles = dir([folder <span class="string">'/file.nam_clust*_Edesolv'</span>]);
+0232         
+0233         [hsScores scScores] = <a href="#_sub2" class="code" title="subfunction [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)">loadcluster</a>(cluster,noClusters,hsFiles,scFiles);
+0234         avgscin = dlmread(<span class="string">'cluster_Edesolv.txt'</span>,<span class="string">''</span>,1,1);
+0235         
+0236     <span class="keyword">case</span> <span class="string">'rmsd'</span>
+0237         scFiles = dir([folder <span class="string">'/file.nam_clust*_rmsd'</span>]);
+0238         
+0239         [hsScores scScores] = <a href="#_sub2" class="code" title="subfunction [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)">loadcluster</a>(cluster,noClusters,hsFiles,scFiles);
+0240         avgscin = dlmread(<span class="string">'cluster_rmsd.txt'</span>,<span class="string">''</span>,1,1);
+0241     
+0242         
+0243         <span class="comment">% Energy terms are all kept within one file, so special processing</span>
+0244         <span class="comment">% is needed to open the file and then sort the columns so that the</span>
+0245         <span class="comment">% correct one is read</span>
+0246         
+0247         <span class="comment">%If no 'ener' is defined then Einter is used by default</span>
+0248         
+0249     <span class="keyword">otherwise</span>
+0250         
+0251         scFiles = dir([folder <span class="string">'/file.nam_clust*_ener'</span>]);
+0252         avgscin = dlmread(<span class="string">'cluster_ener.txt'</span>,<span class="string">''</span>,1,1);
+0253         
+0254         <span class="comment">% This will resize cluster_ener to appropiate columns</span>
+0255         <span class="keyword">switch</span> parameter
+0256             <span class="keyword">case</span> <span class="string">'ener'</span>
+0257                 avgscin = avgscin(:,[2 3]);
+0258             <span class="keyword">case</span> <span class="string">'ener-Einter'</span>
+0259                 avgscin = avgscin(:,[2 3]);
+0260             <span class="keyword">case</span> <span class="string">'ener-Enb'</span>
+0261                 avgscin = avgscin(:,[4 5]);
+0262             <span class="keyword">case</span> <span class="string">'ener-Evdw'</span>
+0263                 avgscin = avgscin(:,[6 7]);
+0264             <span class="keyword">case</span> <span class="string">'ener-Eelec'</span>
+0265                 avgscin = avgscin(:,[8 9]);
+0266             <span class="keyword">case</span> <span class="string">'ener-Eair'</span>
+0267                 avgscin = avgscin(:,[10 11]);
+0268             <span class="keyword">case</span> <span class="string">'ener-Ecdih'</span>
+0269                 avgscin = avgscin(:,[12 13]);
+0270             <span class="keyword">case</span> <span class="string">'ener-Ecoup'</span>
+0271                 avgscin = avgscin(:,[14 15]);
+0272             <span class="keyword">case</span> <span class="string">'ener-Esani'</span>
+0273                 avgscin = avgscin(:,[16 17]);
+0274             <span class="keyword">case</span> <span class="string">'ener-Evean'</span>
+0275                 avgscin = avgscin(:,[18 19]);
+0276             <span class="keyword">case</span> <span class="string">'ener-Edani'</span>
+0277                 avgscin = avgscin(:,[20 21]);
+0278         <span class="keyword">end</span>
+0279 <span class="keyword">end</span>
+0280 
+0281 <span class="comment">% Figure creation</span>
+0282 <span class="comment">% ===============</span>
+0283 
+0284 <span class="comment">% Create figure</span>
+0285 figure(<span class="string">'name'</span> , <span class="string">'HADDOCK Cluster Processing'</span> , <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0286 
+0287 <span class="comment">% Plot the data</span>
+0288 hold on
+0289 scatter(gca,scScores,hsScores,<span class="string">'b'</span>);
+0290 
+0291 <span class="comment">% If only plotting one cluster, do not plot cluster averages. And make sure</span>
+0292 <span class="comment">% that errorbar_x is installed</span>
+0293 <span class="keyword">if</span> isnumeric(cluster) == 0 &amp;&amp; exist(<span class="string">'errorbar_x'</span>) == 2
+0294     <a href="errorbar_x.html" class="code" title="function hh = errorbar_x(x, y, l,u,symbol)">errorbar_x</a>(avgscin(:,1),avgHad(:,1),avgscin(:,2),<span class="string">'or'</span>);
+0295     errorbar(avgscin(:,1),avgHad(:,1),avgHad(:,2),<span class="string">'or'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>);
+0296 <span class="keyword">end</span>
+0297 hold off
+0298 
+0299 <span class="comment">% Adjust presentation</span>
+0300 box on
+0301 ylabel(<span class="string">'\textsf{HADDOCK score}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0302 set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0303 
+0304 <span class="keyword">switch</span> parameter
+0305     <span class="keyword">case</span> <span class="string">'rmsd-Emin'</span>
+0306         xlim([0 ceil(max(scScores(:,1)))]);
+0307         xlabel(<span class="string">'\textsf{RMSD from average HADDOCK structure / }\r{A}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0308     <span class="keyword">case</span> <span class="string">'bsa'</span>
+0309         xlim([0 ceil(max(avgscin(:,1)))]);
+0310         xlabel(<span class="string">'\textsf{Buried surface from average (average HADDOCK structure) / }\r{A}^2'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0311     <span class="keyword">case</span> <span class="string">'dH'</span>
+0312         xlim([0 ceil(max(avgscin(:,1)))]);
+0313         xlabel(<span class="string">'\textsf{Total energy difference from average (average HADDOCK structure)}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0314     <span class="keyword">case</span> <span class="string">'Edesolv'</span>
+0315         xlim([0 ceil(max(avgscin(:,1)))]);
+0316         xlabel(<span class="string">'\textsf{Desolvation energy from average (average HADDOCK structure)}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0317     <span class="keyword">case</span> <span class="string">'rmsd'</span>
+0318         xlim([0 ceil(max(avgscin(:,1)))]);
+0319         xlabel(<span class="string">'\textsf{RMSD from cluster best / }\r{A}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0320     <span class="keyword">case</span> <span class="string">'ener'</span>
+0321         xlim([0 ceil(max(avgscin(:,1)))]);
+0322         xlabel(<span class="string">'\textsf{Energy from average (all energy terms) / }\r{A}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0323     <span class="keyword">case</span> <span class="string">'ener-Einter'</span>
+0324         xlim([0 ceil(max(avgscin(:,1)))]);
+0325         xlabel(<span class="string">'\textsf{Internal energy from average (average HADDOCK structure)}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0326     <span class="keyword">case</span> <span class="string">'ener-Enb'</span>
+0327         xlim([0 ceil(max(avgscin(:,1)))]);
+0328         xlabel(<span class="string">'\textsf{Buried energy from average (average HADDOCK structure)}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0329     <span class="keyword">case</span> <span class="string">'ener-Evdw'</span>
+0330         xlim([0 ceil(max(avgscin(:,1)))]);
+0331         xlabel(<span class="string">'\textsf{Van der Waal energies from average (average HADDOCK structure)}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0332     <span class="keyword">case</span> <span class="string">'ener-Eelec'</span>
+0333         xlim([0 ceil(max(avgscin(:,1)))]);
+0334         xlabel(<span class="string">'\textsf{Electrostatic energies from average (average HADDOCK structure)}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0335     <span class="keyword">case</span> <span class="string">'ener-Eair'</span>
+0336         xlim([0 ceil(max(avgscin(:,1)))]);
+0337         xlabel(<span class="string">'\textsf{AIR energies from average (average HADDOCK structure)}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0338     <span class="keyword">case</span> <span class="string">'ener-Ecdih'</span>
+0339         xlim([0 ceil(max(avgscin(:,1)))]);
+0340         xlabel(<span class="string">'\textsf{Ecdih from average (average HADDOCK structure)}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0341     <span class="keyword">case</span> <span class="string">'ener-Ecoup'</span>
+0342         xlim([0 ceil(max(avgscin(:,1)))]);
+0343         xlabel(<span class="string">'\textsf{Ecoup from average (average HADDOCK structure)}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0344     <span class="keyword">case</span> <span class="string">'ener-Esani'</span>
+0345         xlim([0 ceil(max(avgscin(:,1)))]);
+0346         xlabel(<span class="string">'\textsf{Esani from average (average HADDOCK structure)}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0347     <span class="keyword">case</span> <span class="string">'ener-Evean'</span>
+0348         xlim([0 ceil(max(avgscin(:,1)))]);
+0349         xlabel(<span class="string">'\textsf{Evean from average (average HADDOCK structure)}'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+0350     <span class="keyword">case</span> <span class="string">'ener-Edani'</span>
+0351         
+0352 <span class="keyword">end</span>
 0353 
-0354 <a name="_sub2" href="#_subfunctions" class="code">function [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)</a>
-0355 
-0356 <span class="comment">% This function loads the cluster information from the files</span>
+0354 
+0355 <span class="comment">% Output arguments</span>
+0356 <span class="comment">% ================</span>
 0357 
-0358 <span class="comment">% Get data from files</span>
-0359 <span class="keyword">switch</span> cluster
-0360     <span class="keyword">case</span> <span class="string">'all'</span>
-0361         
-0362         hsScores = [];
-0363         scScores = [];
-0364         
-0365         <span class="keyword">for</span> i = 1:noClusters
-0366             <span class="comment">% Read in the scores</span>
-0367             hsCluster = dlmread(hsFiles(i).name,<span class="string">''</span>,1,1);
-0368             scCluster = dlmread(scFiles(i).name,<span class="string">''</span>,1,1);
-0369             
-0370             <span class="comment">% Merge Clusters</span>
-0371             hsScores = [hsScores ; hsCluster];
-0372             scScores = [scScores ; scCluster];
-0373 
-0374         <span class="keyword">end</span>
-0375         
-0376     <span class="keyword">otherwise</span>
-0377         <span class="comment">% Read in the scores</span>
-0378             hsScores = dlmread(hsFiles(cluster).name,<span class="string">''</span>,1,1);
-0379             scScores = dlmread(scFiles(cluster).name,<span class="string">''</span>,1,1);
-0380         
-0381 <span class="keyword">end</span>
-0382 <span class="keyword">end</span>
-0383 
-0384 
-0385 <a name="_sub3" href="#_subfunctions" class="code">function [hsScores scScores] = loadEnergyCluster(cluster,noClusters,hsFiles,scFiles,parameter)</a>
+0358 <span class="keyword">switch</span> nargout
+0359     <span class="keyword">case</span> 0
+0360         <span class="keyword">return</span>
+0361     <span class="keyword">case</span> 1
+0362         varargout{1} = hsScores;
+0363     <span class="keyword">case</span> 2
+0364         varargout{1} = hsScores;
+0365         varargout{2} = scScores;
+0366 <span class="keyword">end</span>
+0367 <span class="keyword">end</span>
+0368 
+0369 
+0370 <span class="comment">%                               Subfunctions</span>
+0371 <span class="comment">% ========================================================================</span>
+0372 
+0373 <a name="_sub1" href="#_subfunctions" class="code">function folder = loadfolder</a>
+0374 
+0375 <span class="comment">% This function is called from the inputs section. It is used to load</span>
+0376 <span class="comment">% folders and removes duplication</span>
+0377 
+0378 folder = uigetdir(<span class="string">''</span>,<span class="string">'HCE: Select a folder to load'</span>);
+0379 
+0380 <span class="comment">% if user cancels command nothing happens</span>
+0381 <span class="keyword">if</span> isequal(folder,0)
+0382     <span class="keyword">return</span>
+0383 <span class="keyword">end</span>
+0384 <span class="keyword">end</span>
+0385 
 0386 
-0387 <span class="comment">% This function loads the cluster information from the files when an energy</span>
-0388 <span class="comment">% parameter has been selected.</span>
+0387 
+0388 <a name="_sub2" href="#_subfunctions" class="code">function [hsScores scScores] = loadcluster(cluster,noClusters,hsFiles,scFiles)</a>
 0389 
-0390 <span class="comment">% Get data from files</span>
-0391 <span class="keyword">switch</span> cluster
-0392     <span class="keyword">case</span> <span class="string">'all'</span>
-0393         
-0394         hsScores = [];
-0395         scScores = [];
-0396         
-0397         <span class="keyword">for</span> i = 1:noClusters
-0398             <span class="comment">% Read and merge HADDOCK scores</span>
-0399             hsCluster = dlmread(hsFiles(i).name,<span class="string">''</span>,1,1);
-0400             hsScores = [hsScores ; hsCluster];
-0401             
-0402             <span class="comment">% Read in energy file</span>
-0403             scCluster = dlmread(scFiles(i).name,<span class="string">''</span>,1,1);
-0404             
-0405             <span class="keyword">switch</span> parameter
-0406             <span class="keyword">case</span> <span class="string">'ener'</span>
-0407                 scCluster = scCluster(:,2);
-0408             <span class="keyword">case</span> <span class="string">'ener-Einter'</span>
-0409                 scCluster = scCluster(:,3);
-0410             <span class="keyword">case</span> <span class="string">'ener-Enb'</span>
-0411                 scCluster = scCluster(:,4);
-0412             <span class="keyword">case</span> <span class="string">'ener-Evdw'</span>
-0413                 scCluster = scCluster(:,5);
-0414             <span class="keyword">case</span> <span class="string">'ener-Eelec'</span>
-0415                 scCluster = scCluster(:,6);
-0416             <span class="keyword">case</span> <span class="string">'ener-Eair'</span>
-0417                 scCluster = scCluster(:,7);
-0418             <span class="keyword">case</span> <span class="string">'ener-Ecdih'</span>
-0419                 scCluster = scCluster(:,8);
-0420             <span class="keyword">case</span> <span class="string">'ener-Ecoup'</span>
-0421                 scCluster = scCluster(:,9);
-0422             <span class="keyword">case</span> <span class="string">'ener-Esani'</span>
-0423                 scCluster = scCluster(:,10);
-0424             <span class="keyword">case</span> <span class="string">'ener-Evean'</span>
-0425                 scCluster = scCluster(:,11);
-0426             <span class="keyword">case</span> <span class="string">'ener-Edani'</span>
-0427                 scCluster = scCluster(:,12);
-0428             <span class="keyword">end</span>
-0429             
-0430             
-0431             <span class="comment">% Merge Clusters</span>
-0432             scScores = [scScores ; scCluster];
-0433 
-0434         <span class="keyword">end</span>
-0435         
-0436     <span class="keyword">otherwise</span>
-0437         <span class="comment">% Read in the scores</span>
-0438             hsScores = dlmread(hsFiles(cluster).name,<span class="string">''</span>,1,1);
-0439             scScores = dlmread(scFiles(cluster).name,<span class="string">''</span>,1,1);
-0440         
-0441 <span class="keyword">end</span>
-0442 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0390 <span class="comment">% This function loads the cluster information from the files</span>
+0391 
+0392 <span class="comment">% Get data from files</span>
+0393 <span class="keyword">switch</span> cluster
+0394     <span class="keyword">case</span> <span class="string">'all'</span>
+0395         
+0396         hsScores = [];
+0397         scScores = [];
+0398         
+0399         <span class="keyword">for</span> i = 1:noClusters
+0400             <span class="comment">% Read in the scores</span>
+0401             hsCluster = dlmread(hsFiles(i).name,<span class="string">''</span>,1,1);
+0402             scCluster = dlmread(scFiles(i).name,<span class="string">''</span>,1,1);
+0403             
+0404             <span class="comment">% Merge Clusters</span>
+0405             hsScores = [hsScores ; hsCluster];
+0406             scScores = [scScores ; scCluster];
+0407 
+0408         <span class="keyword">end</span>
+0409         
+0410     <span class="keyword">otherwise</span>
+0411         <span class="comment">% Read in the scores</span>
+0412             hsScores = dlmread(hsFiles(cluster).name,<span class="string">''</span>,1,1);
+0413             scScores = dlmread(scFiles(cluster).name,<span class="string">''</span>,1,1);
+0414         
+0415 <span class="keyword">end</span>
+0416 <span class="keyword">end</span>
+0417 
+0418 
+0419 <a name="_sub3" href="#_subfunctions" class="code">function [hsScores scScores] = loadEnergyCluster(cluster,noClusters,hsFiles,scFiles,parameter)</a>
+0420 
+0421 <span class="comment">% This function loads the cluster information from the files when an energy</span>
+0422 <span class="comment">% parameter has been selected.</span>
+0423 
+0424 <span class="comment">% Get data from files</span>
+0425 <span class="keyword">switch</span> cluster
+0426     <span class="keyword">case</span> <span class="string">'all'</span>
+0427         
+0428         hsScores = [];
+0429         scScores = [];
+0430         
+0431         <span class="keyword">for</span> i = 1:noClusters
+0432             <span class="comment">% Read and merge HADDOCK scores</span>
+0433             hsCluster = dlmread(hsFiles(i).name,<span class="string">''</span>,1,1);
+0434             hsScores = [hsScores ; hsCluster];
+0435             
+0436             <span class="comment">% Read in energy file</span>
+0437             scCluster = dlmread(scFiles(i).name,<span class="string">''</span>,1,1);
+0438             
+0439             <span class="keyword">switch</span> parameter
+0440             <span class="keyword">case</span> <span class="string">'ener'</span>
+0441                 scCluster = scCluster(:,2);
+0442             <span class="keyword">case</span> <span class="string">'ener-Einter'</span>
+0443                 scCluster = scCluster(:,3);
+0444             <span class="keyword">case</span> <span class="string">'ener-Enb'</span>
+0445                 scCluster = scCluster(:,4);
+0446             <span class="keyword">case</span> <span class="string">'ener-Evdw'</span>
+0447                 scCluster = scCluster(:,5);
+0448             <span class="keyword">case</span> <span class="string">'ener-Eelec'</span>
+0449                 scCluster = scCluster(:,6);
+0450             <span class="keyword">case</span> <span class="string">'ener-Eair'</span>
+0451                 scCluster = scCluster(:,7);
+0452             <span class="keyword">case</span> <span class="string">'ener-Ecdih'</span>
+0453                 scCluster = scCluster(:,8);
+0454             <span class="keyword">case</span> <span class="string">'ener-Ecoup'</span>
+0455                 scCluster = scCluster(:,9);
+0456             <span class="keyword">case</span> <span class="string">'ener-Esani'</span>
+0457                 scCluster = scCluster(:,10);
+0458             <span class="keyword">case</span> <span class="string">'ener-Evean'</span>
+0459                 scCluster = scCluster(:,11);
+0460             <span class="keyword">case</span> <span class="string">'ener-Edani'</span>
+0461                 scCluster = scCluster(:,12);
+0462             <span class="keyword">end</span>
+0463             
+0464             
+0465             <span class="comment">% Merge Clusters</span>
+0466             scScores = [scScores ; scCluster];
+0467 
+0468         <span class="keyword">end</span>
+0469         
+0470     <span class="keyword">otherwise</span>
+0471         <span class="comment">% Read in the scores</span>
+0472             hsScores = dlmread(hsFiles(cluster).name,<span class="string">''</span>,1,1);
+0473             scScores = dlmread(scFiles(cluster).name,<span class="string">''</span>,1,1);
+0474         
+0475 <span class="keyword">end</span>
+0476 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -24,9 +24,58 @@ EPRtoolbox
                                                          &
                                              Weizmann Institute of Science
 
-M. Bye v13.12
+M. Bye v14.05
 
-v13.12
+v14.05
+
+NEW FEATURE: reportbuilder
+==========================
+reportbuilder aims to take all of the hassle out of plotting data in a
+repetitive manner. A graphical user interface guides file selection of
+the raw data files. The data is then imported, plotted with a table of
+the key parameters from the experiment.
+
+Images are presented by default in vector format. Then a LaTeX (.tex) file
+is generated. On a Linux system the .tex file is automatically compiled to
+generate a formal report (PDF) on A4 paper for easy printing.
+
+SpecManRead
+===========
+> Complete rewrite of how experimental data is processed
+        now we scan through the parameters section, find the variable that
+        changes, then look for that variable and see how it
+        increases. Based on whether it is a "x to y", "x step y" or
+        "x, y, z ..." experiment the axis is then generated.
+
+        As this is terribly complicated there is a lot of commenting for
+        this section. It should now work for almost all experiment types.
+        But testing is the only way to tell for sure.
+
+
+BrukerRead
+==========
+> CPMG support
+> Error handling in figure plotting
+> Better error reporting for when a file cannot be opened -
+        by file permission or missing file
+> YUNI (y axis units) now uses a try statement - old Xepr versions will not
+        automatically add it to the .dsc file
+
+PeldorPlotter
+=============
+> Increased robustness in file names
+> PeldorPlotter2, features the same simply without the raw data
+
+PulseGen
+========
+> Improved toolbar
+> Additional robustness
+> Better error handling and reporting
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v13.12 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 --- EPRtoolbox hits 1200 downloads ---
 

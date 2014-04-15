@@ -56,7 +56,7 @@
        normalise array y between -100 and +100 back into array y
 
  More examples available at:
- http://morganbye.net/eprtoolbox/cw-normaliser-cwnorm
+ http://morganbye.net/eprtoolbox/cwnorm
 
  Other m-files required:
        n/a
@@ -111,7 +111,7 @@ This function is called by:
 0029 <span class="comment">%       normalise array y between -100 and +100 back into array y</span>
 0030 <span class="comment">%</span>
 0031 <span class="comment">% More examples available at:</span>
-0032 <span class="comment">% http://morganbye.net/eprtoolbox/cw-normaliser-cwnorm</span>
+0032 <span class="comment">% http://morganbye.net/eprtoolbox/cwnorm</span>
 0033 <span class="comment">%</span>
 0034 <span class="comment">% Other m-files required:</span>
 0035 <span class="comment">%       n/a</span>
@@ -132,81 +132,89 @@ This function is called by:
 0050 <span class="comment">%                       __/ |                   __/ |</span>
 0051 <span class="comment">%                      |___/                   |___/</span>
 0052 <span class="comment">%</span>
-0053 <span class="comment">% M. Bye v12.12</span>
+0053 <span class="comment">% M. Bye v13.09</span>
 0054 <span class="comment">%</span>
-0055 <span class="comment">% Author:       Morgan Bye</span>
-0056 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
-0057 <span class="comment">%               University of East Anglia</span>
-0058 <span class="comment">%               NORWICH, UK</span>
-0059 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
-0060 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/cw-normaliser-cwnorm</span>
-0061 <span class="comment">% Dec 2012;     Last revision: 7-December-2012</span>
-0062 <span class="comment">%</span>
-0063 <span class="comment">% Dec 2012      &gt; Update for quicker size determination, also better</span>
-0064 <span class="comment">%                   compatibility with Windows systems</span>
-0065 <span class="comment">%               &gt; Switch from ifs to Switch statements</span>
-0066 <span class="comment">%               &gt; Addition of 'true' argument for 0 to 1 normalisation</span>
+0055 <span class="comment">% v13.09 - current</span>
+0056 <span class="comment">%               Chemical Physics Department</span>
+0057 <span class="comment">%               Weizmann Institute of Science</span>
+0058 <span class="comment">%               76100 REHOVOT, Israel</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">% v11.06 - v13.08</span>
+0061 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0062 <span class="comment">%               University of East Anglia</span>
+0063 <span class="comment">%               NORWICH, UK</span>
+0064 <span class="comment">%</span>
+0065 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0066 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/cwplot</span>
 0067 <span class="comment">%</span>
-0068 <span class="comment">% Oct 2011      &gt; Reworking of the calculation to work with arrays with</span>
-0069 <span class="comment">%                   more than one column.</span>
-0070 
-0071 
-0072 <span class="keyword">switch</span> nargin
-0073     
-0074     <span class="keyword">case</span> 0
-0075         warndlg(<span class="string">'No array has been selected to normalise'</span>,<span class="string">'Error:cwnorm'</span>);
-0076     
-0077     <span class="keyword">case</span> 1
-0078         about = 1;
-0079         
-0080     <span class="keyword">case</span> 2
-0081         about = varargin{1};
-0082         
-0083     <span class="keyword">otherwise</span>
-0084         warndlg(<span class="string">'Too many inputs for cwnorm.'</span>,<span class="string">'Error:cwnorm'</span>);
-0085 <span class="keyword">end</span>
-0086 
-0087 c = size(y,2);
-0088 
-0089 <span class="comment">% Singe column data</span>
-0090 <span class="keyword">switch</span> c
-0091     <span class="keyword">case</span> 1
-0092         
-0093         <span class="comment">% Set min and max values</span>
-0094         max_y = max(y);
-0095         min_y = min(y);
-0096         
-0097         <span class="comment">% Do the normalisation</span>
-0098         <span class="keyword">if</span> ischar(about) &amp;&amp; strcmp(<span class="string">'true'</span>,about)
-0099             y = (y - min_y)/(max_y - min_y);
-0100         <span class="keyword">else</span>
-0101             <span class="comment">% Non-true normalisation requires a scaling factor at end</span>
-0102             y = (( y - min_y)/(max_y - min_y) - 0.5) *2*about;
-0103         <span class="keyword">end</span>
+0068 <span class="comment">% Last updated  07-December-2012</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% Version history:</span>
+0071 <span class="comment">% Dec 2012      &gt; Update for quicker size determination, also better</span>
+0072 <span class="comment">%                   compatibility with Windows systems</span>
+0073 <span class="comment">%               &gt; Switch from ifs to Switch statements</span>
+0074 <span class="comment">%               &gt; Addition of 'true' argument for 0 to 1 normalisation</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">% Oct 2011      &gt; Reworking of the calculation to work with arrays with</span>
+0077 <span class="comment">%                   more than one column.</span>
+0078 
+0079 
+0080 <span class="keyword">switch</span> nargin
+0081     
+0082     <span class="keyword">case</span> 0
+0083         warndlg(<span class="string">'No array has been selected to normalise'</span>,<span class="string">'Error:cwnorm'</span>);
+0084     
+0085     <span class="keyword">case</span> 1
+0086         about = 1;
+0087         
+0088     <span class="keyword">case</span> 2
+0089         about = varargin{1};
+0090         
+0091     <span class="keyword">otherwise</span>
+0092         warndlg(<span class="string">'Too many inputs for cwnorm.'</span>,<span class="string">'Error:cwnorm'</span>);
+0093 <span class="keyword">end</span>
+0094 
+0095 c = size(y,2);
+0096 
+0097 <span class="comment">% Singe column data</span>
+0098 <span class="keyword">switch</span> c
+0099     <span class="keyword">case</span> 1
+0100         
+0101         <span class="comment">% Set min and max values</span>
+0102         max_y = max(y);
+0103         min_y = min(y);
 0104         
-0105         
-0106         
-0107         <span class="comment">% Multi column data</span>
-0108     <span class="keyword">otherwise</span>
-0109         
-0110         <span class="keyword">if</span> ischar(about) &amp;&amp; strcmp(<span class="string">'true'</span>,about)
-0111                        
-0112             <span class="keyword">for</span> k = 1:c
-0113                 max_y = max(y(:,k));
-0114                 min_y = min(y(:,k));
-0115                 y(:,k) = (y(:,k) - min_y)/(max_y - min_y);
-0116             <span class="keyword">end</span>
-0117             
-0118         <span class="keyword">else</span>
-0119             
+0105         <span class="comment">% Do the normalisation</span>
+0106         <span class="keyword">if</span> ischar(about) &amp;&amp; strcmp(<span class="string">'true'</span>,about)
+0107             y = (y - min_y)/(max_y - min_y);
+0108         <span class="keyword">else</span>
+0109             <span class="comment">% Non-true normalisation requires a scaling factor at end</span>
+0110             y = (( y - min_y)/(max_y - min_y) - 0.5) *2*about;
+0111         <span class="keyword">end</span>
+0112         
+0113         
+0114         
+0115         <span class="comment">% Multi column data</span>
+0116     <span class="keyword">otherwise</span>
+0117         
+0118         <span class="keyword">if</span> ischar(about) &amp;&amp; strcmp(<span class="string">'true'</span>,about)
+0119                        
 0120             <span class="keyword">for</span> k = 1:c
 0121                 max_y = max(y(:,k));
 0122                 min_y = min(y(:,k));
-0123                 y(:,k) = (( y(:,k) - min_y)/(max_y - min_y) - 0.5) *2*about;
+0123                 y(:,k) = (y(:,k) - min_y)/(max_y - min_y);
 0124             <span class="keyword">end</span>
 0125             
-0126         <span class="keyword">end</span>
-0127 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0126         <span class="keyword">else</span>
+0127             
+0128             <span class="keyword">for</span> k = 1:c
+0129                 max_y = max(y(:,k));
+0130                 min_y = min(y(:,k));
+0131                 y(:,k) = (( y(:,k) - min_y)/(max_y - min_y) - 0.5) *2*about;
+0132             <span class="keyword">end</span>
+0133             
+0134         <span class="keyword">end</span>
+0135 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

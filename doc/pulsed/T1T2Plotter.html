@@ -114,67 +114,68 @@ This function is called by:
 0036 <span class="comment">%</span>
 0037 <span class="comment">% See also: EPRTOOLBOX CWPLOTTER</span>
 0038 
-0039 
-0040 <span class="comment">%                                        _                             _</span>
-0041 <span class="comment">%                                       | |                           | |</span>
-0042 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
-0043 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
-0044 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
-0045 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
-0046 <span class="comment">%                       __/ |                   __/ |</span>
-0047 <span class="comment">%                      |___/                   |___/</span>
-0048 <span class="comment">%</span>
+0039 <span class="comment">%                                        _                             _</span>
+0040 <span class="comment">%                                       | |                           | |</span>
+0041 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0042 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0043 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0044 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0045 <span class="comment">%                       __/ |                   __/ |</span>
+0046 <span class="comment">%                      |___/                   |___/</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">% M. Bye v13.09</span>
 0049 <span class="comment">%</span>
-0050 <span class="comment">% M. Bye v13.06</span>
-0051 <span class="comment">%</span>
-0052 <span class="comment">% Author:       Morgan Bye</span>
-0053 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
-0054 <span class="comment">%               University of East Anglia</span>
-0055 <span class="comment">%               NORWICH, UK</span>
-0056 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
-0057 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/</span>
-0058 <span class="comment">% May 2013;     Last revision: 06-May-2013</span>
+0050 <span class="comment">% v13.09 - current</span>
+0051 <span class="comment">%               Chemical Physics Department</span>
+0052 <span class="comment">%               Weizmann Institute of Science</span>
+0053 <span class="comment">%               76100 REHOVOT, Israel</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% v11.06 - v13.08</span>
+0056 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0057 <span class="comment">%               University of East Anglia</span>
+0058 <span class="comment">%               NORWICH, UK</span>
 0059 <span class="comment">%</span>
-0060 <span class="comment">% Approximate coding time of file:</span>
-0061 <span class="comment">%               0 hours</span>
+0060 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0061 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
 0062 <span class="comment">%</span>
-0063 <span class="comment">%</span>
-0064 <span class="comment">% Version history:</span>
-0065 <span class="comment">% May 13        Initial release</span>
-0066 
-0067 x1 = size(y1,1);
-0068 x2 = size(y2,1);
-0069 
-0070 <span class="comment">% Create functions</span>
-0071 f1 = @(x, y) bar(1:x1,y1);
-0072 f2 = @(x, y) bar(1:x2,y2);
-0073 
-0074 hF = figure;
-0075 
-0076 <span class="comment">% Plot</span>
-0077 [AX,h1,h2] = plotyy(x1,y1,x2,y2,f1,f2);
-0078 
-0079 <span class="comment">% Setup axes</span>
-0080 set(AX(2),<span class="string">'YDir'</span>,<span class="string">'reverse'</span>);
-0081 set(AX(1),<span class="string">'YLim'</span>,[-(max(y1)) max(y1)]);
-0082 set(AX(2),<span class="string">'YLim'</span>,[-(max(y2)) max(y2)]);
-0083 
-0084 <span class="comment">% Add axes labels</span>
-0085 set(get(AX(1),<span class="string">'Ylabel'</span>),<span class="string">'String'</span>,<span class="string">'T_1 / ms'</span>); 
-0086 set(get(AX(2),<span class="string">'Ylabel'</span>),<span class="string">'String'</span>,<span class="string">'T_2 / \mus'</span>);
-0087 set(AX(1), <span class="string">'XTickLabel'</span>,x, <span class="string">'XTick'</span>,1:numel(x));
-0088 set(AX(2), <span class="string">'XTickLabel'</span>,[]);
-0089 
-0090 set(gcf,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)
-0091 pos = get(gcf,<span class="string">'Position'</span>);
-0092 set(gcf,<span class="string">'PaperPositionMode'</span>,<span class="string">'Auto'</span>,<span class="string">'PaperUnits'</span>,<span class="string">'points'</span>,<span class="string">'PaperSize'</span>,[pos(3)-20, pos(4)-20])
-0093 
-0094 [out_name, out_path] = uiputfile(<span class="string">'*.pdf'</span>, <span class="string">'Save figure as...'</span>);
-0095 out_add = fullfile(out_path,out_name);
-0096 
-0097 print(gcf, <span class="string">'-dpdf'</span>,  out_add);
-0098 
-0099 close(hF);</pre></div>
-<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0063 <span class="comment">% Last updated  06-May-2013</span>
+0064 <span class="comment">%</span>
+0065 <span class="comment">% Version history:</span>
+0066 <span class="comment">% May 13        Initial release</span>
+0067 
+0068 x1 = size(y1,1);
+0069 x2 = size(y2,1);
+0070 
+0071 <span class="comment">% Create functions</span>
+0072 f1 = @(x, y) bar(1:x1,y1);
+0073 f2 = @(x, y) bar(1:x2,y2);
+0074 
+0075 hF = figure;
+0076 
+0077 <span class="comment">% Plot</span>
+0078 [AX,h1,h2] = plotyy(x1,y1,x2,y2,f1,f2);
+0079 
+0080 <span class="comment">% Setup axes</span>
+0081 set(AX(2),<span class="string">'YDir'</span>,<span class="string">'reverse'</span>);
+0082 set(AX(1),<span class="string">'YLim'</span>,[-(max(y1)) max(y1)]);
+0083 set(AX(2),<span class="string">'YLim'</span>,[-(max(y2)) max(y2)]);
+0084 
+0085 <span class="comment">% Add axes labels</span>
+0086 set(get(AX(1),<span class="string">'Ylabel'</span>),<span class="string">'String'</span>,<span class="string">'T_1 / ms'</span>); 
+0087 set(get(AX(2),<span class="string">'Ylabel'</span>),<span class="string">'String'</span>,<span class="string">'T_2 / \mus'</span>);
+0088 set(AX(1), <span class="string">'XTickLabel'</span>,x, <span class="string">'XTick'</span>,1:numel(x));
+0089 set(AX(2), <span class="string">'XTickLabel'</span>,[]);
+0090 
+0091 set(gcf,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>)
+0092 pos = get(gcf,<span class="string">'Position'</span>);
+0093 set(gcf,<span class="string">'PaperPositionMode'</span>,<span class="string">'Auto'</span>,<span class="string">'PaperUnits'</span>,<span class="string">'points'</span>,<span class="string">'PaperSize'</span>,[pos(3)-20, pos(4)-20])
+0094 
+0095 [out_name, out_path] = uiputfile(<span class="string">'*.pdf'</span>, <span class="string">'Save figure as...'</span>);
+0096 out_add = fullfile(out_path,out_name);
+0097 
+0098 print(gcf, <span class="string">'-dpdf'</span>,  out_add);
+0099 
+0100 close(hF);</pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

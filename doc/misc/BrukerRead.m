@@ -85,7 +85,7 @@ function varargout = BrukerRead(varargin)
 %                      |___/                   |___/                       
 %
 %
-% M. Bye v14.02
+% M. Bye v14.05
 %
 % Author:       Morgan Bye
 % Work address: Henry Wellcome Unit for Biological EPR
@@ -100,6 +100,9 @@ function varargout = BrukerRead(varargin)
 %
 %
 % Version history:
+% Apr 14        > CPMG support
+%               > Error handling in figure plotting
+%
 % Feb 14        Better error reporting for when a file cannot be opened -
 %                   by file permission or missing file
 %
@@ -689,12 +692,17 @@ switch nargout
         info.NbScansToDo = str2num(regexprep(parameters((strmatch('NbScansToDo',parameters)),:),'NbScansToDo',''));
         
         % Pulsed information
-        % documentation text
-        info.IIFMT = strtrim(regexprep(parameters((strmatch('IIFMT',parameters)),:),'IIFMT',''));
-        info.IIUNI = strtrim(regexprep(parameters((strmatch('IIUNI',parameters)),:),'IIUNI',''));
+        % documentation text - we need try statements as these fields do
+        % not exist in CPMG sequences
+        try
+            info.IIFMT = strtrim(regexprep(parameters((strmatch('IIFMT',parameters)),:),'IIFMT',''));
+            info.IIUNI = strtrim(regexprep(parameters((strmatch('IIUNI',parameters)),:),'IIUNI',''));
+        end
         
-        info.Delay = parameters((strmatch('Delay',parameters)),:);
-        info.Delay = strtrim(regexprep((info.Delay(1,:)),'Delay',''));
+        try
+            info.Delay = parameters((strmatch('Delay',parameters)),:);
+            info.Delay = strtrim(regexprep((info.Delay(1,:)),'Delay',''));
+        end
         % cw bridge
         info.AcqFineTuning = strtrim(regexprep(parameters((strmatch('AcqFineTuning',parameters)),:),'AcqFineTuning',''));
         info.AcqScanFTuning = strtrim(regexprep(parameters((strmatch('AcqScanFTuning',parameters)),:),'AcqScanFTuning',''));
@@ -720,7 +728,9 @@ switch nargout
         info.SumAttenStart = strtrim(regexprep(parameters((strmatch('SumAttenStart',parameters)),:),'SumAttenStart',''));
         info.SumAttenWidth = strtrim(regexprep(parameters((strmatch('SumAttenWidth',parameters)),:),'SumAttenWidth',''));
         % fieldCtrl
-        info.FieldResol = str2num(regexprep(parameters((strmatch('FieldResol',parameters)),:),'FieldResol',''));
+        try
+            info.FieldResol = str2num(regexprep(parameters((strmatch('FieldResol',parameters)),:),'FieldResol',''));
+        end
         % ftBridge
         info.Attenuation = strtrim(regexprep(parameters((strmatch('Attenuation',parameters)),:),'Attenuation',''));
         info.ELDORAtt = strtrim(regexprep(parameters((strmatch('ELDORAtt',parameters)),:),'ELDORAtt',''));
@@ -767,88 +777,91 @@ end
 
 % Check if figure plotting is selected
 if isequal(graph,'plot')
-    figure('name' , ['BrukerRead: ' name], 'NumberTitle','off');
-    set(gcf,'color', 'white');
-    axis tight;
-    
-    % PULSE EXPERIMENTS
-    switch info.EXPT
-        case 'PLS'
-            switch info.XNAM
+    try
+        figure('name' , ['BrukerRead: ' name], 'NumberTitle','off');
+        set(gcf,'color', 'white');
+        axis tight;
+        
+        % PULSE EXPERIMENTS
+        switch info.EXPT
+            case 'PLS'
+                switch info.XNAM
                     % For FSEs
-                case '''Field'''
-                    plot(x/10,y.real,'k-' , x/10,y.imag,'r-');
-                    xlabel('Magnetic Field / mT');
-                    ylabel('Intensity');
-                    legend('Real','Imaginary');
-                    
-                    % For FIDs
-                case '''Time'''
-                    if isfield(y,'real')
-                        plot(x,y.real,'k-' , x,y.imag,'r-');
+                    case '''Field'''
+                        plot(x/10,y.real,'k-' , x/10,y.imag,'r-');
+                        xlabel('Magnetic Field / mT');
+                        ylabel('Intensity');
                         legend('Real','Imaginary');
-                    else
-                        plot(x,y);
-                    end
-                    xlabel('Time / ns');
-                    ylabel('Intensity');
-                    
-                    
-                    % For ENDOR
-                case '''RF'''
-                    plot(x,y.real,'k-' , x,y.imag,'r-');
-                    xlabel('Radio frequency / MHz');
-                    ylabel('Intensity');
-                    legend('Real','Imaginary');
-                    
-                % For some reason HYSCORE and ESEEM experiments do not have
-                % an XNAM field so we need to use XUNI to distinguish
-                % between experiments.
-                otherwise
-                    switch info.XUNI
-                        % For HYSCORE
-                        case '''GHz'''
-                            contour(x*1000,y*1000,z);
-                            xlabel('\nu_1 / MHz');
-                            ylabel('\nu_2 / MHz');
-                            axis normal;
                         
-                        % ESEEM    
-                        case '"ns"'
+                        % For FIDs
+                    case '''Time'''
+                        if isfield(y,'real')
                             plot(x,y.real,'k-' , x,y.imag,'r-');
-                            xlabel('Time / ns');
-                            ylabel('Intensity');
                             legend('Real','Imaginary');
-                            
-                        % DONUT    
-                        case '''ns'''
-                            plot(x,y.real,'k-' , x,y.imag,'r-');
-                            xlabel('Time / ns');
-                            ylabel('Intensity');
-                            legend('Real','Imaginary');
-                            
-                        % Try plotting for other experiments (ie ENDOR)
-                        otherwise
-                            try
+                        else
+                            plot(x,y);
+                        end
+                        xlabel('Time / ns');
+                        ylabel('Intensity');
+                        
+                        
+                        % For ENDOR
+                    case '''RF'''
+                        plot(x,y.real,'k-' , x,y.imag,'r-');
+                        xlabel('Radio frequency / MHz');
+                        ylabel('Intensity');
+                        legend('Real','Imaginary');
+                        
+                        % For some reason HYSCORE and ESEEM experiments do not have
+                        % an XNAM field so we need to use XUNI to distinguish
+                        % between experiments.
+                    otherwise
+                        switch info.XUNI
+                            % For HYSCORE
+                            case '''GHz'''
+                                contour(x*1000,y*1000,z);
+                                xlabel('\nu_1 / MHz');
+                                ylabel('\nu_2 / MHz');
+                                axis normal;
+                                
+                                % ESEEM
+                            case '"ns"'
                                 plot(x,y.real,'k-' , x,y.imag,'r-');
-                                legend('Real','Imaginary')
-                            end
-                    end
-            end
-            
-    % CW EXPERIMENTS
-        case 'CW'
-            plot(x/10,y);
-            xlabel('Magnetic Field / mT');
-            
-        otherwise
-            try
+                                xlabel('Time / ns');
+                                ylabel('Intensity');
+                                legend('Real','Imaginary');
+                                
+                                % DONUT
+                            case '''ns'''
+                                plot(x,y.real,'k-' , x,y.imag,'r-');
+                                xlabel('Time / ns');
+                                ylabel('Intensity');
+                                legend('Real','Imaginary');
+                                
+                                % Try plotting for other experiments (ie ENDOR)
+                            otherwise
+                                try
+                                    plot(x,y.real,'k-' , x,y.imag,'r-');
+                                    legend('Real','Imaginary')
+                                end
+                        end
+                end
+                
+                % CW EXPERIMENTS
+            case 'CW'
                 plot(x/10,y);
                 xlabel('Magnetic Field / mT');
-            end
-            
+                
+            otherwise
+                try
+                    plot(x/10,y);
+                    xlabel('Magnetic Field / mT');
+                end
+                
+        end
+    catch
+        error('Whoops! Looks like that can''t be plotted');
     end
-    
 end
 
 end

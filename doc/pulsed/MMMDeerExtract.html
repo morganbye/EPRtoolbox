@@ -1,0 +1,390 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of MMMDeerExtract</title>
+  <meta name="keywords" content="MMMDeerExtract">
+  <meta name="description" content="DEEREXTRACT Finds an open DeerAnalysis window and exports the data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">pulsed</a> &gt; MMMDeerExtract.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for pulsed&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>MMMDeerExtract
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>DEEREXTRACT Finds an open DeerAnalysis window and exports the data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [x,y] = MMMDeerExtract(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DEEREXTRACT Finds an open DeerAnalysis window and exports the data
+ presented in the various plots into variables in MATLAB's base workspace
+ for easy use in calculations/exporting/plotting
+
+ This requires does not require anything except that you have a
+ DeerAnalysis window open (and that there is data plotted - otherwise
+ you'll get blank figures. Note that L-curves probably won't work - but
+ why would you want them?)
+
+ The user will also be prompted if they want a convenient (ie A4) PDF
+ created showing what they currently have on-screen.
+
+ Syntax:  [x,y] = DEEREXTRACT
+
+ Inputs:
+    input1 - 'noplot'
+               Extracts from DeerAnalysis with no figures plotted
+
+ Outputs:
+    output0 - 3 figures
+               figures from DeerAnalysis
+            - a PDF file containing the 3 figures
+            - a CSV file containing all the raw data
+
+    output1 - x
+               with the following sub-arrays
+                     DistanceDistribution
+                       (SuppressedDistanceDistribution)
+                     TimeDomain or Pake
+                     OriginalData
+    output2 - y
+               with the following sub-arrays
+                     DistanceDistribution
+                       (SuppressedDistanceDistribution)
+                     TimeDomain or Pake
+                     OriginalData
+
+ Example: 
+    [x,y] = DEEREXTRACT
+               plots the 3 DeerAnalysis in new windows and puts the values
+               for each into x and y structures
+
+    [x,y] = DEEREXTRACT('noplot')
+               exports DeerAnalysis figure values to x and y without
+               any plotting
+
+ Other m-files required:
+                       none
+
+ Subfunctions:         none
+
+ MAT-files required:   none</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [x,y] = MMMDeerExtract(varargin)</a>
+0002 
+0003 <span class="comment">% DEEREXTRACT Finds an open DeerAnalysis window and exports the data</span>
+0004 <span class="comment">% presented in the various plots into variables in MATLAB's base workspace</span>
+0005 <span class="comment">% for easy use in calculations/exporting/plotting</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% This requires does not require anything except that you have a</span>
+0008 <span class="comment">% DeerAnalysis window open (and that there is data plotted - otherwise</span>
+0009 <span class="comment">% you'll get blank figures. Note that L-curves probably won't work - but</span>
+0010 <span class="comment">% why would you want them?)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% The user will also be prompted if they want a convenient (ie A4) PDF</span>
+0013 <span class="comment">% created showing what they currently have on-screen.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Syntax:  [x,y] = DEEREXTRACT</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Inputs:</span>
+0018 <span class="comment">%    input1 - 'noplot'</span>
+0019 <span class="comment">%               Extracts from DeerAnalysis with no figures plotted</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Outputs:</span>
+0022 <span class="comment">%    output0 - 3 figures</span>
+0023 <span class="comment">%               figures from DeerAnalysis</span>
+0024 <span class="comment">%            - a PDF file containing the 3 figures</span>
+0025 <span class="comment">%            - a CSV file containing all the raw data</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    output1 - x</span>
+0028 <span class="comment">%               with the following sub-arrays</span>
+0029 <span class="comment">%                     DistanceDistribution</span>
+0030 <span class="comment">%                       (SuppressedDistanceDistribution)</span>
+0031 <span class="comment">%                     TimeDomain or Pake</span>
+0032 <span class="comment">%                     OriginalData</span>
+0033 <span class="comment">%    output2 - y</span>
+0034 <span class="comment">%               with the following sub-arrays</span>
+0035 <span class="comment">%                     DistanceDistribution</span>
+0036 <span class="comment">%                       (SuppressedDistanceDistribution)</span>
+0037 <span class="comment">%                     TimeDomain or Pake</span>
+0038 <span class="comment">%                     OriginalData</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% Example:</span>
+0041 <span class="comment">%    [x,y] = DEEREXTRACT</span>
+0042 <span class="comment">%               plots the 3 DeerAnalysis in new windows and puts the values</span>
+0043 <span class="comment">%               for each into x and y structures</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%    [x,y] = DEEREXTRACT('noplot')</span>
+0046 <span class="comment">%               exports DeerAnalysis figure values to x and y without</span>
+0047 <span class="comment">%               any plotting</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% Other m-files required:</span>
+0050 <span class="comment">%                       none</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% Subfunctions:         none</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% MAT-files required:   none</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">%</span>
+0057 
+0058 <span class="comment">%                                        _                             _</span>
+0059 <span class="comment">%                                       | |                           | |</span>
+0060 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0061 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0062 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0063 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0064 <span class="comment">%                       __/ |                   __/ |</span>
+0065 <span class="comment">%                      |___/                   |___/</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">% M. Bye v13.07</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">% Author:       Morgan Bye</span>
+0070 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0071 <span class="comment">%               University of East Anglia</span>
+0072 <span class="comment">%               NORWICH, UK</span>
+0073 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0074 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox</span>
+0075 <span class="comment">% Jul 2013;     Last revision: 07-July-2013</span>
+0076 <span class="comment">%</span>
+0077 <span class="comment">% Approximate coding time of file:</span>
+0078 <span class="comment">%               4 hours</span>
+0079 <span class="comment">%</span>
+0080 <span class="comment">% Version history:</span>
+0081 <span class="comment">%</span>
+0082 <span class="comment">% Dec 11        &gt; Conversion to function. Allows for single file input and</span>
+0083 <span class="comment">%                   gives x and y outputs.</span>
+0084 
+0085 <span class="comment">% CODING NOTE: any variable that begins with a lower case &quot;h&quot; is a</span>
+0086 <span class="comment">% handle for an object, ie hDA is the handles for the DeerAnalysis figure</span>
+0087 <span class="comment">%</span>
+0088 <span class="comment">% Handles with a lower case &quot;l&quot; are the handles for a line, ie lDD is the</span>
+0089 <span class="comment">% line for the curve in the distance distribution axes.</span>
+0090 
+0091 <span class="keyword">if</span> exist(<span class="string">'MMM'</span>) == 0,
+0092     warndlg(sprintf(<span class="string">'The &quot;MMM&quot; function was not found on your system.'</span>),<span class="string">'MMM'</span>)
+0093 <span class="keyword">end</span>
+0094 
+0095 <span class="comment">% Find all figures</span>
+0096 figs = findall(0,<span class="string">'type'</span>,<span class="string">'figure'</span>);
+0097 
+0098 <span class="comment">% Search the figures for one with a window title that starts &quot;Figure&quot;</span>
+0099 <span class="keyword">for</span> k = 1:numel(figs)
+0100     fig_name = get(figs(k) , <span class="string">'name'</span>);
+0101     
+0102     <span class="keyword">if</span> strcmp(fig_name, <span class="string">''</span>)
+0103         hFig{k} = get(figs(k));
+0104     <span class="keyword">end</span>
+0105 <span class="keyword">end</span>
+0106 
+0107 hAxes1 = findall(hFig{end}.Children, <span class="string">'Type'</span>, <span class="string">'Axes'</span>);
+0108 
+0109 <span class="comment">% Distance Distribution</span>
+0110 hDD = get(hAxes1(1));
+0111 lDD = findall(hDD.Children, <span class="string">'Type'</span>, <span class="string">'Line'</span>);
+0112 
+0113 
+0114 <span class="comment">% Line 1: distance distribution from experiment (black)</span>
+0115 <span class="comment">% Line 2: rotamer adjusted distance distribution (red dotted)</span>
+0116 <span class="comment">% Line 3: MMM line (red)</span>
+0117 
+0118 x1 = (get(lDD(1), <span class="string">'xdata'</span>))';
+0119 y1 = (get(lDD(1), <span class="string">'ydata'</span>))';
+0120 x2 = (get(lDD(2), <span class="string">'xdata'</span>))';
+0121 y2 = (get(lDD(2), <span class="string">'ydata'</span>))';
+0122 x3 = (get(lDD(3), <span class="string">'xdata'</span>))';
+0123 y3 = (get(lDD(3), <span class="string">'ydata'</span>))';
+0124 
+0125 
+0126 <span class="comment">% hAxes2 = findall(hFig{end-1}.Children, 'Type', 'Axes');</span>
+0127 <span class="comment">%</span>
+0128 <span class="comment">% % Distance Distribution</span>
+0129 <span class="comment">% hRaw = get(hAxes2(1));</span>
+0130 <span class="comment">% lRaw = findall(hRaw.Children, 'Type', 'Line');</span>
+0131 <span class="comment">%</span>
+0132 <span class="comment">% % Line 1: MMM line (red)</span>
+0133 <span class="comment">% % Line 2: raw data (black line)</span>
+0134 <span class="comment">%</span>
+0135 <span class="comment">% x1 = (get(lRaw(1), 'xdata'))';</span>
+0136 <span class="comment">% y1 = (get(lRaw(1), 'ydata'))';</span>
+0137 <span class="comment">% x2 = (get(lRaw(2), 'xdata'))';</span>
+0138 <span class="comment">% y2 = (get(lRaw(2), 'ydata'))';</span>
+0139 
+0140 
+0141 
+0142 <span class="comment">% Prompt user if they want the PDF</span>
+0143 genPDF = questdlg(<span class="string">'Would you like a combined PDF of the figures?'</span>,<span class="string">'Generate PDF?'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>,<span class="string">'Yes'</span>);
+0144 
+0145 <span class="comment">% switch genPDF</span>
+0146 <span class="comment">%     case 'Yes'</span>
+0147 <span class="comment">%</span>
+0148 <span class="comment">%         [filename, pathname] = uiputfile({ '*.pdf','Portable document format (*.pdf)'},...</span>
+0149 <span class="comment">%         'Save file as','DeerExtract');</span>
+0150 <span class="comment">%         filePDF = [pathname filename];</span>
+0151 <span class="comment">%</span>
+0152 <span class="comment">%         hF = figure('pos',[0 0 900 300]);</span>
+0153 <span class="comment">%</span>
+0154 <span class="comment">%         % Plot raw data</span>
+0155 <span class="comment">%         h1 = subplot(1,2,1);</span>
+0156 <span class="comment">%         if isfield(x,'DistanceDistribution')</span>
+0157 <span class="comment">%             plot(x.OriginalData.real,y.OriginalData.real);</span>
+0158 <span class="comment">%         else</span>
+0159 <span class="comment">%             set(h1,'Color',[20,43,140]/255)</span>
+0160 <span class="comment">%             axis off</span>
+0161 <span class="comment">%             text(0.5,0.5,'File not found');</span>
+0162 <span class="comment">%         end</span>
+0163 <span class="comment">%</span>
+0164 <span class="comment">%         % Plot background subtracted</span>
+0165 <span class="comment">%         h2 = subplot(1,3,2);</span>
+0166 <span class="comment">%</span>
+0167 <span class="comment">%         if isfield(x,'TimeDomain')</span>
+0168 <span class="comment">%</span>
+0169 <span class="comment">%             if isfield(x.TimeDomain , 'real')</span>
+0170 <span class="comment">%                 plot(x.TimeDomain.real , y.TimeDomain.real)</span>
+0171 <span class="comment">%</span>
+0172 <span class="comment">%                 if isfield(x.TimeDomain , 'fit')</span>
+0173 <span class="comment">%                     hold on</span>
+0174 <span class="comment">%                     plot(x.TimeDomain.fit , y.TimeDomain.fit,'r-');</span>
+0175 <span class="comment">%                     hold off</span>
+0176 <span class="comment">%                     legend('Real','Fit');</span>
+0177 <span class="comment">%                 end</span>
+0178 <span class="comment">%             else</span>
+0179 <span class="comment">%                 plot(x.TimeDomain , y.TimeDomain)</span>
+0180 <span class="comment">%             end</span>
+0181 <span class="comment">%</span>
+0182 <span class="comment">%             xlabel('Time / \mus');</span>
+0183 <span class="comment">%             ylabel('');</span>
+0184 <span class="comment">%             set(gcf,'color', 'white');</span>
+0185 <span class="comment">%             axis tight;</span>
+0186 <span class="comment">%</span>
+0187 <span class="comment">%         else</span>
+0188 <span class="comment">%             set(h2,'Color',[20,43,140]/255)</span>
+0189 <span class="comment">%             axis off</span>
+0190 <span class="comment">%             text(0.5,0.5,'File not found');</span>
+0191 <span class="comment">%         end</span>
+0192 <span class="comment">%</span>
+0193 <span class="comment">%         % Plot distance distribution</span>
+0194 <span class="comment">%         h3 = subplot(1,3,3);</span>
+0195 <span class="comment">%         if isfield(x,'SuppressedDistanceDistribution')</span>
+0196 <span class="comment">%             plot(x.SuppressedDistanceDistribution,y.SuppressedDistanceDistribution);</span>
+0197 <span class="comment">%</span>
+0198 <span class="comment">%         elseif isfield(x,'DistanceDistribution')</span>
+0199 <span class="comment">%             plot(x.DistanceDistribution,y.DistanceDistribution);</span>
+0200 <span class="comment">%         else</span>
+0201 <span class="comment">%             set(h3,'Color',[20,43,140]/255)</span>
+0202 <span class="comment">%             axis off</span>
+0203 <span class="comment">%             text(0.5,0.5,'File not found');</span>
+0204 <span class="comment">%         end</span>
+0205 <span class="comment">%</span>
+0206 <span class="comment">%         axis(h1,'tight');</span>
+0207 <span class="comment">%         axis(h2,'tight');</span>
+0208 <span class="comment">%         axis(h3,'tight');</span>
+0209 <span class="comment">%</span>
+0210 <span class="comment">%         title(h1,'4 Pulse PELDOR experiment','FontSize',12);</span>
+0211 <span class="comment">%         title(h2,'Background subtracted PELDOR trace','FontSize',12);</span>
+0212 <span class="comment">%         title(h3,'Distance distribution','FontSize',12);</span>
+0213 <span class="comment">%</span>
+0214 <span class="comment">%         xlabel(h1,'Time / \mus');</span>
+0215 <span class="comment">%         xlabel(h2,'Time / \mus');</span>
+0216 <span class="comment">%         xlabel(h3,'Distance / nm');</span>
+0217 <span class="comment">%</span>
+0218 <span class="comment">%         set(h1,'YTick',[]);</span>
+0219 <span class="comment">%         set(h3,'YTick',[]);</span>
+0220 <span class="comment">%</span>
+0221 <span class="comment">%         set(hF,'PaperUnits','centimeters');</span>
+0222 <span class="comment">%         set(hF,'PaperSize',[30 10]);</span>
+0223 <span class="comment">%         set(hF,'PaperPosition', [0 0 30 10]);</span>
+0224 <span class="comment">%         print(gcf, '-dpdf',  filePDF);</span>
+0225 <span class="comment">%</span>
+0226 <span class="comment">%         close(hF);</span>
+0227 <span class="comment">%     case 'No'</span>
+0228 <span class="comment">% end</span>
+0229 
+0230 genCSV = questdlg(<span class="string">'Would you like a combined .CSV file of all the data for easy plotting in Excel/Origin/etc?'</span>,<span class="keyword">...</span>
+0231     <span class="string">'Generate CSV?'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>,<span class="string">'Yes'</span>);
+0232 
+0233 <span class="keyword">switch</span> genCSV
+0234     <span class="keyword">case</span> <span class="string">'Yes'</span>
+0235         
+0236         [filename, pathname] = uiputfile({ <span class="string">'*.csv'</span>,<span class="string">'Comma seperated value (*.csv)'</span>},<span class="keyword">...</span><span class="comment"> </span>
+0237         <span class="string">'Save file as'</span>,<span class="string">'MMMDeerExtract'</span>);
+0238         fileCSV = [pathname filename];
+0239         
+0240         fid = fopen(fileCSV,<span class="string">'w'</span>);
+0241         
+0242             fprintf(fid,<span class="string">'Distribution - x, Distribution - y MMM, Distribution - y DeerAnalysis, Distribution - y DA altered\n'</span>);
+0243             fprintf(fid,<span class="string">'nm, , , , us, , \n'</span>);
+0244             
+0245             header = [<span class="keyword">...</span>
+0246                 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0247                 <span class="string">'# The above lines are for import into Origin                               '</span>;<span class="keyword">...</span>
+0248                 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0249                 <span class="string">'#  _____                 ______      _                  _                  '</span>;<span class="keyword">...</span>
+0250                 <span class="string">'# |  __ \               |  ____|    | |                | |                 '</span>;<span class="keyword">...</span>
+0251                 <span class="string">'# | |  | | ___  ___ _ __| |__  __  _| |_ _ __ __ _  ___| |_                '</span>;<span class="keyword">...</span>
+0252                 <span class="string">'# | |  | |/ _ \/ _ \ ''__|  __| \ \/ / __| ''__/ _` |/ __| __|               '</span>;<span class="keyword">...</span>
+0253                 <span class="string">'# | |__| |  __/  __/ |  | |____ &gt;  &lt;| |_| | | (_| | (__| |_                '</span>;<span class="keyword">...</span>
+0254                 <span class="string">'# |_____/ \___|\___|_|  |______/_/\_\\__|_|  \__,_|\___|\__|               '</span>;<span class="keyword">...</span>
+0255                 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0256                 <span class="string">'#  Part of the EPR toolbox:                           developed at         '</span>;<span class="keyword">...</span>
+0257                 <span class="string">'#  morganbye.net/eprtoolbox                    University of East Anglia   '</span>;<span class="keyword">...</span>
+0258                 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0259                 <span class="string">'# Data that cannot be found returns columns of zeros                       '</span>;<span class="keyword">...</span>
+0260                 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0261                 <span class="string">'# This file has been created by MMMDeerExtract - v13.07 at:                '</span>];
+0262             
+0263             header = [header ; sprintf(<span class="string">'%-75s'</span>, [<span class="string">'# '</span> datestr(now, <span class="string">'dd mmmm yyyy - HH:MM'</span>)])];
+0264             
+0265             <span class="keyword">for</span> j = 1:size(header,1)
+0266                 fprintf(fid,<span class="string">'%-75s\n'</span>,header(j,:));
+0267             <span class="keyword">end</span>
+0268             
+0269             <span class="comment">% Close the file (for C language operations/memory freeing)</span>
+0270             fclose(fid);
+0271         
+0272         
+0273             <span class="comment">% Create output array</span>
+0274             output = zeros(size(x3,1),6);
+0275             
+0276             output(1:length(x3),1) = x3;
+0277             output(1:length(y3),2) = y3;
+0278             output(1:length(x1),3) = x1;
+0279             output(1:length(y1),4) = y1;
+0280             output(1:length(x2),5) = x2;
+0281             output(1:length(y2),6) = y2;
+0282             
+0283             dlmwrite(fileCSV,<span class="keyword">...</span>
+0284                 output,<span class="keyword">...</span>
+0285                 <span class="string">'-append'</span>,<span class="keyword">...</span>
+0286                 <span class="string">'delimiter'</span>, <span class="string">','</span>,<span class="keyword">...</span>
+0287                 <span class="string">'precision'</span>, <span class="string">'%.13f'</span>);
+0288             
+0289     <span class="keyword">case</span> <span class="string">'No'</span>
+0290         
+0291 <span class="keyword">end</span>
+0292</pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -292,57 +292,64 @@ This function is called by:
 0205 y.OriginalData.real = get(lOD(1), <span class="string">'ydata'</span>);
 0206 y.OriginalData.real = y.OriginalData.real';
 0207 
-0208 x.OriginalData.imag = get(lOD(8), <span class="string">'xdata'</span>);
-0209 x.OriginalData.imag = x.OriginalData.imag';
-0210 y.OriginalData.imag = get(lOD(8), <span class="string">'ydata'</span>);
-0211 y.OriginalData.imag = y.OriginalData.imag';
-0212 
-0213 <span class="comment">% Plotting commands - used if there are no input arguments, or if the first</span>
-0214 <span class="comment">% argument is 'noplot'</span>
-0215 <span class="keyword">if</span> nargin == 0 || (nargin == 1 &amp;&amp; strcmp(varargin{1},<span class="string">'noplot'</span>) == 0)
-0216     figure(<span class="string">'name'</span> , <span class="string">'DeerExtract: Original data'</span>, <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
-0217     movegui(gcf,<span class="string">'northwest'</span>);
-0218     plot(x.OriginalData.real , y.OriginalData.real,<span class="string">'k-'</span>, <span class="keyword">...</span>
-0219         x.OriginalData.imag , y.OriginalData.imag,<span class="string">'r-'</span>);
-0220     legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>)
-0221     xlabel(<span class="string">'Time / \mus'</span>);
-0222     ylabel(<span class="string">''</span>);
-0223     set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
-0224     axis tight;
-0225     
-0226     figure(<span class="string">'name'</span> , <span class="string">'DeerExtract: Form factor'</span>, <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
-0227     movegui(gcf,<span class="string">'west'</span>);
-0228     
-0229     <span class="keyword">if</span> isfield(x,<span class="string">'TimeDomain'</span>)
-0230         plot(x.TimeDomain.real , y.TimeDomain.real,<span class="string">'k-'</span>, <span class="keyword">...</span>
-0231             x.TimeDomain.fit , y.TimeDomain.fit,<span class="string">'r-'</span>);
-0232         legend(<span class="string">'Real'</span>,<span class="string">'Fit'</span>)
-0233         xlabel(<span class="string">'Time / \mus'</span>);
-0234         ylabel(<span class="string">''</span>);
-0235         set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
-0236         axis tight;
-0237         
-0238     <span class="keyword">elseif</span> isfield(x,<span class="string">'Pake'</span>)
-0239         plot(x.Pake.real , y.Pake.real,<span class="string">'k-'</span>, <span class="keyword">...</span>
-0240             x.Pake.fit , y.Pake.fit,<span class="string">'r-'</span>);
-0241         legend(<span class="string">'Real'</span>,<span class="string">'Fit'</span>)
-0242         xlabel(<span class="string">'Frequency / MHz'</span>);
-0243         ylabel(<span class="string">''</span>);
-0244         set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
-0245         axis tight;
-0246         set(gca,<span class="string">'YTick'</span>,[]);
-0247     <span class="keyword">end</span>
-0248     
-0249     figure(<span class="string">'name'</span> , <span class="string">'DeerExtract: Distance distribution '</span>, <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
-0250     movegui(gcf,<span class="string">'southwest'</span>);
-0251     plot(x.DistanceDistribution , y.DistanceDistribution,<span class="string">'k-'</span>);
-0252     xlabel(<span class="string">'Distance / nm'</span>);
-0253     ylabel(<span class="string">''</span>);
-0254     set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
-0255     axis tight;
-0256     set(gca,<span class="string">'YTick'</span>,[]);
-0257 <span class="keyword">end</span>
-0258</pre></div>
-<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0208 <span class="keyword">try</span>
+0209     x.OriginalData.imag = get(lOD(8), <span class="string">'xdata'</span>);
+0210     x.OriginalData.imag = x.OriginalData.imag';
+0211     y.OriginalData.imag = get(lOD(8), <span class="string">'ydata'</span>);
+0212     y.OriginalData.imag = y.OriginalData.imag';
+0213 <span class="keyword">end</span>
+0214 
+0215 <span class="comment">% Plotting commands - used if there are no input arguments, or if the first</span>
+0216 <span class="comment">% argument is 'noplot'</span>
+0217 <span class="keyword">if</span> nargin == 0 || (nargin == 1 &amp;&amp; strcmp(varargin{1},<span class="string">'noplot'</span>) == 0)
+0218     figure(<span class="string">'name'</span> , <span class="string">'DeerExtract: Original data'</span>, <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0219     movegui(gcf,<span class="string">'northwest'</span>);
+0220     <span class="keyword">try</span>
+0221         plot(x.OriginalData.real , y.OriginalData.real,<span class="string">'k-'</span>, <span class="keyword">...</span>
+0222             x.OriginalData.imag , y.OriginalData.imag,<span class="string">'r-'</span>);
+0223         legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>)
+0224     <span class="keyword">catch</span>
+0225        plot(x.OriginalData.real , y.OriginalData.real,<span class="string">'k-'</span>); 
+0226     <span class="keyword">end</span>
+0227     
+0228     xlabel(<span class="string">'Time / \mus'</span>);
+0229     ylabel(<span class="string">''</span>);
+0230     set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0231     axis tight;
+0232     
+0233     figure(<span class="string">'name'</span> , <span class="string">'DeerExtract: Form factor'</span>, <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0234     movegui(gcf,<span class="string">'west'</span>);
+0235     
+0236     <span class="keyword">if</span> isfield(x,<span class="string">'TimeDomain'</span>)
+0237         plot(x.TimeDomain.real , y.TimeDomain.real,<span class="string">'k-'</span>, <span class="keyword">...</span>
+0238             x.TimeDomain.fit , y.TimeDomain.fit,<span class="string">'r-'</span>);
+0239         legend(<span class="string">'Real'</span>,<span class="string">'Fit'</span>)
+0240         xlabel(<span class="string">'Time / \mus'</span>);
+0241         ylabel(<span class="string">''</span>);
+0242         set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0243         axis tight;
+0244         
+0245     <span class="keyword">elseif</span> isfield(x,<span class="string">'Pake'</span>)
+0246         plot(x.Pake.real , y.Pake.real,<span class="string">'k-'</span>, <span class="keyword">...</span>
+0247             x.Pake.fit , y.Pake.fit,<span class="string">'r-'</span>);
+0248         legend(<span class="string">'Real'</span>,<span class="string">'Fit'</span>)
+0249         xlabel(<span class="string">'Frequency / MHz'</span>);
+0250         ylabel(<span class="string">''</span>);
+0251         set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0252         axis tight;
+0253         set(gca,<span class="string">'YTick'</span>,[]);
+0254     <span class="keyword">end</span>
+0255     
+0256     figure(<span class="string">'name'</span> , <span class="string">'DeerExtract: Distance distribution '</span>, <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0257     movegui(gcf,<span class="string">'southwest'</span>);
+0258     plot(x.DistanceDistribution , y.DistanceDistribution,<span class="string">'k-'</span>);
+0259     xlabel(<span class="string">'Distance / nm'</span>);
+0260     ylabel(<span class="string">''</span>);
+0261     set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0262     axis tight;
+0263     set(gca,<span class="string">'YTick'</span>,[]);
+0264 <span class="keyword">end</span>
+0265</pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

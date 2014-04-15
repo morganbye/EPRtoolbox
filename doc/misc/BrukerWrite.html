@@ -24,29 +24,43 @@
 <div class="box"><strong>BRUKERWRITE save x and y MATLAB variables out to Bruker BES3T files (.DTA</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>function BrukerWrite(x,y,varargin) </strong></div>
+<div class="box"><strong>function BrukerWrite(varargin) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> BRUKERWRITE save x and y MATLAB variables out to Bruker BES3T files (.DTA
  and .DSC)
 
-   This scipt is still quite basic and currently will only work with 2
-   dimensional cw experiments.
-
- BRUKERWRITE (x,y)
+ BRUKERWRITE (x,y)         - where y is a single channel
+ BRUKERWRITE (x,y)         - where y has y.real and y.imag
  BRUKERWRITE (x,y,'path/to/file.DTA')
+ BRUKERWRITE (x,y_real,y_imag)
+ BRUKERWRITE (x,y_real,y_imag,'path/to/file.DTA')
 
- NOT YET IMPLEMENTED - FOR IMAGINARY CHANNELS
- BRUKERWRITE (x,y,y2,title)
+ BRUKERWRITE allows for the saving of variables in the MATLAB workspace to
+ be save out in the Bruker BES3T format. Originally written for cw
+ experiments the program has been expanded for pulsed experiments and has
+ been tested with T1, T2, FSE and PELDOR data.
+
+ To save pulsed experiments correctly requires both real and imaginary
+ channels of data. These can be inputted as either a single structure with
+ &quot;real&quot; and &quot;imag&quot; fields or as 2 seperate variables.
+
+ At this time BRUKERWRITE only outputs very basic details in the DSC file,
+ enough to be read again by BRUKERREAD or Xepr. It will not change the
+ file title or the axis units etc. Nor will it accept an editted info
+ array from BRUKERREAD (though this may change with time).
+
  NOT YET IMPLEMENTED - FOR 2 DIMENSIONAL DATA WITH .YGF FILE
  BRUKERWRITE (x,y,z,title)
 
 
  Inputs:
     input1     - x axis
-                   Magnetic field
+                   Magnetic field / Time
     input2     - y axis
                    Intensity
+    input3     - second y axis if required
+                   Intensity in imaginary channel
     input3     - 'path/to/file.DTA'
                    The path to save the files
 
@@ -71,7 +85,7 @@
  MAT-files required:       none
 
 
- See also: EPRTOOLBOX CWPLOTTER</pre></div>
+ See also: EPRTOOLBOX <a href="BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BRUKERREAD</a></pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
@@ -86,199 +100,358 @@ This function is called by:
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function BrukerWrite(x,y,varargin)</a>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function BrukerWrite(varargin)</a>
 0002 
 0003 <span class="comment">% BRUKERWRITE save x and y MATLAB variables out to Bruker BES3T files (.DTA</span>
 0004 <span class="comment">% and .DSC)</span>
 0005 <span class="comment">%</span>
-0006 <span class="comment">%   This scipt is still quite basic and currently will only work with 2</span>
-0007 <span class="comment">%   dimensional cw experiments.</span>
-0008 <span class="comment">%</span>
-0009 <span class="comment">% BRUKERWRITE (x,y)</span>
-0010 <span class="comment">% BRUKERWRITE (x,y,'path/to/file.DTA')</span>
+0006 <span class="comment">% BRUKERWRITE (x,y)         - where y is a single channel</span>
+0007 <span class="comment">% BRUKERWRITE (x,y)         - where y has y.real and y.imag</span>
+0008 <span class="comment">% BRUKERWRITE (x,y,'path/to/file.DTA')</span>
+0009 <span class="comment">% BRUKERWRITE (x,y_real,y_imag)</span>
+0010 <span class="comment">% BRUKERWRITE (x,y_real,y_imag,'path/to/file.DTA')</span>
 0011 <span class="comment">%</span>
-0012 <span class="comment">% NOT YET IMPLEMENTED - FOR IMAGINARY CHANNELS</span>
-0013 <span class="comment">% BRUKERWRITE (x,y,y2,title)</span>
-0014 <span class="comment">% NOT YET IMPLEMENTED - FOR 2 DIMENSIONAL DATA WITH .YGF FILE</span>
-0015 <span class="comment">% BRUKERWRITE (x,y,z,title)</span>
+0012 <span class="comment">% BRUKERWRITE allows for the saving of variables in the MATLAB workspace to</span>
+0013 <span class="comment">% be save out in the Bruker BES3T format. Originally written for cw</span>
+0014 <span class="comment">% experiments the program has been expanded for pulsed experiments and has</span>
+0015 <span class="comment">% been tested with T1, T2, FSE and PELDOR data.</span>
 0016 <span class="comment">%</span>
-0017 <span class="comment">%</span>
-0018 <span class="comment">% Inputs:</span>
-0019 <span class="comment">%    input1     - x axis</span>
-0020 <span class="comment">%                   Magnetic field</span>
-0021 <span class="comment">%    input2     - y axis</span>
-0022 <span class="comment">%                   Intensity</span>
-0023 <span class="comment">%    input3     - 'path/to/file.DTA'</span>
-0024 <span class="comment">%                   The path to save the files</span>
+0017 <span class="comment">% To save pulsed experiments correctly requires both real and imaginary</span>
+0018 <span class="comment">% channels of data. These can be inputted as either a single structure with</span>
+0019 <span class="comment">% &quot;real&quot; and &quot;imag&quot; fields or as 2 seperate variables.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% At this time BRUKERWRITE only outputs very basic details in the DSC file,</span>
+0022 <span class="comment">% enough to be read again by BRUKERREAD or Xepr. It will not change the</span>
+0023 <span class="comment">% file title or the axis units etc. Nor will it accept an editted info</span>
+0024 <span class="comment">% array from BRUKERREAD (though this may change with time).</span>
 0025 <span class="comment">%</span>
-0026 <span class="comment">%</span>
-0027 <span class="comment">% Outputs:</span>
-0028 <span class="comment">%    output1    - file.DTA</span>
-0029 <span class="comment">%                   Data file</span>
-0030 <span class="comment">%    output2    - file.DSC</span>
-0031 <span class="comment">%                   Parameters file</span>
-0032 <span class="comment">% Example:</span>
-0033 <span class="comment">%    BRUKERWRITE(x,y)</span>
-0034 <span class="comment">%               GUI to select file location of x and y</span>
-0035 <span class="comment">%    BRUKERWRITE(x,y,'/home/spectra/MTSL.DTA')</span>
-0036 <span class="comment">%               Saves x and y to the the files MTSL.DTA and MTSL.DSC at</span>
-0037 <span class="comment">%               /home/spectra</span>
-0038 <span class="comment">%</span>
+0026 <span class="comment">% NOT YET IMPLEMENTED - FOR 2 DIMENSIONAL DATA WITH .YGF FILE</span>
+0027 <span class="comment">% BRUKERWRITE (x,y,z,title)</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Inputs:</span>
+0031 <span class="comment">%    input1     - x axis</span>
+0032 <span class="comment">%                   Magnetic field / Time</span>
+0033 <span class="comment">%    input2     - y axis</span>
+0034 <span class="comment">%                   Intensity</span>
+0035 <span class="comment">%    input3     - second y axis if required</span>
+0036 <span class="comment">%                   Intensity in imaginary channel</span>
+0037 <span class="comment">%    input3     - 'path/to/file.DTA'</span>
+0038 <span class="comment">%                   The path to save the files</span>
 0039 <span class="comment">%</span>
-0040 <span class="comment">% Other m-files required:   none</span>
-0041 <span class="comment">%</span>
-0042 <span class="comment">% Subfunctions:             none</span>
-0043 <span class="comment">%</span>
-0044 <span class="comment">% MAT-files required:       none</span>
-0045 <span class="comment">%</span>
-0046 <span class="comment">%</span>
-0047 <span class="comment">% See also: EPRTOOLBOX CWPLOTTER</span>
-0048 
-0049 
-0050 <span class="comment">%                                        _                             _</span>
-0051 <span class="comment">%                                       | |                           | |</span>
-0052 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
-0053 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
-0054 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
-0055 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
-0056 <span class="comment">%                       __/ |                   __/ |</span>
-0057 <span class="comment">%                      |___/                   |___/</span>
-0058 <span class="comment">%</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">% Outputs:</span>
+0042 <span class="comment">%    output1    - file.DTA</span>
+0043 <span class="comment">%                   Data file</span>
+0044 <span class="comment">%    output2    - file.DSC</span>
+0045 <span class="comment">%                   Parameters file</span>
+0046 <span class="comment">% Example:</span>
+0047 <span class="comment">%    BRUKERWRITE(x,y)</span>
+0048 <span class="comment">%               GUI to select file location of x and y</span>
+0049 <span class="comment">%    BRUKERWRITE(x,y,'/home/spectra/MTSL.DTA')</span>
+0050 <span class="comment">%               Saves x and y to the the files MTSL.DTA and MTSL.DSC at</span>
+0051 <span class="comment">%               /home/spectra</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% Other m-files required:   none</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">% Subfunctions:             none</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% MAT-files required:       none</span>
 0059 <span class="comment">%</span>
-0060 <span class="comment">% M. Bye v12.05</span>
-0061 <span class="comment">%</span>
-0062 <span class="comment">% Author:       Morgan Bye</span>
-0063 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
-0064 <span class="comment">%               University of East Anglia</span>
-0065 <span class="comment">%               NORWICH, UK</span>
-0066 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
-0067 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/</span>
-0068 <span class="comment">% May 2012;     Last revision: 08-May-2012</span>
-0069 <span class="comment">%</span>
-0070 <span class="comment">% Approximate coding time of file:</span>
-0071 <span class="comment">%               4 hours</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">% See also: EPRTOOLBOX BRUKERREAD</span>
+0062 
+0063 
+0064 <span class="comment">%                                        _                             _</span>
+0065 <span class="comment">%                                       | |                           | |</span>
+0066 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0067 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0068 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0069 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0070 <span class="comment">%                       __/ |                   __/ |</span>
+0071 <span class="comment">%                      |___/                   |___/</span>
 0072 <span class="comment">%</span>
-0073 <span class="comment">%</span>
-0074 <span class="comment">% Version history:</span>
-0075 <span class="comment">% May 12        Changed 3rd input argument so that if a file path is</span>
-0076 <span class="comment">%               specified then the script writes out to that address. Only</span>
-0077 <span class="comment">%               useful really for when this script is called from other</span>
-0078 <span class="comment">%               scripts; ie. in a for loop for writing many files</span>
+0073 <span class="comment">% M. Bye v13.10</span>
+0074 <span class="comment">%</span>
+0075 <span class="comment">% v13.09 - current</span>
+0076 <span class="comment">%               Chemical Physics Department</span>
+0077 <span class="comment">%               Weizmann Institute of Science</span>
+0078 <span class="comment">%               76100 REHOVOT, Israel</span>
 0079 <span class="comment">%</span>
-0080 <span class="comment">% Dec 11        Initial release</span>
-0081 <span class="comment">%</span>
-0082 
-0083 <span class="comment">%                       Input arguments</span>
-0084 <span class="comment">% ========================================================================</span>
-0085 
-0086 <span class="keyword">switch</span> nargin
-0087     <span class="keyword">case</span> 0
-0088         error(<span class="string">'BrukerWrite needs to be called with input arguments'</span>);
-0089     <span class="keyword">case</span> 1
-0090         error(<span class="string">'Insufficient number of input arguments for BrukerWrite'</span>);
-0091     <span class="keyword">case</span> 3
-0092         title = varargin{1};
-0093 
-0094 <span class="keyword">end</span>
-0095 
-0096 
-0097 <span class="comment">%                         Create files</span>
-0098 <span class="comment">% ========================================================================</span>
-0099 
-0100 [file, pathname] = uiputfile({ <span class="string">'*.DTA'</span>,<span class="string">'Bruker BES3T File (*.DTA)'</span>},<span class="keyword">...</span><span class="comment"> </span>
-0101         <span class="string">'Save file as'</span>,<span class="string">'default'</span>);
-0102     
-0103 filename = strtok(file,<span class="string">'.'</span>);
+0080 <span class="comment">% v11.06 - v13.08</span>
+0081 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0082 <span class="comment">%               University of East Anglia</span>
+0083 <span class="comment">%               NORWICH, UK</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0086 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/cwplot</span>
+0087 <span class="comment">%</span>
+0088 <span class="comment">% Last updated  08-May-2012</span>
+0089 <span class="comment">%</span>
+0090 <span class="comment">% Version history:</span>
+0091 <span class="comment">% Jul 13        Major update allowing for the writing of pulsed experiments</span>
+0092 <span class="comment">%               with imaginary channels</span>
+0093 <span class="comment">%</span>
+0094 <span class="comment">% May 12        Changed 3rd input argument so that if a file path is</span>
+0095 <span class="comment">%               specified then the script writes out to that address. Only</span>
+0096 <span class="comment">%               useful really for when this script is called from other</span>
+0097 <span class="comment">%               scripts; ie. in a for loop for writing many files</span>
+0098 <span class="comment">%</span>
+0099 <span class="comment">% Dec 11        Initial release</span>
+0100 <span class="comment">%</span>
+0101 
+0102 <span class="comment">%                       Input arguments</span>
+0103 <span class="comment">% ========================================================================</span>
 0104 
-0105 DTA = fopen([pathname filename <span class="string">'.DTA'</span>],<span class="string">'w'</span>);
-0106 DSC = fopen([pathname filename <span class="string">'.DSC'</span>],<span class="string">'w'</span>);
-0107 
-0108 
-0109 <span class="comment">%                           Data file</span>
-0110 <span class="comment">% ========================================================================</span>
-0111 
-0112 fwrite(DTA,y,<span class="string">'double'</span>,0,<span class="string">'ieee-be.l64'</span>);
-0113 
-0114 <span class="comment">%                       Descriptor file</span>
-0115 <span class="comment">% ========================================================================</span>
-0116 
-0117 L01 = <span class="string">'#DESC    1.2 * DESCRIPTOR INFORMATION ***********************'</span>;
-0118 L02 = <span class="string">'*'</span>;
-0119 L03 = <span class="string">'*    Dataset Type and Format:'</span>;
-0120 L04 = <span class="string">'*'</span>;
-0121 DSRC = [<span class="string">'DSRC    '</span> <span class="string">'EXP'</span>];
-0122 BSEQ = [<span class="string">'BSEQ    '</span> <span class="string">'BIG'</span>];
-0123 IKKF = [<span class="string">'IKKF    '</span> <span class="string">'REAL'</span>];
-0124 XTYP = [<span class="string">'XTYP    '</span> <span class="string">'IDX'</span>];
-0125 YTYP = [<span class="string">'YTYP    '</span> <span class="string">'NODATA'</span>];
-0126 ZTYP = [<span class="string">'ZTYP    '</span> <span class="string">'NODATA'</span>];
-0127 L05 = <span class="string">'*'</span>;
-0128 L06 = <span class="string">'*    Item Formats:'</span>;
-0129 L07 = <span class="string">'*'</span>;
-0130 L08 = <span class="string">'IRFMT    D'</span>;
-0131 L09 = <span class="string">'*'</span>;
-0132 L10 = <span class="string">'*    Data Ranges and Resolutions:'</span>;
-0133 L11 = <span class="string">'*'</span>;
-0134 XPTS = [<span class="string">'XPTS    '</span> num2str(size(x,1))];
-0135 XMIN = [<span class="string">'XMIN    '</span> num2str(min(x))];
-0136 XWID = [<span class="string">'XWID    '</span> num2str(max(x) - min(x))];
-0137 L12 = <span class="string">'*'</span>;
-0138 L13 = <span class="string">'*    Documentational Text:'</span>;
-0139 L14 = <span class="string">'*'</span>;
-0140 TITL = filename;
-0141 IRNAM = [<span class="string">'IRNAM    '</span> <span class="string">'''Intensity'''</span>];
-0142 XNAM  = [<span class="string">'XNAM    '</span> <span class="string">'''Field'''</span>];
-0143 IRUNI = [<span class="string">'IRUNI    '</span> <span class="string">''''''</span>];
-0144 XUNI  = [<span class="string">'XUNI    '</span> <span class="string">'''G'''</span>];
-0145 L15 = <span class="string">'*'</span>;
-0146 L16 = <span class="string">'************************************************************'</span>;
-0147 
-0148 DESC = char(L01,L02,L03,L04,DSRC,BSEQ,IKKF,XTYP,YTYP,ZTYP,<span class="keyword">...</span>
-0149     L05,L06,L07,L08,L09,L10,L11,XPTS,XMIN,XWID,L12,L13,L14,TITL,IRNAM<span class="keyword">...</span>
-0150     ,XNAM,IRUNI,XUNI,L15,L16);
-0151 
-0152 L17 = <span class="string">'*'</span>;
-0153 L18 = <span class="string">'#SPL    1.2 * STANDARD PARAMETER LAYER'</span>;
-0154 L19 = <span class="string">'*'</span>;
-0155 OPER = [<span class="string">'OPER    '</span> <span class="string">'EPRtoolbox'</span>];
-0156 DATE  = [<span class="string">'DATE    '</span> datestr(now , <span class="string">'dd/mm/yy'</span>)];
-0157 TIME = [<span class="string">'TIME    '</span> datestr(now , <span class="string">'HH:MM:SS'</span>)];
-0158 CMNT = <span class="string">'CMNT'</span>;
-0159 SAMP = [<span class="string">'SAMP    '</span> <span class="string">''</span>];
-0160 SFOR = [<span class="string">'SFOR    '</span> <span class="string">'CW'</span>];
-0161 STAG = [<span class="string">'STAG    '</span> <span class="string">'C'</span>];
-0162 EXPT = [<span class="string">'EXPT    '</span> <span class="string">'CW'</span>];
-0163 OXS1 = [<span class="string">'OXS1    '</span> <span class="string">'IADC'</span>];
-0164 AXS1 = [<span class="string">'AXS1    '</span> <span class="string">'BOVL'</span>];
-0165 AXS2 = [<span class="string">'AXS2    '</span> <span class="string">'NONE'</span>];
-0166 AXS3 = [<span class="string">'AXS3    '</span> <span class="string">''</span>];
-0167 A1CT = [<span class="string">'A1CT    '</span> <span class="string">''</span>];
-0168 A1SW = [<span class="string">'A1SW    '</span> <span class="string">''</span>];
-0169 MWFQ = [<span class="string">'MWFQ    '</span> <span class="string">''</span>];
-0170 AVGS = [<span class="string">'AVGS    '</span> <span class="string">''</span>];
-0171 RESO = [<span class="string">'RESO    '</span> <span class="string">''</span>];
-0172 RCAG = [<span class="string">'RCAG    '</span> <span class="string">''</span>];
-0173 RCHM = [<span class="string">'RCHM    '</span> <span class="string">''</span>];
-0174 B0MA = [<span class="string">'B0MA    '</span> <span class="string">''</span>];
-0175 B0MF = [<span class="string">'B0MF    '</span> <span class="string">''</span>];
-0176 RCPH = [<span class="string">'RCPH    '</span> <span class="string">''</span>];
-0177 RCOF = [<span class="string">'RCOF    '</span> <span class="string">''</span>];
-0178 A1RS = [<span class="string">'A1RS    '</span> <span class="string">''</span>];
-0179 RCTC = [<span class="string">'RCTC    '</span> <span class="string">''</span>];
-0180 L20 = <span class="string">'*'</span>;
-0181 L21 = <span class="string">'************************************************************'</span>;
-0182 
-0183 SPL = char(L17,L18,L19,OPER,DATE,TIME,CMNT,SAMP,SFOR,STAG,EXPT,OXS1,<span class="keyword">...</span>
-0184     AXS1,AXS2,AXS3,A1CT,A1SW,MWFQ,AVGS,RESO,RCAG,RCAG,RCHM,B0MA,B0MF,<span class="keyword">...</span>
-0185     RCPH,RCOF,A1RS,RCTC,L20,L21);
-0186 
-0187 dsc_output = char(DESC,SPL);
-0188 
-0189 <span class="keyword">for</span> k = 1:size(dsc_output,1)
-0190     fprintf(DSC,<span class="string">'%s\n'</span>,dsc_output(k,:));
-0191 <span class="keyword">end</span>
-0192 
-0193 fclose(DSC);</pre></div>
-<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0105 <span class="keyword">switch</span> nargin
+0106     
+0107     <span class="keyword">case</span> 0
+0108         error(<span class="string">'BrukerWrite needs to be called with input arguments'</span>);
+0109         
+0110     <span class="keyword">case</span> 1
+0111         error(<span class="string">'Insufficient number of input arguments for BrukerWrite'</span>);
+0112         
+0113     <span class="comment">% X and Y</span>
+0114     <span class="keyword">case</span> 2
+0115         
+0116         x = varargin{1};
+0117         y = varargin{2};
+0118         
+0119         [file, pathname] = uiputfile({ <span class="string">'*.DTA'</span>,<span class="string">'Bruker BES3T File (*.DTA)'</span>},<span class="keyword">...</span><span class="comment"> </span>
+0120         <span class="string">'Save file as'</span>,<span class="string">'default'</span>);
+0121     
+0122         <span class="comment">% if user cancels command nothing happens</span>
+0123         <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0124             <span class="keyword">return</span>
+0125         <span class="keyword">end</span>
+0126     
+0127         <span class="comment">% Seperate name from extension</span>
+0128         filename = strtok(file,<span class="string">'.'</span>);
+0129         
+0130         <span class="comment">% Is input 2 a structure with real and imag</span>
+0131         <span class="keyword">if</span> isstruct(varargin{2})
+0132             
+0133             <span class="keyword">if</span> isfield(varargin{2},<span class="string">'real'</span>) &amp;&amp; isfield(varargin{2},<span class="string">'imag'</span>)
+0134                 
+0135                <span class="keyword">if</span> size(varargin{2}.real,1) ~= size(varargin{2}.imag,1)
+0136                   error(<span class="string">'Real and imaginary fields are different lengths'</span>); 
+0137                <span class="keyword">end</span>
+0138                 
+0139                 <span class="keyword">for</span> k = 1:size(varargin{2}.real,1)
+0140                     y_shaped((2*k)-1,1) = y.real(k);
+0141                     y_shaped((2*k),1)   = y.imag(k);
+0142                 <span class="keyword">end</span>
+0143                 
+0144                 clear y;
+0145                 y = y_shaped;
+0146                 exp = <span class="string">'PLS'</span>;
+0147                 irname = <span class="string">'''Intensity'''</span>;
+0148                 xnam   = <span class="string">'''Time'''</span>;
+0149                 xuni   = <span class="string">'''ns'''</span>;
+0150                 
+0151             <span class="keyword">else</span>
+0152                 error(<span class="string">'The structure in the second input argument needs to have the fields ''real'' and ''imag'''</span>);
+0153             <span class="keyword">end</span>
+0154         <span class="keyword">else</span>
+0155             exp = <span class="string">'CW'</span>;
+0156             irname = <span class="string">'''Intensity'''</span>;
+0157             xnam   = <span class="string">'''Field'''</span>;
+0158             xuni   = <span class="string">'''G'''</span>;
+0159         <span class="keyword">end</span>
+0160         
+0161         
+0162     <span class="keyword">case</span> 3
+0163         <span class="comment">% Is input 3 a string, ie address</span>
+0164         <span class="keyword">if</span> ischar(varargin{3})
+0165             
+0166             x = varargin{1};
+0167             y = varargin{2};
+0168             
+0169             <span class="comment">% Get file parts</span>
+0170             [pathname,filename,ext] = fileparts(varargin{3});
+0171             
+0172             <span class="comment">% Check y for size</span>
+0173             <span class="keyword">if</span> isstruct(y)
+0174                 
+0175                 <span class="comment">% Check if y is a structure, if so create single array</span>
+0176                 <span class="keyword">if</span> isfield(y,<span class="string">'real'</span>) &amp;&amp; isfield(y,<span class="string">'imag'</span>)
+0177                     
+0178                     <span class="keyword">if</span> size(y.real,1) ~= size(y.imag,1)
+0179                         error(<span class="string">'Real and imaginary fields are different lengths'</span>);
+0180                     <span class="keyword">end</span>
+0181                     
+0182                     <span class="keyword">for</span> k = 1:size(y.real,1)
+0183                         y_shaped((2*k)-1,1) = y.real(k);
+0184                         y_shaped((2*k),1)   = y.imag(k);
+0185                     <span class="keyword">end</span>
+0186                     
+0187                     clear y;
+0188                     y = y_shaped;
+0189                     
+0190                     exp = <span class="string">'PLS'</span>;
+0191                     irname = <span class="string">'''Intensity'''</span>;
+0192                     xnam   = <span class="string">'''Time'''</span>;
+0193                     xuni   = <span class="string">'''ns'''</span>;
+0194                 
+0195                     
+0196                 <span class="keyword">else</span>
+0197                     error(<span class="string">'The structure in the second input argument needs to have the fields ''real'' and ''imag'''</span>);
+0198                 <span class="keyword">end</span>
+0199             <span class="keyword">else</span>
+0200                 <span class="comment">% For cw experiments do nothing</span>
+0201                 exp = <span class="string">'CW'</span>;
+0202                 irname = <span class="string">'''Intensity'''</span>;
+0203                 xnam   = <span class="string">'''Field'''</span>;
+0204                 xuni   = <span class="string">'''G'''</span>;
+0205             <span class="keyword">end</span>
+0206             
+0207             
+0208             <span class="comment">% Is input 3 imag</span>
+0209         <span class="keyword">else</span>
+0210             x = varargin{1};
+0211             
+0212             <span class="comment">% Get file</span>
+0213             [file, pathname] = uiputfile({ <span class="string">'*.DTA'</span>,<span class="string">'Bruker BES3T File (*.DTA)'</span>},<span class="keyword">...</span>
+0214                 <span class="string">'Save file as'</span>,<span class="string">'default'</span>);
+0215             
+0216             <span class="comment">% if user cancels command nothing happens</span>
+0217             <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0218                 <span class="keyword">return</span>
+0219             <span class="keyword">end</span>
+0220             
+0221             <span class="comment">% Seperate name from extension</span>
+0222             filename = strtok(file,<span class="string">'.'</span>);
+0223             
+0224             <span class="keyword">for</span> k = 1:size(varargin{2},1)
+0225                 y((2*k)-1,1) = varargin{2}(k);
+0226                 y((2*k),1)   = varargin{3}(k);
+0227             <span class="keyword">end</span>
+0228             
+0229             exp = <span class="string">'PLS'</span>;
+0230             irname = <span class="string">'''Intensity'''</span>;
+0231             xnam   = <span class="string">'''Time'''</span>;
+0232             xuni   = <span class="string">'''ns'''</span>;
+0233             
+0234         <span class="keyword">end</span>
+0235        
+0236     <span class="keyword">case</span> 4
+0237         x = varargin{1};
+0238         
+0239         <span class="comment">% Get file parts</span>
+0240         [pathname,filename,ext] = fileparts(varargin{4});
+0241         
+0242         <span class="comment">% Manipultate data</span>
+0243         <span class="keyword">if</span> size(varargin{2},1) ~= size(varargin{3},1)
+0244             error(<span class="string">'Inputs 2 and 3 are different lengths'</span>);
+0245         <span class="keyword">else</span>
+0246             <span class="keyword">for</span> k = 1:size(varargin{2},1)
+0247                 y((2*k)-1,1) = varargin{2}(k);
+0248                 y((2*k),1)   = varargin{3}(k);
+0249             <span class="keyword">end</span>
+0250         <span class="keyword">end</span>
+0251         
+0252         exp = <span class="string">'PLS'</span>;
+0253         irname = <span class="string">'''Intensity'''</span>;
+0254         xnam   = <span class="string">'''Time'''</span>;
+0255         xuni   = <span class="string">'''ns'''</span>;
+0256         
+0257 <span class="keyword">end</span>
+0258 
+0259 
+0260 <span class="comment">%                         Create files</span>
+0261 <span class="comment">% ========================================================================</span>
+0262 
+0263 DTA = fopen([pathname filename <span class="string">'.DTA'</span>],<span class="string">'w'</span>);
+0264 DSC = fopen([pathname filename <span class="string">'.DSC'</span>],<span class="string">'w'</span>);
+0265 
+0266 
+0267 <span class="comment">%                           Data file</span>
+0268 <span class="comment">% ========================================================================</span>
+0269 
+0270 fwrite(DTA,y,<span class="string">'double'</span>,0,<span class="string">'ieee-be.l64'</span>);
+0271 fclose(DTA);
+0272 
+0273 <span class="comment">%                       Descriptor file</span>
+0274 <span class="comment">% ========================================================================</span>
+0275 
+0276 L01 = <span class="string">'#DESC    1.2 * DESCRIPTOR INFORMATION ***********************'</span>;
+0277 L02 = <span class="string">'*'</span>;
+0278 L03 = <span class="string">'*    Dataset Type and Format:'</span>;
+0279 L04 = <span class="string">'*'</span>;
+0280 DSRC = [<span class="string">'DSRC    '</span> <span class="string">'EXP'</span>];
+0281 BSEQ = [<span class="string">'BSEQ    '</span> <span class="string">'BIG'</span>];
+0282 IKKF = [<span class="string">'IKKF    '</span> <span class="string">'REAL'</span>];
+0283 XTYP = [<span class="string">'XTYP    '</span> <span class="string">'IDX'</span>];
+0284 YTYP = [<span class="string">'YTYP    '</span> <span class="string">'NODATA'</span>];
+0285 ZTYP = [<span class="string">'ZTYP    '</span> <span class="string">'NODATA'</span>];
+0286 L05 = <span class="string">'*'</span>;
+0287 L06 = <span class="string">'*    Item Formats:'</span>;
+0288 L07 = <span class="string">'*'</span>;
+0289 L08 = <span class="string">'IRFMT    D'</span>;
+0290 L09 = <span class="string">'*'</span>;
+0291 L10 = <span class="string">'*    Data Ranges and Resolutions:'</span>;
+0292 L11 = <span class="string">'*'</span>;
+0293 XPTS = [<span class="string">'XPTS    '</span> num2str(size(x,1))];
+0294 XMIN = [<span class="string">'XMIN    '</span> num2str(min(x))];
+0295 XWID = [<span class="string">'XWID    '</span> num2str(max(x) - min(x))];
+0296 L12 = <span class="string">'*'</span>;
+0297 L13 = <span class="string">'*    Documentational Text:'</span>;
+0298 L14 = <span class="string">'*'</span>;
+0299 TITL = filename;
+0300 IRNAM = [<span class="string">'IRNAM    '</span> irname];
+0301 XNAM  = [<span class="string">'XNAM    '</span> xnam];
+0302 IRUNI = [<span class="string">'IRUNI    '</span> <span class="string">''''''</span>];
+0303 XUNI  = [<span class="string">'XUNI    '</span> xuni];
+0304 L15 = <span class="string">'*'</span>;
+0305 L16 = <span class="string">'************************************************************'</span>;
+0306 
+0307 DESC = char(L01,L02,L03,L04,DSRC,BSEQ,IKKF,XTYP,YTYP,ZTYP,<span class="keyword">...</span>
+0308     L05,L06,L07,L08,L09,L10,L11,XPTS,XMIN,XWID,L12,L13,L14,TITL,IRNAM<span class="keyword">...</span>
+0309     ,XNAM,IRUNI,XUNI,L15,L16);
+0310 
+0311 L17 = <span class="string">'*'</span>;
+0312 L18 = <span class="string">'#SPL    1.2 * STANDARD PARAMETER LAYER'</span>;
+0313 L19 = <span class="string">'*'</span>;
+0314 OPER = [<span class="string">'OPER    '</span> <span class="string">'EPRtoolbox'</span>];
+0315 DATE  = [<span class="string">'DATE    '</span> datestr(now , <span class="string">'dd/mm/yy'</span>)];
+0316 TIME = [<span class="string">'TIME    '</span> datestr(now , <span class="string">'HH:MM:SS'</span>)];
+0317 CMNT = <span class="string">'CMNT'</span>;
+0318 SAMP = [<span class="string">'SAMP    '</span> <span class="string">''</span>];
+0319 SFOR = [<span class="string">'SFOR    '</span> exp];
+0320 STAG = [<span class="string">'STAG    '</span> <span class="string">'C'</span>];
+0321 EXPT = [<span class="string">'EXPT    '</span> exp];
+0322 OXS1 = [<span class="string">'OXS1    '</span> <span class="string">'IADC'</span>];
+0323 AXS1 = [<span class="string">'AXS1    '</span> <span class="string">'BOVL'</span>];
+0324 AXS2 = [<span class="string">'AXS2    '</span> <span class="string">'NONE'</span>];
+0325 AXS3 = [<span class="string">'AXS3    '</span> <span class="string">''</span>];
+0326 A1CT = [<span class="string">'A1CT    '</span> <span class="string">''</span>];
+0327 A1SW = [<span class="string">'A1SW    '</span> <span class="string">''</span>];
+0328 MWFQ = [<span class="string">'MWFQ    '</span> <span class="string">''</span>];
+0329 AVGS = [<span class="string">'AVGS    '</span> <span class="string">''</span>];
+0330 RESO = [<span class="string">'RESO    '</span> <span class="string">''</span>];
+0331 RCAG = [<span class="string">'RCAG    '</span> <span class="string">''</span>];
+0332 RCHM = [<span class="string">'RCHM    '</span> <span class="string">''</span>];
+0333 B0MA = [<span class="string">'B0MA    '</span> <span class="string">''</span>];
+0334 B0MF = [<span class="string">'B0MF    '</span> <span class="string">''</span>];
+0335 RCPH = [<span class="string">'RCPH    '</span> <span class="string">''</span>];
+0336 RCOF = [<span class="string">'RCOF    '</span> <span class="string">''</span>];
+0337 A1RS = [<span class="string">'A1RS    '</span> <span class="string">''</span>];
+0338 RCTC = [<span class="string">'RCTC    '</span> <span class="string">''</span>];
+0339 L20 = <span class="string">'*'</span>;
+0340 L21 = <span class="string">'************************************************************'</span>;
+0341 
+0342 SPL = char(L17,L18,L19,OPER,DATE,TIME,CMNT,SAMP,SFOR,STAG,EXPT,OXS1,<span class="keyword">...</span>
+0343     AXS1,AXS2,AXS3,A1CT,A1SW,MWFQ,AVGS,RESO,RCAG,RCAG,RCHM,B0MA,B0MF,<span class="keyword">...</span>
+0344     RCPH,RCOF,A1RS,RCTC,L20,L21);
+0345 
+0346 dsc_output = char(DESC,SPL);
+0347 
+0348 <span class="keyword">for</span> k = 1:size(dsc_output,1)
+0349     fprintf(DSC,<span class="string">'%s\n'</span>,dsc_output(k,:));
+0350 <span class="keyword">end</span>
+0351 
+0352 fclose(DSC);</pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

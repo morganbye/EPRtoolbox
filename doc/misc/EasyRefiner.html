@@ -88,7 +88,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC , .spc / .par) into the</li></ul>
+<li><a href="BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 </ul>
@@ -167,1022 +167,1024 @@ This function is called by:
 0066 <span class="comment">%                       __/ |                   __/ |</span>
 0067 <span class="comment">%                      |___/                   |___/</span>
 0068 <span class="comment">%</span>
-0069 <span class="comment">%</span>
-0070 <span class="comment">% M. Bye v13.03</span>
-0071 <span class="comment">%</span>
-0072 <span class="comment">% Author:       Morgan Bye</span>
-0073 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
-0074 <span class="comment">%               University of East Anglia</span>
-0075 <span class="comment">%               NORWICH, UK</span>
-0076 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
-0077 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/cwviewer</span>
-0078 <span class="comment">% Mar 2013;     Last revision: 14-March-2013</span>
-0079 <span class="comment">%</span>
-0080 <span class="comment">% Approximate coding time of file:</span>
-0081 <span class="comment">%               20 hours</span>
-0082 <span class="comment">%</span>
+0069 <span class="comment">% M. Bye v13.09</span>
+0070 <span class="comment">%</span>
+0071 <span class="comment">% v13.09 - current</span>
+0072 <span class="comment">%               Chemical Physics Department</span>
+0073 <span class="comment">%               Weizmann Institute of Science</span>
+0074 <span class="comment">%               76100 REHOVOT, Israel</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">% v11.06 - v13.08</span>
+0077 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0078 <span class="comment">%               University of East Anglia</span>
+0079 <span class="comment">%               NORWICH, UK</span>
+0080 <span class="comment">%</span>
+0081 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0082 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/cwplot</span>
 0083 <span class="comment">%</span>
-0084 <span class="comment">% Version history:</span>
-0085 <span class="comment">% Mar 13        &quot;Run later&quot; button added</span>
-0086 <span class="comment">%               Better error handling</span>
-0087 <span class="comment">%               Supports long file names</span>
-0088 <span class="comment">%               Closing waitbar cancels queue</span>
-0089 <span class="comment">%               Seperating of fitting in command window using file name</span>
-0090 <span class="comment">%               Add fit results to the output</span>
-0091 <span class="comment">%               Handling of non-valid file name characters in file title</span>
-0092 <span class="comment">%</span>
-0093 <span class="comment">% Feb 13        Initial release</span>
-0094 
-0095 <span class="comment">% Edit the above text to modify the response to help EasyRefiner</span>
+0084 <span class="comment">% Last updated  14-March-2013</span>
+0085 <span class="comment">%</span>
+0086 <span class="comment">% Version history:</span>
+0087 <span class="comment">% Mar 13        &quot;Run later&quot; button added</span>
+0088 <span class="comment">%               Better error handling</span>
+0089 <span class="comment">%               Supports long file names</span>
+0090 <span class="comment">%               Closing waitbar cancels queue</span>
+0091 <span class="comment">%               Seperating of fitting in command window using file name</span>
+0092 <span class="comment">%               Add fit results to the output</span>
+0093 <span class="comment">%               Handling of non-valid file name characters in file title</span>
+0094 <span class="comment">%</span>
+0095 <span class="comment">% Feb 13        Initial release</span>
 0096 
-0097 <span class="comment">% Last Modified by GUIDE v2.5 12-Feb-2013 16:04:27</span>
+0097 <span class="comment">% Edit the above text to modify the response to help EasyRefiner</span>
 0098 
-0099 <span class="comment">% Begin initialization code - DO NOT EDIT</span>
-0100 gui_Singleton = 1;
-0101 gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
-0102                    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
-0103                    <span class="string">'gui_OpeningFcn'</span>, @<a href="#_sub1" class="code" title="subfunction EasyRefiner_OpeningFcn(hObject, eventdata, handles, varargin)">EasyRefiner_OpeningFcn</a>, <span class="keyword">...</span>
-0104                    <span class="string">'gui_OutputFcn'</span>,  @<a href="#_sub3" class="code" title="subfunction varargout = EasyRefiner_OutputFcn(hObject, eventdata, handles)">EasyRefiner_OutputFcn</a>, <span class="keyword">...</span>
-0105                    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
-0106                    <span class="string">'gui_Callback'</span>,   []);
-0107 <span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
-0108     gui_State.gui_Callback = str2func(varargin{1});
-0109 <span class="keyword">end</span>
-0110 
-0111 <span class="keyword">if</span> nargout
-0112     [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
-0113 <span class="keyword">else</span>
-0114     gui_mainfcn(gui_State, varargin{:});
-0115 <span class="keyword">end</span>
-0116 <span class="comment">% End initialization code - DO NOT EDIT</span>
-0117 
-0118 
-0119 <span class="comment">% --- Executes just before EasyRefiner is made visible.</span>
-0120 <a name="_sub1" href="#_subfunctions" class="code">function EasyRefiner_OpeningFcn(hObject, eventdata, handles, varargin)</a>
-0121 <span class="comment">% This function has no output args, see OutputFcn.</span>
-0122 <span class="comment">% hObject    handle to figure</span>
-0123 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
-0124 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
-0125 <span class="comment">% varargin   command line arguments to EasyRefiner (see VARARGIN)</span>
-0126 
-0127 <span class="comment">% Choose default command line output for EasyRefiner</span>
-0128 handles.output = hObject;
-0129 
-0130 <span class="comment">% Update handles structure</span>
-0131 guidata(hObject, handles);
-0132 
-0133 <span class="comment">% Name the window</span>
-0134 set(gcf,<span class="string">'Name'</span>,<span class="string">'EasyRefiner - v13.03'</span>);
-0135 
-0136 <span class="comment">% Update output location edit box to current folder</span>
-0137 set(handles.edit_outputAddress,<span class="string">'String'</span>,pwd);
-0138 set(handles.edit_outputAddress,<span class="string">'Tooltipstring'</span>,pwd);
-0139 
-0140 <span class="comment">% Set edit boxes to accept multiline input</span>
-0141 set(handles.edit_system,<span class="string">'Max'</span>,2);
-0142 set(handles.edit_exp ,<span class="string">'Max'</span>,2);
-0143 set(handles.edit_opt ,<span class="string">'Max'</span>,2);
-0144 set(handles.edit_var1,<span class="string">'Max'</span>,2);
-0145 set(handles.edit_var2,<span class="string">'Max'</span>,2);
-0146 set(handles.edit_var3,<span class="string">'Max'</span>,2);
-0147 set(handles.edit_info,<span class="string">'Max'</span>,2);
-0148 
-0149 <span class="comment">% Create global variable</span>
-0150 <span class="keyword">global</span> ER;
-0151 
-0152 <span class="comment">% --- Executes when user attempts to close figure1.</span>
-0153 <a name="_sub2" href="#_subfunctions" class="code">function figure1_CloseRequestFcn(hObject, eventdata, handles)</a>
-0154 
-0155 <span class="comment">% Hint: delete(hObject) closes the figure</span>
-0156 delete(hObject);
-0157 
-0158 <span class="comment">% Clear global variable, else files wont clear if ER is reopened</span>
-0159 clear <span class="keyword">global</span> ER
-0160 
-0161 
-0162 <span class="comment">% --- Outputs from this function are returned to the command line.</span>
-0163 <a name="_sub3" href="#_subfunctions" class="code">function varargout = EasyRefiner_OutputFcn(hObject, eventdata, handles) </a>
-0164 <span class="comment">% varargout  cell array for returning output args (see VARARGOUT);</span>
-0165 <span class="comment">% hObject    handle to figure</span>
-0166 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
-0167 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
-0168 
-0169 <span class="comment">% Get default command line output from handles structure</span>
-0170 varargout{1} = handles.output;
-0171 
-0172 <span class="comment">% oooooooooooo  o8o  oooo</span>
-0173 <span class="comment">% `888'     `8  `&quot;'  `888</span>
-0174 <span class="comment">%  888         oooo   888   .ooooo.   .oooo.o</span>
-0175 <span class="comment">%  888oooo8    `888   888  d88' `88b d88(  &quot;8</span>
-0176 <span class="comment">%  888    &quot;     888   888  888ooo888 `&quot;Y88b.</span>
-0177 <span class="comment">%  888          888   888  888    .o o.  )88b</span>
-0178 <span class="comment">% o888o        o888o o888o `Y8bod8P' 8&quot;&quot;888P'</span>
-0179 
-0180 
-0181 <span class="comment">% --- Executes on button press in button_loadFile.</span>
-0182 <a name="_sub4" href="#_subfunctions" class="code">function button_loadFile_Callback(hObject, eventdata, handles)</a>
-0183 
-0184 <span class="keyword">global</span> ER
+0099 <span class="comment">% Last Modified by GUIDE v2.5 12-Feb-2013 16:04:27</span>
+0100 
+0101 <span class="comment">% Begin initialization code - DO NOT EDIT</span>
+0102 gui_Singleton = 1;
+0103 gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+0104                    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+0105                    <span class="string">'gui_OpeningFcn'</span>, @<a href="#_sub1" class="code" title="subfunction EasyRefiner_OpeningFcn(hObject, eventdata, handles, varargin)">EasyRefiner_OpeningFcn</a>, <span class="keyword">...</span>
+0106                    <span class="string">'gui_OutputFcn'</span>,  @<a href="#_sub3" class="code" title="subfunction varargout = EasyRefiner_OutputFcn(hObject, eventdata, handles)">EasyRefiner_OutputFcn</a>, <span class="keyword">...</span>
+0107                    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+0108                    <span class="string">'gui_Callback'</span>,   []);
+0109 <span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+0110     gui_State.gui_Callback = str2func(varargin{1});
+0111 <span class="keyword">end</span>
+0112 
+0113 <span class="keyword">if</span> nargout
+0114     [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+0115 <span class="keyword">else</span>
+0116     gui_mainfcn(gui_State, varargin{:});
+0117 <span class="keyword">end</span>
+0118 <span class="comment">% End initialization code - DO NOT EDIT</span>
+0119 
+0120 
+0121 <span class="comment">% --- Executes just before EasyRefiner is made visible.</span>
+0122 <a name="_sub1" href="#_subfunctions" class="code">function EasyRefiner_OpeningFcn(hObject, eventdata, handles, varargin)</a>
+0123 <span class="comment">% This function has no output args, see OutputFcn.</span>
+0124 <span class="comment">% hObject    handle to figure</span>
+0125 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0126 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0127 <span class="comment">% varargin   command line arguments to EasyRefiner (see VARARGIN)</span>
+0128 
+0129 <span class="comment">% Choose default command line output for EasyRefiner</span>
+0130 handles.output = hObject;
+0131 
+0132 <span class="comment">% Update handles structure</span>
+0133 guidata(hObject, handles);
+0134 
+0135 <span class="comment">% Name the window</span>
+0136 set(gcf,<span class="string">'Name'</span>,<span class="string">'EasyRefiner - v13.03'</span>);
+0137 
+0138 <span class="comment">% Update output location edit box to current folder</span>
+0139 set(handles.edit_outputAddress,<span class="string">'String'</span>,pwd);
+0140 set(handles.edit_outputAddress,<span class="string">'Tooltipstring'</span>,pwd);
+0141 
+0142 <span class="comment">% Set edit boxes to accept multiline input</span>
+0143 set(handles.edit_system,<span class="string">'Max'</span>,2);
+0144 set(handles.edit_exp ,<span class="string">'Max'</span>,2);
+0145 set(handles.edit_opt ,<span class="string">'Max'</span>,2);
+0146 set(handles.edit_var1,<span class="string">'Max'</span>,2);
+0147 set(handles.edit_var2,<span class="string">'Max'</span>,2);
+0148 set(handles.edit_var3,<span class="string">'Max'</span>,2);
+0149 set(handles.edit_info,<span class="string">'Max'</span>,2);
+0150 
+0151 <span class="comment">% Create global variable</span>
+0152 <span class="keyword">global</span> ER;
+0153 
+0154 <span class="comment">% --- Executes when user attempts to close figure1.</span>
+0155 <a name="_sub2" href="#_subfunctions" class="code">function figure1_CloseRequestFcn(hObject, eventdata, handles)</a>
+0156 
+0157 <span class="comment">% Hint: delete(hObject) closes the figure</span>
+0158 delete(hObject);
+0159 
+0160 <span class="comment">% Clear global variable, else files wont clear if ER is reopened</span>
+0161 clear <span class="keyword">global</span> ER
+0162 
+0163 
+0164 <span class="comment">% --- Outputs from this function are returned to the command line.</span>
+0165 <a name="_sub3" href="#_subfunctions" class="code">function varargout = EasyRefiner_OutputFcn(hObject, eventdata, handles) </a>
+0166 <span class="comment">% varargout  cell array for returning output args (see VARARGOUT);</span>
+0167 <span class="comment">% hObject    handle to figure</span>
+0168 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0169 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0170 
+0171 <span class="comment">% Get default command line output from handles structure</span>
+0172 varargout{1} = handles.output;
+0173 
+0174 <span class="comment">% oooooooooooo  o8o  oooo</span>
+0175 <span class="comment">% `888'     `8  `&quot;'  `888</span>
+0176 <span class="comment">%  888         oooo   888   .ooooo.   .oooo.o</span>
+0177 <span class="comment">%  888oooo8    `888   888  d88' `88b d88(  &quot;8</span>
+0178 <span class="comment">%  888    &quot;     888   888  888ooo888 `&quot;Y88b.</span>
+0179 <span class="comment">%  888          888   888  888    .o o.  )88b</span>
+0180 <span class="comment">% o888o        o888o o888o `Y8bod8P' 8&quot;&quot;888P'</span>
+0181 
+0182 
+0183 <span class="comment">% --- Executes on button press in button_loadFile.</span>
+0184 <a name="_sub4" href="#_subfunctions" class="code">function button_loadFile_Callback(hObject, eventdata, handles)</a>
 0185 
-0186 <span class="keyword">try</span>
-0187     ER.fileNum = size(fieldnames(ER.data),1) +1;
-0188 <span class="keyword">catch</span>
-0189     ER.fileNum = 1;
-0190 <span class="keyword">end</span>
-0191 
-0192 <span class="comment">% Load the file</span>
-0193 [x , y , info] = <a href="BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>;
-0194 
-0195 <span class="comment">% Move the file to data structure</span>
-0196 ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).x = x;
-0197 ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).y = y;
-0198 ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).info = info;
-0199 
-0200 <span class="comment">% Get string in File Details window listbox</span>
-0201 files = get(handles.listbox_files,<span class="string">'String'</span>);
-0202 
-0203 <span class="comment">% See if files have been listed previously</span>
-0204 <span class="keyword">if</span> strcmp(files , <span class="string">'-- No file loaded --'</span>)
-0205     files = [<span class="string">'1: '</span> , regexprep(info.TITL , <span class="string">''''</span>,<span class="string">''</span>)];
-0206     files = sscanf(files,<span class="string">'%c'</span>,25);      <span class="comment">% Cuts down to 25 characters</span>
-0207     files = sprintf(<span class="string">'%-25s'</span>,files);     <span class="comment">% Makes up to 25 characters</span>
-0208     
-0209     <span class="comment">% Write out new string to File Details listbox</span>
-0210     set(handles.listbox_files,<span class="string">'String'</span>,files)
-0211     
-0212     <span class="comment">% Change focus of listbox to the new file</span>
-0213     set(handles.listbox_files,<span class="string">'Value'</span>, 1)
-0214 
-0215 <span class="comment">% If previous file then get string, add new string title to a new line</span>
-0216 <span class="keyword">else</span>
-0217     Num = mat2str(ER.fileNum);
-0218     next_line = [Num , <span class="string">': '</span> , regexprep(info.TITL , <span class="string">''''</span>,<span class="string">''</span>)];
-0219     next_formated = sscanf(next_line,<span class="string">'%c'</span>,25);
-0220     next_formated = sprintf(<span class="string">'%-25s'</span>,next_formated);
-0221     files = [files ; next_formated];
-0222     
-0223     <span class="comment">% Write out new string to File Details listbox</span>
-0224     set(handles.listbox_files,<span class="string">'String'</span>,files)
-0225     
-0226     <span class="comment">% Change focus of listbox to the new file</span>
-0227     set(handles.listbox_files,<span class="string">'Value'</span>, str2num(Num));
-0228 
-0229 <span class="keyword">end</span>
+0186 <span class="keyword">global</span> ER
+0187 
+0188 <span class="keyword">try</span>
+0189     ER.fileNum = size(fieldnames(ER.data),1) +1;
+0190 <span class="keyword">catch</span>
+0191     ER.fileNum = 1;
+0192 <span class="keyword">end</span>
+0193 
+0194 <span class="comment">% Load the file</span>
+0195 [x , y , info] = <a href="BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>;
+0196 
+0197 <span class="comment">% Move the file to data structure</span>
+0198 ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).x = x;
+0199 ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).y = y;
+0200 ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).info = info;
+0201 
+0202 <span class="comment">% Get string in File Details window listbox</span>
+0203 files = get(handles.listbox_files,<span class="string">'String'</span>);
+0204 
+0205 <span class="comment">% See if files have been listed previously</span>
+0206 <span class="keyword">if</span> strcmp(files , <span class="string">'-- No file loaded --'</span>)
+0207     files = [<span class="string">'1: '</span> , regexprep(info.TITL , <span class="string">''''</span>,<span class="string">''</span>)];
+0208     files = sscanf(files,<span class="string">'%c'</span>,25);      <span class="comment">% Cuts down to 25 characters</span>
+0209     files = sprintf(<span class="string">'%-25s'</span>,files);     <span class="comment">% Makes up to 25 characters</span>
+0210     
+0211     <span class="comment">% Write out new string to File Details listbox</span>
+0212     set(handles.listbox_files,<span class="string">'String'</span>,files)
+0213     
+0214     <span class="comment">% Change focus of listbox to the new file</span>
+0215     set(handles.listbox_files,<span class="string">'Value'</span>, 1)
+0216 
+0217 <span class="comment">% If previous file then get string, add new string title to a new line</span>
+0218 <span class="keyword">else</span>
+0219     Num = mat2str(ER.fileNum);
+0220     next_line = [Num , <span class="string">': '</span> , regexprep(info.TITL , <span class="string">''''</span>,<span class="string">''</span>)];
+0221     next_formated = sscanf(next_line,<span class="string">'%c'</span>,25);
+0222     next_formated = sprintf(<span class="string">'%-25s'</span>,next_formated);
+0223     files = [files ; next_formated];
+0224     
+0225     <span class="comment">% Write out new string to File Details listbox</span>
+0226     set(handles.listbox_files,<span class="string">'String'</span>,files)
+0227     
+0228     <span class="comment">% Change focus of listbox to the new file</span>
+0229     set(handles.listbox_files,<span class="string">'Value'</span>, str2num(Num));
 0230 
-0231 ER.files = files;
+0231 <span class="keyword">end</span>
 0232 
-0233 
-0234 <span class="comment">% --- Executes on button press in button_loadFolder.</span>
-0235 <a name="_sub5" href="#_subfunctions" class="code">function button_loadFolder_Callback(hObject, eventdata, handles)</a>
-0236 
-0237 <span class="keyword">global</span> ER
+0233 ER.files = files;
+0234 
+0235 
+0236 <span class="comment">% --- Executes on button press in button_loadFolder.</span>
+0237 <a name="_sub5" href="#_subfunctions" class="code">function button_loadFolder_Callback(hObject, eventdata, handles)</a>
 0238 
-0239 <span class="comment">% Find all the spectra</span>
-0240 folder = uigetdir;
-0241 dtaFiles = dir([folder <span class="string">'/*.DTA'</span>]);
-0242 
-0243 <span class="keyword">if</span> numel(dtaFiles) ~= 0
-0244     <span class="keyword">for</span> k=1:numel(dtaFiles)
-0245                 
-0246         <span class="comment">% Set file number for file</span>
-0247         <span class="keyword">try</span>
-0248             ER.fileNum = size(fieldnames(ER.data),1) +1;
-0249         <span class="keyword">catch</span>
-0250             ER.fileNum = 1;
-0251         <span class="keyword">end</span>
-0252         
-0253         <span class="comment">% Load the file</span>
-0254         [x , y , info] = <a href="BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([folder <span class="string">'/'</span> dtaFiles(k).name]);
-0255         
-0256         <span class="comment">% Move the file to data structure</span>
-0257         ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).x = x;
-0258         ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).y = y;
-0259         ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).info = info;
-0260         
-0261         <span class="comment">% Get string in File Details window listbox</span>
-0262         files = get(handles.listbox_files,<span class="string">'String'</span>);
-0263         
-0264         <span class="comment">% See if files have been listed previously</span>
-0265         <span class="keyword">if</span> strcmp(files , <span class="string">'-- No file loaded --'</span>)
-0266             files = [<span class="string">'1: '</span> , regexprep(info.TITL , <span class="string">''''</span>,<span class="string">''</span>)];
-0267             files = sscanf(files,<span class="string">'%c'</span>,25);      <span class="comment">% Cuts down to 25 characters</span>
-0268             files = sprintf(<span class="string">'%-25s'</span>,files);     <span class="comment">% Makes up to 25 characters</span>
-0269             
-0270             <span class="comment">% Write out new string to File Details listbox</span>
-0271             set(handles.listbox_files,<span class="string">'String'</span>,files)
-0272             
-0273             <span class="comment">% If previous file then get string, add new string title to a new line</span>
-0274         <span class="keyword">else</span>
-0275             Num = mat2str(ER.fileNum);
-0276             next_line = [Num , <span class="string">': '</span> , regexprep(info.TITL , <span class="string">''''</span>,<span class="string">''</span>)];
-0277             next_formated = sscanf(next_line,<span class="string">'%c'</span>,25);
-0278             next_formated = sprintf(<span class="string">'%-25s'</span>,next_formated);
-0279             files = [files ; next_formated];
-0280             
-0281             <span class="comment">% Write out new string to File Details listbox</span>
-0282             set(handles.listbox_files,<span class="string">'String'</span>,files)
-0283                         
-0284         <span class="keyword">end</span>
-0285     <span class="keyword">end</span>
-0286     
-0287     <span class="comment">% Change focus of listbox to the new file</span>
-0288     set(handles.listbox_files,<span class="string">'Value'</span>, ER.fileNum);
-0289     
-0290 <span class="keyword">else</span>
-0291     msgbox(<span class="string">'No .DTA files could be found in that folder!'</span>,<span class="string">'Folder load error'</span>,<span class="string">'warn'</span>);
-0292 <span class="keyword">end</span>
-0293 
-0294 
-0295 <span class="comment">% --- Executes on selection change in listbox_files.</span>
-0296 <a name="_sub6" href="#_subfunctions" class="code">function listbox_files_Callback(hObject, eventdata, handles)</a>
-0297 
-0298 
-0299 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0300 <a name="_sub7" href="#_subfunctions" class="code">function listbox_files_CreateFcn(hObject, eventdata, handles)</a>
-0301 
-0302 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0303     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0304 <span class="keyword">end</span>
-0305 
-0306 <span class="comment">%  .oooooo..o                          .</span>
-0307 <span class="comment">% d8P'    `Y8                        .o8</span>
-0308 <span class="comment">% Y88bo.      oooo    ooo  .oooo.o .o888oo  .ooooo.  ooo. .oo.  .oo.</span>
-0309 <span class="comment">%  `&quot;Y8888o.   `88.  .8'  d88(  &quot;8   888   d88' `88b `888P&quot;Y88bP&quot;Y88b</span>
-0310 <span class="comment">%      `&quot;Y88b   `88..8'   `&quot;Y88b.    888   888ooo888  888   888   888</span>
-0311 <span class="comment">% oo     .d8P    `888'    o.  )88b   888 . 888    .o  888   888   888</span>
-0312 <span class="comment">% 8&quot;&quot;88888P'      .8'     8&quot;&quot;888P'   &quot;888&quot; `Y8bod8P' o888o o888o o888o</span>
-0313 <span class="comment">%             .o..P'</span>
-0314 <span class="comment">%             `Y8P'</span>
-0315 
-0316 <span class="comment">% --- Executes on selection change in edit_system.</span>
-0317 <a name="_sub8" href="#_subfunctions" class="code">function edit_system_Callback(hObject, eventdata, handles)</a>
-0318 
-0319 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0320 <a name="_sub9" href="#_subfunctions" class="code">function edit_system_CreateFcn(hObject, eventdata, handles)</a>
-0321 
-0322 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0323     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0324 <span class="keyword">end</span>
-0325 
-0326 
+0239 <span class="keyword">global</span> ER
+0240 
+0241 <span class="comment">% Find all the spectra</span>
+0242 folder = uigetdir;
+0243 dtaFiles = dir([folder <span class="string">'/*.DTA'</span>]);
+0244 
+0245 <span class="keyword">if</span> numel(dtaFiles) ~= 0
+0246     <span class="keyword">for</span> k=1:numel(dtaFiles)
+0247                 
+0248         <span class="comment">% Set file number for file</span>
+0249         <span class="keyword">try</span>
+0250             ER.fileNum = size(fieldnames(ER.data),1) +1;
+0251         <span class="keyword">catch</span>
+0252             ER.fileNum = 1;
+0253         <span class="keyword">end</span>
+0254         
+0255         <span class="comment">% Load the file</span>
+0256         [x , y , info] = <a href="BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([folder <span class="string">'/'</span> dtaFiles(k).name]);
+0257         
+0258         <span class="comment">% Move the file to data structure</span>
+0259         ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).x = x;
+0260         ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).y = y;
+0261         ER.data.([<span class="string">'File'</span> mat2str(ER.fileNum)]).info = info;
+0262         
+0263         <span class="comment">% Get string in File Details window listbox</span>
+0264         files = get(handles.listbox_files,<span class="string">'String'</span>);
+0265         
+0266         <span class="comment">% See if files have been listed previously</span>
+0267         <span class="keyword">if</span> strcmp(files , <span class="string">'-- No file loaded --'</span>)
+0268             files = [<span class="string">'1: '</span> , regexprep(info.TITL , <span class="string">''''</span>,<span class="string">''</span>)];
+0269             files = sscanf(files,<span class="string">'%c'</span>,25);      <span class="comment">% Cuts down to 25 characters</span>
+0270             files = sprintf(<span class="string">'%-25s'</span>,files);     <span class="comment">% Makes up to 25 characters</span>
+0271             
+0272             <span class="comment">% Write out new string to File Details listbox</span>
+0273             set(handles.listbox_files,<span class="string">'String'</span>,files)
+0274             
+0275             <span class="comment">% If previous file then get string, add new string title to a new line</span>
+0276         <span class="keyword">else</span>
+0277             Num = mat2str(ER.fileNum);
+0278             next_line = [Num , <span class="string">': '</span> , regexprep(info.TITL , <span class="string">''''</span>,<span class="string">''</span>)];
+0279             next_formated = sscanf(next_line,<span class="string">'%c'</span>,25);
+0280             next_formated = sprintf(<span class="string">'%-25s'</span>,next_formated);
+0281             files = [files ; next_formated];
+0282             
+0283             <span class="comment">% Write out new string to File Details listbox</span>
+0284             set(handles.listbox_files,<span class="string">'String'</span>,files)
+0285                         
+0286         <span class="keyword">end</span>
+0287     <span class="keyword">end</span>
+0288     
+0289     <span class="comment">% Change focus of listbox to the new file</span>
+0290     set(handles.listbox_files,<span class="string">'Value'</span>, ER.fileNum);
+0291     
+0292 <span class="keyword">else</span>
+0293     msgbox(<span class="string">'No .DTA files could be found in that folder!'</span>,<span class="string">'Folder load error'</span>,<span class="string">'warn'</span>);
+0294 <span class="keyword">end</span>
+0295 
+0296 
+0297 <span class="comment">% --- Executes on selection change in listbox_files.</span>
+0298 <a name="_sub6" href="#_subfunctions" class="code">function listbox_files_Callback(hObject, eventdata, handles)</a>
+0299 
+0300 
+0301 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0302 <a name="_sub7" href="#_subfunctions" class="code">function listbox_files_CreateFcn(hObject, eventdata, handles)</a>
+0303 
+0304 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0305     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0306 <span class="keyword">end</span>
+0307 
+0308 <span class="comment">%  .oooooo..o                          .</span>
+0309 <span class="comment">% d8P'    `Y8                        .o8</span>
+0310 <span class="comment">% Y88bo.      oooo    ooo  .oooo.o .o888oo  .ooooo.  ooo. .oo.  .oo.</span>
+0311 <span class="comment">%  `&quot;Y8888o.   `88.  .8'  d88(  &quot;8   888   d88' `88b `888P&quot;Y88bP&quot;Y88b</span>
+0312 <span class="comment">%      `&quot;Y88b   `88..8'   `&quot;Y88b.    888   888ooo888  888   888   888</span>
+0313 <span class="comment">% oo     .d8P    `888'    o.  )88b   888 . 888    .o  888   888   888</span>
+0314 <span class="comment">% 8&quot;&quot;88888P'      .8'     8&quot;&quot;888P'   &quot;888&quot; `Y8bod8P' o888o o888o o888o</span>
+0315 <span class="comment">%             .o..P'</span>
+0316 <span class="comment">%             `Y8P'</span>
+0317 
+0318 <span class="comment">% --- Executes on selection change in edit_system.</span>
+0319 <a name="_sub8" href="#_subfunctions" class="code">function edit_system_Callback(hObject, eventdata, handles)</a>
+0320 
+0321 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0322 <a name="_sub9" href="#_subfunctions" class="code">function edit_system_CreateFcn(hObject, eventdata, handles)</a>
+0323 
+0324 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0325     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0326 <span class="keyword">end</span>
 0327 
-0328 <span class="comment">% --- Executes on selection change in popupmenu_defaults.</span>
-0329 <a name="_sub10" href="#_subfunctions" class="code">function popupmenu_defaults_Callback(hObject, eventdata, handles)</a>
-0330 
-0331 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0332 <a name="_sub11" href="#_subfunctions" class="code">function popupmenu_defaults_CreateFcn(hObject, eventdata, handles)</a>
-0333 
-0334 
-0335 <span class="comment">% Hint: popupmenu controls usually have a white background on Windows.</span>
-0336 <span class="comment">%       See ISPC and COMPUTER.</span>
-0337 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0338     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0339 <span class="keyword">end</span>
-0340 
-0341 <span class="comment">% --- Executes on button press in button_systemLoad.</span>
-0342 <a name="_sub12" href="#_subfunctions" class="code">function button_systemLoad_Callback(hObject, eventdata, handles)</a>
-0343 
-0344 <a href="#_sub42" class="code" title="subfunction defaultSelection(hObject, eventdata, handles)">defaultSelection</a>(hObject, eventdata, handles);
+0328 
+0329 
+0330 <span class="comment">% --- Executes on selection change in popupmenu_defaults.</span>
+0331 <a name="_sub10" href="#_subfunctions" class="code">function popupmenu_defaults_Callback(hObject, eventdata, handles)</a>
+0332 
+0333 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0334 <a name="_sub11" href="#_subfunctions" class="code">function popupmenu_defaults_CreateFcn(hObject, eventdata, handles)</a>
+0335 
+0336 
+0337 <span class="comment">% Hint: popupmenu controls usually have a white background on Windows.</span>
+0338 <span class="comment">%       See ISPC and COMPUTER.</span>
+0339 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0340     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0341 <span class="keyword">end</span>
+0342 
+0343 <span class="comment">% --- Executes on button press in button_systemLoad.</span>
+0344 <a name="_sub12" href="#_subfunctions" class="code">function button_systemLoad_Callback(hObject, eventdata, handles)</a>
 0345 
-0346 
-0347 <span class="comment">% oooooooooooo                                            o8o</span>
-0348 <span class="comment">% `888'     `8                                            `&quot;'</span>
-0349 <span class="comment">%  888         oooo    ooo oo.ooooo.   .ooooo.  oooo d8b oooo</span>
-0350 <span class="comment">%  888oooo8     `88b..8P'   888' `88b d88' `88b `888&quot;&quot;8P `888</span>
-0351 <span class="comment">%  888    &quot;       Y888'     888   888 888ooo888  888      888</span>
-0352 <span class="comment">%  888       o  .o8&quot;'88b    888   888 888    .o  888      888</span>
-0353 <span class="comment">% o888ooooood8 o88'   888o  888bod8P' `Y8bod8P' d888b    o888o</span>
-0354 <span class="comment">%                           888</span>
-0355 <span class="comment">%                          o888o</span>
-0356 
-0357 <span class="comment">% --- Executes on selection change in edit_exp.</span>
-0358 <a name="_sub13" href="#_subfunctions" class="code">function edit_exp_Callback(hObject, eventdata, handles)</a>
-0359 
-0360 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0361 <a name="_sub14" href="#_subfunctions" class="code">function edit_exp_CreateFcn(hObject, eventdata, handles)</a>
-0362 
-0363 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0364     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0365 <span class="keyword">end</span>
-0366 
-0367 
-0368 <span class="comment">% --- Executes on button press in button_expHelp.</span>
-0369 <a name="_sub15" href="#_subfunctions" class="code">function button_expHelp_Callback(hObject, eventdata, handles)</a>
-0370 
-0371 msgbox(sprintf(<span class="string">'Experiment does not need field or frequency information as this will be automatically taken from the .DSC files\n\nYou must use Exp as the variable name'</span>)<span class="keyword">...</span>
-0372     ,<span class="string">'Experiment help'</span>);
-0373 
-0374 
-0375 <span class="comment">%</span>
-0376 <span class="comment">%   .oooooo.                  .    o8o</span>
-0377 <span class="comment">%  d8P'  `Y8b               .o8    `&quot;'</span>
-0378 <span class="comment">% 888      888 oo.ooooo.  .o888oo oooo   .ooooo.  ooo. .oo.    .oooo.o</span>
-0379 <span class="comment">% 888      888  888' `88b   888   `888  d88' `88b `888P&quot;Y88b  d88(  &quot;8</span>
-0380 <span class="comment">% 888      888  888   888   888    888  888   888  888   888  `&quot;Y88b.</span>
-0381 <span class="comment">% `88b    d88'  888   888   888 .  888  888   888  888   888  o.  )88b</span>
-0382 <span class="comment">%  `Y8bood8P'   888bod8P'   &quot;888&quot; o888o `Y8bod8P' o888o o888o 8&quot;&quot;888P'</span>
-0383 <span class="comment">%               888</span>
-0384 <span class="comment">%              o888o</span>
-0385 <span class="comment">%</span>
-0386 
-0387 <span class="comment">% --- Executes on button press in button_output.</span>
-0388 <a name="_sub16" href="#_subfunctions" class="code">function button_output_Callback(hObject, eventdata, handles)</a>
-0389 
-0390 path = uigetdir(get(handles.edit_outputAddress,<span class="string">'String'</span>),<span class="string">'EasyRefiner: Load folder'</span>);
-0391 set(handles.edit_outputAddress,<span class="string">'String'</span>,path);
-0392 
-0393 
-0394 <a name="_sub17" href="#_subfunctions" class="code">function edit_outputAddress_Callback(hObject, eventdata, handles)</a>
+0346 <a href="#_sub42" class="code" title="subfunction defaultSelection(hObject, eventdata, handles)">defaultSelection</a>(hObject, eventdata, handles);
+0347 
+0348 
+0349 <span class="comment">% oooooooooooo                                            o8o</span>
+0350 <span class="comment">% `888'     `8                                            `&quot;'</span>
+0351 <span class="comment">%  888         oooo    ooo oo.ooooo.   .ooooo.  oooo d8b oooo</span>
+0352 <span class="comment">%  888oooo8     `88b..8P'   888' `88b d88' `88b `888&quot;&quot;8P `888</span>
+0353 <span class="comment">%  888    &quot;       Y888'     888   888 888ooo888  888      888</span>
+0354 <span class="comment">%  888       o  .o8&quot;'88b    888   888 888    .o  888      888</span>
+0355 <span class="comment">% o888ooooood8 o88'   888o  888bod8P' `Y8bod8P' d888b    o888o</span>
+0356 <span class="comment">%                           888</span>
+0357 <span class="comment">%                          o888o</span>
+0358 
+0359 <span class="comment">% --- Executes on selection change in edit_exp.</span>
+0360 <a name="_sub13" href="#_subfunctions" class="code">function edit_exp_Callback(hObject, eventdata, handles)</a>
+0361 
+0362 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0363 <a name="_sub14" href="#_subfunctions" class="code">function edit_exp_CreateFcn(hObject, eventdata, handles)</a>
+0364 
+0365 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0366     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0367 <span class="keyword">end</span>
+0368 
+0369 
+0370 <span class="comment">% --- Executes on button press in button_expHelp.</span>
+0371 <a name="_sub15" href="#_subfunctions" class="code">function button_expHelp_Callback(hObject, eventdata, handles)</a>
+0372 
+0373 msgbox(sprintf(<span class="string">'Experiment does not need field or frequency information as this will be automatically taken from the .DSC files\n\nYou must use Exp as the variable name'</span>)<span class="keyword">...</span>
+0374     ,<span class="string">'Experiment help'</span>);
+0375 
+0376 
+0377 <span class="comment">%</span>
+0378 <span class="comment">%   .oooooo.                  .    o8o</span>
+0379 <span class="comment">%  d8P'  `Y8b               .o8    `&quot;'</span>
+0380 <span class="comment">% 888      888 oo.ooooo.  .o888oo oooo   .ooooo.  ooo. .oo.    .oooo.o</span>
+0381 <span class="comment">% 888      888  888' `88b   888   `888  d88' `88b `888P&quot;Y88b  d88(  &quot;8</span>
+0382 <span class="comment">% 888      888  888   888   888    888  888   888  888   888  `&quot;Y88b.</span>
+0383 <span class="comment">% `88b    d88'  888   888   888 .  888  888   888  888   888  o.  )88b</span>
+0384 <span class="comment">%  `Y8bood8P'   888bod8P'   &quot;888&quot; o888o `Y8bod8P' o888o o888o 8&quot;&quot;888P'</span>
+0385 <span class="comment">%               888</span>
+0386 <span class="comment">%              o888o</span>
+0387 <span class="comment">%</span>
+0388 
+0389 <span class="comment">% --- Executes on button press in button_output.</span>
+0390 <a name="_sub16" href="#_subfunctions" class="code">function button_output_Callback(hObject, eventdata, handles)</a>
+0391 
+0392 path = uigetdir(get(handles.edit_outputAddress,<span class="string">'String'</span>),<span class="string">'EasyRefiner: Load folder'</span>);
+0393 set(handles.edit_outputAddress,<span class="string">'String'</span>,path);
+0394 
 0395 
-0396 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0397 <a name="_sub18" href="#_subfunctions" class="code">function edit_outputAddress_CreateFcn(hObject, eventdata, handles)</a>
-0398 
-0399 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0400     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0401 <span class="keyword">end</span>
-0402 
-0403 <span class="comment">% --- Executes on button press in checkbox_figureOpen.</span>
-0404 <a name="_sub19" href="#_subfunctions" class="code">function checkbox_figureOpen_Callback(hObject, eventdata, handles)</a>
-0405 
-0406 <span class="keyword">switch</span> get(handles.checkbox_figureOpen,<span class="string">'Value'</span>)
-0407     <span class="keyword">case</span> 0
-0408         <span class="comment">% Do nothing</span>
-0409     <span class="keyword">case</span> 1
-0410         set(handles.checkbox_figureSave,<span class="string">'Value'</span>,1);
-0411 <span class="keyword">end</span>
-0412 
-0413 
+0396 <a name="_sub17" href="#_subfunctions" class="code">function edit_outputAddress_Callback(hObject, eventdata, handles)</a>
+0397 
+0398 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0399 <a name="_sub18" href="#_subfunctions" class="code">function edit_outputAddress_CreateFcn(hObject, eventdata, handles)</a>
+0400 
+0401 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0402     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0403 <span class="keyword">end</span>
+0404 
+0405 <span class="comment">% --- Executes on button press in checkbox_figureOpen.</span>
+0406 <a name="_sub19" href="#_subfunctions" class="code">function checkbox_figureOpen_Callback(hObject, eventdata, handles)</a>
+0407 
+0408 <span class="keyword">switch</span> get(handles.checkbox_figureOpen,<span class="string">'Value'</span>)
+0409     <span class="keyword">case</span> 0
+0410         <span class="comment">% Do nothing</span>
+0411     <span class="keyword">case</span> 1
+0412         set(handles.checkbox_figureSave,<span class="string">'Value'</span>,1);
+0413 <span class="keyword">end</span>
 0414 
-0415 <span class="comment">% --- Executes on button press in checkbox_figureSave.</span>
-0416 <a name="_sub20" href="#_subfunctions" class="code">function checkbox_figureSave_Callback(hObject, eventdata, handles)</a>
-0417 
-0418 
-0419 <span class="comment">% --- Executes on button press in checkbox_delay.</span>
-0420 <a name="_sub21" href="#_subfunctions" class="code">function checkbox_delay_Callback(hObject, eventdata, handles)</a>
-0421 
-0422 
-0423 <span class="comment">% --- Executes on button press in checkbox_log.</span>
-0424 <a name="_sub22" href="#_subfunctions" class="code">function checkbox_log_Callback(hObject, eventdata, handles)</a>
-0425 
-0426 
-0427 <a name="_sub23" href="#_subfunctions" class="code">function edit_delay_Callback(hObject, eventdata, handles)</a>
+0415 
+0416 
+0417 <span class="comment">% --- Executes on button press in checkbox_figureSave.</span>
+0418 <a name="_sub20" href="#_subfunctions" class="code">function checkbox_figureSave_Callback(hObject, eventdata, handles)</a>
+0419 
+0420 
+0421 <span class="comment">% --- Executes on button press in checkbox_delay.</span>
+0422 <a name="_sub21" href="#_subfunctions" class="code">function checkbox_delay_Callback(hObject, eventdata, handles)</a>
+0423 
+0424 
+0425 <span class="comment">% --- Executes on button press in checkbox_log.</span>
+0426 <a name="_sub22" href="#_subfunctions" class="code">function checkbox_log_Callback(hObject, eventdata, handles)</a>
+0427 
 0428 
-0429 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0430 <a name="_sub24" href="#_subfunctions" class="code">function edit_delay_CreateFcn(hObject, eventdata, handles)</a>
-0431 
-0432 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0433     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0434 <span class="keyword">end</span>
-0435 
-0436 <span class="comment">% --- Executes on selection change in popupmenu_esFitting.</span>
-0437 <a name="_sub25" href="#_subfunctions" class="code">function popupmenu_esFitting_Callback(hObject, eventdata, handles)</a>
-0438 
-0439 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0440 <a name="_sub26" href="#_subfunctions" class="code">function popupmenu_esFitting_CreateFcn(hObject, eventdata, handles)</a>
-0441 
-0442 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0443     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0444 <span class="keyword">end</span>
-0445 
-0446 
-0447 <span class="comment">% --- Executes on selection change in popupmenu_esFitMethod.</span>
-0448 <a name="_sub27" href="#_subfunctions" class="code">function popupmenu_esFitMethod_Callback(hObject, eventdata, handles)</a>
-0449 
-0450 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0451 <a name="_sub28" href="#_subfunctions" class="code">function popupmenu_esFitMethod_CreateFcn(hObject, eventdata, handles)</a>
-0452 
-0453 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0454     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0455 <span class="keyword">end</span>
-0456 
-0457 <a name="_sub29" href="#_subfunctions" class="code">function edit_opt_Callback(hObject, eventdata, handles)</a>
+0429 <a name="_sub23" href="#_subfunctions" class="code">function edit_delay_Callback(hObject, eventdata, handles)</a>
+0430 
+0431 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0432 <a name="_sub24" href="#_subfunctions" class="code">function edit_delay_CreateFcn(hObject, eventdata, handles)</a>
+0433 
+0434 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0435     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0436 <span class="keyword">end</span>
+0437 
+0438 <span class="comment">% --- Executes on selection change in popupmenu_esFitting.</span>
+0439 <a name="_sub25" href="#_subfunctions" class="code">function popupmenu_esFitting_Callback(hObject, eventdata, handles)</a>
+0440 
+0441 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0442 <a name="_sub26" href="#_subfunctions" class="code">function popupmenu_esFitting_CreateFcn(hObject, eventdata, handles)</a>
+0443 
+0444 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0445     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0446 <span class="keyword">end</span>
+0447 
+0448 
+0449 <span class="comment">% --- Executes on selection change in popupmenu_esFitMethod.</span>
+0450 <a name="_sub27" href="#_subfunctions" class="code">function popupmenu_esFitMethod_Callback(hObject, eventdata, handles)</a>
+0451 
+0452 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0453 <a name="_sub28" href="#_subfunctions" class="code">function popupmenu_esFitMethod_CreateFcn(hObject, eventdata, handles)</a>
+0454 
+0455 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0456     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0457 <span class="keyword">end</span>
 0458 
-0459 
-0460 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0461 <a name="_sub30" href="#_subfunctions" class="code">function edit_opt_CreateFcn(hObject, eventdata, handles)</a>
-0462 
-0463 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0464     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0465 <span class="keyword">end</span>
-0466 
-0467 
-0468 <span class="comment">% oooooo     oooo                           .o</span>
-0469 <span class="comment">%  `888.     .8'                          o888</span>
-0470 <span class="comment">%   `888.   .8'    .oooo.   oooo d8b       888</span>
-0471 <span class="comment">%    `888. .8'    `P  )88b  `888&quot;&quot;8P       888</span>
-0472 <span class="comment">%     `888.8'      .oP&quot;888   888           888</span>
-0473 <span class="comment">%      `888'      d8(  888   888           888</span>
-0474 <span class="comment">%       `8'       `Y888&quot;&quot;8o d888b         o888o</span>
-0475 <span class="comment">%</span>
-0476 
-0477 <span class="comment">% --- Executes on selection change in edit_var1.</span>
-0478 <a name="_sub31" href="#_subfunctions" class="code">function edit_var1_Callback(hObject, eventdata, handles)</a>
-0479 
-0480 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0481 <a name="_sub32" href="#_subfunctions" class="code">function edit_var1_CreateFcn(hObject, eventdata, handles)</a>
-0482 
-0483 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0484     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0485 <span class="keyword">end</span>
-0486 
-0487 <span class="comment">% --- Executes on button press in checkbox_var1.</span>
-0488 <a name="_sub33" href="#_subfunctions" class="code">function checkbox_var1_Callback(hObject, eventdata, handles)</a>
-0489 
-0490 <span class="keyword">switch</span> get(handles.checkbox_var1,<span class="string">'Value'</span>)
-0491     <span class="keyword">case</span> 0
-0492         set(handles.checkbox_var2,<span class="string">'Value'</span>,0);
-0493         set(handles.checkbox_var3,<span class="string">'Value'</span>,0);
-0494     <span class="keyword">case</span> 1
-0495         
-0496 <span class="keyword">end</span>
-0497 
-0498 <span class="comment">% oooooo     oooo                           .oooo.</span>
-0499 <span class="comment">%  `888.     .8'                          .dP&quot;&quot;Y88b</span>
-0500 <span class="comment">%   `888.   .8'    .oooo.   oooo d8b            ]8P'</span>
-0501 <span class="comment">%    `888. .8'    `P  )88b  `888&quot;&quot;8P          .d8P'</span>
-0502 <span class="comment">%     `888.8'      .oP&quot;888   888            .dP'</span>
-0503 <span class="comment">%      `888'      d8(  888   888          .oP     .o</span>
-0504 <span class="comment">%       `8'       `Y888&quot;&quot;8o d888b         8888888888</span>
-0505 <span class="comment">%</span>
-0506 
-0507 <span class="comment">% --- Executes on selection change in edit_var2.</span>
-0508 <a name="_sub34" href="#_subfunctions" class="code">function edit_var2_Callback(hObject, eventdata, handles)</a>
-0509 
-0510 
-0511 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0512 <a name="_sub35" href="#_subfunctions" class="code">function edit_var2_CreateFcn(hObject, eventdata, handles)</a>
-0513 
-0514 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0515     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0516 <span class="keyword">end</span>
-0517 
-0518 <span class="comment">% --- Executes on button press in checkbox_var2.</span>
-0519 <a name="_sub36" href="#_subfunctions" class="code">function checkbox_var2_Callback(hObject, eventdata, handles)</a>
-0520 
-0521 <span class="keyword">switch</span> get(handles.checkbox_var2,<span class="string">'Value'</span>)
-0522     <span class="keyword">case</span> 0
-0523         set(handles.checkbox_var3,<span class="string">'Value'</span>,0);
-0524     <span class="keyword">case</span> 1
-0525         set(handles.checkbox_var1,<span class="string">'Value'</span>,1);
-0526 <span class="keyword">end</span>
-0527 
-0528 <span class="comment">% oooooo     oooo                           .oooo.</span>
-0529 <span class="comment">%  `888.     .8'                          .dP&quot;&quot;Y88b</span>
-0530 <span class="comment">%   `888.   .8'    .oooo.   oooo d8b            ]8P'</span>
-0531 <span class="comment">%    `888. .8'    `P  )88b  `888&quot;&quot;8P          &lt;88b.</span>
-0532 <span class="comment">%     `888.8'      .oP&quot;888   888               `88b.</span>
-0533 <span class="comment">%      `888'      d8(  888   888          o.   .88P</span>
-0534 <span class="comment">%       `8'       `Y888&quot;&quot;8o d888b         `8bd88P'</span>
-0535 <span class="comment">%</span>
-0536 
-0537 <span class="comment">% --- Executes on selection change in edit_var3.</span>
-0538 <a name="_sub37" href="#_subfunctions" class="code">function edit_var3_Callback(hObject, eventdata, handles)</a>
-0539 
-0540 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0541 <a name="_sub38" href="#_subfunctions" class="code">function edit_var3_CreateFcn(hObject, eventdata, handles)</a>
-0542 
-0543 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0544     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0545 <span class="keyword">end</span>
-0546 
-0547 <span class="comment">% --- Executes on button press in checkbox_var3.</span>
-0548 <a name="_sub39" href="#_subfunctions" class="code">function checkbox_var3_Callback(hObject, eventdata, handles)</a>
-0549 
-0550 <span class="keyword">switch</span> get(handles.checkbox_var3,<span class="string">'Value'</span>)
-0551     <span class="keyword">case</span> 0
-0552         <span class="comment">% Do nothing</span>
-0553     <span class="keyword">case</span> 1
-0554         set(handles.checkbox_var1,<span class="string">'Value'</span>,1);
-0555         set(handles.checkbox_var2,<span class="string">'Value'</span>,1);
-0556 <span class="keyword">end</span>
-0557 
-0558 
-0559 <span class="comment">% ooooo              .o88o.</span>
-0560 <span class="comment">% `888'              888 `&quot;</span>
-0561 <span class="comment">%  888  ooo. .oo.   o888oo   .ooooo.</span>
-0562 <span class="comment">%  888  `888P&quot;Y88b   888    d88' `88b</span>
-0563 <span class="comment">%  888   888   888   888    888   888</span>
-0564 <span class="comment">%  888   888   888   888    888   888</span>
-0565 <span class="comment">% o888o o888o o888o o888o   `Y8bod8P'</span>
-0566 <span class="comment">%</span>
-0567                                     
-0568 <span class="comment">% --- Executes on selection change in edit_info.</span>
-0569 <a name="_sub40" href="#_subfunctions" class="code">function edit_info_Callback(hObject, eventdata, handles)</a>
-0570 
-0571 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
-0572 <a name="_sub41" href="#_subfunctions" class="code">function edit_info_CreateFcn(hObject, eventdata, handles)</a>
-0573 
-0574 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
-0575     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
-0576 <span class="keyword">end</span>
-0577 
-0578 <span class="comment">% oooooooooooo                                       .    o8o</span>
-0579 <span class="comment">% `888'     `8                                     .o8    `&quot;'</span>
-0580 <span class="comment">%  888         oooo  oooo  ooo. .oo.    .ooooo.  .o888oo oooo   .ooooo.  ooo. .oo.    .oooo.o</span>
-0581 <span class="comment">%  888oooo8    `888  `888  `888P&quot;Y88b  d88' `&quot;Y8   888   `888  d88' `88b `888P&quot;Y88b  d88(  &quot;8</span>
-0582 <span class="comment">%  888    &quot;     888   888   888   888  888         888    888  888   888  888   888  `&quot;Y88b.</span>
-0583 <span class="comment">%  888          888   888   888   888  888   .o8   888 .  888  888   888  888   888  o.  )88b</span>
-0584 <span class="comment">% o888o         `V88V&quot;V8P' o888o o888o `Y8bod8P'   &quot;888&quot; o888o `Y8bod8P' o888o o888o 8&quot;&quot;888P'</span>
-0585                                                                                             
-0586 
-0587 <a name="_sub42" href="#_subfunctions" class="code">function defaultSelection(hObject, eventdata, handles)</a>
+0459 <a name="_sub29" href="#_subfunctions" class="code">function edit_opt_Callback(hObject, eventdata, handles)</a>
+0460 
+0461 
+0462 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0463 <a name="_sub30" href="#_subfunctions" class="code">function edit_opt_CreateFcn(hObject, eventdata, handles)</a>
+0464 
+0465 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0466     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0467 <span class="keyword">end</span>
+0468 
+0469 
+0470 <span class="comment">% oooooo     oooo                           .o</span>
+0471 <span class="comment">%  `888.     .8'                          o888</span>
+0472 <span class="comment">%   `888.   .8'    .oooo.   oooo d8b       888</span>
+0473 <span class="comment">%    `888. .8'    `P  )88b  `888&quot;&quot;8P       888</span>
+0474 <span class="comment">%     `888.8'      .oP&quot;888   888           888</span>
+0475 <span class="comment">%      `888'      d8(  888   888           888</span>
+0476 <span class="comment">%       `8'       `Y888&quot;&quot;8o d888b         o888o</span>
+0477 <span class="comment">%</span>
+0478 
+0479 <span class="comment">% --- Executes on selection change in edit_var1.</span>
+0480 <a name="_sub31" href="#_subfunctions" class="code">function edit_var1_Callback(hObject, eventdata, handles)</a>
+0481 
+0482 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0483 <a name="_sub32" href="#_subfunctions" class="code">function edit_var1_CreateFcn(hObject, eventdata, handles)</a>
+0484 
+0485 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0486     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0487 <span class="keyword">end</span>
+0488 
+0489 <span class="comment">% --- Executes on button press in checkbox_var1.</span>
+0490 <a name="_sub33" href="#_subfunctions" class="code">function checkbox_var1_Callback(hObject, eventdata, handles)</a>
+0491 
+0492 <span class="keyword">switch</span> get(handles.checkbox_var1,<span class="string">'Value'</span>)
+0493     <span class="keyword">case</span> 0
+0494         set(handles.checkbox_var2,<span class="string">'Value'</span>,0);
+0495         set(handles.checkbox_var3,<span class="string">'Value'</span>,0);
+0496     <span class="keyword">case</span> 1
+0497         
+0498 <span class="keyword">end</span>
+0499 
+0500 <span class="comment">% oooooo     oooo                           .oooo.</span>
+0501 <span class="comment">%  `888.     .8'                          .dP&quot;&quot;Y88b</span>
+0502 <span class="comment">%   `888.   .8'    .oooo.   oooo d8b            ]8P'</span>
+0503 <span class="comment">%    `888. .8'    `P  )88b  `888&quot;&quot;8P          .d8P'</span>
+0504 <span class="comment">%     `888.8'      .oP&quot;888   888            .dP'</span>
+0505 <span class="comment">%      `888'      d8(  888   888          .oP     .o</span>
+0506 <span class="comment">%       `8'       `Y888&quot;&quot;8o d888b         8888888888</span>
+0507 <span class="comment">%</span>
+0508 
+0509 <span class="comment">% --- Executes on selection change in edit_var2.</span>
+0510 <a name="_sub34" href="#_subfunctions" class="code">function edit_var2_Callback(hObject, eventdata, handles)</a>
+0511 
+0512 
+0513 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0514 <a name="_sub35" href="#_subfunctions" class="code">function edit_var2_CreateFcn(hObject, eventdata, handles)</a>
+0515 
+0516 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0517     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0518 <span class="keyword">end</span>
+0519 
+0520 <span class="comment">% --- Executes on button press in checkbox_var2.</span>
+0521 <a name="_sub36" href="#_subfunctions" class="code">function checkbox_var2_Callback(hObject, eventdata, handles)</a>
+0522 
+0523 <span class="keyword">switch</span> get(handles.checkbox_var2,<span class="string">'Value'</span>)
+0524     <span class="keyword">case</span> 0
+0525         set(handles.checkbox_var3,<span class="string">'Value'</span>,0);
+0526     <span class="keyword">case</span> 1
+0527         set(handles.checkbox_var1,<span class="string">'Value'</span>,1);
+0528 <span class="keyword">end</span>
+0529 
+0530 <span class="comment">% oooooo     oooo                           .oooo.</span>
+0531 <span class="comment">%  `888.     .8'                          .dP&quot;&quot;Y88b</span>
+0532 <span class="comment">%   `888.   .8'    .oooo.   oooo d8b            ]8P'</span>
+0533 <span class="comment">%    `888. .8'    `P  )88b  `888&quot;&quot;8P          &lt;88b.</span>
+0534 <span class="comment">%     `888.8'      .oP&quot;888   888               `88b.</span>
+0535 <span class="comment">%      `888'      d8(  888   888          o.   .88P</span>
+0536 <span class="comment">%       `8'       `Y888&quot;&quot;8o d888b         `8bd88P'</span>
+0537 <span class="comment">%</span>
+0538 
+0539 <span class="comment">% --- Executes on selection change in edit_var3.</span>
+0540 <a name="_sub37" href="#_subfunctions" class="code">function edit_var3_Callback(hObject, eventdata, handles)</a>
+0541 
+0542 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0543 <a name="_sub38" href="#_subfunctions" class="code">function edit_var3_CreateFcn(hObject, eventdata, handles)</a>
+0544 
+0545 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0546     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0547 <span class="keyword">end</span>
+0548 
+0549 <span class="comment">% --- Executes on button press in checkbox_var3.</span>
+0550 <a name="_sub39" href="#_subfunctions" class="code">function checkbox_var3_Callback(hObject, eventdata, handles)</a>
+0551 
+0552 <span class="keyword">switch</span> get(handles.checkbox_var3,<span class="string">'Value'</span>)
+0553     <span class="keyword">case</span> 0
+0554         <span class="comment">% Do nothing</span>
+0555     <span class="keyword">case</span> 1
+0556         set(handles.checkbox_var1,<span class="string">'Value'</span>,1);
+0557         set(handles.checkbox_var2,<span class="string">'Value'</span>,1);
+0558 <span class="keyword">end</span>
+0559 
+0560 
+0561 <span class="comment">% ooooo              .o88o.</span>
+0562 <span class="comment">% `888'              888 `&quot;</span>
+0563 <span class="comment">%  888  ooo. .oo.   o888oo   .ooooo.</span>
+0564 <span class="comment">%  888  `888P&quot;Y88b   888    d88' `88b</span>
+0565 <span class="comment">%  888   888   888   888    888   888</span>
+0566 <span class="comment">%  888   888   888   888    888   888</span>
+0567 <span class="comment">% o888o o888o o888o o888o   `Y8bod8P'</span>
+0568 <span class="comment">%</span>
+0569                                     
+0570 <span class="comment">% --- Executes on selection change in edit_info.</span>
+0571 <a name="_sub40" href="#_subfunctions" class="code">function edit_info_Callback(hObject, eventdata, handles)</a>
+0572 
+0573 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0574 <a name="_sub41" href="#_subfunctions" class="code">function edit_info_CreateFcn(hObject, eventdata, handles)</a>
+0575 
+0576 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0577     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0578 <span class="keyword">end</span>
+0579 
+0580 <span class="comment">% oooooooooooo                                       .    o8o</span>
+0581 <span class="comment">% `888'     `8                                     .o8    `&quot;'</span>
+0582 <span class="comment">%  888         oooo  oooo  ooo. .oo.    .ooooo.  .o888oo oooo   .ooooo.  ooo. .oo.    .oooo.o</span>
+0583 <span class="comment">%  888oooo8    `888  `888  `888P&quot;Y88b  d88' `&quot;Y8   888   `888  d88' `88b `888P&quot;Y88b  d88(  &quot;8</span>
+0584 <span class="comment">%  888    &quot;     888   888   888   888  888         888    888  888   888  888   888  `&quot;Y88b.</span>
+0585 <span class="comment">%  888          888   888   888   888  888   .o8   888 .  888  888   888  888   888  o.  )88b</span>
+0586 <span class="comment">% o888o         `V88V&quot;V8P' o888o o888o `Y8bod8P'   &quot;888&quot; o888o `Y8bod8P' o888o o888o 8&quot;&quot;888P'</span>
+0587                                                                                             
 0588 
-0589 <span class="comment">% Clear all edit boxes</span>
-0590 set(handles.edit_system,<span class="string">'String'</span>,<span class="string">''</span>);
-0591 set(handles.edit_exp ,<span class="string">'String'</span>,<span class="string">''</span>);
-0592 set(handles.edit_var1,<span class="string">'String'</span>,<span class="string">''</span>);
-0593 set(handles.edit_var2,<span class="string">'String'</span>,<span class="string">''</span>);
-0594 set(handles.edit_var3,<span class="string">'String'</span>,<span class="string">''</span>);
-0595 
-0596 
-0597 <span class="comment">% Get listbox</span>
-0598 <span class="keyword">switch</span> get(handles.popupmenu_defaults,<span class="string">'Value'</span>)
-0599     <span class="keyword">case</span> 1  <span class="comment">% Nitroxide</span>
-0600         set(handles.edit_system,<span class="string">'String'</span>,[<span class="keyword">...</span>
-0601         <span class="string">'Sys.g = [2.02 2.01 2.00];   '</span>;<span class="keyword">...</span>
-0602         <span class="string">'Sys.Nucs = ''14N'';           '</span>;<span class="keyword">...</span>
-0603         <span class="string">'Sys.A = [20 20 85];         '</span>;<span class="keyword">...</span>
-0604         <span class="string">'Sys.n = 1;                  '</span>;<span class="keyword">...</span>
-0605         <span class="string">'Sys.lwpp = 0.25;            '</span>]);
-0606     
-0607         set(handles.edit_var1,<span class="string">'String'</span>,[<span class="keyword">...</span>
-0608         <span class="string">'Var.g = [0.01 0.01 0.01];   '</span>;<span class="keyword">...</span>
-0609         <span class="string">'Var.A = [2 2 2];            '</span>;<span class="keyword">...</span>
-0610         <span class="string">'Var.lwpp = 0.05;            '</span>]);
-0611     
-0612         set(handles.edit_var2,<span class="string">'String'</span>,[<span class="keyword">...</span>
-0613         <span class="string">'Var.g = [0.001 0.001 0.001];'</span>;<span class="keyword">...</span>
-0614         <span class="string">'Var.A = [0.5 0.5 0.5];      '</span>;<span class="keyword">...</span>
-0615         <span class="string">'Var.lwpp = 0.01;            '</span>]);
-0616     
-0617         set(handles.edit_var3,<span class="string">'String'</span>,[<span class="keyword">...</span>
-0618         <span class="string">'Var.g = [0.0005 0.0005 0.0005];'</span>;<span class="keyword">...</span>
-0619         <span class="string">'Var.A = [0.001 0.001 0.001];   '</span>;<span class="keyword">...</span>
-0620         <span class="string">'Var.lwpp = 0.001;              '</span>]);
-0621     
-0622         set(handles.edit_opt,<span class="string">'String'</span>,[<span class="keyword">...</span>
-0623             <span class="string">'FitOpt.PopulationSize = 80;'</span>;<span class="keyword">...</span>
-0624             <span class="string">'FitOpt.maxGenerations = 80;'</span>]);
-0625             
-0626     
-0627     <span class="keyword">case</span> 2  <span class="comment">% Fremy's</span>
-0628         set(handles.edit_system,<span class="string">'String'</span>,[<span class="keyword">...</span>
-0629         <span class="string">'Sys.g = [2.00785 2.00590 2.00265];'</span>;<span class="keyword">...</span>
-0630         <span class="string">'Sys.Nucs = ''14N'';                 '</span>;<span class="keyword">...</span>
-0631         <span class="string">'Sys.A = [15.4137 14.0125 80.4316];'</span>;<span class="keyword">...</span>
-0632         <span class="string">'Sys.n = 1;                        '</span>;<span class="keyword">...</span>
-0633         <span class="string">'Sys.lw = [0 0.03];                '</span>]);
-0634     
-0635         set(handles.edit_var1,<span class="string">'String'</span>,[<span class="keyword">...</span>
-0636         <span class="string">'Var.g = [0.005 0.005 0.005];'</span>;<span class="keyword">...</span>
-0637         <span class="string">'Var.lwpp = 0.001;           '</span>]);
-0638     
-0639         
-0640     <span class="keyword">case</span> 3  <span class="comment">% DPPH</span>
-0641          set(handles.edit_system,<span class="string">'String'</span>,[<span class="keyword">...</span>
-0642         <span class="string">'Sys.g = 2.0036;    '</span>;<span class="keyword">...</span>
-0643         <span class="string">'Sys.Nucs = ''14N'';  '</span>;<span class="keyword">...</span>
-0644         <span class="string">'Sys.n = 1;         '</span>;<span class="keyword">...</span>
-0645         <span class="string">'Sys.lw = 0 0.005;  '</span>]);
-0646     
-0647     set(handles.edit_var1,<span class="string">'String'</span>,[<span class="keyword">...</span>
-0648         <span class="string">'Var.g = 0.005;'</span>]);
-0649     
-0650 <span class="keyword">end</span>
-0651 
-0652 <span class="comment">% --- Executes on button press in button_RUN.</span>
-0653 <a name="_sub43" href="#_subfunctions" class="code">function button_RUN_Callback(hObject, eventdata, handles)</a>
-0654 
-0655 <span class="comment">% Check for EasySpin</span>
-0656 <span class="keyword">if</span> exist(<span class="string">'esfit'</span>) == 0
-0657     msgbox(<span class="string">'EasySpin could not be found. Please check that it is installed and on an active path.'</span>,<span class="string">'EasyRefiner: RUN'</span>,<span class="string">'error'</span>);
-0658     <span class="keyword">return</span>
-0659 <span class="keyword">end</span>
-0660 
-0661 
-0662 <span class="comment">% Message user</span>
-0663 info = [sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'EASYREFINER INITIALIZING:'</span>])];
-0664 set(handles.edit_info,<span class="string">'String'</span>,info);
-0665 
-0666 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Loading variables...'</span>])];
-0667 set(handles.edit_info,<span class="string">'String'</span>,info);
-0668 
-0669 <span class="comment">% Check file has been loaded, otherwise abort</span>
-0670 <span class="keyword">if</span> strcmp(get(handles.listbox_files,<span class="string">'String'</span>), <span class="string">'-- No file loaded --'</span>)
-0671     info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'No files loaded, aborting'</span>])];
-0672     set(handles.edit_info,<span class="string">'String'</span>,info);
-0673     <span class="keyword">return</span>
-0674 <span class="keyword">end</span>
-0675 
-0676 <span class="comment">% Get all variables</span>
-0677 <span class="keyword">global</span> ER
-0678 var1On  = get(handles.checkbox_var1,<span class="string">'Value'</span>);
-0679 var2On  = get(handles.checkbox_var2,<span class="string">'Value'</span>);
-0680 var3On  = get(handles.checkbox_var3,<span class="string">'Value'</span>);
-0681 figOpen = get(handles.checkbox_figureOpen,<span class="string">'Value'</span>);
-0682 figSave = get(handles.checkbox_figureSave,<span class="string">'Value'</span>);
-0683 log     = get(handles.checkbox_log,<span class="string">'Value'</span>);
-0684 outAdd  = get(handles.edit_outputAddress,<span class="string">'String'</span>);
-0685 
-0686 <span class="keyword">if</span> get(handles.checkbox_delay,<span class="string">'Value'</span>) == 1
-0687     delay = str2num(get(handles.edit_delay,<span class="string">'String'</span>));
-0688 <span class="keyword">else</span>
-0689     delay = 0;
-0690 <span class="keyword">end</span>
-0691 
-0692 <span class="comment">% Get strings from edit boxes</span>
-0693 sSys    = get(handles.edit_system,<span class="string">'String'</span>);
-0694 sExp    = get(handles.edit_exp,<span class="string">'String'</span>);
-0695 sOpt    = get(handles.edit_opt,<span class="string">'String'</span>);
-0696 sVar1   = get(handles.edit_var1,<span class="string">'String'</span>);
-0697 sVar2   = get(handles.edit_var2,<span class="string">'String'</span>);
-0698 sVar3   = get(handles.edit_var3,<span class="string">'String'</span>);
-0699 
-0700 <span class="comment">% Fitting options</span>
-0701 <span class="keyword">switch</span> get(handles.popupmenu_esFitting,<span class="string">'Value'</span>);
-0702     <span class="keyword">case</span> 1  <span class="comment">% Garlic</span>
-0703         Fit = <span class="string">'garlic'</span>;
-0704     <span class="keyword">case</span> 2  <span class="comment">% Chili</span>
-0705         Fit = <span class="string">'chili'</span>;
-0706     <span class="keyword">case</span> 3  <span class="comment">% Pepper</span>
-0707         Fit = <span class="string">'pepper'</span>;
-0708 <span class="keyword">end</span>
-0709 
-0710 <span class="comment">% Fitting method</span>
-0711 <span class="keyword">switch</span> get(handles.popupmenu_esFitMethod,<span class="string">'Value'</span>)
-0712     <span class="keyword">case</span> 1
-0713         FitOpt.Method = <span class="string">'simplex'</span>;
-0714         Opt = [];
-0715     <span class="keyword">case</span> 2
-0716         FitOpt.Method = <span class="string">'levmar'</span>;
-0717         Opt = [];
-0718     <span class="keyword">case</span> 3
-0719         FitOpt.Method = <span class="string">'montecarlo'</span>;
-0720         Opt = [];
-0721     <span class="keyword">case</span> 4
-0722         FitOpt.Method = <span class="string">'genetic'</span>;
-0723         Opt = [];
-0724     <span class="keyword">case</span> 5
-0725         FitOpt.Method = <span class="string">'grid'</span>;
-0726         Opt = [];
-0727 <span class="keyword">end</span>
-0728 
-0729 
+0589 <a name="_sub42" href="#_subfunctions" class="code">function defaultSelection(hObject, eventdata, handles)</a>
+0590 
+0591 <span class="comment">% Clear all edit boxes</span>
+0592 set(handles.edit_system,<span class="string">'String'</span>,<span class="string">''</span>);
+0593 set(handles.edit_exp ,<span class="string">'String'</span>,<span class="string">''</span>);
+0594 set(handles.edit_var1,<span class="string">'String'</span>,<span class="string">''</span>);
+0595 set(handles.edit_var2,<span class="string">'String'</span>,<span class="string">''</span>);
+0596 set(handles.edit_var3,<span class="string">'String'</span>,<span class="string">''</span>);
+0597 
+0598 
+0599 <span class="comment">% Get listbox</span>
+0600 <span class="keyword">switch</span> get(handles.popupmenu_defaults,<span class="string">'Value'</span>)
+0601     <span class="keyword">case</span> 1  <span class="comment">% Nitroxide</span>
+0602         set(handles.edit_system,<span class="string">'String'</span>,[<span class="keyword">...</span>
+0603         <span class="string">'Sys.g = [2.02 2.01 2.00];   '</span>;<span class="keyword">...</span>
+0604         <span class="string">'Sys.Nucs = ''14N'';           '</span>;<span class="keyword">...</span>
+0605         <span class="string">'Sys.A = [20 20 85];         '</span>;<span class="keyword">...</span>
+0606         <span class="string">'Sys.n = 1;                  '</span>;<span class="keyword">...</span>
+0607         <span class="string">'Sys.lwpp = 0.25;            '</span>]);
+0608     
+0609         set(handles.edit_var1,<span class="string">'String'</span>,[<span class="keyword">...</span>
+0610         <span class="string">'Var.g = [0.01 0.01 0.01];   '</span>;<span class="keyword">...</span>
+0611         <span class="string">'Var.A = [2 2 2];            '</span>;<span class="keyword">...</span>
+0612         <span class="string">'Var.lwpp = 0.05;            '</span>]);
+0613     
+0614         set(handles.edit_var2,<span class="string">'String'</span>,[<span class="keyword">...</span>
+0615         <span class="string">'Var.g = [0.001 0.001 0.001];'</span>;<span class="keyword">...</span>
+0616         <span class="string">'Var.A = [0.5 0.5 0.5];      '</span>;<span class="keyword">...</span>
+0617         <span class="string">'Var.lwpp = 0.01;            '</span>]);
+0618     
+0619         set(handles.edit_var3,<span class="string">'String'</span>,[<span class="keyword">...</span>
+0620         <span class="string">'Var.g = [0.0005 0.0005 0.0005];'</span>;<span class="keyword">...</span>
+0621         <span class="string">'Var.A = [0.001 0.001 0.001];   '</span>;<span class="keyword">...</span>
+0622         <span class="string">'Var.lwpp = 0.001;              '</span>]);
+0623     
+0624         set(handles.edit_opt,<span class="string">'String'</span>,[<span class="keyword">...</span>
+0625             <span class="string">'FitOpt.PopulationSize = 80;'</span>;<span class="keyword">...</span>
+0626             <span class="string">'FitOpt.maxGenerations = 80;'</span>]);
+0627             
+0628     
+0629     <span class="keyword">case</span> 2  <span class="comment">% Fremy's</span>
+0630         set(handles.edit_system,<span class="string">'String'</span>,[<span class="keyword">...</span>
+0631         <span class="string">'Sys.g = [2.00785 2.00590 2.00265];'</span>;<span class="keyword">...</span>
+0632         <span class="string">'Sys.Nucs = ''14N'';                 '</span>;<span class="keyword">...</span>
+0633         <span class="string">'Sys.A = [15.4137 14.0125 80.4316];'</span>;<span class="keyword">...</span>
+0634         <span class="string">'Sys.n = 1;                        '</span>;<span class="keyword">...</span>
+0635         <span class="string">'Sys.lw = [0 0.03];                '</span>]);
+0636     
+0637         set(handles.edit_var1,<span class="string">'String'</span>,[<span class="keyword">...</span>
+0638         <span class="string">'Var.g = [0.005 0.005 0.005];'</span>;<span class="keyword">...</span>
+0639         <span class="string">'Var.lwpp = 0.001;           '</span>]);
+0640     
+0641         
+0642     <span class="keyword">case</span> 3  <span class="comment">% DPPH</span>
+0643          set(handles.edit_system,<span class="string">'String'</span>,[<span class="keyword">...</span>
+0644         <span class="string">'Sys.g = 2.0036;    '</span>;<span class="keyword">...</span>
+0645         <span class="string">'Sys.Nucs = ''14N'';  '</span>;<span class="keyword">...</span>
+0646         <span class="string">'Sys.n = 1;         '</span>;<span class="keyword">...</span>
+0647         <span class="string">'Sys.lw = 0 0.005;  '</span>]);
+0648     
+0649     set(handles.edit_var1,<span class="string">'String'</span>,[<span class="keyword">...</span>
+0650         <span class="string">'Var.g = 0.005;'</span>]);
+0651     
+0652 <span class="keyword">end</span>
+0653 
+0654 <span class="comment">% --- Executes on button press in button_RUN.</span>
+0655 <a name="_sub43" href="#_subfunctions" class="code">function button_RUN_Callback(hObject, eventdata, handles)</a>
+0656 
+0657 <span class="comment">% Check for EasySpin</span>
+0658 <span class="keyword">if</span> exist(<span class="string">'esfit'</span>) == 0
+0659     msgbox(<span class="string">'EasySpin could not be found. Please check that it is installed and on an active path.'</span>,<span class="string">'EasyRefiner: RUN'</span>,<span class="string">'error'</span>);
+0660     <span class="keyword">return</span>
+0661 <span class="keyword">end</span>
+0662 
+0663 
+0664 <span class="comment">% Message user</span>
+0665 info = [sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'EASYREFINER INITIALIZING:'</span>])];
+0666 set(handles.edit_info,<span class="string">'String'</span>,info);
+0667 
+0668 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Loading variables...'</span>])];
+0669 set(handles.edit_info,<span class="string">'String'</span>,info);
+0670 
+0671 <span class="comment">% Check file has been loaded, otherwise abort</span>
+0672 <span class="keyword">if</span> strcmp(get(handles.listbox_files,<span class="string">'String'</span>), <span class="string">'-- No file loaded --'</span>)
+0673     info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'No files loaded, aborting'</span>])];
+0674     set(handles.edit_info,<span class="string">'String'</span>,info);
+0675     <span class="keyword">return</span>
+0676 <span class="keyword">end</span>
+0677 
+0678 <span class="comment">% Get all variables</span>
+0679 <span class="keyword">global</span> ER
+0680 var1On  = get(handles.checkbox_var1,<span class="string">'Value'</span>);
+0681 var2On  = get(handles.checkbox_var2,<span class="string">'Value'</span>);
+0682 var3On  = get(handles.checkbox_var3,<span class="string">'Value'</span>);
+0683 figOpen = get(handles.checkbox_figureOpen,<span class="string">'Value'</span>);
+0684 figSave = get(handles.checkbox_figureSave,<span class="string">'Value'</span>);
+0685 log     = get(handles.checkbox_log,<span class="string">'Value'</span>);
+0686 outAdd  = get(handles.edit_outputAddress,<span class="string">'String'</span>);
+0687 
+0688 <span class="keyword">if</span> get(handles.checkbox_delay,<span class="string">'Value'</span>) == 1
+0689     delay = str2num(get(handles.edit_delay,<span class="string">'String'</span>));
+0690 <span class="keyword">else</span>
+0691     delay = 0;
+0692 <span class="keyword">end</span>
+0693 
+0694 <span class="comment">% Get strings from edit boxes</span>
+0695 sSys    = get(handles.edit_system,<span class="string">'String'</span>);
+0696 sExp    = get(handles.edit_exp,<span class="string">'String'</span>);
+0697 sOpt    = get(handles.edit_opt,<span class="string">'String'</span>);
+0698 sVar1   = get(handles.edit_var1,<span class="string">'String'</span>);
+0699 sVar2   = get(handles.edit_var2,<span class="string">'String'</span>);
+0700 sVar3   = get(handles.edit_var3,<span class="string">'String'</span>);
+0701 
+0702 <span class="comment">% Fitting options</span>
+0703 <span class="keyword">switch</span> get(handles.popupmenu_esFitting,<span class="string">'Value'</span>);
+0704     <span class="keyword">case</span> 1  <span class="comment">% Garlic</span>
+0705         Fit = <span class="string">'garlic'</span>;
+0706     <span class="keyword">case</span> 2  <span class="comment">% Chili</span>
+0707         Fit = <span class="string">'chili'</span>;
+0708     <span class="keyword">case</span> 3  <span class="comment">% Pepper</span>
+0709         Fit = <span class="string">'pepper'</span>;
+0710 <span class="keyword">end</span>
+0711 
+0712 <span class="comment">% Fitting method</span>
+0713 <span class="keyword">switch</span> get(handles.popupmenu_esFitMethod,<span class="string">'Value'</span>)
+0714     <span class="keyword">case</span> 1
+0715         FitOpt.Method = <span class="string">'simplex'</span>;
+0716         Opt = [];
+0717     <span class="keyword">case</span> 2
+0718         FitOpt.Method = <span class="string">'levmar'</span>;
+0719         Opt = [];
+0720     <span class="keyword">case</span> 3
+0721         FitOpt.Method = <span class="string">'montecarlo'</span>;
+0722         Opt = [];
+0723     <span class="keyword">case</span> 4
+0724         FitOpt.Method = <span class="string">'genetic'</span>;
+0725         Opt = [];
+0726     <span class="keyword">case</span> 5
+0727         FitOpt.Method = <span class="string">'grid'</span>;
+0728         Opt = [];
+0729 <span class="keyword">end</span>
 0730 
-0731 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Fitting with '</span> Fit ])];
-0732 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) FitOpt.Method <span class="string">' method selected'</span>])];
-0733 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0734 
-0735 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Variables loaded!'</span>])];
-0736 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0737 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Beginning fitting...'</span>])];
+0731 
+0732 
+0733 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Fitting with '</span> Fit ])];
+0734 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) FitOpt.Method <span class="string">' method selected'</span>])];
+0735 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0736 
+0737 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Variables loaded!'</span>])];
 0738 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0739 
-0740 files = ER.fileNum;
+0739 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Beginning fitting...'</span>])];
+0740 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
 0741 
-0742 <span class="comment">% Start timers</span>
-0743 timeBegin = tic;
-0744 wb = waitbar(0,sprintf(<span class="string">'Completed 0 of %1d'</span>,files),<span class="string">'Name'</span>,<span class="string">'Close to cancel queue'</span>);
-0745 
-0746 <span class="comment">% Begin fitting</span>
-0747 <span class="keyword">for</span> k = 1:files
-0748         
-0749     <span class="comment">% Evaluate system and options line by line</span>
-0750     <span class="keyword">for</span> l = 1:size(sSys,1)
-0751         eval(sSys(l,:));
-0752     <span class="keyword">end</span>
-0753     
-0754     <span class="keyword">for</span> l = 1:size(sOpt,1)
-0755         eval(sOpt(l,:));
-0756     <span class="keyword">end</span>
-0757     
-0758     <span class="comment">% Evaluate experiment</span>
-0759     <span class="keyword">for</span> l = 1:size(sExp,1)
-0760         eval(sExp(l,:));
-0761     <span class="keyword">end</span>
-0762     
-0763     <span class="comment">% Pull mw frequency from file's info and evaluate</span>
-0764     eval([<span class="string">'Exp.mwFreq = '</span> num2str(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.MWFQ/10^9) <span class="string">';'</span>]);
-0765     eval([<span class="string">'Exp.Range = ['</span> num2str(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x(1)/10) <span class="string">' '</span> num2str(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x(end)/10) <span class="string">'];'</span>]);
-0766    
-0767     timeVar1 = tic;
+0742 files = ER.fileNum;
+0743 
+0744 <span class="comment">% Start timers</span>
+0745 timeBegin = tic;
+0746 wb = waitbar(0,sprintf(<span class="string">'Completed 0 of %1d'</span>,files),<span class="string">'Name'</span>,<span class="string">'Close to cancel queue'</span>);
+0747 
+0748 <span class="comment">% Begin fitting</span>
+0749 <span class="keyword">for</span> k = 1:files
+0750         
+0751     <span class="comment">% Evaluate system and options line by line</span>
+0752     <span class="keyword">for</span> l = 1:size(sSys,1)
+0753         eval(sSys(l,:));
+0754     <span class="keyword">end</span>
+0755     
+0756     <span class="keyword">for</span> l = 1:size(sOpt,1)
+0757         eval(sOpt(l,:));
+0758     <span class="keyword">end</span>
+0759     
+0760     <span class="comment">% Evaluate experiment</span>
+0761     <span class="keyword">for</span> l = 1:size(sExp,1)
+0762         eval(sExp(l,:));
+0763     <span class="keyword">end</span>
+0764     
+0765     <span class="comment">% Pull mw frequency from file's info and evaluate</span>
+0766     eval([<span class="string">'Exp.mwFreq = '</span> num2str(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.MWFQ/10^9) <span class="string">';'</span>]);
+0767     eval([<span class="string">'Exp.Range = ['</span> num2str(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x(1)/10) <span class="string">' '</span> num2str(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x(end)/10) <span class="string">'];'</span>]);
 0768    
-0769     str = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Beginning file '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
-0770     info = [info ; str(1:50)];
-0771     set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0772     
-0773     <span class="keyword">switch</span> var1On
-0774         <span class="keyword">case</span> 0
-0775             <span class="comment">% If no variable selected</span>
-0776             eval([<span class="string">'[B,spc] = '</span> Fit <span class="string">'('</span> Sys <span class="string">','</span> Exp <span class="string">');'</span>]);
-0777         <span class="keyword">case</span> 1
-0778             <span class="comment">% If var1 ticked, evaluate</span>
-0779             <span class="keyword">for</span> l = 1:size(sVar1,1)
-0780                 eval(sVar1(l,:));
-0781             <span class="keyword">end</span>
-0782             
-0783             info = [info;sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Starting round 1'</span>])];
-0784             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0785             
-0786             <span class="comment">% Have to autozero spectra for EasySpin</span>
-0787             m = mean([(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).y(end-4:<span class="keyword">end</span>,1)) ; (ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).y(1:5,1))]);
-0788             ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).y(:,1) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).y(:,1) - (m);
-0789                        
-0790             <span class="comment">% Call EasySpin</span>
-0791             disp([datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'File '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL , <span class="string">'round 1'</span>]);
-0792             
-0793             <span class="keyword">try</span>
-0794                 eval([<span class="string">'[bestsys,bestspc] = esfit('''</span> Fit <span class="string">''', ER.data.File'</span> num2str(k) <span class="string">'.y , Sys, Var, Exp , Opt, FitOpt);'</span>]);
-0795             <span class="keyword">catch</span>
-0796                 fail = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'FAILED round 1 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
-0797                 info = [info ; fail(1:50)];
-0798                 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0799                 <span class="keyword">continue</span>
-0800             <span class="keyword">end</span>
-0801             
-0802             str2 = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Completed round 1 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
+0769     timeVar1 = tic;
+0770    
+0771     str = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Beginning file '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
+0772     info = [info ; str(1:50)];
+0773     set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0774     
+0775     <span class="keyword">switch</span> var1On
+0776         <span class="keyword">case</span> 0
+0777             <span class="comment">% If no variable selected</span>
+0778             eval([<span class="string">'[B,spc] = '</span> Fit <span class="string">'('</span> Sys <span class="string">','</span> Exp <span class="string">');'</span>]);
+0779         <span class="keyword">case</span> 1
+0780             <span class="comment">% If var1 ticked, evaluate</span>
+0781             <span class="keyword">for</span> l = 1:size(sVar1,1)
+0782                 eval(sVar1(l,:));
+0783             <span class="keyword">end</span>
+0784             
+0785             info = [info;sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Starting round 1'</span>])];
+0786             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0787             
+0788             <span class="comment">% Have to autozero spectra for EasySpin</span>
+0789             m = mean([(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).y(end-4:<span class="keyword">end</span>,1)) ; (ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).y(1:5,1))]);
+0790             ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).y(:,1) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).y(:,1) - (m);
+0791                        
+0792             <span class="comment">% Call EasySpin</span>
+0793             disp([datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'File '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL , <span class="string">'round 1'</span>]);
+0794             
+0795             <span class="keyword">try</span>
+0796                 eval([<span class="string">'[bestsys,bestspc] = esfit('''</span> Fit <span class="string">''', ER.data.File'</span> num2str(k) <span class="string">'.y , Sys, Var, Exp , Opt, FitOpt);'</span>]);
+0797             <span class="keyword">catch</span>
+0798                 fail = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'FAILED round 1 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
+0799                 info = [info ; fail(1:50)];
+0800                 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0801                 <span class="keyword">continue</span>
+0802             <span class="keyword">end</span>
 0803             
-0804             info = [info ; str2(1:50)];
-0805             info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Round 1 time taken: '</span> num2str(round(toc(timeVar1))) <span class="string">' s'</span>])];
-0806             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0807             
-0808             
-0809             <span class="comment">% Save variables</span>
-0810             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r1.bestsys = bestsys;
-0811             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r1.bestspc = bestspc;
-0812             
-0813             <span class="comment">% Save the figure?</span>
-0814             <span class="keyword">switch</span> figSave
-0815                 <span class="keyword">case</span> 0
-0816                     <span class="comment">% Do nothing</span>
-0817                 <span class="keyword">case</span> 1
-0818                     <span class="comment">% Save the figure</span>
-0819                     saveas(gcf,[outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r1.fig'</span>]);
-0820             <span class="keyword">end</span>
-0821             
-0822             close(gcf);
+0804             str2 = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Completed round 1 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
+0805             
+0806             info = [info ; str2(1:50)];
+0807             info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Round 1 time taken: '</span> num2str(round(toc(timeVar1))) <span class="string">' s'</span>])];
+0808             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0809             
+0810             
+0811             <span class="comment">% Save variables</span>
+0812             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r1.bestsys = bestsys;
+0813             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r1.bestspc = bestspc;
+0814             
+0815             <span class="comment">% Save the figure?</span>
+0816             <span class="keyword">switch</span> figSave
+0817                 <span class="keyword">case</span> 0
+0818                     <span class="comment">% Do nothing</span>
+0819                 <span class="keyword">case</span> 1
+0820                     <span class="comment">% Save the figure</span>
+0821                     saveas(gcf,[outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r1.fig'</span>]);
+0822             <span class="keyword">end</span>
 0823             
-0824             <span class="comment">% Keep the figure open?</span>
-0825             <span class="keyword">switch</span> figOpen
-0826                 <span class="keyword">case</span> 0
-0827                     <span class="comment">% Do nothing</span>
-0828                 <span class="keyword">case</span> 1
-0829                     openfig([outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r1.fig'</span>],<span class="string">'new'</span>);
-0830                     set(gcf,<span class="string">'Name'</span>,[<span class="string">'EasyRefiner - '</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">' - Round 1'</span>]);
-0831             <span class="keyword">end</span>
-0832             
-0833             <span class="comment">% Delay between fitting</span>
-0834             <span class="keyword">switch</span> delay
-0835                 <span class="keyword">case</span> 0
-0836                     
-0837                 <span class="keyword">otherwise</span>
-0838                     pause(delay)
-0839             <span class="keyword">end</span>
-0840     <span class="keyword">end</span>
-0841     
-0842     <span class="keyword">switch</span> var2On
-0843         <span class="keyword">case</span> 0
-0844             <span class="comment">% Do nothing</span>
-0845         <span class="keyword">case</span> 1
-0846             timeVar2 = tic;
-0847 
-0848             <span class="comment">% Start round 2</span>
-0849             info = [info;sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Starting round 2'</span>])];
-0850             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0851             
-0852             <span class="comment">% Evaluate variables</span>
-0853             <span class="keyword">for</span> l = 1:size(sVar2,1)
-0854                 eval(sVar2(l,:));
-0855             <span class="keyword">end</span>
-0856                       
-0857             <span class="comment">% Call EasySpin</span>
-0858             disp([datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'File '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL , <span class="string">'round 2'</span>]);
-0859             
-0860             <span class="keyword">try</span>
-0861                 eval([<span class="string">'[bestsys,bestspc] = esfit('''</span> Fit <span class="string">''', ER.data.File'</span> num2str(k) <span class="string">'.y , bestsys, Var, Exp , Opt, FitOpt);'</span>]);
-0862             <span class="keyword">catch</span>
-0863                 fail = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'FAILED round 2 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
-0864                 info = [info ; fail(1:50)];
-0865                 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0866                 <span class="keyword">continue</span>
-0867             <span class="keyword">end</span>
-0868             
-0869             <span class="comment">% Report to user</span>
-0870             str3 = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Completed round 2 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
-0871             info = [info ; str3(1:50)];
-0872             info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Round 2 time taken: '</span> num2str(round(toc(timeVar2))) <span class="string">' s'</span>])];
-0873             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0874             
-0875             <span class="comment">% Save variables</span>
-0876             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r2.bestsys = bestsys;
-0877             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r2.bestspc = bestspc;
-0878             
-0879             <span class="comment">% Save the figure?</span>
-0880             <span class="keyword">switch</span> figSave
-0881                 <span class="keyword">case</span> 0
-0882                     <span class="comment">% Do nothing</span>
-0883                 <span class="keyword">case</span> 1
-0884                     <span class="comment">% Save the figure</span>
-0885                     saveas(gcf,[outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r2.fig'</span>]);
-0886             <span class="keyword">end</span>
-0887             
-0888             close(gcf);
+0824             close(gcf);
+0825             
+0826             <span class="comment">% Keep the figure open?</span>
+0827             <span class="keyword">switch</span> figOpen
+0828                 <span class="keyword">case</span> 0
+0829                     <span class="comment">% Do nothing</span>
+0830                 <span class="keyword">case</span> 1
+0831                     openfig([outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r1.fig'</span>],<span class="string">'new'</span>);
+0832                     set(gcf,<span class="string">'Name'</span>,[<span class="string">'EasyRefiner - '</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">' - Round 1'</span>]);
+0833             <span class="keyword">end</span>
+0834             
+0835             <span class="comment">% Delay between fitting</span>
+0836             <span class="keyword">switch</span> delay
+0837                 <span class="keyword">case</span> 0
+0838                     
+0839                 <span class="keyword">otherwise</span>
+0840                     pause(delay)
+0841             <span class="keyword">end</span>
+0842     <span class="keyword">end</span>
+0843     
+0844     <span class="keyword">switch</span> var2On
+0845         <span class="keyword">case</span> 0
+0846             <span class="comment">% Do nothing</span>
+0847         <span class="keyword">case</span> 1
+0848             timeVar2 = tic;
+0849 
+0850             <span class="comment">% Start round 2</span>
+0851             info = [info;sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Starting round 2'</span>])];
+0852             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0853             
+0854             <span class="comment">% Evaluate variables</span>
+0855             <span class="keyword">for</span> l = 1:size(sVar2,1)
+0856                 eval(sVar2(l,:));
+0857             <span class="keyword">end</span>
+0858                       
+0859             <span class="comment">% Call EasySpin</span>
+0860             disp([datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'File '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL , <span class="string">'round 2'</span>]);
+0861             
+0862             <span class="keyword">try</span>
+0863                 eval([<span class="string">'[bestsys,bestspc] = esfit('''</span> Fit <span class="string">''', ER.data.File'</span> num2str(k) <span class="string">'.y , bestsys, Var, Exp , Opt, FitOpt);'</span>]);
+0864             <span class="keyword">catch</span>
+0865                 fail = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'FAILED round 2 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
+0866                 info = [info ; fail(1:50)];
+0867                 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0868                 <span class="keyword">continue</span>
+0869             <span class="keyword">end</span>
+0870             
+0871             <span class="comment">% Report to user</span>
+0872             str3 = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Completed round 2 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
+0873             info = [info ; str3(1:50)];
+0874             info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Round 2 time taken: '</span> num2str(round(toc(timeVar2))) <span class="string">' s'</span>])];
+0875             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0876             
+0877             <span class="comment">% Save variables</span>
+0878             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r2.bestsys = bestsys;
+0879             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r2.bestspc = bestspc;
+0880             
+0881             <span class="comment">% Save the figure?</span>
+0882             <span class="keyword">switch</span> figSave
+0883                 <span class="keyword">case</span> 0
+0884                     <span class="comment">% Do nothing</span>
+0885                 <span class="keyword">case</span> 1
+0886                     <span class="comment">% Save the figure</span>
+0887                     saveas(gcf,[outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r2.fig'</span>]);
+0888             <span class="keyword">end</span>
 0889             
-0890             <span class="comment">% Keep the figure open?</span>
-0891             <span class="keyword">switch</span> figOpen
-0892                 <span class="keyword">case</span> 0
-0893                     <span class="comment">% Do nothing</span>
-0894                 <span class="keyword">case</span> 1
-0895                     openfig([outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r2.fig'</span>],<span class="string">'new'</span>);
-0896                     set(gcf,<span class="string">'Name'</span>,[<span class="string">'EasyRefiner - '</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">' - Round 2'</span>]);
-0897             <span class="keyword">end</span>
-0898             
-0899             <span class="comment">% Delay between fitting</span>
-0900             <span class="keyword">switch</span> delay
-0901                 <span class="keyword">case</span> 0
-0902                     
-0903                 <span class="keyword">otherwise</span>
-0904                     pause(delay)
-0905             <span class="keyword">end</span>
-0906     <span class="keyword">end</span>
-0907     
-0908     <span class="keyword">switch</span> var3On
-0909         <span class="keyword">case</span> 0
-0910             <span class="comment">% Do nothing</span>
-0911         <span class="keyword">case</span> 1
-0912             timeVar3 = tic;
-0913 
-0914             <span class="comment">% Start round 3</span>
-0915             info = [info;sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Starting round 3'</span>])];
-0916             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0917             
-0918             <span class="comment">% Evaluate variables</span>
-0919             <span class="keyword">for</span> l = 1:size(sVar3,1)
-0920                 eval(sVar3(l,:));
-0921             <span class="keyword">end</span>
-0922             
-0923             <span class="comment">% Call EasySpin</span>
-0924             disp([datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'File '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL , <span class="string">'round 3'</span>]);
-0925             
-0926             <span class="keyword">try</span>
-0927                 eval([<span class="string">'[bestsys,bestspc] = esfit('''</span> Fit <span class="string">''', ER.data.File'</span> num2str(k) <span class="string">'.y , bestsys, Var, Exp , Opt, FitOpt);'</span>])
-0928             <span class="keyword">catch</span>
-0929                 fail = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'FAILED round 3 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
-0930                 info = [info ; fail(1:50)];
-0931                 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0932                 <span class="keyword">continue</span>
-0933             <span class="keyword">end</span>
-0934             
-0935             <span class="comment">% Report to user</span>
-0936             str4 = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Completed round 3 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
-0937             info = [info ; str4(1:50)];
-0938             info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Round 3 time taken: '</span> num2str(round(toc(timeVar3))) <span class="string">' s'</span>])];
-0939             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0940             
-0941             <span class="comment">% Save variables</span>
-0942             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r3.bestsys = bestsys;
-0943             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r3.bestspc = bestspc;
-0944             
-0945             <span class="comment">% Save the figure?</span>
-0946             <span class="keyword">switch</span> figSave
-0947                 <span class="keyword">case</span> 0
-0948                     <span class="comment">% Do nothing</span>
-0949                 <span class="keyword">case</span> 1
-0950                     <span class="comment">% Save the figure</span>
-0951                     saveas(gcf,[outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r3.fig'</span>]);
-0952             <span class="keyword">end</span>
-0953             
-0954             close(gcf);
+0890             close(gcf);
+0891             
+0892             <span class="comment">% Keep the figure open?</span>
+0893             <span class="keyword">switch</span> figOpen
+0894                 <span class="keyword">case</span> 0
+0895                     <span class="comment">% Do nothing</span>
+0896                 <span class="keyword">case</span> 1
+0897                     openfig([outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r2.fig'</span>],<span class="string">'new'</span>);
+0898                     set(gcf,<span class="string">'Name'</span>,[<span class="string">'EasyRefiner - '</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">' - Round 2'</span>]);
+0899             <span class="keyword">end</span>
+0900             
+0901             <span class="comment">% Delay between fitting</span>
+0902             <span class="keyword">switch</span> delay
+0903                 <span class="keyword">case</span> 0
+0904                     
+0905                 <span class="keyword">otherwise</span>
+0906                     pause(delay)
+0907             <span class="keyword">end</span>
+0908     <span class="keyword">end</span>
+0909     
+0910     <span class="keyword">switch</span> var3On
+0911         <span class="keyword">case</span> 0
+0912             <span class="comment">% Do nothing</span>
+0913         <span class="keyword">case</span> 1
+0914             timeVar3 = tic;
+0915 
+0916             <span class="comment">% Start round 3</span>
+0917             info = [info;sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Starting round 3'</span>])];
+0918             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0919             
+0920             <span class="comment">% Evaluate variables</span>
+0921             <span class="keyword">for</span> l = 1:size(sVar3,1)
+0922                 eval(sVar3(l,:));
+0923             <span class="keyword">end</span>
+0924             
+0925             <span class="comment">% Call EasySpin</span>
+0926             disp([datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'File '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL , <span class="string">'round 3'</span>]);
+0927             
+0928             <span class="keyword">try</span>
+0929                 eval([<span class="string">'[bestsys,bestspc] = esfit('''</span> Fit <span class="string">''', ER.data.File'</span> num2str(k) <span class="string">'.y , bestsys, Var, Exp , Opt, FitOpt);'</span>])
+0930             <span class="keyword">catch</span>
+0931                 fail = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'FAILED round 3 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
+0932                 info = [info ; fail(1:50)];
+0933                 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0934                 <span class="keyword">continue</span>
+0935             <span class="keyword">end</span>
+0936             
+0937             <span class="comment">% Report to user</span>
+0938             str4 = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Completed round 3 of '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
+0939             info = [info ; str4(1:50)];
+0940             info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Round 3 time taken: '</span> num2str(round(toc(timeVar3))) <span class="string">' s'</span>])];
+0941             set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0942             
+0943             <span class="comment">% Save variables</span>
+0944             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r3.bestsys = bestsys;
+0945             Results.(strcat(<span class="string">'File'</span>,num2str(k))).r3.bestspc = bestspc;
+0946             
+0947             <span class="comment">% Save the figure?</span>
+0948             <span class="keyword">switch</span> figSave
+0949                 <span class="keyword">case</span> 0
+0950                     <span class="comment">% Do nothing</span>
+0951                 <span class="keyword">case</span> 1
+0952                     <span class="comment">% Save the figure</span>
+0953                     saveas(gcf,[outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r3.fig'</span>]);
+0954             <span class="keyword">end</span>
 0955             
-0956             <span class="comment">% Keep the figure open?</span>
-0957             <span class="keyword">switch</span> figOpen
-0958                 <span class="keyword">case</span> 0
-0959                     <span class="comment">% Do nothing</span>
-0960                 <span class="keyword">case</span> 1
-0961                     openfig([outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r3.fig'</span>],<span class="string">'new'</span>);
-0962                     set(gcf,<span class="string">'Name'</span>,[<span class="string">'EasyRefiner - '</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">' - Round 3'</span>]);
-0963             <span class="keyword">end</span>
-0964             
-0965             <span class="comment">% Delay between fitting</span>
-0966             <span class="keyword">switch</span> delay
-0967                 <span class="keyword">case</span> 0
-0968                     
-0969                 <span class="keyword">otherwise</span>
-0970                     pause(delay)
-0971             <span class="keyword">end</span>
-0972     <span class="keyword">end</span>
-0973      
-0974     <span class="comment">% Message user for file completion</span>
-0975     str5 = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Completed file '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
-0976     info = [info ; str5(1:50)];
-0977     info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'File time taken: '</span> num2str(round(toc(timeVar1))) <span class="string">' s'</span>])];
-0978     set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-0979     
-0980     <span class="comment">% Update progress bar</span>
-0981     <span class="keyword">try</span>
-0982         wb = waitbar((k/files)-(1/files),wb,sprintf(<span class="string">'Completed %1d of %1d'</span>,k,files));
-0983     <span class="keyword">catch</span>
-0984         msgbox(<span class="string">'Fitting canceled by user'</span>,<span class="string">'EasyRefiner'</span>,<span class="string">'error'</span>) ;
-0985         <span class="keyword">return</span>
-0986     <span class="keyword">end</span>
-0987     
-0988 <span class="keyword">end</span>
-0989 
-0990 delete(wb);
+0956             close(gcf);
+0957             
+0958             <span class="comment">% Keep the figure open?</span>
+0959             <span class="keyword">switch</span> figOpen
+0960                 <span class="keyword">case</span> 0
+0961                     <span class="comment">% Do nothing</span>
+0962                 <span class="keyword">case</span> 1
+0963                     openfig([outAdd <span class="string">'/'</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">'r3.fig'</span>],<span class="string">'new'</span>);
+0964                     set(gcf,<span class="string">'Name'</span>,[<span class="string">'EasyRefiner - '</span> regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">''''</span>,<span class="string">''</span>) <span class="string">' - Round 3'</span>]);
+0965             <span class="keyword">end</span>
+0966             
+0967             <span class="comment">% Delay between fitting</span>
+0968             <span class="keyword">switch</span> delay
+0969                 <span class="keyword">case</span> 0
+0970                     
+0971                 <span class="keyword">otherwise</span>
+0972                     pause(delay)
+0973             <span class="keyword">end</span>
+0974     <span class="keyword">end</span>
+0975      
+0976     <span class="comment">% Message user for file completion</span>
+0977     str5 = sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Completed file '</span> ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL]);
+0978     info = [info ; str5(1:50)];
+0979     info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'File time taken: '</span> num2str(round(toc(timeVar1))) <span class="string">' s'</span>])];
+0980     set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+0981     
+0982     <span class="comment">% Update progress bar</span>
+0983     <span class="keyword">try</span>
+0984         wb = waitbar((k/files)-(1/files),wb,sprintf(<span class="string">'Completed %1d of %1d'</span>,k,files));
+0985     <span class="keyword">catch</span>
+0986         msgbox(<span class="string">'Fitting canceled by user'</span>,<span class="string">'EasyRefiner'</span>,<span class="string">'error'</span>) ;
+0987         <span class="keyword">return</span>
+0988     <span class="keyword">end</span>
+0989     
+0990 <span class="keyword">end</span>
 0991 
-0992 <span class="comment">% Process the outputs</span>
-0993 out =[];
-0994 
-0995 <span class="keyword">for</span> k = 1:files
-0996     
-0997     <span class="comment">% Create nice array of data for plotting &amp; copy EasySpin results</span>
+0992 delete(wb);
+0993 
+0994 <span class="comment">% Process the outputs</span>
+0995 out =[];
+0996 
+0997 <span class="keyword">for</span> k = 1:files
 0998     
-0999     <span class="comment">% Column 1 and 2 are original data</span>
-1000     ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,1) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x;
-1001     ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,2) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).y;
-1002     <span class="comment">% Column 3 and 4 is round 1</span>
-1003     ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,3) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x;
-1004     ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,4) = (Results.(strcat(<span class="string">'File'</span>,num2str(k))).r1.bestspc)';
-1005     
-1006     ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Fits.r1    = Results.(strcat(<span class="string">'File'</span>,num2str(k))).r1.bestsys;
+0999     <span class="comment">% Create nice array of data for plotting &amp; copy EasySpin results</span>
+1000     
+1001     <span class="comment">% Column 1 and 2 are original data</span>
+1002     ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,1) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x;
+1003     ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,2) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).y;
+1004     <span class="comment">% Column 3 and 4 is round 1</span>
+1005     ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,3) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x;
+1006     ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,4) = (Results.(strcat(<span class="string">'File'</span>,num2str(k))).r1.bestspc)';
 1007     
-1008     <span class="keyword">if</span> isfield(Results.(strcat(<span class="string">'File'</span>,num2str(k))),<span class="string">'r2'</span>)
-1009         <span class="comment">% Column 5 and 6 is round 2</span>
-1010         ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,5) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x;
-1011         ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,6) = (Results.(strcat(<span class="string">'File'</span>,num2str(k))).r2.bestspc)';
-1012         
-1013         ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Fits.r2    = Results.(strcat(<span class="string">'File'</span>,num2str(k))).r2.bestsys;
+1008     ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Fits.r1    = Results.(strcat(<span class="string">'File'</span>,num2str(k))).r1.bestsys;
+1009     
+1010     <span class="keyword">if</span> isfield(Results.(strcat(<span class="string">'File'</span>,num2str(k))),<span class="string">'r2'</span>)
+1011         <span class="comment">% Column 5 and 6 is round 2</span>
+1012         ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,5) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x;
+1013         ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,6) = (Results.(strcat(<span class="string">'File'</span>,num2str(k))).r2.bestspc)';
 1014         
-1015         <span class="keyword">if</span> isfield(Results.(strcat(<span class="string">'File'</span>,num2str(k))),<span class="string">'r3'</span>)
-1016             <span class="comment">% Column 7 and 8 is round 3</span>
-1017             ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,7) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x;
-1018             ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,8) = (Results.(strcat(<span class="string">'File'</span>,num2str(k))).r3.bestspc)';
-1019             
-1020             ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Fits.r3    = Results.(strcat(<span class="string">'File'</span>,num2str(k))).r3.bestsys;
-1021         <span class="keyword">end</span>
-1022     <span class="keyword">end</span>
-1023     
-1024     <span class="comment">% Rename FileX to out.{FileTitle}</span>
-1025     <span class="keyword">try</span>
-1026         out.(regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">'[- \/'']'</span>,<span class="string">''</span>)) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k)));
-1027     <span class="keyword">catch</span>
-1028         error(<span class="string">'%s is not a valid file name and will be skipped'</span>, ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL);
-1029         <span class="keyword">continue</span>
-1030     <span class="keyword">end</span>
-1031 <span class="keyword">end</span>
-1032 
-1033 <span class="comment">% Save the results</span>
-1034 save([outAdd <span class="string">'/'</span> datestr(now, <span class="string">'dd-mm-yy_HH:MM_'</span>) <span class="string">'EasyRefiner_Results.mat'</span>],<span class="string">'out'</span>);
-1035 <span class="comment">% Put output to base workspace</span>
-1036 assignin(<span class="string">'base'</span>,<span class="string">'EasyRefiner_Results'</span>,out);
-1037 
-1038 <span class="comment">% Message user for queue completion</span>
-1039 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Completed queue!'</span>])];
-1040 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Queue time taken: '</span> num2str(round(toc(timeBegin))) <span class="string">' s'</span>])];
-1041 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
-1042 
-1043 <span class="keyword">switch</span> log
-1044     <span class="keyword">case</span> 0
-1045         <span class="comment">% Do nothing</span>
-1046     <span class="keyword">case</span> 1
-1047         <span class="comment">% Save out info</span>
-1048         logFile = fopen([outAdd <span class="string">'/'</span> datestr(now, <span class="string">'dd-mm-yy_HH:MM_'</span>) <span class="string">'EasyRefiner_Log.txt'</span>],<span class="string">'w'</span>);
-1049         
-1050         <span class="keyword">for</span> k = 1:size(info,1)
-1051             fprintf(logFile,<span class="string">'%-50s\n'</span>,info(k,:));
-1052         <span class="keyword">end</span>
-1053         
-1054         fclose(logFile);
-1055 <span class="keyword">end</span>
-1056 
-1057 
-1058 <span class="comment">% --- Executes on button press in button_RunLater.</span>
-1059 <a name="_sub44" href="#_subfunctions" class="code">function button_RunLater_Callback(hObject, eventdata, handles)</a>
-1060 
-1061 timenow = datevec(now);
+1015         ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Fits.r2    = Results.(strcat(<span class="string">'File'</span>,num2str(k))).r2.bestsys;
+1016         
+1017         <span class="keyword">if</span> isfield(Results.(strcat(<span class="string">'File'</span>,num2str(k))),<span class="string">'r3'</span>)
+1018             <span class="comment">% Column 7 and 8 is round 3</span>
+1019             ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,7) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).x;
+1020             ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Plots(:,8) = (Results.(strcat(<span class="string">'File'</span>,num2str(k))).r3.bestspc)';
+1021             
+1022             ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).Fits.r3    = Results.(strcat(<span class="string">'File'</span>,num2str(k))).r3.bestsys;
+1023         <span class="keyword">end</span>
+1024     <span class="keyword">end</span>
+1025     
+1026     <span class="comment">% Rename FileX to out.{FileTitle}</span>
+1027     <span class="keyword">try</span>
+1028         out.(regexprep(ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL,<span class="string">'[- \/'']'</span>,<span class="string">''</span>)) = ER.data.(strcat(<span class="string">'File'</span>,num2str(k)));
+1029     <span class="keyword">catch</span>
+1030         error(<span class="string">'%s is not a valid file name and will be skipped'</span>, ER.data.(strcat(<span class="string">'File'</span>,num2str(k))).info.TITL);
+1031         <span class="keyword">continue</span>
+1032     <span class="keyword">end</span>
+1033 <span class="keyword">end</span>
+1034 
+1035 <span class="comment">% Save the results</span>
+1036 save([outAdd <span class="string">'/'</span> datestr(now, <span class="string">'dd-mm-yy_HH:MM_'</span>) <span class="string">'EasyRefiner_Results.mat'</span>],<span class="string">'out'</span>);
+1037 <span class="comment">% Put output to base workspace</span>
+1038 assignin(<span class="string">'base'</span>,<span class="string">'EasyRefiner_Results'</span>,out);
+1039 
+1040 <span class="comment">% Message user for queue completion</span>
+1041 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Completed queue!'</span>])];
+1042 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Queue time taken: '</span> num2str(round(toc(timeBegin))) <span class="string">' s'</span>])];
+1043 set(handles.edit_info,<span class="string">'String'</span>,info(end-2:<span class="keyword">end</span> , :));
+1044 
+1045 <span class="keyword">switch</span> log
+1046     <span class="keyword">case</span> 0
+1047         <span class="comment">% Do nothing</span>
+1048     <span class="keyword">case</span> 1
+1049         <span class="comment">% Save out info</span>
+1050         logFile = fopen([outAdd <span class="string">'/'</span> datestr(now, <span class="string">'dd-mm-yy_HH:MM_'</span>) <span class="string">'EasyRefiner_Log.txt'</span>],<span class="string">'w'</span>);
+1051         
+1052         <span class="keyword">for</span> k = 1:size(info,1)
+1053             fprintf(logFile,<span class="string">'%-50s\n'</span>,info(k,:));
+1054         <span class="keyword">end</span>
+1055         
+1056         fclose(logFile);
+1057 <span class="keyword">end</span>
+1058 
+1059 
+1060 <span class="comment">% --- Executes on button press in button_RunLater.</span>
+1061 <a name="_sub44" href="#_subfunctions" class="code">function button_RunLater_Callback(hObject, eventdata, handles)</a>
 1062 
-1063 prompt = <span class="string">'When would like the queue to start? (dd-mm-yy HH:MM:SS)'</span>;
-1064 dlg_title = <span class="string">'Delay queue start'</span>;
-1065 num_lines = 1;
-1066 def = {[num2str(timenow(3)) <span class="string">'-'</span> num2str(timenow(2)) <span class="string">'-'</span> num2str(timenow(1)) <span class="string">' '</span>,<span class="keyword">...</span>
-1067     num2str(timenow(4)) <span class="string">':'</span> num2str(timenow(5)+5) <span class="string">':00'</span>]};
-1068 
-1069 start = inputdlg(prompt,dlg_title,num_lines,def);
+1063 timenow = datevec(now);
+1064 
+1065 prompt = <span class="string">'When would like the queue to start? (dd-mm-yy HH:MM:SS)'</span>;
+1066 dlg_title = <span class="string">'Delay queue start'</span>;
+1067 num_lines = 1;
+1068 def = {[num2str(timenow(3)) <span class="string">'-'</span> num2str(timenow(2)) <span class="string">'-'</span> num2str(timenow(1)) <span class="string">' '</span>,<span class="keyword">...</span>
+1069     num2str(timenow(4)) <span class="string">':'</span> num2str(timenow(5)+5) <span class="string">':00'</span>]};
 1070 
-1071 
-1072 t1 = datevec(start,<span class="string">'dd-mm-yy HH:MM:SS'</span>);
-1073 t2 = clock;
-1074 
-1075 diff = etime(t1,t2);
+1071 start = inputdlg(prompt,dlg_title,num_lines,def);
+1072 
+1073 
+1074 t1 = datevec(start,<span class="string">'dd-mm-yy HH:MM:SS'</span>);
+1075 t2 = clock;
 1076 
-1077 info = [sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'EasyRefiner has been queued:'</span> ])];
-1078 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Starting at:'</span> datestr(t1, <span class="string">'dd-mm-yy HH:MM:SS '</span>)])];
-1079 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Waiting: '</span> num2str(round(diff)) <span class="string">' s'</span>])];
-1080 set(handles.edit_info,<span class="string">'String'</span>,info);
-1081 
-1082 pause(diff);
+1077 diff = etime(t1,t2);
+1078 
+1079 info = [sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'EasyRefiner has been queued:'</span> ])];
+1080 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Starting at:'</span> datestr(t1, <span class="string">'dd-mm-yy HH:MM:SS '</span>)])];
+1081 info = [info ; sprintf(<span class="string">'%-50s'</span>,[datestr(now, <span class="string">'dd-mm-yy HH:MM:SS '</span>) <span class="string">'Waiting: '</span> num2str(round(diff)) <span class="string">' s'</span>])];
+1082 set(handles.edit_info,<span class="string">'String'</span>,info);
 1083 
-1084 <a href="#_sub43" class="code" title="subfunction button_RUN_Callback(hObject, eventdata, handles)">button_RUN_Callback</a>(hObject, eventdata, handles);</pre></div>
-<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+1084 pause(diff);
+1085 
+1086 <a href="#_sub43" class="code" title="subfunction button_RUN_Callback(hObject, eventdata, handles)">button_RUN_Callback</a>(hObject, eventdata, handles);</pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

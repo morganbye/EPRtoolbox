@@ -39,6 +39,7 @@
        E2A ('path/to/file.DTA',delimiter)
        E2A ('path/to/file.DTA',delimiter, extension)
        E2A ('path/to/file.DTA',delimiter, extension, interval)
+       E2A ('path/to/file.DTA',delimiter, extension, interval, 'noheader')
 
  Inputs:
        input1      - The path to a file
@@ -103,261 +104,295 @@ This function is called by:
 0012 <span class="comment">%       E2A ('path/to/file.DTA',delimiter)</span>
 0013 <span class="comment">%       E2A ('path/to/file.DTA',delimiter, extension)</span>
 0014 <span class="comment">%       E2A ('path/to/file.DTA',delimiter, extension, interval)</span>
-0015 <span class="comment">%</span>
-0016 <span class="comment">% Inputs:</span>
-0017 <span class="comment">%       input1      - The path to a file</span>
-0018 <span class="comment">%       input2      - Delimiter is the seperator in the file ',' for comma</span>
-0019 <span class="comment">%                       ' ' for space, '\t' for tab, etc</span>
-0020 <span class="comment">%       input3      - Extension is the file format to output</span>
-0021 <span class="comment">%                       eg '.csv' , '.txt', '.dat', etc</span>
-0022 <span class="comment">%       input4      - Desired magnetic field interval</span>
-0023 <span class="comment">%                       eg 0.2 to use interpolation to give data points</span>
-0024 <span class="comment">%                       every 0.2 Gauss</span>
-0025 <span class="comment">%</span>
-0026 <span class="comment">% Outputs:</span>
-0027 <span class="comment">%       output      - a file</span>
-0028 <span class="comment">%                       by default a common seperated value file (.csv)</span>
-0029 <span class="comment">%</span>
-0030 <span class="comment">% Example:</span>
-0031 <span class="comment">%       E2A</span>
-0032 <span class="comment">%           Standard use, a graphical user interface to select file to</span>
-0033 <span class="comment">%           convert and where to put it</span>
-0034 <span class="comment">%       E2A = ('/path/to/file.DTA',' ','.txt')</span>
-0035 <span class="comment">%           Take the file &quot;file.DTA&quot; and convert it to &quot;file.txt&quot; where</span>
-0036 <span class="comment">%           values are seperated with a space rather than the standard</span>
-0037 <span class="comment">%           comma</span>
-0038 <span class="comment">%</span>
+0015 <span class="comment">%       E2A ('path/to/file.DTA',delimiter, extension, interval, 'noheader')</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Inputs:</span>
+0018 <span class="comment">%       input1      - The path to a file</span>
+0019 <span class="comment">%       input2      - Delimiter is the seperator in the file ',' for comma</span>
+0020 <span class="comment">%                       ' ' for space, '\t' for tab, etc</span>
+0021 <span class="comment">%       input3      - Extension is the file format to output</span>
+0022 <span class="comment">%                       eg '.csv' , '.txt', '.dat', etc</span>
+0023 <span class="comment">%       input4      - Desired magnetic field interval</span>
+0024 <span class="comment">%                       eg 0.2 to use interpolation to give data points</span>
+0025 <span class="comment">%                       every 0.2 Gauss</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Outputs:</span>
+0028 <span class="comment">%       output      - a file</span>
+0029 <span class="comment">%                       by default a common seperated value file (.csv)</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Example:</span>
+0032 <span class="comment">%       E2A</span>
+0033 <span class="comment">%           Standard use, a graphical user interface to select file to</span>
+0034 <span class="comment">%           convert and where to put it</span>
+0035 <span class="comment">%       E2A = ('/path/to/file.DTA',' ','.txt')</span>
+0036 <span class="comment">%           Take the file &quot;file.DTA&quot; and convert it to &quot;file.txt&quot; where</span>
+0037 <span class="comment">%           values are seperated with a space rather than the standard</span>
+0038 <span class="comment">%           comma</span>
 0039 <span class="comment">%</span>
-0040 <span class="comment">% For more information see:</span>
-0041 <span class="comment">% http://morganbye.net/eprtoolbox/epr-converter-e2a</span>
-0042 <span class="comment">%</span>
-0043 <span class="comment">% Other m-files required:</span>
-0044 <span class="comment">%       BrukerRead</span>
-0045 <span class="comment">%</span>
-0046 <span class="comment">% Subfunctions:         none</span>
-0047 <span class="comment">%</span>
-0048 <span class="comment">% MAT-files required:   none</span>
-0049 <span class="comment">%</span>
-0050 <span class="comment">% See also: E2AF BRUKERREAD</span>
-0051 
-0052 <span class="comment">%                                        _                             _</span>
-0053 <span class="comment">%                                       | |                           | |</span>
-0054 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
-0055 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
-0056 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
-0057 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
-0058 <span class="comment">%                       __/ |                   __/ |</span>
-0059 <span class="comment">%                      |___/                   |___/</span>
-0060 <span class="comment">%</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">% For more information see:</span>
+0042 <span class="comment">% http://morganbye.net/eprtoolbox/epr-converter-e2a</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% Other m-files required:</span>
+0045 <span class="comment">%       BrukerRead</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% Subfunctions:         none</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% MAT-files required:   none</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% See also: E2AF BRUKERREAD</span>
+0052 
+0053 <span class="comment">%                                        _                             _</span>
+0054 <span class="comment">%                                       | |                           | |</span>
+0055 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0056 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0057 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0058 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0059 <span class="comment">%                       __/ |                   __/ |</span>
+0060 <span class="comment">%                      |___/                   |___/</span>
 0061 <span class="comment">%</span>
-0062 <span class="comment">% M. Bye v13.04</span>
+0062 <span class="comment">% M. Bye v13.11</span>
 0063 <span class="comment">%</span>
-0064 <span class="comment">% Author:       Morgan Bye</span>
-0065 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
-0066 <span class="comment">%               University of East Anglia</span>
-0067 <span class="comment">%               NORWICH, UK</span>
-0068 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
-0069 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/epr-converter-e2a</span>
-0070 <span class="comment">% Mar 2013;     Last revision: 15-March-2013</span>
-0071 <span class="comment">%</span>
-0072 <span class="comment">% Approximate coding time of file:</span>
-0073 <span class="comment">%               3 hours</span>
-0074 <span class="comment">%</span>
-0075 <span class="comment">%</span>
-0076 <span class="comment">% Version history:</span>
-0077 <span class="comment">% Mar 13        Update for file errors.</span>
-0078 <span class="comment">%                   Changed input address - removes conflict with address</span>
-0079 <span class="comment">%                   command</span>
-0080 <span class="comment">%                   Added switch for output to the same folder - so that if</span>
-0081 <span class="comment">%                   the folder is the current folder it still works</span>
-0082 <span class="comment">%               Added an interpolation function so that the output data</span>
-0083 <span class="comment">%               files can have set interval between data-points</span>
+0064 <span class="comment">% v13.09 - current</span>
+0065 <span class="comment">%               Chemical Physics Department</span>
+0066 <span class="comment">%               Weizmann Institute of Science</span>
+0067 <span class="comment">%               76100 REHOVOT, Israel</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">% v11.06 - v13.08</span>
+0070 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0071 <span class="comment">%               University of East Anglia</span>
+0072 <span class="comment">%               NORWICH, UK</span>
+0073 <span class="comment">%</span>
+0074 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0075 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/e2a</span>
+0076 <span class="comment">%</span>
+0077 <span class="comment">% Last updated 11-November-2013</span>
+0078 <span class="comment">%</span>
+0079 <span class="comment">% Version history:</span>
+0080 <span class="comment">% Nov 13        &gt; Added header to output file</span>
+0081 <span class="comment">%               &gt; Optional 'noheader' call</span>
+0082 <span class="comment">%               &gt; Removed extremely complex output argument and replaced</span>
+0083 <span class="comment">%                   with smarter use of arguments</span>
 0084 <span class="comment">%</span>
-0085 <span class="comment">% Feb 12        Update for file load error and inputs have changed allowing</span>
-0086 <span class="comment">%               for a command line file selection.</span>
+0085 <span class="comment">% Jul 13        Removal of tilde &quot;~&quot; from input arguments for better</span>
+0086 <span class="comment">%               compatibility with old Windows versions of MatLab</span>
 0087 <span class="comment">%</span>
-0088 <span class="comment">% Sept 11       Initial release</span>
-0089 
-0090 <span class="keyword">switch</span> nargin
-0091     <span class="comment">% No inputs, use the GUI loader</span>
-0092     <span class="keyword">case</span> 0
-0093         delimiter = <span class="string">','</span>;
-0094         extension = <span class="string">'.csv'</span>;
-0095         
-0096         <span class="comment">% Select the file</span>
-0097         [file , directory] = uigetfile({<span class="string">'*.DTA'</span>,<span class="string">'Bruker BES3T File (*.DTA)'</span>; <span class="keyword">...</span>
-0098             <span class="string">'*.spc'</span>,<span class="string">'Bruker Spc File UNTESTED (*.spc)'</span>; <span class="keyword">...</span>
-0099             <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load Bruker file'</span>);
-0100         
-0101         <span class="comment">% if user cancels command nothing happens</span>
-0102         <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
-0103             <span class="keyword">return</span>
-0104         <span class="keyword">end</span>
-0105         
-0106         in_address = [directory,file];
-0107         
-0108         [mag_field, abs] = BrukerRead(in_address);
-0109     
-0110         <span class="comment">% File selected via command line</span>
-0111     <span class="keyword">case</span> 1
-0112             <span class="comment">% For File</span>
-0113         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
-0114             
-0115             <span class="keyword">if</span> isempty(strfind(varargin{1},<span class="string">'/'</span>))
-0116                 error(<span class="string">'The full file path must be entered! You cant just use the current folder'</span>)
-0117             <span class="keyword">end</span>
-0118             
-0119             delimiter = <span class="string">','</span>;
-0120             extension = <span class="string">'.csv'</span>;
-0121             
-0122             in_address = varargin{1};
-0123             [~,f,e] = fileparts(in_address);
-0124             file = [f e];
-0125             [mag_field, abs] = BrukerRead(in_address);
-0126             
-0127             <span class="comment">% For delimiter</span>
-0128         <span class="keyword">elseif</span> ischar(varargin{1}) &amp;&amp; length(varargin{1}) == 1
-0129             delimiter = varargin{1};
-0130             extension = <span class="string">'.csv'</span>;
+0088 <span class="comment">% Mar 13        Update for file errors.</span>
+0089 <span class="comment">%                   Changed input address - removes conflict with address</span>
+0090 <span class="comment">%                   command</span>
+0091 <span class="comment">%                   Added switch for output to the same folder - so that if</span>
+0092 <span class="comment">%                   the folder is the current folder it still works</span>
+0093 <span class="comment">%               Added an interpolation function so that the output data</span>
+0094 <span class="comment">%               files can have set interval between data-points</span>
+0095 <span class="comment">%</span>
+0096 <span class="comment">% Feb 12        Update for file load error and inputs have changed allowing</span>
+0097 <span class="comment">%               for a command line file selection.</span>
+0098 <span class="comment">%</span>
+0099 <span class="comment">% Sept 11       Initial release</span>
+0100 
+0101 <span class="keyword">switch</span> nargin
+0102     <span class="comment">% No inputs, use the GUI loader</span>
+0103     <span class="keyword">case</span> 0
+0104         delimiter = <span class="string">','</span>;
+0105         extension = <span class="string">'.csv'</span>;
+0106         
+0107         <span class="comment">% Select the file</span>
+0108         [file , directory] = uigetfile({<span class="string">'*.DTA'</span>,<span class="string">'Bruker BES3T File (*.DTA)'</span>; <span class="keyword">...</span>
+0109             <span class="string">'*.spc'</span>,<span class="string">'Bruker Spc File UNTESTED (*.spc)'</span>; <span class="keyword">...</span>
+0110             <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load Bruker file'</span>);
+0111         
+0112         <span class="comment">% if user cancels command nothing happens</span>
+0113         <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0114             <span class="keyword">return</span>
+0115         <span class="keyword">end</span>
+0116         
+0117         in_address = [directory,file];
+0118         
+0119         [mag_field, abs] = BrukerRead(in_address);
+0120     
+0121         <span class="comment">% File selected via command line</span>
+0122     <span class="keyword">case</span> 1
+0123             <span class="comment">% For File</span>
+0124         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
+0125             
+0126             <span class="keyword">if</span> isempty(strfind(varargin{1},<span class="string">'/'</span>))
+0127                 error(<span class="string">'The full file path must be entered! You cant just use the current folder'</span>)
+0128             <span class="keyword">end</span>
+0129             
+0130             delimiter = <span class="string">','</span>;
 0131             
-0132             <span class="comment">% Select the file</span>
-0133             [file , directory] = uigetfile({<span class="string">'*.DTA'</span>,<span class="string">'Bruker BES3T File (*.DTA)'</span>; <span class="keyword">...</span>
-0134                 <span class="string">'*.spc'</span>,<span class="string">'Bruker Spc File UNTESTED (*.spc)'</span>; <span class="keyword">...</span>
-0135                 <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load Bruker file'</span>);
+0132             in_address = varargin{1};
+0133             [~,f,e] = fileparts(in_address);
+0134             file = [f e];
+0135             [mag_field, abs] = BrukerRead(in_address);
 0136             
-0137             <span class="comment">% if user cancels command nothing happens</span>
-0138             <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
-0139                 <span class="keyword">return</span>
-0140             <span class="keyword">end</span>
+0137             <span class="comment">% For delimiter</span>
+0138         <span class="keyword">elseif</span> ischar(varargin{1}) &amp;&amp; length(varargin{1}) == 1
+0139             delimiter = varargin{1};
+0140             
 0141             
-0142             in_address = [directory,file];
-0143             
-0144             [mag_field, abs] = BrukerRead(in_address);
-0145         <span class="keyword">end</span>
-0146        
-0147         <span class="comment">% File and delimiter selection</span>
-0148     <span class="keyword">case</span> 2
-0149         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
-0150             in_address = varargin{1};
-0151             [~,f,e] = fileparts(in_address);
-0152             file = [f e];
-0153             [mag_field, abs] = BrukerRead(in_address);
-0154         <span class="keyword">end</span>
-0155 
-0156         delimiter = varargin{2};
-0157         
-0158         <span class="comment">% File, delimiter and extension selection</span>
-0159     <span class="keyword">case</span> 3
-0160         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
-0161             in_address = varargin{1};
-0162             [~,f,e] = fileparts(in_address);
-0163             file = [f e];
-0164             [mag_field, abs] = BrukerRead(in_address);
-0165         <span class="keyword">end</span>
-0166         
-0167         delimiter = varargin{2};
-0168         extension = varargin{3};
-0169         
-0170         <span class="comment">% File, delimiter, extension and interval selection</span>
-0171     <span class="keyword">case</span> 4
-0172         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
-0173             in_address = varargin{1};
-0174             [~,f,e] = fileparts(in_address);
-0175             file = [f e];
-0176             [mag_field, abs] = BrukerRead(in_address);
-0177         <span class="keyword">end</span>
-0178         
-0179         delimiter = varargin{2};
-0180         extension = varargin{3};
-0181         interval  = varargin{4};
-0182 <span class="keyword">end</span>
-0183 
-0184 <span class="comment">% File loaded details</span>
-0185 [directory,name,~] = fileparts(in_address);
-0186 
-0187 <span class="comment">% ========================================================================</span>
-0188 <span class="comment">% Data step</span>
-0189 <span class="comment">% ========================================================================</span>
-0190 
-0191 <span class="keyword">if</span> exist(<span class="string">'interval'</span>,<span class="string">'var'</span>)
-0192     x = (mag_field(1):interval:mag_field(end));
-0193     y = interp1(mag_field,abs,x);
-0194 
-0195     z = [x' y'];
-0196     
-0197 <span class="keyword">else</span>
-0198     z = [mag_field abs];
-0199 <span class="keyword">end</span>
-0200 
-0201 <span class="comment">% ========================================================================</span>
-0202 <span class="comment">% Output arguments</span>
-0203 <span class="comment">% ========================================================================</span>
-0204 
-0205 <span class="comment">% select ouput method</span>
-0206 prompt = questdlg(<span class="string">'Do you wish to convert to the same folder?'</span>,<span class="string">'Export'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>,<span class="string">'Yes'</span>);
-0207 
-0208 
-0209 <span class="comment">% output according to choice</span>
-0210 <span class="keyword">switch</span> prompt,
-0211     <span class="keyword">case</span> <span class="string">'Yes'</span>
-0212         <span class="comment">% If doing from the current folder, using CLI file entry, then</span>
-0213         <span class="comment">% directory is blank and we have a leading '/'</span>
-0214         <span class="keyword">if</span> size(directory,1) == 0
-0215             dlmwrite([name,extension], z, <span class="string">'delimiter'</span>, delimiter,<span class="string">'precision'</span>, <span class="string">'%.13f'</span>);
-0216         <span class="keyword">else</span>
-0217             dlmwrite([directory,<span class="string">'/'</span>,name,extension], z, <span class="string">'delimiter'</span>, delimiter,<span class="string">'precision'</span>, <span class="string">'%.13f'</span>);
-0218         <span class="keyword">end</span>
+0142             <span class="comment">% Select the file</span>
+0143             [file , directory] = uigetfile({<span class="string">'*.DTA'</span>,<span class="string">'Bruker BES3T File (*.DTA)'</span>; <span class="keyword">...</span>
+0144                 <span class="string">'*.spc'</span>,<span class="string">'Bruker Spc File UNTESTED (*.spc)'</span>; <span class="keyword">...</span>
+0145                 <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load Bruker file'</span>);
+0146             
+0147             <span class="comment">% if user cancels command nothing happens</span>
+0148             <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0149                 <span class="keyword">return</span>
+0150             <span class="keyword">end</span>
+0151             
+0152             in_address = [directory,file];
+0153             
+0154             [mag_field, abs] = BrukerRead(in_address);
+0155         <span class="keyword">end</span>
+0156         
+0157         extension = <span class="string">'.csv'</span>;
+0158         noheader  = <span class="string">''</span>;
+0159        
+0160         <span class="comment">% File and delimiter selection</span>
+0161     <span class="keyword">case</span> 2
+0162         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
+0163             in_address = varargin{1};
+0164             [directory,name,ext] = fileparts(in_address);
+0165             file = [name ext];
+0166             [mag_field, abs] = BrukerRead(in_address);
+0167         <span class="keyword">end</span>
+0168 
+0169         delimiter = varargin{2};
+0170         noheader  = <span class="string">''</span>;
+0171         
+0172         <span class="comment">% File, delimiter and extension selection</span>
+0173     <span class="keyword">case</span> 3
+0174         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
+0175             in_address = varargin{1};
+0176             [directory,name,ext] = fileparts(in_address);
+0177             file = [name ext];
+0178             [mag_field, abs] = BrukerRead(in_address);
+0179         <span class="keyword">end</span>
+0180         
+0181         delimiter = varargin{2};
+0182         extension = varargin{3};
+0183         noheader  = <span class="string">''</span>;
+0184         
+0185         <span class="comment">% File, delimiter, extension and interval selection</span>
+0186     <span class="keyword">case</span> 4
+0187         <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
+0188             in_address = varargin{1};
+0189             [directory,name,ext] = fileparts(in_address);
+0190             file = [name ext];
+0191             [mag_field, abs] = BrukerRead(in_address);
+0192         <span class="keyword">end</span>
+0193         
+0194         delimiter = varargin{2};
+0195         extension = varargin{3};
+0196         interval  = varargin{4};
+0197         noheader  = <span class="string">''</span>;
+0198         
+0199     <span class="keyword">case</span> 5
+0200                 <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
+0201             in_address = varargin{1};
+0202             [directory,name,ext] = fileparts(in_address);
+0203             file = [name ext];
+0204             [mag_field, abs] = BrukerRead(in_address);
+0205         <span class="keyword">end</span>
+0206         
+0207         delimiter = varargin{2};
+0208         extension = varargin{3};
+0209         interval  = varargin{4};
+0210         noheader  = varargin{5};
+0211 <span class="keyword">end</span>
+0212 
+0213 <span class="comment">% File loaded details</span>
+0214 [directory,name,~] = fileparts(in_address);
+0215 
+0216 <span class="comment">% ========================================================================</span>
+0217 <span class="comment">% Data step</span>
+0218 <span class="comment">% ========================================================================</span>
 0219 
-0220     <span class="keyword">case</span> <span class="string">'No'</span>
-0221               
-0222         <span class="keyword">switch</span> nargin
-0223             <span class="keyword">case</span> 0
-0224                 <span class="comment">% Get output address</span>
-0225                 [out_name, out_path] = uiputfile(<span class="string">'*.csv'</span>, <span class="string">'Save output as...'</span>);
-0226                 out_add = fullfile(out_path,out_name);
-0227                 
-0228                 <span class="comment">% Write file</span>
-0229                 dlmwrite(out_add, z, <span class="string">'delimiter'</span>, <span class="string">','</span>,<span class="string">'precision'</span>, <span class="string">'%.13f'</span>);
-0230           
-0231             <span class="keyword">case</span> 1
-0232                 <span class="comment">% Get output address</span>
-0233                 [out_name, out_path] = uiputfile(<span class="string">'*.csv'</span>, <span class="string">'Save output as...'</span>);
-0234                 out_add = fullfile(out_path,out_name);
-0235                                 
-0236                 <span class="comment">% If argument was a file then output as normal</span>
-0237                 <span class="keyword">if</span> exist(varargin{1},<span class="string">'file'</span>);
-0238                     dlmwrite(out_add, z, <span class="string">'delimiter'</span>, <span class="string">','</span>,<span class="string">'precision'</span>, <span class="string">'%.13f'</span>);
-0239                 
-0240                 <span class="comment">% Output with user's selected delimiter</span>
-0241                 <span class="keyword">else</span>
-0242                     dlmwrite(out_add, z, <span class="string">'delimiter'</span>, delimiter,<span class="string">'precision'</span>, <span class="string">'%.13f'</span>);
-0243                 <span class="keyword">end</span>
-0244                 
-0245             <span class="keyword">case</span> 2
-0246                 <span class="comment">% Get output address</span>
-0247                 [out_name, out_path] = uiputfile(<span class="string">'*.csv'</span>, <span class="string">'Save output as...'</span>);
-0248                 out_add = fullfile(out_path,out_name);
-0249                 
-0250                 dlmwrite(out_add, z, <span class="string">'delimiter'</span>, delimiter,<span class="string">'precision'</span>, <span class="string">'%.13f'</span>);
-0251 
-0252             <span class="keyword">case</span> 3
-0253                 [out_name, out_path] = uiputfile([<span class="string">'*'</span> delimiter], <span class="string">'Save output as...'</span>);
-0254                 out_add = fullfile(out_path,out_name);
-0255                 
-0256                 dlmwrite(out_add, z, <span class="string">'delimiter'</span>, delimiter,<span class="string">'precision'</span>, <span class="string">'%.13f'</span>);
-0257                 
-0258             <span class="keyword">case</span> 4
-0259                 [out_name, out_path] = uiputfile([<span class="string">'*'</span> delimiter], <span class="string">'Save output as...'</span>);
-0260                 out_add = fullfile(out_path,out_name);
-0261                 
-0262                 dlmwrite(out_add, z, <span class="string">'delimiter'</span>, delimiter,<span class="string">'precision'</span>, <span class="string">'%.13f'</span>);
-0263                 
-0264         <span class="keyword">end</span>
-0265 
-0266 <span class="keyword">end</span>
-0267 
-0268 <span class="comment">% Message user</span>
-0269 fprintf(<span class="string">'File %s has been successfully converted to %s%s \n \n'</span>, file, out_name, extension)</pre></div>
-<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0220 <span class="keyword">if</span> exist(<span class="string">'interval'</span>,<span class="string">'var'</span>)
+0221     x = (mag_field(1):interval:mag_field(end));
+0222     y = interp1(mag_field,abs,x);
+0223 
+0224     z = [x' y'];
+0225     
+0226 <span class="keyword">else</span>
+0227     z = [mag_field abs];
+0228 <span class="keyword">end</span>
+0229 
+0230 <span class="comment">% ========================================================================</span>
+0231 <span class="comment">% Output arguments</span>
+0232 <span class="comment">% ========================================================================</span>
+0233 
+0234 <span class="comment">% select ouput method</span>
+0235 prompt = questdlg(<span class="string">'Do you wish to convert to the same folder?'</span>,<span class="string">'Export'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>,<span class="string">'Yes'</span>);
+0236 
+0237 
+0238 <span class="comment">% output according to choice</span>
+0239 <span class="keyword">switch</span> prompt,
+0240     <span class="keyword">case</span> <span class="string">'Yes'</span>
+0241         <span class="comment">% If doing from the current folder, using CLI file entry, then</span>
+0242         <span class="comment">% directory is blank and we have a leading '/'</span>
+0243         <span class="keyword">if</span> size(directory,1) == 0
+0244             <span class="comment">% dlmwrite([name,extension], z, 'delimiter', delimiter,'precision', '%.13f');</span>
+0245             
+0246             out_add = [name,extension];
+0247             
+0248         <span class="keyword">else</span>
+0249             <span class="comment">% dlmwrite([directory,'/',name,extension], z, 'delimiter', delimiter,'precision', '%.13f');</span>
+0250             
+0251             out_add = [directory,<span class="string">'/'</span>,name,extension];
+0252         <span class="keyword">end</span>
+0253 
+0254     <span class="keyword">case</span> <span class="string">'No'</span>
+0255         
+0256         [out_name, out_path] = uiputfile(<span class="string">'*.csv'</span>, <span class="string">'Save output as...'</span>);
+0257         out_add = fullfile(out_path,out_name);
+0258         
+0259 <span class="keyword">end</span>
+0260 
+0261 <span class="comment">% Generate header</span>
+0262 <span class="comment">% ===============</span>
+0263 
+0264 <span class="keyword">if</span> strcmp(noheader,<span class="string">'noheader'</span>) == 0
+0265     
+0266     fid = fopen(out_add,<span class="string">'w'</span>);
+0267     
+0268     header = [<span class="keyword">...</span>
+0269         <span class="string">'#                            ___                                           '</span>;<span class="keyword">...</span>
+0270         <span class="string">'#                           |__ \                                          '</span>;<span class="keyword">...</span>
+0271         <span class="string">'#                        ___   ) |__ _.                                    '</span>;<span class="keyword">...</span>
+0272         <span class="string">'#                       / _ \ / /  _` |                                    '</span>;<span class="keyword">...</span>
+0273         <span class="string">'#                      |  __// /| (_| |                                    '</span>;<span class="keyword">...</span>
+0274         <span class="string">'#                       \___|____\__,_|                                    '</span>;<span class="keyword">...</span>
+0275         <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0276         <span class="string">'#  Part of the EPR toolbox:                           developed at         '</span>;<span class="keyword">...</span>
+0277         <span class="string">'#  morganbye.net/eprtoolbox                    University of East Anglia   '</span>;<span class="keyword">...</span>
+0278         <span class="string">'#                                                         &amp;                '</span>;<span class="keyword">...</span>
+0279         <span class="string">'#                                             Weizmann Institue of Science '</span>;<span class="keyword">...</span>
+0280         <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0281         <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0282         <span class="string">'# This file has been created by e2af - v13.11 at:                          '</span>];
+0283     
+0284     header = [header ; sprintf(<span class="string">'%-75s'</span>, [<span class="string">'# '</span> datestr(now, <span class="string">'dd mmmm yyyy - HH:MM'</span>)])];
+0285     
+0286     <span class="keyword">for</span> j = 1:size(header,1)
+0287         fprintf(fid,<span class="string">'%-75s\n'</span>,header(j,:));
+0288     <span class="keyword">end</span>
+0289     
+0290     <span class="comment">% Close the file (for C language operations/memory freeing)</span>
+0291     fclose(fid);
+0292     
+0293 <span class="keyword">end</span>
+0294 
+0295 <span class="comment">% Write out data</span>
+0296 dlmwrite(file,<span class="keyword">...</span>
+0297             z,<span class="keyword">...</span>
+0298             <span class="string">'-append'</span>,<span class="keyword">...</span>
+0299             <span class="string">'delimiter'</span>, delimiter,<span class="keyword">...</span>
+0300             <span class="string">'precision'</span>, <span class="string">'%.13f'</span>);
+0301 
+0302 <span class="comment">% Message user</span>
+0303 fprintf(<span class="string">'File %s has been successfully converted to %s%s \n \n'</span>, file, out_name, extension)</pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

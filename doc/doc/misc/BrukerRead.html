@@ -201,7 +201,7 @@ This function is called by:
 0085 <span class="comment">%                      |___/                   |___/</span>
 0086 <span class="comment">%</span>
 0087 <span class="comment">%</span>
-0088 <span class="comment">% M. Bye v13.01</span>
+0088 <span class="comment">% M. Bye v14.05</span>
 0089 <span class="comment">%</span>
 0090 <span class="comment">% Author:       Morgan Bye</span>
 0091 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
@@ -209,736 +209,771 @@ This function is called by:
 0093 <span class="comment">%               NORWICH, UK</span>
 0094 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
 0095 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/brukerread</span>
-0096 <span class="comment">% Dec 2012;     Last revision: 20-December-2012</span>
+0096 <span class="comment">% Dec 2012;     Last revision: 23-Feb-2014</span>
 0097 <span class="comment">%</span>
 0098 <span class="comment">% Approximate coding time of file:</span>
 0099 <span class="comment">%               12 hours</span>
 0100 <span class="comment">%</span>
 0101 <span class="comment">%</span>
 0102 <span class="comment">% Version history:</span>
-0103 <span class="comment">% Dec 12        &gt; Major update for HYSCORE experiment handling</span>
-0104 <span class="comment">%               &gt; Bug fixes and better handling for ENDOR, ESEEM, DONUT</span>
-0105 <span class="comment">%                   experiment handling especially in figure plotting</span>
-0106 <span class="comment">%</span>
-0107 <span class="comment">% Jun 12        &gt; Muege Aksoyoglu (Uni. Freiburg, DE) kindly donated some</span>
-0108 <span class="comment">%                   .spc/.par files from an EMX machine allowing for</span>
-0109 <span class="comment">%                   support for these files</span>
-0110 <span class="comment">%               &gt; GUI load window updated to &quot;Bruker files&quot; instead of</span>
-0111 <span class="comment">%                   seperate options for DTA and spc</span>
-0112 <span class="comment">%               &gt; if statements for DTA/spc changed to switch statements</span>
-0113 <span class="comment">%                   for cleaner code</span>
-0114 <span class="comment">%</span>
-0115 <span class="comment">% Apr 12        &gt; Better handling of pulse experiments</span>
-0116 <span class="comment">%               &gt; Inputs changed so that 'plot' can be used by itself</span>
-0117 <span class="comment">%               &gt; Figure plotting reconfigured and improved</span>
-0118 <span class="comment">%                       - imaginary channel for pulse experiments</span>
-0119 <span class="comment">%                       - legend is displayed for real/imaginary channels</span>
-0120 <span class="comment">%                       - x-axis corrected for time or mag field depending</span>
-0121 <span class="comment">%                       on FSE or FID experiment with correct units/label</span>
-0122 <span class="comment">%</span>
-0123 <span class="comment">% Feb 12        Minor edit - fix for occasional file load by command line</span>
-0124 <span class="comment">%               error</span>
-0125 <span class="comment">%</span>
-0126 <span class="comment">% Dec 11        Plotted figures have file names included in header</span>
-0127 <span class="comment">%</span>
-0128 <span class="comment">% Oct 11        &gt; &quot;Return&quot; catch statement if user cancels a file load</span>
-0129 <span class="comment">%                   using the GUI</span>
-0130 <span class="comment">%               &gt; Fixed bug with 'plot' input parameter</span>
+0103 <span class="comment">% Apr 14        &gt; CPMG support</span>
+0104 <span class="comment">%               &gt; Error handling in figure plotting</span>
+0105 <span class="comment">%</span>
+0106 <span class="comment">% Feb 14        Better error reporting for when a file cannot be opened -</span>
+0107 <span class="comment">%                   by file permission or missing file</span>
+0108 <span class="comment">%</span>
+0109 <span class="comment">% Dec 13        YUNI now uses a try statement - old Xepr versions will not</span>
+0110 <span class="comment">%                   add it to the .dsc file automatically</span>
+0111 <span class="comment">%</span>
+0112 <span class="comment">% Dec 12        &gt; Major update for HYSCORE experiment handling</span>
+0113 <span class="comment">%               &gt; Bug fixes and better handling for ENDOR, ESEEM, DONUT</span>
+0114 <span class="comment">%                   experiment handling especially in figure plotting</span>
+0115 <span class="comment">%</span>
+0116 <span class="comment">% Jun 12        &gt; Muege Aksoyoglu (Uni. Freiburg, DE) kindly donated some</span>
+0117 <span class="comment">%                   .spc/.par files from an EMX machine allowing for</span>
+0118 <span class="comment">%                   support for these files</span>
+0119 <span class="comment">%               &gt; GUI load window updated to &quot;Bruker files&quot; instead of</span>
+0120 <span class="comment">%                   seperate options for DTA and spc</span>
+0121 <span class="comment">%               &gt; if statements for DTA/spc changed to switch statements</span>
+0122 <span class="comment">%                   for cleaner code</span>
+0123 <span class="comment">%</span>
+0124 <span class="comment">% Apr 12        &gt; Better handling of pulse experiments</span>
+0125 <span class="comment">%               &gt; Inputs changed so that 'plot' can be used by itself</span>
+0126 <span class="comment">%               &gt; Figure plotting reconfigured and improved</span>
+0127 <span class="comment">%                       - imaginary channel for pulse experiments</span>
+0128 <span class="comment">%                       - legend is displayed for real/imaginary channels</span>
+0129 <span class="comment">%                       - x-axis corrected for time or mag field depending</span>
+0130 <span class="comment">%                       on FSE or FID experiment with correct units/label</span>
 0131 <span class="comment">%</span>
-0132 <span class="comment">% Sept 11       Changed fid/fopen name reference system so that files are</span>
-0133 <span class="comment">%               still loaded even if not in the same location as MATLAB's</span>
-0134 <span class="comment">%               &quot;Current Folder&quot;. Only a problem occasionally when called</span>
-0135 <span class="comment">%               from another script.</span>
-0136 
-0137 <span class="comment">%                         Input arguments</span>
-0138 <span class="comment">% ========================================================================</span>
-0139 
-0140 <span class="keyword">switch</span> nargin
-0141     <span class="keyword">case</span> 0
-0142         <span class="comment">% GUI get file</span>
-0143         [file , directory] = uigetfile({<span class="string">'*.DTA;*.spc'</span>,<span class="string">'Bruker File (*.DTA,*.spc)'</span>; <span class="keyword">...</span>
-0144             <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="keyword">...</span>
-0145             <span class="string">'Load Bruker file'</span>);
-0146         
-0147         <span class="comment">% if user cancels command nothing happens</span>
-0148         <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
-0149             <span class="keyword">return</span>
-0150         <span class="keyword">end</span>
-0151                 
-0152         <span class="comment">% File name/path manipulation</span>
-0153         address = [directory,file];
-0154         [~, name,extension] = fileparts(address);
+0132 <span class="comment">% Feb 12        Minor edit - fix for occasional file load by command line</span>
+0133 <span class="comment">%               error</span>
+0134 <span class="comment">%</span>
+0135 <span class="comment">% Dec 11        Plotted figures have file names included in header</span>
+0136 <span class="comment">%</span>
+0137 <span class="comment">% Oct 11        &gt; &quot;Return&quot; catch statement if user cancels a file load</span>
+0138 <span class="comment">%                   using the GUI</span>
+0139 <span class="comment">%               &gt; Fixed bug with 'plot' input parameter</span>
+0140 <span class="comment">%</span>
+0141 <span class="comment">% Sept 11       Changed fid/fopen name reference system so that files are</span>
+0142 <span class="comment">%               still loaded even if not in the same location as MATLAB's</span>
+0143 <span class="comment">%               &quot;Current Folder&quot;. Only a problem occasionally when called</span>
+0144 <span class="comment">%               from another script.</span>
+0145 
+0146 <span class="comment">%                         Input arguments</span>
+0147 <span class="comment">% ========================================================================</span>
+0148 
+0149 <span class="keyword">switch</span> nargin
+0150     <span class="keyword">case</span> 0
+0151         <span class="comment">% GUI get file</span>
+0152         [file , directory] = uigetfile({<span class="string">'*.DTA;*.spc'</span>,<span class="string">'Bruker File (*.DTA,*.spc)'</span>; <span class="keyword">...</span>
+0153             <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="keyword">...</span>
+0154             <span class="string">'Load Bruker file'</span>);
 0155         
-0156         graph = <span class="string">''</span>;
-0157         
-0158         
-0159     <span class="keyword">case</span> 1
-0160         <span class="comment">% If input is 'plot'</span>
-0161         <span class="keyword">if</span> strcmp(varargin{1},<span class="string">'plot'</span>)
-0162             graph = <span class="string">'plot'</span>;
-0163             
-0164             <span class="comment">% GUI get file</span>
-0165             [file , directory] = uigetfile({<span class="string">'*.DTA'</span>,<span class="string">'Bruker BES3T File (*.DTA)'</span>; <span class="keyword">...</span>
-0166             <span class="string">'*.spc'</span>,<span class="string">'Bruker Spc File (*.spc)'</span>; <span class="keyword">...</span>
-0167             <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load Bruker file'</span>);
-0168         
-0169             <span class="comment">% if user cancels command nothing happens</span>
-0170             <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
-0171                 <span class="keyword">return</span>
-0172             <span class="keyword">end</span>
-0173                 
-0174             <span class="comment">% File name/path manipulation</span>
-0175             address = [directory,file];
-0176             [~, name,extension] = fileparts(address);
-0177             
-0178         <span class="comment">% Or if input is a path</span>
-0179         <span class="keyword">else</span>
-0180             address = varargin{1};
-0181             [directory,name,extension] = fileparts(address);
-0182             graph = <span class="string">''</span>;
-0183         <span class="keyword">end</span>
-0184         
-0185     <span class="keyword">case</span> 2
-0186         address = varargin{1};
-0187         [directory,name,extension] = fileparts(address);
-0188         graph = varargin{2};
-0189 <span class="keyword">end</span>
-0190 
-0191 <span class="comment">%                         Parameter files</span>
-0192 <span class="comment">% ========================================================================</span>
-0193 
-0194 <span class="comment">% Load .dsc/.par file</span>
-0195 <span class="comment">% ===================</span>
-0196 <span class="keyword">switch</span> extension
-0197     <span class="keyword">case</span> <span class="string">'.spc'</span>
-0198     filepar = [ directory <span class="string">'/'</span> name <span class="string">'.par'</span>];
-0199     fid = fopen( filepar , <span class="string">'r'</span>);
-0200     
-0201     delimiter = 10;
-0202     
-0203     <span class="keyword">case</span> <span class="string">'.DTA'</span>
-0204     filedsc = [directory <span class="string">'/'</span> name <span class="string">'.DSC'</span>];
-0205     fid = fopen( filedsc , <span class="string">'r'</span>);
-0206     
-0207     delimiter = 10;
-0208 <span class="keyword">end</span>
-0209 
-0210 <span class="comment">% Get characters from file</span>
-0211 <span class="comment">% [string , string_characters] = fscanf( fid , '%c' );</span>
-0212 <span class="comment">%</span>
-0213 <span class="comment">% % Close file, free up memory</span>
-0214 <span class="comment">% fclose(fid);</span>
-0215 <span class="comment">%</span>
-0216 <span class="comment">% % Convert character array into useful string array (insert line breaks)</span>
-0217 <span class="comment">% parameters = [];</span>
-0218 <span class="comment">%</span>
-0219 <span class="comment">% while isempty(string) == 0;</span>
-0220 <span class="comment">%     [token, string] = strtok(string,char(delimiter));</span>
-0221 <span class="comment">%     parameters = str2mat(parameters,token);</span>
-0222 <span class="comment">% end</span>
-0223 
-0224 <span class="comment">% Do basic reading of info file to decide on how to proceed with number</span>
-0225 <span class="comment">% crunching.</span>
-0226 
-0227 <span class="keyword">switch</span> extension
-0228     <span class="keyword">case</span> <span class="string">'.spc'</span>
-0229         info.EXPT = <span class="string">'CW'</span>;
-0230         
-0231     <span class="keyword">case</span> <span class="string">'.DTA'</span>
-0232         
-0233         info.EXPT  = strtrim(regexprep(parameters((strmatch(<span class="string">'EXPT'</span>,parameters)),:),<span class="string">'EXPT'</span>,<span class="string">''</span>));
-0234         info.XTYP  = strtrim(regexprep(parameters((strmatch(<span class="string">'XTYP'</span>,parameters)),:),<span class="string">'XTYP'</span>,<span class="string">''</span>));
-0235         info.YTYP  = strtrim(regexprep(parameters((strmatch(<span class="string">'YTYP'</span>,parameters)),:),<span class="string">'YTYP'</span>,<span class="string">''</span>));
-0236         info.IRNAM = strtrim(regexprep(parameters((strmatch(<span class="string">'IRNAM'</span>,parameters)),:),<span class="string">'IRNAM'</span>,<span class="string">''</span>));
-0237         info.XNAM  = strtrim(regexprep(parameters((strmatch(<span class="string">'XNAM'</span>,parameters)),:),<span class="string">'XNAM'</span>,<span class="string">''</span>));
-0238         info.XUNI  = strtrim(regexprep(parameters((strmatch(<span class="string">'XUNI'</span>,parameters)),:),<span class="string">'XUNI'</span>,<span class="string">''</span>));
-0239         info.YUNI  = strtrim(regexprep(parameters((strmatch(<span class="string">'YUNI'</span>,parameters)),:),<span class="string">'YUNI'</span>,<span class="string">''</span>));
-0240         info.TITL  = strtrim(regexprep(parameters((strmatch(<span class="string">'TITL'</span>,parameters)),:),<span class="string">'TITL'</span>,<span class="string">''</span>));
-0241 <span class="keyword">end</span>
-0242 
-0243 
-0244 <span class="comment">%                            Data files</span>
-0245 <span class="comment">% ========================================================================</span>
-0246 
+0156         <span class="comment">% if user cancels command nothing happens</span>
+0157         <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0158             <span class="keyword">return</span>
+0159         <span class="keyword">end</span>
+0160                 
+0161         <span class="comment">% File name/path manipulation</span>
+0162         address = [directory,file];
+0163         [~, name,extension] = fileparts(address);
+0164         
+0165         graph = <span class="string">''</span>;
+0166         
+0167         
+0168     <span class="keyword">case</span> 1
+0169         <span class="comment">% If input is 'plot'</span>
+0170         <span class="keyword">if</span> strcmp(varargin{1},<span class="string">'plot'</span>)
+0171             graph = <span class="string">'plot'</span>;
+0172             
+0173             <span class="comment">% GUI get file</span>
+0174             [file , directory] = uigetfile({<span class="string">'*.DTA'</span>,<span class="string">'Bruker BES3T File (*.DTA)'</span>; <span class="keyword">...</span>
+0175             <span class="string">'*.spc'</span>,<span class="string">'Bruker Spc File (*.spc)'</span>; <span class="keyword">...</span>
+0176             <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load Bruker file'</span>);
+0177         
+0178             <span class="comment">% if user cancels command nothing happens</span>
+0179             <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0180                 <span class="keyword">return</span>
+0181             <span class="keyword">end</span>
+0182                 
+0183             <span class="comment">% File name/path manipulation</span>
+0184             address = [directory,file];
+0185             [~, name,extension] = fileparts(address);
+0186             
+0187         <span class="comment">% Or if input is a path</span>
+0188         <span class="keyword">else</span>
+0189             address = varargin{1};
+0190             [directory,name,extension] = fileparts(address);
+0191             graph = <span class="string">''</span>;
+0192         <span class="keyword">end</span>
+0193         
+0194     <span class="keyword">case</span> 2
+0195         address = varargin{1};
+0196         [directory,name,extension] = fileparts(address);
+0197         graph = varargin{2};
+0198 <span class="keyword">end</span>
+0199 
+0200 <span class="comment">%                         Parameter files</span>
+0201 <span class="comment">% ========================================================================</span>
+0202 
+0203 <span class="comment">% Load .dsc/.par file</span>
+0204 <span class="comment">% ===================</span>
+0205 <span class="keyword">switch</span> extension
+0206     <span class="keyword">case</span> <span class="string">'.spc'</span>
+0207         filepar = [ directory <span class="string">'/'</span> name <span class="string">'.par'</span>];
+0208         fid = fopen( filepar , <span class="string">'r'</span>);
+0209         
+0210         <span class="keyword">if</span> isequal(fid,-1)
+0211             error(<span class="string">'BrukerRead: Could not open the desired *.spc file.'</span>)
+0212             <span class="keyword">return</span>
+0213         <span class="keyword">end</span>
+0214         
+0215         delimiter = 10;
+0216         
+0217     <span class="keyword">case</span> <span class="string">'.DTA'</span>
+0218         filedsc = [directory <span class="string">'/'</span> name <span class="string">'.DSC'</span>];
+0219         fid = fopen( filedsc , <span class="string">'r'</span>);
+0220         
+0221         
+0222         <span class="keyword">if</span> isequal(fid,-1)
+0223             error(<span class="string">'BrukerRead: Could not open the desired *.DSC file.'</span>)
+0224             <span class="keyword">return</span>
+0225         <span class="keyword">end</span>
+0226         
+0227         delimiter = 10;
+0228 <span class="keyword">end</span>
+0229 
+0230 
+0231 <span class="comment">% Get characters from file</span>
+0232 [string , string_characters] = fscanf( fid , <span class="string">'%c'</span> );
+0233 
+0234 <span class="comment">% Close file, free up memory</span>
+0235 fclose(fid);
+0236 
+0237 <span class="comment">% Convert character array into useful string array (insert line breaks)</span>
+0238 parameters = [];
+0239 
+0240 <span class="keyword">while</span> isempty(string) == 0;
+0241     [token, string] = strtok(string,char(delimiter));
+0242     parameters = str2mat(parameters,token);
+0243 <span class="keyword">end</span>
+0244 
+0245 <span class="comment">% Do basic reading of info file to decide on how to proceed with number</span>
+0246 <span class="comment">% crunching.</span>
 0247 
-0248 <span class="comment">% Load .dta/.spc file</span>
-0249 <span class="keyword">switch</span> extension
-0250     <span class="keyword">case</span> <span class="string">'.spc'</span>
-0251         fid   = fopen( [directory <span class="string">'/'</span> name <span class="string">'.spc'</span>], <span class="string">'r'</span>);
-0252         [y,n] = fread(fid,inf,<span class="string">'float'</span>);
+0248 <span class="keyword">switch</span> extension
+0249     <span class="keyword">case</span> <span class="string">'.spc'</span>
+0250         info.EXPT = <span class="string">'CW'</span>;
+0251         
+0252     <span class="keyword">case</span> <span class="string">'.DTA'</span>
 0253         
-0254     <span class="keyword">case</span> <span class="string">'.DTA'</span>
-0255         fid   = fopen( [directory <span class="string">'/'</span> name <span class="string">'.DTA'</span>], <span class="string">'r'</span>,<span class="string">'ieee-be.l64'</span>);
-0256         [y,n] = fread(fid,inf,<span class="string">'float64'</span>);
-0257 <span class="keyword">end</span>
-0258 
-0259 fclose(fid);
-0260 
-0261 
-0262 <span class="comment">%                      Magnetic field / X - axis</span>
-0263 <span class="comment">% ========================================================================</span>
-0264 
-0265 
-0266 <span class="keyword">switch</span> extension
-0267     <span class="keyword">case</span> <span class="string">'.spc'</span>
-0268         
-0269         <span class="comment">% Mag field centre point</span>
-0270         MagField.centre = str2num(regexprep(parameters((strmatch(<span class="string">'HCF'</span>,parameters)),:),<span class="string">'HCF'</span>,<span class="string">''</span>));
-0271         
-0272         <span class="comment">% Mag field sweep width</span>
-0273         MagField.width  = str2num(regexprep(parameters((strmatch(<span class="string">'HSW'</span>,parameters)),:),<span class="string">'HSW'</span>,<span class="string">''</span>));
-0274         
-0275         <span class="comment">% Mag field data points</span>
-0276         MagField.points = str2num(regexprep(parameters((strmatch(<span class="string">'ANZ'</span>,parameters)),:),<span class="string">'ANZ'</span>,<span class="string">''</span>));
-0277         
-0278         MagField.min      = MagField.centre - (MagField.width / 2);
-0279         MagField.sampling = MagField.width / MagField.points;
-0280         
-0281         <span class="keyword">for</span> k = 1:MagField.points
-0282             x(k) = MagField.min + (MagField.sampling * ((k)-1));
-0283         <span class="keyword">end</span>
-0284         
-0285         x = x';
-0286         
-0287     <span class="keyword">case</span> <span class="string">'.DTA'</span>    
-0288 
-0289         <span class="comment">% =================================</span>
-0290         <span class="comment">% a = strmatch('XMIN',basic_info)  % find line of XMIN</span>
-0291         <span class="comment">% mag_start = basic_info(a,:);     % read that line</span>
-0292         <span class="comment">% regexprep(mag_start,'XMIN','')   % delete XMIN from that line</span>
-0293         <span class="comment">% str2num                          % convert string to number</span>
-0294         <span class="comment">%</span>
-0295         <span class="comment">% in a shell this could easily be done with &quot;awk&quot;</span>
-0296         <span class="comment">% =================================</span>
-0297         
-0298         <span class="comment">% Mag field start</span>
-0299         MagField.min = str2num(regexprep(parameters((strmatch(<span class="string">'XMIN'</span>,parameters)),:),<span class="string">'XMIN'</span>,<span class="string">''</span>));
-0300         
-0301         <span class="comment">% Mag field width</span>
-0302         MagField.width = str2num(regexprep(parameters((strmatch(<span class="string">'XWID'</span>,parameters)),:),<span class="string">'XWID'</span>,<span class="string">''</span>));
-0303         
-0304         <span class="comment">% Mag number of data points</span>
-0305         MagField.points = str2num(regexprep(parameters((strmatch(<span class="string">'XPTS'</span>,parameters)),:),<span class="string">'XPTS'</span>,<span class="string">''</span>));
-0306         
-0307         
-0308         MagField.max = MagField.min + MagField.width;
-0309         MagField.sampling = MagField.width / MagField.points;
-0310         
-0311         <span class="keyword">for</span> k = 1:MagField.points
-0312             x(k) = MagField.min + (MagField.sampling * ((k)-1));
-0313         <span class="keyword">end</span>
-0314         
-0315         x = x';
-0316         
-0317 <span class="keyword">end</span>
-0318 
-0319 <span class="comment">%                          Data / Y - axis</span>
-0320 <span class="comment">% ========================================================================</span>
-0321 
-0322 <span class="comment">% Some work required for Pulsed experiments, cw experiments fine</span>
-0323 
-0324 <span class="keyword">if</span> strcmp(info.EXPT,<span class="string">'PLS'</span>)
-0325     
-0326     <span class="comment">% PELDOR, FSE and FID require splitting into real and imaginary</span>
-0327     <span class="comment">% channels, these should have no Y axis data.</span>
-0328     
-0329     <span class="keyword">if</span> strcmp(info.YTYP,<span class="string">'NODATA'</span>)
-0330     
-0331         z = reshape(y,2,[]);
-0332         clear y;
-0333         y.real = z(1,:)';
-0334         y.imag = z(2,:)';
-0335     
-0336     <span class="comment">% HYSCORE obviously have Y axis data collection and require splitting</span>
-0337     
-0338     <span class="keyword">elseif</span> strcmp(info.YTYP,<span class="string">'IDX'</span>)
+0254         info.EXPT  = strtrim(regexprep(parameters((strmatch(<span class="string">'EXPT'</span>,parameters)),:),<span class="string">'EXPT'</span>,<span class="string">''</span>));
+0255         info.XTYP  = strtrim(regexprep(parameters((strmatch(<span class="string">'XTYP'</span>,parameters)),:),<span class="string">'XTYP'</span>,<span class="string">''</span>));
+0256         info.YTYP  = strtrim(regexprep(parameters((strmatch(<span class="string">'YTYP'</span>,parameters)),:),<span class="string">'YTYP'</span>,<span class="string">''</span>));
+0257         info.IRNAM = strtrim(regexprep(parameters((strmatch(<span class="string">'IRNAM'</span>,parameters)),:),<span class="string">'IRNAM'</span>,<span class="string">''</span>));
+0258         info.XNAM  = strtrim(regexprep(parameters((strmatch(<span class="string">'XNAM'</span>,parameters)),:),<span class="string">'XNAM'</span>,<span class="string">''</span>));
+0259         info.XUNI  = strtrim(regexprep(parameters((strmatch(<span class="string">'XUNI'</span>,parameters)),:),<span class="string">'XUNI'</span>,<span class="string">''</span>));
+0260         
+0261         <span class="comment">% Old Xepr versions might not automatically add YUNI to .dsc</span>
+0262         <span class="keyword">try</span>
+0263             info.YUNI  = strtrim(regexprep(parameters((strmatch(<span class="string">'YUNI'</span>,parameters)),:),<span class="string">'YUNI'</span>,<span class="string">''</span>));
+0264         <span class="keyword">end</span>
+0265         info.TITL  = strtrim(regexprep(parameters((strmatch(<span class="string">'TITL'</span>,parameters)),:),<span class="string">'TITL'</span>,<span class="string">''</span>));
+0266 <span class="keyword">end</span>
+0267 
+0268 
+0269 <span class="comment">%                            Data files</span>
+0270 <span class="comment">% ========================================================================</span>
+0271 
+0272 
+0273 <span class="comment">% Load .dta/.spc file</span>
+0274 <span class="keyword">switch</span> extension
+0275     <span class="keyword">case</span> <span class="string">'.spc'</span>
+0276         fid   = fopen( [directory <span class="string">'/'</span> name <span class="string">'.spc'</span>], <span class="string">'r'</span>);
+0277         [y,n] = fread(fid,inf,<span class="string">'float'</span>);
+0278         
+0279     <span class="keyword">case</span> <span class="string">'.DTA'</span>
+0280         fid   = fopen( [directory <span class="string">'/'</span> name <span class="string">'.DTA'</span>], <span class="string">'r'</span>,<span class="string">'ieee-be.l64'</span>);
+0281         [y,n] = fread(fid,inf,<span class="string">'float64'</span>);
+0282 <span class="keyword">end</span>
+0283 
+0284 fclose(fid);
+0285 
+0286 
+0287 <span class="comment">%                      Magnetic field / X - axis</span>
+0288 <span class="comment">% ========================================================================</span>
+0289 
+0290 
+0291 <span class="keyword">switch</span> extension
+0292     <span class="keyword">case</span> <span class="string">'.spc'</span>
+0293         
+0294         <span class="comment">% Mag field centre point</span>
+0295         MagField.centre = str2num(regexprep(parameters((strmatch(<span class="string">'HCF'</span>,parameters)),:),<span class="string">'HCF'</span>,<span class="string">''</span>));
+0296         
+0297         <span class="comment">% Mag field sweep width</span>
+0298         MagField.width  = str2num(regexprep(parameters((strmatch(<span class="string">'HSW'</span>,parameters)),:),<span class="string">'HSW'</span>,<span class="string">''</span>));
+0299         
+0300         <span class="comment">% Mag field data points</span>
+0301         MagField.points = str2num(regexprep(parameters((strmatch(<span class="string">'ANZ'</span>,parameters)),:),<span class="string">'ANZ'</span>,<span class="string">''</span>));
+0302         
+0303         MagField.min      = MagField.centre - (MagField.width / 2);
+0304         MagField.sampling = MagField.width / MagField.points;
+0305         
+0306         <span class="keyword">for</span> k = 1:MagField.points
+0307             x(k) = MagField.min + (MagField.sampling * ((k)-1));
+0308         <span class="keyword">end</span>
+0309         
+0310         x = x';
+0311         
+0312     <span class="keyword">case</span> <span class="string">'.DTA'</span>    
+0313 
+0314         <span class="comment">% =================================</span>
+0315         <span class="comment">% a = strmatch('XMIN',basic_info)  % find line of XMIN</span>
+0316         <span class="comment">% mag_start = basic_info(a,:);     % read that line</span>
+0317         <span class="comment">% regexprep(mag_start,'XMIN','')   % delete XMIN from that line</span>
+0318         <span class="comment">% str2num                          % convert string to number</span>
+0319         <span class="comment">%</span>
+0320         <span class="comment">% in a shell this could easily be done with &quot;awk&quot;</span>
+0321         <span class="comment">% =================================</span>
+0322         
+0323         <span class="comment">% Mag field start</span>
+0324         MagField.min = str2num(regexprep(parameters((strmatch(<span class="string">'XMIN'</span>,parameters)),:),<span class="string">'XMIN'</span>,<span class="string">''</span>));
+0325         
+0326         <span class="comment">% Mag field width</span>
+0327         MagField.width = str2num(regexprep(parameters((strmatch(<span class="string">'XWID'</span>,parameters)),:),<span class="string">'XWID'</span>,<span class="string">''</span>));
+0328         
+0329         <span class="comment">% Mag number of data points</span>
+0330         MagField.points = str2num(regexprep(parameters((strmatch(<span class="string">'XPTS'</span>,parameters)),:),<span class="string">'XPTS'</span>,<span class="string">''</span>));
+0331         
+0332         
+0333         MagField.max = MagField.min + MagField.width;
+0334         MagField.sampling = MagField.width / MagField.points;
+0335         
+0336         <span class="keyword">for</span> k = 1:MagField.points
+0337             x(k) = MagField.min + (MagField.sampling * ((k)-1));
+0338         <span class="keyword">end</span>
 0339         
-0340         z = y;
-0341         clear y
-0342         
-0343         <span class="comment">% Create Y-axis</span>
-0344         <span class="comment">% =============</span>
-0345         
-0346         <span class="comment">% Y start</span>
-0347         Y.min    = str2num(regexprep(parameters((strmatch(<span class="string">'YMIN'</span>,parameters)),:),<span class="string">'YMIN'</span>,<span class="string">''</span>));
-0348         
-0349         <span class="comment">% Y width</span>
-0350         Y.width  = str2num(regexprep(parameters((strmatch(<span class="string">'YWID'</span>,parameters)),:),<span class="string">'YWID'</span>,<span class="string">''</span>));
-0351         
-0352         <span class="comment">% Y number of data points</span>
-0353         Y.points = str2num(regexprep(parameters((strmatch(<span class="string">'YPTS'</span>,parameters)),:),<span class="string">'YPTS'</span>,<span class="string">''</span>));
-0354         
-0355         <span class="comment">% Create other Y points</span>
-0356         Y.max = Y.min + Y.width;
-0357         Y.sampling = Y.width / Y.points;
-0358         
-0359         <span class="comment">% Create Y</span>
-0360         <span class="keyword">for</span> k = 1:Y.points
-0361             y(k) = Y.min + (Y.sampling * ((k)-1));
-0362         <span class="keyword">end</span>
-0363         
-0364         y = y';
-0365         
-0366         <span class="comment">% Format Z-axis</span>
-0367         <span class="comment">% =============</span>
-0368         
-0369         z = reshape(z,size(y,1),[]);
+0340         x = x';
+0341         
+0342 <span class="keyword">end</span>
+0343 
+0344 <span class="comment">%                          Data / Y - axis</span>
+0345 <span class="comment">% ========================================================================</span>
+0346 
+0347 <span class="comment">% Some work required for Pulsed experiments, cw experiments fine</span>
+0348 
+0349 <span class="keyword">if</span> strcmp(info.EXPT,<span class="string">'PLS'</span>)
+0350     
+0351     <span class="comment">% PELDOR, FSE and FID require splitting into real and imaginary</span>
+0352     <span class="comment">% channels, these should have no Y axis data.</span>
+0353     
+0354     <span class="keyword">if</span> strcmp(info.YTYP,<span class="string">'NODATA'</span>)
+0355     
+0356         z = reshape(y,2,[]);
+0357         clear y;
+0358         y.real = z(1,:)';
+0359         y.imag = z(2,:)';
+0360     
+0361     <span class="comment">% HYSCORE obviously have Y axis data collection and require splitting</span>
+0362     
+0363     <span class="keyword">elseif</span> strcmp(info.YTYP,<span class="string">'IDX'</span>)
+0364         
+0365         z = y;
+0366         clear y
+0367         
+0368         <span class="comment">% Create Y-axis</span>
+0369         <span class="comment">% =============</span>
 0370         
-0371     <span class="keyword">end</span>
-0372 <span class="keyword">end</span>
-0373     
-0374 
-0375 
-0376 
-0377 <span class="comment">%                         YGF files / Z - axis</span>
-0378 <span class="comment">% ========================================================================</span>
-0379 
-0380 
-0381 <span class="comment">% search directory for .YGF file</span>
-0382 <span class="keyword">if</span> exist([directory name <span class="string">'.YGF'</span>],<span class="string">'file'</span>)
-0383     
-0384     <span class="comment">% if exist, load .YGF , convert to usable matrix</span>
-0385     fid = fopen( [directory name <span class="string">'.YGF'</span>], <span class="string">'r'</span>,<span class="string">'ieee-be.l64'</span>);
-0386     [info.z_axis,info.z_axis_points] = fread(fid,inf,<span class="string">'float64'</span>);
-0387     
-0388     <span class="comment">% find number of data points</span>
-0389     MagField.points = str2num(regexprep(parameters((strmatch(<span class="string">'XPTS'</span>,parameters)),:),<span class="string">'XPTS'</span>,<span class="string">''</span>));
-0390     <span class="comment">% reshape the y-axis into columns using number of data points</span>
-0391     y = reshape(y, MagField.points , []);
-0392     
-0393 <span class="keyword">end</span>
-0394 
-0395 
-0396 
-0397 <span class="comment">%                         Output arguments</span>
-0398 <span class="comment">% ========================================================================</span>
+0371         <span class="comment">% Y start</span>
+0372         Y.min    = str2num(regexprep(parameters((strmatch(<span class="string">'YMIN'</span>,parameters)),:),<span class="string">'YMIN'</span>,<span class="string">''</span>));
+0373         
+0374         <span class="comment">% Y width</span>
+0375         Y.width  = str2num(regexprep(parameters((strmatch(<span class="string">'YWID'</span>,parameters)),:),<span class="string">'YWID'</span>,<span class="string">''</span>));
+0376         
+0377         <span class="comment">% Y number of data points</span>
+0378         Y.points = str2num(regexprep(parameters((strmatch(<span class="string">'YPTS'</span>,parameters)),:),<span class="string">'YPTS'</span>,<span class="string">''</span>));
+0379         
+0380         <span class="comment">% Create other Y points</span>
+0381         Y.max = Y.min + Y.width;
+0382         Y.sampling = Y.width / Y.points;
+0383         
+0384         <span class="comment">% Create Y</span>
+0385         <span class="keyword">for</span> k = 1:Y.points
+0386             y(k) = Y.min + (Y.sampling * ((k)-1));
+0387         <span class="keyword">end</span>
+0388         
+0389         y = y';
+0390         
+0391         <span class="comment">% Format Z-axis</span>
+0392         <span class="comment">% =============</span>
+0393         
+0394         z = reshape(z,size(y,1),[]);
+0395         
+0396     <span class="keyword">end</span>
+0397 <span class="keyword">end</span>
+0398     
 0399 
-0400 <span class="comment">% Output results according to requests</span>
-0401 <span class="keyword">switch</span> nargout
-0402     <span class="keyword">case</span> 0
-0403         graph = <span class="string">'plot'</span>;
-0404     <span class="keyword">case</span> 1
-0405         varargout{1} = y;
-0406     <span class="keyword">case</span> 2
-0407         varargout{1} = x;
-0408         varargout{2} = y;
-0409     <span class="keyword">case</span> 3
-0410         <span class="keyword">if</span> strcmp(info.EXPT,<span class="string">'PLS'</span>) &amp;&amp; strcmp(info.YTYP,<span class="string">'IDX'</span>)
-0411             varargout{1} = x;
-0412             varargout{2} = y;
-0413             varargout{3} = z;
-0414         <span class="keyword">else</span>
-0415             <span class="keyword">switch</span> extension
-0416                 <span class="keyword">case</span> <span class="string">'.spc'</span>
-0417                     info.MWFQ = str2num(regexprep(parameters((strmatch(<span class="string">'MF'</span> ,parameters)),:),<span class="string">'MF'</span> ,<span class="string">''</span>));
-0418                     info.MWPW = str2num(regexprep(parameters((strmatch(<span class="string">'MP'</span> ,parameters)),:),<span class="string">'MP'</span> ,<span class="string">''</span>));
-0419                     
-0420                     info.CenterField    = str2num(regexprep(parameters((strmatch(<span class="string">'HCF'</span>,parameters)),:),<span class="string">'HCF'</span>,<span class="string">''</span>));
-0421                     info.SweepWidth     = str2num(regexprep(parameters((strmatch(<span class="string">'HSW'</span>,parameters)),:),<span class="string">'HSW'</span>,<span class="string">''</span>));
-0422                     
-0423                 <span class="keyword">case</span> <span class="string">'.DTA'</span>
-0424                     
-0425                     <span class="comment">% create info parameters, only done if requested to minimise</span>
-0426                     <span class="comment">% computation time of function</span>
-0427                     info.DSRC = strtrim(regexprep(parameters((strmatch(<span class="string">'DSRC'</span>,parameters)),:),<span class="string">'DSRC'</span>,<span class="string">''</span>));
-0428                     info.BSEQ = strtrim(regexprep(parameters((strmatch(<span class="string">'BSEQ'</span>,parameters)),:),<span class="string">'BSEQ'</span>,<span class="string">''</span>));
-0429                     info.IKKF = strtrim(regexprep(parameters((strmatch(<span class="string">'IKKF'</span>,parameters)),:),<span class="string">'IKKF'</span>,<span class="string">''</span>));
-0430                     info.XTYP = strtrim(regexprep(parameters((strmatch(<span class="string">'XTYP'</span>,parameters)),:),<span class="string">'XTYP'</span>,<span class="string">''</span>));
-0431                     info.YTYP = strtrim(regexprep(parameters((strmatch(<span class="string">'YTYP'</span>,parameters)),:),<span class="string">'YTYP'</span>,<span class="string">''</span>));
-0432                     info.ZTYP = strtrim(regexprep(parameters((strmatch(<span class="string">'ZTYP'</span>,parameters)),:),<span class="string">'ZTYP'</span>,<span class="string">''</span>));
-0433                     
-0434                     info.IRFMT = strtrim(regexprep(parameters((strmatch(<span class="string">'IRFMT'</span>,parameters)),:),<span class="string">'IRFMT'</span>,<span class="string">''</span>));
-0435                     
-0436                     info.XMIN = str2num(regexprep(parameters((strmatch(<span class="string">'XMIN'</span>,parameters)),:),<span class="string">'XMIN'</span>,<span class="string">''</span>));
-0437                     info.XWID = str2num(regexprep(parameters((strmatch(<span class="string">'XWID'</span>,parameters)),:),<span class="string">'XWID'</span>,<span class="string">''</span>));
-0438                     info.XPTS = str2num(regexprep(parameters((strmatch(<span class="string">'XPTS'</span>,parameters)),:),<span class="string">'XPTS'</span>,<span class="string">''</span>));
-0439                     
-0440                     <span class="comment">% info.TITL = strtrim(regexprep(parameters((strmatch('TITL',parameters)),:),'TITL',''));</span>
-0441                     info.IRUNI = strtrim(regexprep(parameters((strmatch(<span class="string">'IRUNI'</span>,parameters)),:),<span class="string">'IRUNI'</span>,<span class="string">''</span>));
-0442                     
-0443                     info.OPER = strtrim(regexprep(parameters((strmatch(<span class="string">'OPER'</span>,parameters)),:),<span class="string">'OPER'</span>,<span class="string">''</span>));
-0444                     info.DATE = strtrim(regexprep(parameters((strmatch(<span class="string">'DATE'</span>,parameters)),:),<span class="string">'DATE'</span>,<span class="string">''</span>));
-0445                     info.TIME = strtrim(regexprep(parameters((strmatch(<span class="string">'TIME'</span>,parameters)),:),<span class="string">'TIME'</span>,<span class="string">''</span>));
-0446                     info.CMNT = strtrim(regexprep(parameters((strmatch(<span class="string">'CMNT'</span>,parameters)),:),<span class="string">'CMNT'</span>,<span class="string">''</span>));
-0447                     info.SAMP = strtrim(regexprep(parameters((strmatch(<span class="string">'SAMP'</span>,parameters)),:),<span class="string">'SAMP'</span>,<span class="string">''</span>));
-0448                     info.SFOR = strtrim(regexprep(parameters((strmatch(<span class="string">'SFOR'</span>,parameters)),:),<span class="string">'SFOR'</span>,<span class="string">''</span>));
-0449                     info.STAG = strtrim(regexprep(parameters((strmatch(<span class="string">'STAG'</span>,parameters)),:),<span class="string">'STAG'</span>,<span class="string">''</span>));
-0450                     info.OXS1 = strtrim(regexprep(parameters((strmatch(<span class="string">'OXS1'</span>,parameters)),:),<span class="string">'OXS1'</span>,<span class="string">''</span>));
-0451                     info.AXS1 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS1'</span>,parameters)),:),<span class="string">'AXS1'</span>,<span class="string">''</span>));
-0452                     info.AXS2 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS2'</span>,parameters)),:),<span class="string">'AXS2'</span>,<span class="string">''</span>));
-0453                     info.AXS3 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS3'</span>,parameters)),:),<span class="string">'AXS3'</span>,<span class="string">''</span>));
-0454                     info.A1CT = str2num(regexprep(parameters((strmatch(<span class="string">'A1CT'</span>,parameters)),:),<span class="string">'A1CT'</span>,<span class="string">''</span>));
-0455                     info.A1SW = str2num(regexprep(parameters((strmatch(<span class="string">'A1SW'</span>,parameters)),:),<span class="string">'A1SW'</span>,<span class="string">''</span>));
-0456                     info.MWFQ = str2num(regexprep(parameters((strmatch(<span class="string">'MWFQ'</span>,parameters)),:),<span class="string">'MWFQ'</span>,<span class="string">''</span>));
-0457                     info.MWPW = str2num(regexprep(parameters((strmatch(<span class="string">'MWPW'</span>,parameters)),:),<span class="string">'MWPW'</span>,<span class="string">''</span>));
-0458                     info.AVGS = str2num(regexprep(parameters((strmatch(<span class="string">'AVGS'</span>,parameters)),:),<span class="string">'AVGS'</span>,<span class="string">''</span>));
-0459                     
-0460                     info.CenterField = strtrim(regexprep(parameters((strmatch(<span class="string">'CenterField'</span>,parameters)),:),<span class="string">'CenterField'</span>,<span class="string">''</span>));
-0461                     info.FieldFlyback = strtrim(regexprep(parameters((strmatch(<span class="string">'FieldFlyback'</span>,parameters)),:),<span class="string">'FieldFlyback'</span>,<span class="string">''</span>));
-0462                     info.FieldWait = strtrim(regexprep(parameters((strmatch(<span class="string">'FieldWait'</span>,parameters)),:),<span class="string">'FieldWait'</span>,<span class="string">''</span>));
-0463                     info.GFactor = str2num(regexprep(parameters((strmatch(<span class="string">'GFactor'</span>,parameters)),:),<span class="string">'GFactor'</span>,<span class="string">''</span>));
-0464                     info.SetToSampleG = strtrim(regexprep(parameters((strmatch(<span class="string">'SetToSampleG'</span>,parameters)),:),<span class="string">'SetToSampleG'</span>,<span class="string">''</span>));
-0465                     info.SweepDirection = strtrim(regexprep(parameters((strmatch(<span class="string">'SweepDirection'</span>,parameters)),:),<span class="string">'SweepDirection'</span>,<span class="string">''</span>));
-0466                     
-0467                     info.FrequencyMon = strtrim(regexprep(parameters((strmatch(<span class="string">'FrequencyMon'</span>,parameters)),:),<span class="string">'FrequencyMon'</span>,<span class="string">''</span>));
-0468                     info.QMonitBridge = strtrim(regexprep(parameters((strmatch(<span class="string">'QMonitBridge'</span>,parameters)),:),<span class="string">'QMonitBridge'</span>,<span class="string">''</span>));
-0469                     <span class="comment">% Power is different because strmatch for 'Power' finds Power and</span>
-0470                     <span class="comment">% PowerAtten</span>
-0471                     info.Power = parameters((strmatch(<span class="string">'Power'</span>,parameters)),:);
-0472                     info.Power = strtrim(regexprep((info.Power(1,:)),<span class="string">'Power'</span>,<span class="string">''</span>));
-0473                     info.PowerAtten = strtrim(regexprep(parameters((strmatch(<span class="string">'PowerAtten'</span>,parameters)),:),<span class="string">'PowerAtten'</span>,<span class="string">''</span>));
-0474                     info.BaselineCorr = strtrim(regexprep(parameters((strmatch(<span class="string">'BaselineCorr'</span>,parameters)),:),<span class="string">'BaselineCorr'</span>,<span class="string">''</span>));
-0475                     info.NbScansAcc = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansAcc'</span>,parameters)),:),<span class="string">'NbScansAcc'</span>,<span class="string">''</span>));
-0476                     info.NbScansDone = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansDone'</span>,parameters)),:),<span class="string">'NbScansDone'</span>,<span class="string">''</span>));
-0477                     info.NbScansToDo = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansToDo'</span>,parameters)),:),<span class="string">'NbScansToDo'</span>,<span class="string">''</span>));
-0478                     
-0479                     
-0480                     <span class="comment">% Experiment dependent parameters</span>
-0481                     <span class="keyword">switch</span> info.EXPT
-0482                         <span class="keyword">case</span> <span class="string">'PLS'</span>
-0483                             <span class="comment">% documentation text</span>
-0484                             info.IIFMT = strtrim(regexprep(parameters((strmatch(<span class="string">'IIFMT'</span>,parameters)),:),<span class="string">'IIFMT'</span>,<span class="string">''</span>));
-0485                             info.IIUNI = strtrim(regexprep(parameters((strmatch(<span class="string">'IIUNI'</span>,parameters)),:),<span class="string">'IIUNI'</span>,<span class="string">''</span>));
-0486                             
-0487                             info.Delay = parameters((strmatch(<span class="string">'Delay'</span>,parameters)),:);
-0488                             info.Delay = strtrim(regexprep((info.Delay(1,:)),<span class="string">'Delay'</span>,<span class="string">''</span>));
-0489                             <span class="comment">% cw bridge</span>
-0490                             info.AcqFineTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqFineTuning'</span>,parameters)),:),<span class="string">'AcqFineTuning'</span>,<span class="string">''</span>));
-0491                             info.AcqScanFTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqScanFTuning'</span>,parameters)),:),<span class="string">'AcqScanFTuning'</span>,<span class="string">''</span>));
-0492                             info.AcqSliceFTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqSliceFTuning'</span>,parameters)),:),<span class="string">'AcqSliceFTuning'</span>,<span class="string">''</span>));
-0493                             <span class="comment">% endor</span>
-0494                             info.EIEENDORFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEENDORFreq'</span>,parameters)),:),<span class="string">'EIEENDORFreq'</span>,<span class="string">''</span>));
-0495                             info.EIEIsotope = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEIsotope'</span>,parameters)),:),<span class="string">'EIEIsotope'</span>,<span class="string">''</span>));
-0496                             info.EIERFSweepDir = strtrim(regexprep(parameters((strmatch(<span class="string">'EIERFSweepDir'</span>,parameters)),:),<span class="string">'EIERFSweepDir'</span>,<span class="string">''</span>));
-0497                             info.EIEStaticField = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEStaticField'</span>,parameters)),:),<span class="string">'EIEStaticField'</span>,<span class="string">''</span>));
-0498                             info.EIEStaticRF = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEStaticRF'</span>,parameters)),:),<span class="string">'EIEStaticRF'</span>,<span class="string">''</span>));
-0499                             info.ENDORType = strtrim(regexprep(parameters((strmatch(<span class="string">'ENDORType'</span>,parameters)),:),<span class="string">'ENDORType'</span>,<span class="string">''</span>));
-0500                             info.RF1Atten = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1Atten'</span>,parameters)),:),<span class="string">'RF1Atten'</span>,<span class="string">''</span>));
-0501                             info.RF1FreqPos = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1FreqPos'</span>,parameters)),:),<span class="string">'RF1FreqPos'</span>,<span class="string">''</span>));
-0502                             info.RF1StartFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1StartFreq'</span>,parameters)),:),<span class="string">'RF1StartFreq'</span>,<span class="string">''</span>));
-0503                             info.RF1SweepWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1SweepWidth'</span>,parameters)),:),<span class="string">'RF1SweepWidth'</span>,<span class="string">''</span>));
-0504                             info.RF2Atten = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2Atten'</span>,parameters)),:),<span class="string">'RF2Atten'</span>,<span class="string">''</span>));
-0505                             info.RF2FreqPos = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2FreqPos'</span>,parameters)),:),<span class="string">'RF2FreqPos'</span>,<span class="string">''</span>));
-0506                             info.RF2StartFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2StartFreq'</span>,parameters)),:),<span class="string">'RF2StartFreq'</span>,<span class="string">''</span>));
-0507                             info.RF2SweepWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2SweepWidth'</span>,parameters)),:),<span class="string">'RF2SweepWidth'</span>,<span class="string">''</span>));
-0508                             info.RFSrcMixing = strtrim(regexprep(parameters((strmatch(<span class="string">'RFSrcMixing'</span>,parameters)),:),<span class="string">'RFSrcMixing'</span>,<span class="string">''</span>));
-0509                             info.SumAtten = parameters((strmatch(<span class="string">'SumAtten'</span>,parameters)),:);
-0510                             info.SumAtten = strtrim(regexprep((info.Power(1,:)),<span class="string">'SumAtten'</span>,<span class="string">''</span>));
-0511                             info.SumAttenStart = strtrim(regexprep(parameters((strmatch(<span class="string">'SumAttenStart'</span>,parameters)),:),<span class="string">'SumAttenStart'</span>,<span class="string">''</span>));
-0512                             info.SumAttenWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'SumAttenWidth'</span>,parameters)),:),<span class="string">'SumAttenWidth'</span>,<span class="string">''</span>));
-0513                             <span class="comment">% fieldCtrl</span>
-0514                             info.FieldResol = str2num(regexprep(parameters((strmatch(<span class="string">'FieldResol'</span>,parameters)),:),<span class="string">'FieldResol'</span>,<span class="string">''</span>));
-0515                             <span class="comment">% ftBridge</span>
-0516                             info.Attenuation = strtrim(regexprep(parameters((strmatch(<span class="string">'Attenuation'</span>,parameters)),:),<span class="string">'Attenuation'</span>,<span class="string">''</span>));
-0517                             info.ELDORAtt = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORAtt'</span>,parameters)),:),<span class="string">'ELDORAtt'</span>,<span class="string">''</span>));
-0518                             info.FrequencyA = strtrim(regexprep(parameters((strmatch(<span class="string">'FrequencyA'</span>,parameters)),:),<span class="string">'FrequencyA'</span>,<span class="string">''</span>));
-0519                             info.VideoBW = strtrim(regexprep(parameters((strmatch(<span class="string">'VideoBW'</span>,parameters)),:),<span class="string">'VideoBW'</span>,<span class="string">''</span>));
-0520                             info.VideoGain = strtrim(regexprep(parameters((strmatch(<span class="string">'VideoGain'</span>,parameters)),:),<span class="string">'VideoGain'</span>,<span class="string">''</span>));
-0521                             <span class="comment">% ftEpr</span>
-0522                             info.AutoTimeOut = strtrim(regexprep(parameters((strmatch(<span class="string">'AutoTimeOut'</span>,parameters)),:),<span class="string">'AutoTimeOut'</span>,<span class="string">''</span>));
-0523                             info.AveragesPerScan = str2num(regexprep(parameters((strmatch(<span class="string">'AveragesPerScan'</span>,parameters)),:),<span class="string">'AveragesPerScan'</span>,<span class="string">''</span>));
-0524                             info.ELDORFreqStart = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORFreqStart'</span>,parameters)),:),<span class="string">'ELDORFreqStart'</span>,<span class="string">''</span>));
-0525                             info.ELDORFreqWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORFreqWidth'</span>,parameters)),:),<span class="string">'ELDORFreqWidth'</span>,<span class="string">''</span>));
-0526                             info.FTAcqModeSlct = strtrim(regexprep(parameters((strmatch(<span class="string">'FTAcqModeSlct'</span>,parameters)),:),<span class="string">'FTAcqModeSlct'</span>,<span class="string">''</span>));
-0527                             info.PPExtTrg = parameters((strmatch(<span class="string">'PPExtTrg'</span>,parameters)),:);
-0528                             info.PPExtTrg = strtrim(regexprep((info.PPExtTrg(1,:)),<span class="string">'PPExtTrg'</span>,<span class="string">''</span>));
-0529                             info.PPExtTrgSlope = strtrim(regexprep(parameters((strmatch(<span class="string">'PPExtTrgSlope'</span>,parameters)),:),<span class="string">'PPExtTrgSlope'</span>,<span class="string">''</span>));
-0530                             info.PlsSPELEXPSlct = strtrim(regexprep(parameters((strmatch(<span class="string">'PlsSPELEXPSlct'</span>,parameters)),:),<span class="string">'PlsSPELEXPSlct'</span>,<span class="string">''</span>));
-0531                             info.ReplaceMode = parameters((strmatch(<span class="string">'ReplaceMode'</span>,parameters)),:);
-0532                             info.ReplaceMode_ftEpr = strtrim(regexprep((info.ReplaceMode(1,:)),<span class="string">'ReplaceMode'</span>,<span class="string">''</span>));
-0533                             info.ReplaceMode_recorder = strtrim(regexprep((info.ReplaceMode(2,:)),<span class="string">'ReplaceMode'</span>,<span class="string">''</span>));
-0534                             clear info.ReplaceMode
-0535                             info.ShotRepTime = strtrim(regexprep(parameters((strmatch(<span class="string">'ShotRepTime'</span>,parameters)),:),<span class="string">'ShotRepTime'</span>,<span class="string">''</span>));
-0536                             info.ShotsPLoop = strtrim(regexprep(parameters((strmatch(<span class="string">'ShotsPLoop'</span>,parameters)),:),<span class="string">'ShotsPLoop'</span>,<span class="string">''</span>));
-0537                             info.SptProgress = strtrim(regexprep(parameters((strmatch(<span class="string">'SptProgress'</span>,parameters)),:),<span class="string">'SptProgress'</span>,<span class="string">''</span>));
-0538                             info.SweepsPExp = strtrim(regexprep(parameters((strmatch(<span class="string">'SweepsPExp'</span>,parameters)),:),<span class="string">'SweepsPExp'</span>,<span class="string">''</span>));
-0539                             info.TriggerTimeOut = strtrim(regexprep(parameters((strmatch(<span class="string">'TriggerTimeOut'</span>,parameters)),:),<span class="string">'TriggerTimeOut'</span>,<span class="string">''</span>));
-0540                             info.XAxisQuant = strtrim(regexprep(parameters((strmatch(<span class="string">'XAxisQuant'</span>,parameters)),:),<span class="string">'XAxisQuant'</span>,<span class="string">''</span>));
-0541                             info.XSpecRes = str2num(regexprep(parameters((strmatch(<span class="string">'XSpecRes'</span>,parameters)),:),<span class="string">'XSpecRes'</span>,<span class="string">''</span>));
-0542                             info.YAxisQuant = strtrim(regexprep(parameters((strmatch(<span class="string">'YAxisQuant'</span>,parameters)),:),<span class="string">'YAxisQuant'</span>,<span class="string">''</span>));
-0543                             info.YSpecRes = str2num(regexprep(parameters((strmatch(<span class="string">'YSpecRes'</span>,parameters)),:),<span class="string">'YSpecRes'</span>,<span class="string">''</span>));
-0544                             
-0545                             
-0546                         <span class="keyword">case</span> <span class="string">'CW'</span>
-0547                             <span class="comment">% document text</span>
-0548                             info.YFMT = strtrim(regexprep(parameters((strmatch(<span class="string">'YFMT'</span>,parameters)),:),<span class="string">'YFMT'</span>,<span class="string">''</span>));
-0549                             info.YNAM = strtrim(regexprep(parameters((strmatch(<span class="string">'YNAM'</span>,parameters)),:),<span class="string">'YNAM'</span>,<span class="string">''</span>));
-0550                             info.YUNI = strtrim(regexprep(parameters((strmatch(<span class="string">'YUNI'</span>,parameters)),:),<span class="string">'YUNI'</span>,<span class="string">''</span>));
-0551                             <span class="comment">% standard parameter</span>
-0552                             info.RESO = strtrim(regexprep(parameters((strmatch(<span class="string">'RESO'</span>,parameters)),:),<span class="string">'RESO'</span>,<span class="string">''</span>));
-0553                             info.SPTP = str2num(regexprep(parameters((strmatch(<span class="string">'SPTP'</span>,parameters)),:),<span class="string">'SPTP'</span>,<span class="string">''</span>));
-0554                             info.RCAG = str2num(regexprep(parameters((strmatch(<span class="string">'RCAG'</span>,parameters)),:),<span class="string">'RCAG'</span>,<span class="string">''</span>));
-0555                             info.RCHM = str2num(regexprep(parameters((strmatch(<span class="string">'RCHM'</span>,parameters)),:),<span class="string">'RCHM'</span>,<span class="string">''</span>));
-0556                             info.B0MA = str2num(regexprep(parameters((strmatch(<span class="string">'B0MA'</span>,parameters)),:),<span class="string">'B0MA'</span>,<span class="string">''</span>));
-0557                             info.B0MF = str2num(regexprep(parameters((strmatch(<span class="string">'B0MF'</span>,parameters)),:),<span class="string">'B0MF'</span>,<span class="string">''</span>));
-0558                             info.RCPH = str2num(regexprep(parameters((strmatch(<span class="string">'RCPH'</span>,parameters)),:),<span class="string">'RCPH'</span>,<span class="string">''</span>));
-0559                             info.RCOF = str2num(regexprep(parameters((strmatch(<span class="string">'RCOF'</span>,parameters)),:),<span class="string">'RCOF'</span>,<span class="string">''</span>));
-0560                             info.A1RS = str2num(regexprep(parameters((strmatch(<span class="string">'A1RS'</span>,parameters)),:),<span class="string">'A1RS'</span>,<span class="string">''</span>));
-0561                             info.RCTC = str2num(regexprep(parameters((strmatch(<span class="string">'RCTC'</span>,parameters)),:),<span class="string">'RCTC'</span>,<span class="string">''</span>));
-0562                             <span class="comment">% mwBridge</span>
-0563                             info.AcqFineTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqFineTuning'</span>,parameters)),:),<span class="string">'AcqFineTuning'</span>,<span class="string">''</span>));
-0564                             <span class="comment">% fieldCtrl</span>
-0565                             <span class="comment">%            info.SweepWidth = parameters((strmatch('SweepWidth',parameters)),:);</span>
-0566                             <span class="comment">%            info.SweepWidth_fieldCtrl = strtrim(regexprep((info.SweepWidth(1,:)),'SweepWidth',''));</span>
-0567                             <span class="comment">%            info.SweepWidth_ramp2 = strtrim(regexprep((info.SweepWidth(2,:)),'SweepWidth',''));</span>
-0568                             clear info.SweepWidth
-0569                             info.Delay = strtrim(regexprep(parameters((strmatch(<span class="string">'Delay'</span>,parameters,<span class="string">'exact'</span>)),:),<span class="string">'Delay'</span>,<span class="string">''</span>));
-0570                             info.ReplaceMode = strtrim(regexprep(parameters((strmatch(<span class="string">'ReplaceMode'</span>,parameters)),:),<span class="string">'ReplaceMode'</span>,<span class="string">''</span>));
-0571                             <span class="comment">% signalChannel</span>
-0572                             info.AFCTrap = strtrim(regexprep(parameters((strmatch(<span class="string">'AFCTrap'</span>,parameters)),:),<span class="string">'AFCTrap'</span>,<span class="string">''</span>));
-0573                             info.Calibrated = strtrim(regexprep(parameters((strmatch(<span class="string">'Calibrated'</span>,parameters)),:),<span class="string">'Calibrated'</span>,<span class="string">''</span>));
-0574                             info.ConvTime = strtrim(regexprep(parameters((strmatch(<span class="string">'ConvTime'</span>,parameters)),:),<span class="string">'ConvTime'</span>,<span class="string">''</span>));
-0575                             info.DModAFCTrap = strtrim(regexprep(parameters((strmatch(<span class="string">'DModAFCTrap'</span>,parameters)),:),<span class="string">'DModAFCTrap'</span>,<span class="string">''</span>));
-0576                             info.DModAmp = strtrim(regexprep(parameters((strmatch(<span class="string">'DModAmp'</span>,parameters)),:),<span class="string">'DModAmp'</span>,<span class="string">''</span>));
-0577                             info.DModCalibrated = strtrim(regexprep(parameters((strmatch(<span class="string">'DModCalibrated'</span>,parameters)),:),<span class="string">'DModCalibrated'</span>,<span class="string">''</span>));
-0578                             info.DModDetectSCT = strtrim(regexprep(parameters((strmatch(<span class="string">'DModDetectSCT'</span>,parameters)),:),<span class="string">'DModDetectSCT'</span>,<span class="string">''</span>));
-0579                             info.DModEliDelay = strtrim(regexprep(parameters((strmatch(<span class="string">'DModEliDelay'</span>,parameters)),:),<span class="string">'DModEliDelay'</span>,<span class="string">''</span>));
-0580                             info.DModExtLockIn = strtrim(regexprep(parameters((strmatch(<span class="string">'DModExtLockIn'</span>,parameters)),:),<span class="string">'DModExtLockIn'</span>,<span class="string">''</span>));
-0581                             info.DModExtTrigger = strtrim(regexprep(parameters((strmatch(<span class="string">'DModExtTrigger'</span>,parameters)),:),<span class="string">'DModExtTrigger'</span>,<span class="string">''</span>));
-0582                             info.DModFieldMod = strtrim(regexprep(parameters((strmatch(<span class="string">'DModFieldMod'</span>,parameters)),:),<span class="string">'DModFieldMod'</span>,<span class="string">''</span>));
-0583                             info.DModGain = strtrim(regexprep(parameters((strmatch(<span class="string">'DModGain'</span>,parameters)),:),<span class="string">'DModGain'</span>,<span class="string">''</span>));
-0584                             info.DModHighPass = strtrim(regexprep(parameters((strmatch(<span class="string">'DModHighPass'</span>,parameters)),:),<span class="string">'DModHighPass'</span>,<span class="string">''</span>));
-0585                             info.DModIntegrator = strtrim(regexprep(parameters((strmatch(<span class="string">'DModIntegrator'</span>,parameters)),:),<span class="string">'DModIntegrator'</span>,<span class="string">''</span>));
-0586                             info.DModModOutput = strtrim(regexprep(parameters((strmatch(<span class="string">'DModModOutput'</span>,parameters)),:),<span class="string">'DModModOutput'</span>,<span class="string">''</span>));
-0587                             info.DModSignalInput = strtrim(regexprep(parameters((strmatch(<span class="string">'DModSignalInput'</span>,parameters)),:),<span class="string">'DModSignalInput'</span>,<span class="string">''</span>));
-0588                             info.DModTimeConst = strtrim(regexprep(parameters((strmatch(<span class="string">'DModTimeConst'</span>,parameters)),:),<span class="string">'DModTimeConst'</span>,<span class="string">''</span>));
-0589                             info.DoubleModFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'DoubleModFreq'</span>,parameters)),:),<span class="string">'DoubleModFreq'</span>,<span class="string">''</span>));
-0590                             info.DoubleModPhase = strtrim(regexprep(parameters((strmatch(<span class="string">'DoubleModPhase'</span>,parameters)),:),<span class="string">'DoubleModPhase'</span>,<span class="string">''</span>));
-0591                             info.DoubleMode = strtrim(regexprep(parameters((strmatch(<span class="string">'DoubleMode'</span>,parameters)),:),<span class="string">'DoubleMode'</span>,<span class="string">''</span>));
-0592                             info.EliDelay = strtrim(regexprep(parameters((strmatch(<span class="string">'EliDelay'</span>,parameters)),:),<span class="string">'EliDelay'</span>,<span class="string">''</span>));
-0593                             info.ExtLockIn = strtrim(regexprep(parameters((strmatch(<span class="string">'ExtLockIn'</span>,parameters)),:),<span class="string">'ExtLockIn'</span>,<span class="string">''</span>));
-0594                             info.ExtTrigger = strtrim(regexprep(parameters((strmatch(<span class="string">'ExtTrigger'</span>,parameters)),:),<span class="string">'ExtTrigger'</span>,<span class="string">''</span>));
-0595                             info.Gain = strtrim(regexprep(parameters((strmatch(<span class="string">'Gain'</span>,parameters)),:),<span class="string">'Gain'</span>,<span class="string">''</span>));
-0596                             info.Harmonic = str2num(regexprep(parameters((strmatch(<span class="string">'Harmonic'</span>,parameters)),:),<span class="string">'Harmonic'</span>,<span class="string">''</span>));
-0597                             info.HighPass = strtrim(regexprep(parameters((strmatch(<span class="string">'HighPass'</span>,parameters)),:),<span class="string">'HighPass'</span>,<span class="string">''</span>));
-0598                             info.Integrator = strtrim(regexprep(parameters((strmatch(<span class="string">'Integrator'</span>,parameters)),:),<span class="string">'Integrator'</span>,<span class="string">''</span>));
-0599                             info.ModAmp = strtrim(regexprep(parameters((strmatch(<span class="string">'ModAmp'</span>,parameters)),:),<span class="string">'ModAmp'</span>,<span class="string">''</span>));
-0600                             info.ModFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'ModFreq'</span>,parameters)),:),<span class="string">'ModFreq'</span>,<span class="string">''</span>));
-0601                             info.ModInput = strtrim(regexprep(parameters((strmatch(<span class="string">'ModInput'</span>,parameters)),:),<span class="string">'ModInput'</span>,<span class="string">''</span>));
-0602                             info.ModOutput = strtrim(regexprep(parameters((strmatch(<span class="string">'ModOutput'</span>,parameters)),:),<span class="string">'ModOutput'</span>,<span class="string">''</span>));
-0603                             info.ModPhase = str2num(regexprep(parameters((strmatch(<span class="string">'ModPhase'</span>,parameters)),:),<span class="string">'ModPhase'</span>,<span class="string">''</span>));
-0604                             info.Offset = strtrim(regexprep(parameters((strmatch(<span class="string">'Offset'</span>,parameters)),:),<span class="string">'Offset'</span>,<span class="string">''</span>));
-0605                             info.QuadMode = strtrim(regexprep(parameters((strmatch(<span class="string">'QuadMode'</span>,parameters)),:),<span class="string">'QuadMode'</span>,<span class="string">''</span>));
-0606                             info.QuadPhase = str2num(regexprep(parameters((strmatch(<span class="string">'QuadPhase'</span>,parameters)),:),<span class="string">'QuadPhase'</span>,<span class="string">''</span>));
-0607                             info.Resolution = str2num(regexprep(parameters((strmatch(<span class="string">'Resolution'</span>,parameters)),:),<span class="string">'Resolution'</span>,<span class="string">''</span>));
-0608                             info.Resonator = str2num(regexprep(parameters((strmatch(<span class="string">'Resonator'</span>,parameters)),:),<span class="string">'Resonator'</span>,<span class="string">''</span>));
-0609                             info.SctNorm = strtrim(regexprep(parameters((strmatch(<span class="string">'SctNorm'</span>,parameters)),:),<span class="string">'SctNorm'</span>,<span class="string">''</span>));
-0610                             info.SctRevision = strtrim(regexprep(parameters((strmatch(<span class="string">'SctRevision'</span>,parameters)),:),<span class="string">'SctRevision'</span>,<span class="string">''</span>));
-0611                             info.SignalInput = strtrim(regexprep(parameters((strmatch(<span class="string">'SignalInput'</span>,parameters)),:),<span class="string">'SignalInput'</span>,<span class="string">''</span>));
-0612                             info.SweepTime = strtrim(regexprep(parameters((strmatch(<span class="string">'SweepTime'</span>,parameters)),:),<span class="string">'SweepTime'</span>,<span class="string">''</span>));
-0613                             info.TimeConst = strtrim(regexprep(parameters((strmatch(<span class="string">'TimeConst'</span>,parameters)),:),<span class="string">'TimeConst'</span>,<span class="string">''</span>));
-0614                             info.TuneCaps = str2num(regexprep(parameters((strmatch(<span class="string">'TuneCaps'</span>,parameters)),:),<span class="string">'TuneCaps'</span>,<span class="string">''</span>));
-0615                     <span class="keyword">end</span>
-0616             <span class="keyword">end</span>
-0617             
-0618             varargout{1} = x;
-0619             varargout{2} = y;
-0620             varargout{3} = info;
-0621         <span class="keyword">end</span>
-0622         
-0623     <span class="keyword">case</span> 4
-0624         
-0625         <span class="comment">% Generate info section</span>
-0626         info.DSRC = strtrim(regexprep(parameters((strmatch(<span class="string">'DSRC'</span>,parameters)),:),<span class="string">'DSRC'</span>,<span class="string">''</span>));
-0627         info.BSEQ = strtrim(regexprep(parameters((strmatch(<span class="string">'BSEQ'</span>,parameters)),:),<span class="string">'BSEQ'</span>,<span class="string">''</span>));
-0628         info.IKKF = strtrim(regexprep(parameters((strmatch(<span class="string">'IKKF'</span>,parameters)),:),<span class="string">'IKKF'</span>,<span class="string">''</span>));
-0629         info.ZTYP = strtrim(regexprep(parameters((strmatch(<span class="string">'ZTYP'</span>,parameters)),:),<span class="string">'ZTYP'</span>,<span class="string">''</span>));
-0630         
-0631         info.IRFMT = strtrim(regexprep(parameters((strmatch(<span class="string">'IRFMT'</span>,parameters)),:),<span class="string">'IRFMT'</span>,<span class="string">''</span>));
-0632         info.IRUNI = strtrim(regexprep(parameters((strmatch(<span class="string">'IRUNI'</span>,parameters)),:),<span class="string">'IRUNI'</span>,<span class="string">''</span>));
-0633         info.OPER = strtrim(regexprep(parameters((strmatch(<span class="string">'OPER'</span>,parameters)),:),<span class="string">'OPER'</span>,<span class="string">''</span>));
-0634         info.DATE = strtrim(regexprep(parameters((strmatch(<span class="string">'DATE'</span>,parameters)),:),<span class="string">'DATE'</span>,<span class="string">''</span>));
-0635         info.TIME = strtrim(regexprep(parameters((strmatch(<span class="string">'TIME'</span>,parameters)),:),<span class="string">'TIME'</span>,<span class="string">''</span>));
-0636         info.CMNT = strtrim(regexprep(parameters((strmatch(<span class="string">'CMNT'</span>,parameters)),:),<span class="string">'CMNT'</span>,<span class="string">''</span>));
-0637         info.SAMP = strtrim(regexprep(parameters((strmatch(<span class="string">'SAMP'</span>,parameters)),:),<span class="string">'SAMP'</span>,<span class="string">''</span>));
-0638         info.SFOR = strtrim(regexprep(parameters((strmatch(<span class="string">'SFOR'</span>,parameters)),:),<span class="string">'SFOR'</span>,<span class="string">''</span>));
-0639         info.STAG = strtrim(regexprep(parameters((strmatch(<span class="string">'STAG'</span>,parameters)),:),<span class="string">'STAG'</span>,<span class="string">''</span>));
-0640         info.OXS1 = strtrim(regexprep(parameters((strmatch(<span class="string">'OXS1'</span>,parameters)),:),<span class="string">'OXS1'</span>,<span class="string">''</span>));
-0641         info.AXS1 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS1'</span>,parameters)),:),<span class="string">'AXS1'</span>,<span class="string">''</span>));
-0642         info.AXS2 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS2'</span>,parameters)),:),<span class="string">'AXS2'</span>,<span class="string">''</span>));
-0643         info.AXS3 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS3'</span>,parameters)),:),<span class="string">'AXS3'</span>,<span class="string">''</span>));
-0644         info.A1CT = str2num(regexprep(parameters((strmatch(<span class="string">'A1CT'</span>,parameters)),:),<span class="string">'A1CT'</span>,<span class="string">''</span>));
-0645         info.A1SW = str2num(regexprep(parameters((strmatch(<span class="string">'A1SW'</span>,parameters)),:),<span class="string">'A1SW'</span>,<span class="string">''</span>));
-0646         info.MWFQ = str2num(regexprep(parameters((strmatch(<span class="string">'MWFQ'</span>,parameters)),:),<span class="string">'MWFQ'</span>,<span class="string">''</span>));
-0647         info.MWPW = str2num(regexprep(parameters((strmatch(<span class="string">'MWPW'</span>,parameters)),:),<span class="string">'MWPW'</span>,<span class="string">''</span>));
-0648         info.AVGS = str2num(regexprep(parameters((strmatch(<span class="string">'AVGS'</span>,parameters)),:),<span class="string">'AVGS'</span>,<span class="string">''</span>));
+0400 
+0401 
+0402 <span class="comment">%                         YGF files / Z - axis</span>
+0403 <span class="comment">% ========================================================================</span>
+0404 
+0405 
+0406 <span class="comment">% search directory for .YGF file</span>
+0407 <span class="keyword">if</span> exist([directory name <span class="string">'.YGF'</span>],<span class="string">'file'</span>)
+0408     
+0409     <span class="comment">% if exist, load .YGF , convert to usable matrix</span>
+0410     fid = fopen( [directory name <span class="string">'.YGF'</span>], <span class="string">'r'</span>,<span class="string">'ieee-be.l64'</span>);
+0411     [info.z_axis,info.z_axis_points] = fread(fid,inf,<span class="string">'float64'</span>);
+0412     
+0413     <span class="comment">% find number of data points</span>
+0414     MagField.points = str2num(regexprep(parameters((strmatch(<span class="string">'XPTS'</span>,parameters)),:),<span class="string">'XPTS'</span>,<span class="string">''</span>));
+0415     <span class="comment">% reshape the y-axis into columns using number of data points</span>
+0416     y = reshape(y, MagField.points , []);
+0417     
+0418 <span class="keyword">end</span>
+0419 
+0420 
+0421 
+0422 <span class="comment">%                         Output arguments</span>
+0423 <span class="comment">% ========================================================================</span>
+0424 
+0425 <span class="comment">% Output results according to requests</span>
+0426 <span class="keyword">switch</span> nargout
+0427     <span class="keyword">case</span> 0
+0428         graph = <span class="string">'plot'</span>;
+0429     <span class="keyword">case</span> 1
+0430         varargout{1} = y;
+0431     <span class="keyword">case</span> 2
+0432         varargout{1} = x;
+0433         varargout{2} = y;
+0434     <span class="keyword">case</span> 3
+0435         <span class="keyword">if</span> strcmp(info.EXPT,<span class="string">'PLS'</span>) &amp;&amp; strcmp(info.YTYP,<span class="string">'IDX'</span>)
+0436             varargout{1} = x;
+0437             varargout{2} = y;
+0438             varargout{3} = z;
+0439         <span class="keyword">else</span>
+0440             <span class="keyword">switch</span> extension
+0441                 <span class="keyword">case</span> <span class="string">'.spc'</span>
+0442                     info.MWFQ = str2num(regexprep(parameters((strmatch(<span class="string">'MF'</span> ,parameters)),:),<span class="string">'MF'</span> ,<span class="string">''</span>));
+0443                     info.MWPW = str2num(regexprep(parameters((strmatch(<span class="string">'MP'</span> ,parameters)),:),<span class="string">'MP'</span> ,<span class="string">''</span>));
+0444                     
+0445                     info.CenterField    = str2num(regexprep(parameters((strmatch(<span class="string">'HCF'</span>,parameters)),:),<span class="string">'HCF'</span>,<span class="string">''</span>));
+0446                     info.SweepWidth     = str2num(regexprep(parameters((strmatch(<span class="string">'HSW'</span>,parameters)),:),<span class="string">'HSW'</span>,<span class="string">''</span>));
+0447                     
+0448                 <span class="keyword">case</span> <span class="string">'.DTA'</span>
+0449                     
+0450                     <span class="comment">% create info parameters, only done if requested to minimise</span>
+0451                     <span class="comment">% computation time of function</span>
+0452                     info.DSRC = strtrim(regexprep(parameters((strmatch(<span class="string">'DSRC'</span>,parameters)),:),<span class="string">'DSRC'</span>,<span class="string">''</span>));
+0453                     info.BSEQ = strtrim(regexprep(parameters((strmatch(<span class="string">'BSEQ'</span>,parameters)),:),<span class="string">'BSEQ'</span>,<span class="string">''</span>));
+0454                     info.IKKF = strtrim(regexprep(parameters((strmatch(<span class="string">'IKKF'</span>,parameters)),:),<span class="string">'IKKF'</span>,<span class="string">''</span>));
+0455                     info.XTYP = strtrim(regexprep(parameters((strmatch(<span class="string">'XTYP'</span>,parameters)),:),<span class="string">'XTYP'</span>,<span class="string">''</span>));
+0456                     info.YTYP = strtrim(regexprep(parameters((strmatch(<span class="string">'YTYP'</span>,parameters)),:),<span class="string">'YTYP'</span>,<span class="string">''</span>));
+0457                     info.ZTYP = strtrim(regexprep(parameters((strmatch(<span class="string">'ZTYP'</span>,parameters)),:),<span class="string">'ZTYP'</span>,<span class="string">''</span>));
+0458                     
+0459                     info.IRFMT = strtrim(regexprep(parameters((strmatch(<span class="string">'IRFMT'</span>,parameters)),:),<span class="string">'IRFMT'</span>,<span class="string">''</span>));
+0460                     
+0461                     info.XMIN = str2num(regexprep(parameters((strmatch(<span class="string">'XMIN'</span>,parameters)),:),<span class="string">'XMIN'</span>,<span class="string">''</span>));
+0462                     info.XWID = str2num(regexprep(parameters((strmatch(<span class="string">'XWID'</span>,parameters)),:),<span class="string">'XWID'</span>,<span class="string">''</span>));
+0463                     info.XPTS = str2num(regexprep(parameters((strmatch(<span class="string">'XPTS'</span>,parameters)),:),<span class="string">'XPTS'</span>,<span class="string">''</span>));
+0464                     
+0465                     <span class="comment">% info.TITL = strtrim(regexprep(parameters((strmatch('TITL',parameters)),:),'TITL',''));</span>
+0466                     info.IRUNI = strtrim(regexprep(parameters((strmatch(<span class="string">'IRUNI'</span>,parameters)),:),<span class="string">'IRUNI'</span>,<span class="string">''</span>));
+0467                     
+0468                     info.OPER = strtrim(regexprep(parameters((strmatch(<span class="string">'OPER'</span>,parameters)),:),<span class="string">'OPER'</span>,<span class="string">''</span>));
+0469                     info.DATE = strtrim(regexprep(parameters((strmatch(<span class="string">'DATE'</span>,parameters)),:),<span class="string">'DATE'</span>,<span class="string">''</span>));
+0470                     info.TIME = strtrim(regexprep(parameters((strmatch(<span class="string">'TIME'</span>,parameters)),:),<span class="string">'TIME'</span>,<span class="string">''</span>));
+0471                     info.CMNT = strtrim(regexprep(parameters((strmatch(<span class="string">'CMNT'</span>,parameters)),:),<span class="string">'CMNT'</span>,<span class="string">''</span>));
+0472                     info.SAMP = strtrim(regexprep(parameters((strmatch(<span class="string">'SAMP'</span>,parameters)),:),<span class="string">'SAMP'</span>,<span class="string">''</span>));
+0473                     info.SFOR = strtrim(regexprep(parameters((strmatch(<span class="string">'SFOR'</span>,parameters)),:),<span class="string">'SFOR'</span>,<span class="string">''</span>));
+0474                     info.STAG = strtrim(regexprep(parameters((strmatch(<span class="string">'STAG'</span>,parameters)),:),<span class="string">'STAG'</span>,<span class="string">''</span>));
+0475                     info.OXS1 = strtrim(regexprep(parameters((strmatch(<span class="string">'OXS1'</span>,parameters)),:),<span class="string">'OXS1'</span>,<span class="string">''</span>));
+0476                     info.AXS1 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS1'</span>,parameters)),:),<span class="string">'AXS1'</span>,<span class="string">''</span>));
+0477                     info.AXS2 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS2'</span>,parameters)),:),<span class="string">'AXS2'</span>,<span class="string">''</span>));
+0478                     info.AXS3 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS3'</span>,parameters)),:),<span class="string">'AXS3'</span>,<span class="string">''</span>));
+0479                     info.A1CT = str2num(regexprep(parameters((strmatch(<span class="string">'A1CT'</span>,parameters)),:),<span class="string">'A1CT'</span>,<span class="string">''</span>));
+0480                     info.A1SW = str2num(regexprep(parameters((strmatch(<span class="string">'A1SW'</span>,parameters)),:),<span class="string">'A1SW'</span>,<span class="string">''</span>));
+0481                     info.MWFQ = str2num(regexprep(parameters((strmatch(<span class="string">'MWFQ'</span>,parameters)),:),<span class="string">'MWFQ'</span>,<span class="string">''</span>));
+0482                     info.MWPW = str2num(regexprep(parameters((strmatch(<span class="string">'MWPW'</span>,parameters)),:),<span class="string">'MWPW'</span>,<span class="string">''</span>));
+0483                     info.AVGS = str2num(regexprep(parameters((strmatch(<span class="string">'AVGS'</span>,parameters)),:),<span class="string">'AVGS'</span>,<span class="string">''</span>));
+0484                     
+0485                     info.CenterField = strtrim(regexprep(parameters((strmatch(<span class="string">'CenterField'</span>,parameters)),:),<span class="string">'CenterField'</span>,<span class="string">''</span>));
+0486                     info.FieldFlyback = strtrim(regexprep(parameters((strmatch(<span class="string">'FieldFlyback'</span>,parameters)),:),<span class="string">'FieldFlyback'</span>,<span class="string">''</span>));
+0487                     info.FieldWait = strtrim(regexprep(parameters((strmatch(<span class="string">'FieldWait'</span>,parameters)),:),<span class="string">'FieldWait'</span>,<span class="string">''</span>));
+0488                     info.GFactor = str2num(regexprep(parameters((strmatch(<span class="string">'GFactor'</span>,parameters)),:),<span class="string">'GFactor'</span>,<span class="string">''</span>));
+0489                     info.SetToSampleG = strtrim(regexprep(parameters((strmatch(<span class="string">'SetToSampleG'</span>,parameters)),:),<span class="string">'SetToSampleG'</span>,<span class="string">''</span>));
+0490                     info.SweepDirection = strtrim(regexprep(parameters((strmatch(<span class="string">'SweepDirection'</span>,parameters)),:),<span class="string">'SweepDirection'</span>,<span class="string">''</span>));
+0491                     
+0492                     info.FrequencyMon = strtrim(regexprep(parameters((strmatch(<span class="string">'FrequencyMon'</span>,parameters)),:),<span class="string">'FrequencyMon'</span>,<span class="string">''</span>));
+0493                     info.QMonitBridge = strtrim(regexprep(parameters((strmatch(<span class="string">'QMonitBridge'</span>,parameters)),:),<span class="string">'QMonitBridge'</span>,<span class="string">''</span>));
+0494                     <span class="comment">% Power is different because strmatch for 'Power' finds Power and</span>
+0495                     <span class="comment">% PowerAtten</span>
+0496                     info.Power = parameters((strmatch(<span class="string">'Power'</span>,parameters)),:);
+0497                     info.Power = strtrim(regexprep((info.Power(1,:)),<span class="string">'Power'</span>,<span class="string">''</span>));
+0498                     info.PowerAtten = strtrim(regexprep(parameters((strmatch(<span class="string">'PowerAtten'</span>,parameters)),:),<span class="string">'PowerAtten'</span>,<span class="string">''</span>));
+0499                     info.BaselineCorr = strtrim(regexprep(parameters((strmatch(<span class="string">'BaselineCorr'</span>,parameters)),:),<span class="string">'BaselineCorr'</span>,<span class="string">''</span>));
+0500                     info.NbScansAcc = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansAcc'</span>,parameters)),:),<span class="string">'NbScansAcc'</span>,<span class="string">''</span>));
+0501                     info.NbScansDone = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansDone'</span>,parameters)),:),<span class="string">'NbScansDone'</span>,<span class="string">''</span>));
+0502                     info.NbScansToDo = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansToDo'</span>,parameters)),:),<span class="string">'NbScansToDo'</span>,<span class="string">''</span>));
+0503                     
+0504                     
+0505                     <span class="comment">% Experiment dependent parameters</span>
+0506                     <span class="keyword">switch</span> info.EXPT
+0507                         <span class="keyword">case</span> <span class="string">'PLS'</span>
+0508                             <span class="comment">% documentation text</span>
+0509                             info.IIFMT = strtrim(regexprep(parameters((strmatch(<span class="string">'IIFMT'</span>,parameters)),:),<span class="string">'IIFMT'</span>,<span class="string">''</span>));
+0510                             info.IIUNI = strtrim(regexprep(parameters((strmatch(<span class="string">'IIUNI'</span>,parameters)),:),<span class="string">'IIUNI'</span>,<span class="string">''</span>));
+0511                             
+0512                             info.Delay = parameters((strmatch(<span class="string">'Delay'</span>,parameters)),:);
+0513                             info.Delay = strtrim(regexprep((info.Delay(1,:)),<span class="string">'Delay'</span>,<span class="string">''</span>));
+0514                             <span class="comment">% cw bridge</span>
+0515                             info.AcqFineTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqFineTuning'</span>,parameters)),:),<span class="string">'AcqFineTuning'</span>,<span class="string">''</span>));
+0516                             info.AcqScanFTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqScanFTuning'</span>,parameters)),:),<span class="string">'AcqScanFTuning'</span>,<span class="string">''</span>));
+0517                             info.AcqSliceFTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqSliceFTuning'</span>,parameters)),:),<span class="string">'AcqSliceFTuning'</span>,<span class="string">''</span>));
+0518                             <span class="comment">% endor</span>
+0519                             info.EIEENDORFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEENDORFreq'</span>,parameters)),:),<span class="string">'EIEENDORFreq'</span>,<span class="string">''</span>));
+0520                             info.EIEIsotope = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEIsotope'</span>,parameters)),:),<span class="string">'EIEIsotope'</span>,<span class="string">''</span>));
+0521                             info.EIERFSweepDir = strtrim(regexprep(parameters((strmatch(<span class="string">'EIERFSweepDir'</span>,parameters)),:),<span class="string">'EIERFSweepDir'</span>,<span class="string">''</span>));
+0522                             info.EIEStaticField = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEStaticField'</span>,parameters)),:),<span class="string">'EIEStaticField'</span>,<span class="string">''</span>));
+0523                             info.EIEStaticRF = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEStaticRF'</span>,parameters)),:),<span class="string">'EIEStaticRF'</span>,<span class="string">''</span>));
+0524                             info.ENDORType = strtrim(regexprep(parameters((strmatch(<span class="string">'ENDORType'</span>,parameters)),:),<span class="string">'ENDORType'</span>,<span class="string">''</span>));
+0525                             info.RF1Atten = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1Atten'</span>,parameters)),:),<span class="string">'RF1Atten'</span>,<span class="string">''</span>));
+0526                             info.RF1FreqPos = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1FreqPos'</span>,parameters)),:),<span class="string">'RF1FreqPos'</span>,<span class="string">''</span>));
+0527                             info.RF1StartFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1StartFreq'</span>,parameters)),:),<span class="string">'RF1StartFreq'</span>,<span class="string">''</span>));
+0528                             info.RF1SweepWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1SweepWidth'</span>,parameters)),:),<span class="string">'RF1SweepWidth'</span>,<span class="string">''</span>));
+0529                             info.RF2Atten = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2Atten'</span>,parameters)),:),<span class="string">'RF2Atten'</span>,<span class="string">''</span>));
+0530                             info.RF2FreqPos = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2FreqPos'</span>,parameters)),:),<span class="string">'RF2FreqPos'</span>,<span class="string">''</span>));
+0531                             info.RF2StartFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2StartFreq'</span>,parameters)),:),<span class="string">'RF2StartFreq'</span>,<span class="string">''</span>));
+0532                             info.RF2SweepWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2SweepWidth'</span>,parameters)),:),<span class="string">'RF2SweepWidth'</span>,<span class="string">''</span>));
+0533                             info.RFSrcMixing = strtrim(regexprep(parameters((strmatch(<span class="string">'RFSrcMixing'</span>,parameters)),:),<span class="string">'RFSrcMixing'</span>,<span class="string">''</span>));
+0534                             info.SumAtten = parameters((strmatch(<span class="string">'SumAtten'</span>,parameters)),:);
+0535                             info.SumAtten = strtrim(regexprep((info.Power(1,:)),<span class="string">'SumAtten'</span>,<span class="string">''</span>));
+0536                             info.SumAttenStart = strtrim(regexprep(parameters((strmatch(<span class="string">'SumAttenStart'</span>,parameters)),:),<span class="string">'SumAttenStart'</span>,<span class="string">''</span>));
+0537                             info.SumAttenWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'SumAttenWidth'</span>,parameters)),:),<span class="string">'SumAttenWidth'</span>,<span class="string">''</span>));
+0538                             <span class="comment">% fieldCtrl</span>
+0539 <span class="comment">%                            info.FieldResol = str2num(regexprep(parameters((strmatch('FieldResol',parameters)),:),'FieldResol',''));</span>
+0540                             <span class="comment">% ftBridge</span>
+0541                             info.Attenuation = strtrim(regexprep(parameters((strmatch(<span class="string">'Attenuation'</span>,parameters)),:),<span class="string">'Attenuation'</span>,<span class="string">''</span>));
+0542                             info.ELDORAtt = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORAtt'</span>,parameters)),:),<span class="string">'ELDORAtt'</span>,<span class="string">''</span>));
+0543                             info.FrequencyA = strtrim(regexprep(parameters((strmatch(<span class="string">'FrequencyA'</span>,parameters)),:),<span class="string">'FrequencyA'</span>,<span class="string">''</span>));
+0544                             info.VideoBW = strtrim(regexprep(parameters((strmatch(<span class="string">'VideoBW'</span>,parameters)),:),<span class="string">'VideoBW'</span>,<span class="string">''</span>));
+0545                             info.VideoGain = strtrim(regexprep(parameters((strmatch(<span class="string">'VideoGain'</span>,parameters)),:),<span class="string">'VideoGain'</span>,<span class="string">''</span>));
+0546                             <span class="comment">% ftEpr</span>
+0547                             info.AutoTimeOut = strtrim(regexprep(parameters((strmatch(<span class="string">'AutoTimeOut'</span>,parameters)),:),<span class="string">'AutoTimeOut'</span>,<span class="string">''</span>));
+0548                             info.AveragesPerScan = str2num(regexprep(parameters((strmatch(<span class="string">'AveragesPerScan'</span>,parameters)),:),<span class="string">'AveragesPerScan'</span>,<span class="string">''</span>));
+0549                             info.ELDORFreqStart = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORFreqStart'</span>,parameters)),:),<span class="string">'ELDORFreqStart'</span>,<span class="string">''</span>));
+0550                             info.ELDORFreqWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORFreqWidth'</span>,parameters)),:),<span class="string">'ELDORFreqWidth'</span>,<span class="string">''</span>));
+0551                             info.FTAcqModeSlct = strtrim(regexprep(parameters((strmatch(<span class="string">'FTAcqModeSlct'</span>,parameters)),:),<span class="string">'FTAcqModeSlct'</span>,<span class="string">''</span>));
+0552                             info.PPExtTrg = parameters((strmatch(<span class="string">'PPExtTrg'</span>,parameters)),:);
+0553                             info.PPExtTrg = strtrim(regexprep((info.PPExtTrg(1,:)),<span class="string">'PPExtTrg'</span>,<span class="string">''</span>));
+0554                             info.PPExtTrgSlope = strtrim(regexprep(parameters((strmatch(<span class="string">'PPExtTrgSlope'</span>,parameters)),:),<span class="string">'PPExtTrgSlope'</span>,<span class="string">''</span>));
+0555                             info.PlsSPELEXPSlct = strtrim(regexprep(parameters((strmatch(<span class="string">'PlsSPELEXPSlct'</span>,parameters)),:),<span class="string">'PlsSPELEXPSlct'</span>,<span class="string">''</span>));
+0556                             info.ReplaceMode = parameters((strmatch(<span class="string">'ReplaceMode'</span>,parameters)),:);
+0557                             info.ReplaceMode_ftEpr = strtrim(regexprep((info.ReplaceMode(1,:)),<span class="string">'ReplaceMode'</span>,<span class="string">''</span>));
+0558                             info.ReplaceMode_recorder = strtrim(regexprep((info.ReplaceMode(2,:)),<span class="string">'ReplaceMode'</span>,<span class="string">''</span>));
+0559                             clear info.ReplaceMode
+0560                             info.ShotRepTime = strtrim(regexprep(parameters((strmatch(<span class="string">'ShotRepTime'</span>,parameters)),:),<span class="string">'ShotRepTime'</span>,<span class="string">''</span>));
+0561                             info.ShotsPLoop = strtrim(regexprep(parameters((strmatch(<span class="string">'ShotsPLoop'</span>,parameters)),:),<span class="string">'ShotsPLoop'</span>,<span class="string">''</span>));
+0562                             info.SptProgress = strtrim(regexprep(parameters((strmatch(<span class="string">'SptProgress'</span>,parameters)),:),<span class="string">'SptProgress'</span>,<span class="string">''</span>));
+0563                             info.SweepsPExp = strtrim(regexprep(parameters((strmatch(<span class="string">'SweepsPExp'</span>,parameters)),:),<span class="string">'SweepsPExp'</span>,<span class="string">''</span>));
+0564                             info.TriggerTimeOut = strtrim(regexprep(parameters((strmatch(<span class="string">'TriggerTimeOut'</span>,parameters)),:),<span class="string">'TriggerTimeOut'</span>,<span class="string">''</span>));
+0565                             info.XAxisQuant = strtrim(regexprep(parameters((strmatch(<span class="string">'XAxisQuant'</span>,parameters)),:),<span class="string">'XAxisQuant'</span>,<span class="string">''</span>));
+0566                             info.XSpecRes = str2num(regexprep(parameters((strmatch(<span class="string">'XSpecRes'</span>,parameters)),:),<span class="string">'XSpecRes'</span>,<span class="string">''</span>));
+0567                             info.YAxisQuant = strtrim(regexprep(parameters((strmatch(<span class="string">'YAxisQuant'</span>,parameters)),:),<span class="string">'YAxisQuant'</span>,<span class="string">''</span>));
+0568                             info.YSpecRes = str2num(regexprep(parameters((strmatch(<span class="string">'YSpecRes'</span>,parameters)),:),<span class="string">'YSpecRes'</span>,<span class="string">''</span>));
+0569                             
+0570                             
+0571                         <span class="keyword">case</span> <span class="string">'CW'</span>
+0572                             <span class="comment">% document text</span>
+0573                             info.YFMT = strtrim(regexprep(parameters((strmatch(<span class="string">'YFMT'</span>,parameters)),:),<span class="string">'YFMT'</span>,<span class="string">''</span>));
+0574                             info.YNAM = strtrim(regexprep(parameters((strmatch(<span class="string">'YNAM'</span>,parameters)),:),<span class="string">'YNAM'</span>,<span class="string">''</span>));
+0575                             info.YUNI = strtrim(regexprep(parameters((strmatch(<span class="string">'YUNI'</span>,parameters)),:),<span class="string">'YUNI'</span>,<span class="string">''</span>));
+0576                             <span class="comment">% standard parameter</span>
+0577                             info.RESO = strtrim(regexprep(parameters((strmatch(<span class="string">'RESO'</span>,parameters)),:),<span class="string">'RESO'</span>,<span class="string">''</span>));
+0578                             info.SPTP = str2num(regexprep(parameters((strmatch(<span class="string">'SPTP'</span>,parameters)),:),<span class="string">'SPTP'</span>,<span class="string">''</span>));
+0579                             info.RCAG = str2num(regexprep(parameters((strmatch(<span class="string">'RCAG'</span>,parameters)),:),<span class="string">'RCAG'</span>,<span class="string">''</span>));
+0580                             info.RCHM = str2num(regexprep(parameters((strmatch(<span class="string">'RCHM'</span>,parameters)),:),<span class="string">'RCHM'</span>,<span class="string">''</span>));
+0581                             info.B0MA = str2num(regexprep(parameters((strmatch(<span class="string">'B0MA'</span>,parameters)),:),<span class="string">'B0MA'</span>,<span class="string">''</span>));
+0582                             info.B0MF = str2num(regexprep(parameters((strmatch(<span class="string">'B0MF'</span>,parameters)),:),<span class="string">'B0MF'</span>,<span class="string">''</span>));
+0583                             info.RCPH = str2num(regexprep(parameters((strmatch(<span class="string">'RCPH'</span>,parameters)),:),<span class="string">'RCPH'</span>,<span class="string">''</span>));
+0584                             info.RCOF = str2num(regexprep(parameters((strmatch(<span class="string">'RCOF'</span>,parameters)),:),<span class="string">'RCOF'</span>,<span class="string">''</span>));
+0585                             info.A1RS = str2num(regexprep(parameters((strmatch(<span class="string">'A1RS'</span>,parameters)),:),<span class="string">'A1RS'</span>,<span class="string">''</span>));
+0586                             info.RCTC = str2num(regexprep(parameters((strmatch(<span class="string">'RCTC'</span>,parameters)),:),<span class="string">'RCTC'</span>,<span class="string">''</span>));
+0587                             <span class="comment">% mwBridge</span>
+0588                             info.AcqFineTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqFineTuning'</span>,parameters)),:),<span class="string">'AcqFineTuning'</span>,<span class="string">''</span>));
+0589                             <span class="comment">% fieldCtrl</span>
+0590                             <span class="comment">%            info.SweepWidth = parameters((strmatch('SweepWidth',parameters)),:);</span>
+0591                             <span class="comment">%            info.SweepWidth_fieldCtrl = strtrim(regexprep((info.SweepWidth(1,:)),'SweepWidth',''));</span>
+0592                             <span class="comment">%            info.SweepWidth_ramp2 = strtrim(regexprep((info.SweepWidth(2,:)),'SweepWidth',''));</span>
+0593                             clear info.SweepWidth
+0594                             info.Delay = strtrim(regexprep(parameters((strmatch(<span class="string">'Delay'</span>,parameters,<span class="string">'exact'</span>)),:),<span class="string">'Delay'</span>,<span class="string">''</span>));
+0595                             info.ReplaceMode = strtrim(regexprep(parameters((strmatch(<span class="string">'ReplaceMode'</span>,parameters)),:),<span class="string">'ReplaceMode'</span>,<span class="string">''</span>));
+0596                             <span class="comment">% signalChannel</span>
+0597                             info.AFCTrap = strtrim(regexprep(parameters((strmatch(<span class="string">'AFCTrap'</span>,parameters)),:),<span class="string">'AFCTrap'</span>,<span class="string">''</span>));
+0598                             info.Calibrated = strtrim(regexprep(parameters((strmatch(<span class="string">'Calibrated'</span>,parameters)),:),<span class="string">'Calibrated'</span>,<span class="string">''</span>));
+0599                             info.ConvTime = strtrim(regexprep(parameters((strmatch(<span class="string">'ConvTime'</span>,parameters)),:),<span class="string">'ConvTime'</span>,<span class="string">''</span>));
+0600                             info.DModAFCTrap = strtrim(regexprep(parameters((strmatch(<span class="string">'DModAFCTrap'</span>,parameters)),:),<span class="string">'DModAFCTrap'</span>,<span class="string">''</span>));
+0601                             info.DModAmp = strtrim(regexprep(parameters((strmatch(<span class="string">'DModAmp'</span>,parameters)),:),<span class="string">'DModAmp'</span>,<span class="string">''</span>));
+0602                             info.DModCalibrated = strtrim(regexprep(parameters((strmatch(<span class="string">'DModCalibrated'</span>,parameters)),:),<span class="string">'DModCalibrated'</span>,<span class="string">''</span>));
+0603                             info.DModDetectSCT = strtrim(regexprep(parameters((strmatch(<span class="string">'DModDetectSCT'</span>,parameters)),:),<span class="string">'DModDetectSCT'</span>,<span class="string">''</span>));
+0604                             info.DModEliDelay = strtrim(regexprep(parameters((strmatch(<span class="string">'DModEliDelay'</span>,parameters)),:),<span class="string">'DModEliDelay'</span>,<span class="string">''</span>));
+0605                             info.DModExtLockIn = strtrim(regexprep(parameters((strmatch(<span class="string">'DModExtLockIn'</span>,parameters)),:),<span class="string">'DModExtLockIn'</span>,<span class="string">''</span>));
+0606                             info.DModExtTrigger = strtrim(regexprep(parameters((strmatch(<span class="string">'DModExtTrigger'</span>,parameters)),:),<span class="string">'DModExtTrigger'</span>,<span class="string">''</span>));
+0607                             info.DModFieldMod = strtrim(regexprep(parameters((strmatch(<span class="string">'DModFieldMod'</span>,parameters)),:),<span class="string">'DModFieldMod'</span>,<span class="string">''</span>));
+0608                             info.DModGain = strtrim(regexprep(parameters((strmatch(<span class="string">'DModGain'</span>,parameters)),:),<span class="string">'DModGain'</span>,<span class="string">''</span>));
+0609                             info.DModHighPass = strtrim(regexprep(parameters((strmatch(<span class="string">'DModHighPass'</span>,parameters)),:),<span class="string">'DModHighPass'</span>,<span class="string">''</span>));
+0610                             info.DModIntegrator = strtrim(regexprep(parameters((strmatch(<span class="string">'DModIntegrator'</span>,parameters)),:),<span class="string">'DModIntegrator'</span>,<span class="string">''</span>));
+0611                             info.DModModOutput = strtrim(regexprep(parameters((strmatch(<span class="string">'DModModOutput'</span>,parameters)),:),<span class="string">'DModModOutput'</span>,<span class="string">''</span>));
+0612                             info.DModSignalInput = strtrim(regexprep(parameters((strmatch(<span class="string">'DModSignalInput'</span>,parameters)),:),<span class="string">'DModSignalInput'</span>,<span class="string">''</span>));
+0613                             info.DModTimeConst = strtrim(regexprep(parameters((strmatch(<span class="string">'DModTimeConst'</span>,parameters)),:),<span class="string">'DModTimeConst'</span>,<span class="string">''</span>));
+0614                             info.DoubleModFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'DoubleModFreq'</span>,parameters)),:),<span class="string">'DoubleModFreq'</span>,<span class="string">''</span>));
+0615                             info.DoubleModPhase = strtrim(regexprep(parameters((strmatch(<span class="string">'DoubleModPhase'</span>,parameters)),:),<span class="string">'DoubleModPhase'</span>,<span class="string">''</span>));
+0616                             info.DoubleMode = strtrim(regexprep(parameters((strmatch(<span class="string">'DoubleMode'</span>,parameters)),:),<span class="string">'DoubleMode'</span>,<span class="string">''</span>));
+0617                             info.EliDelay = strtrim(regexprep(parameters((strmatch(<span class="string">'EliDelay'</span>,parameters)),:),<span class="string">'EliDelay'</span>,<span class="string">''</span>));
+0618                             info.ExtLockIn = strtrim(regexprep(parameters((strmatch(<span class="string">'ExtLockIn'</span>,parameters)),:),<span class="string">'ExtLockIn'</span>,<span class="string">''</span>));
+0619                             info.ExtTrigger = strtrim(regexprep(parameters((strmatch(<span class="string">'ExtTrigger'</span>,parameters)),:),<span class="string">'ExtTrigger'</span>,<span class="string">''</span>));
+0620                             info.Gain = strtrim(regexprep(parameters((strmatch(<span class="string">'Gain'</span>,parameters)),:),<span class="string">'Gain'</span>,<span class="string">''</span>));
+0621                             info.Harmonic = str2num(regexprep(parameters((strmatch(<span class="string">'Harmonic'</span>,parameters)),:),<span class="string">'Harmonic'</span>,<span class="string">''</span>));
+0622                             info.HighPass = strtrim(regexprep(parameters((strmatch(<span class="string">'HighPass'</span>,parameters)),:),<span class="string">'HighPass'</span>,<span class="string">''</span>));
+0623                             info.Integrator = strtrim(regexprep(parameters((strmatch(<span class="string">'Integrator'</span>,parameters)),:),<span class="string">'Integrator'</span>,<span class="string">''</span>));
+0624                             info.ModAmp = strtrim(regexprep(parameters((strmatch(<span class="string">'ModAmp'</span>,parameters)),:),<span class="string">'ModAmp'</span>,<span class="string">''</span>));
+0625                             info.ModFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'ModFreq'</span>,parameters)),:),<span class="string">'ModFreq'</span>,<span class="string">''</span>));
+0626                             info.ModInput = strtrim(regexprep(parameters((strmatch(<span class="string">'ModInput'</span>,parameters)),:),<span class="string">'ModInput'</span>,<span class="string">''</span>));
+0627                             info.ModOutput = strtrim(regexprep(parameters((strmatch(<span class="string">'ModOutput'</span>,parameters)),:),<span class="string">'ModOutput'</span>,<span class="string">''</span>));
+0628                             info.ModPhase = str2num(regexprep(parameters((strmatch(<span class="string">'ModPhase'</span>,parameters)),:),<span class="string">'ModPhase'</span>,<span class="string">''</span>));
+0629                             info.Offset = strtrim(regexprep(parameters((strmatch(<span class="string">'Offset'</span>,parameters)),:),<span class="string">'Offset'</span>,<span class="string">''</span>));
+0630                             info.QuadMode = strtrim(regexprep(parameters((strmatch(<span class="string">'QuadMode'</span>,parameters)),:),<span class="string">'QuadMode'</span>,<span class="string">''</span>));
+0631                             info.QuadPhase = str2num(regexprep(parameters((strmatch(<span class="string">'QuadPhase'</span>,parameters)),:),<span class="string">'QuadPhase'</span>,<span class="string">''</span>));
+0632                             info.Resolution = str2num(regexprep(parameters((strmatch(<span class="string">'Resolution'</span>,parameters)),:),<span class="string">'Resolution'</span>,<span class="string">''</span>));
+0633                             info.Resonator = str2num(regexprep(parameters((strmatch(<span class="string">'Resonator'</span>,parameters)),:),<span class="string">'Resonator'</span>,<span class="string">''</span>));
+0634                             info.SctNorm = strtrim(regexprep(parameters((strmatch(<span class="string">'SctNorm'</span>,parameters)),:),<span class="string">'SctNorm'</span>,<span class="string">''</span>));
+0635                             info.SctRevision = strtrim(regexprep(parameters((strmatch(<span class="string">'SctRevision'</span>,parameters)),:),<span class="string">'SctRevision'</span>,<span class="string">''</span>));
+0636                             info.SignalInput = strtrim(regexprep(parameters((strmatch(<span class="string">'SignalInput'</span>,parameters)),:),<span class="string">'SignalInput'</span>,<span class="string">''</span>));
+0637                             info.SweepTime = strtrim(regexprep(parameters((strmatch(<span class="string">'SweepTime'</span>,parameters)),:),<span class="string">'SweepTime'</span>,<span class="string">''</span>));
+0638                             info.TimeConst = strtrim(regexprep(parameters((strmatch(<span class="string">'TimeConst'</span>,parameters)),:),<span class="string">'TimeConst'</span>,<span class="string">''</span>));
+0639                             info.TuneCaps = str2num(regexprep(parameters((strmatch(<span class="string">'TuneCaps'</span>,parameters)),:),<span class="string">'TuneCaps'</span>,<span class="string">''</span>));
+0640                     <span class="keyword">end</span>
+0641             <span class="keyword">end</span>
+0642             
+0643             varargout{1} = x;
+0644             varargout{2} = y;
+0645             varargout{3} = info;
+0646         <span class="keyword">end</span>
+0647         
+0648     <span class="keyword">case</span> 4
 0649         
-0650         info.CenterField = strtrim(regexprep(parameters((strmatch(<span class="string">'CenterField'</span>,parameters)),:),<span class="string">'CenterField'</span>,<span class="string">''</span>));
-0651         info.FieldFlyback = strtrim(regexprep(parameters((strmatch(<span class="string">'FieldFlyback'</span>,parameters)),:),<span class="string">'FieldFlyback'</span>,<span class="string">''</span>));
-0652         info.FieldWait = strtrim(regexprep(parameters((strmatch(<span class="string">'FieldWait'</span>,parameters)),:),<span class="string">'FieldWait'</span>,<span class="string">''</span>));
-0653         info.GFactor = str2num(regexprep(parameters((strmatch(<span class="string">'GFactor'</span>,parameters)),:),<span class="string">'GFactor'</span>,<span class="string">''</span>));
-0654         info.SetToSampleG = strtrim(regexprep(parameters((strmatch(<span class="string">'SetToSampleG'</span>,parameters)),:),<span class="string">'SetToSampleG'</span>,<span class="string">''</span>));
-0655         info.SweepDirection = strtrim(regexprep(parameters((strmatch(<span class="string">'SweepDirection'</span>,parameters)),:),<span class="string">'SweepDirection'</span>,<span class="string">''</span>));
-0656         
-0657         info.FrequencyMon = strtrim(regexprep(parameters((strmatch(<span class="string">'FrequencyMon'</span>,parameters)),:),<span class="string">'FrequencyMon'</span>,<span class="string">''</span>));
-0658         info.QMonitBridge = strtrim(regexprep(parameters((strmatch(<span class="string">'QMonitBridge'</span>,parameters)),:),<span class="string">'QMonitBridge'</span>,<span class="string">''</span>));
-0659         <span class="comment">% Power is different because strmatch for 'Power' finds Power and</span>
-0660         <span class="comment">% PowerAtten</span>
-0661         info.Power = parameters((strmatch(<span class="string">'Power'</span>,parameters)),:);
-0662         info.Power = strtrim(regexprep((info.Power(1,:)),<span class="string">'Power'</span>,<span class="string">''</span>));
-0663         info.PowerAtten = strtrim(regexprep(parameters((strmatch(<span class="string">'PowerAtten'</span>,parameters)),:),<span class="string">'PowerAtten'</span>,<span class="string">''</span>));
-0664         info.BaselineCorr = strtrim(regexprep(parameters((strmatch(<span class="string">'BaselineCorr'</span>,parameters)),:),<span class="string">'BaselineCorr'</span>,<span class="string">''</span>));
-0665         info.NbScansAcc = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansAcc'</span>,parameters)),:),<span class="string">'NbScansAcc'</span>,<span class="string">''</span>));
-0666         info.NbScansDone = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansDone'</span>,parameters)),:),<span class="string">'NbScansDone'</span>,<span class="string">''</span>));
-0667         info.NbScansToDo = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansToDo'</span>,parameters)),:),<span class="string">'NbScansToDo'</span>,<span class="string">''</span>));
-0668         
-0669         <span class="comment">% Pulsed information</span>
-0670         <span class="comment">% documentation text</span>
-0671         info.IIFMT = strtrim(regexprep(parameters((strmatch(<span class="string">'IIFMT'</span>,parameters)),:),<span class="string">'IIFMT'</span>,<span class="string">''</span>));
-0672         info.IIUNI = strtrim(regexprep(parameters((strmatch(<span class="string">'IIUNI'</span>,parameters)),:),<span class="string">'IIUNI'</span>,<span class="string">''</span>));
-0673         
-0674         info.Delay = parameters((strmatch(<span class="string">'Delay'</span>,parameters)),:);
-0675         info.Delay = strtrim(regexprep((info.Delay(1,:)),<span class="string">'Delay'</span>,<span class="string">''</span>));
-0676         <span class="comment">% cw bridge</span>
-0677         info.AcqFineTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqFineTuning'</span>,parameters)),:),<span class="string">'AcqFineTuning'</span>,<span class="string">''</span>));
-0678         info.AcqScanFTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqScanFTuning'</span>,parameters)),:),<span class="string">'AcqScanFTuning'</span>,<span class="string">''</span>));
-0679         info.AcqSliceFTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqSliceFTuning'</span>,parameters)),:),<span class="string">'AcqSliceFTuning'</span>,<span class="string">''</span>));
-0680         <span class="comment">% endor</span>
-0681         info.EIEENDORFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEENDORFreq'</span>,parameters)),:),<span class="string">'EIEENDORFreq'</span>,<span class="string">''</span>));
-0682         info.EIEIsotope = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEIsotope'</span>,parameters)),:),<span class="string">'EIEIsotope'</span>,<span class="string">''</span>));
-0683         info.EIERFSweepDir = strtrim(regexprep(parameters((strmatch(<span class="string">'EIERFSweepDir'</span>,parameters)),:),<span class="string">'EIERFSweepDir'</span>,<span class="string">''</span>));
-0684         info.EIEStaticField = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEStaticField'</span>,parameters)),:),<span class="string">'EIEStaticField'</span>,<span class="string">''</span>));
-0685         info.EIEStaticRF = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEStaticRF'</span>,parameters)),:),<span class="string">'EIEStaticRF'</span>,<span class="string">''</span>));
-0686         info.ENDORType = strtrim(regexprep(parameters((strmatch(<span class="string">'ENDORType'</span>,parameters)),:),<span class="string">'ENDORType'</span>,<span class="string">''</span>));
-0687         info.RF1Atten = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1Atten'</span>,parameters)),:),<span class="string">'RF1Atten'</span>,<span class="string">''</span>));
-0688         info.RF1FreqPos = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1FreqPos'</span>,parameters)),:),<span class="string">'RF1FreqPos'</span>,<span class="string">''</span>));
-0689         info.RF1StartFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1StartFreq'</span>,parameters)),:),<span class="string">'RF1StartFreq'</span>,<span class="string">''</span>));
-0690         info.RF1SweepWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1SweepWidth'</span>,parameters)),:),<span class="string">'RF1SweepWidth'</span>,<span class="string">''</span>));
-0691         info.RF2Atten = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2Atten'</span>,parameters)),:),<span class="string">'RF2Atten'</span>,<span class="string">''</span>));
-0692         info.RF2FreqPos = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2FreqPos'</span>,parameters)),:),<span class="string">'RF2FreqPos'</span>,<span class="string">''</span>));
-0693         info.RF2StartFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2StartFreq'</span>,parameters)),:),<span class="string">'RF2StartFreq'</span>,<span class="string">''</span>));
-0694         info.RF2SweepWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2SweepWidth'</span>,parameters)),:),<span class="string">'RF2SweepWidth'</span>,<span class="string">''</span>));
-0695         info.RFSrcMixing = strtrim(regexprep(parameters((strmatch(<span class="string">'RFSrcMixing'</span>,parameters)),:),<span class="string">'RFSrcMixing'</span>,<span class="string">''</span>));
-0696         info.SumAtten = parameters((strmatch(<span class="string">'SumAtten'</span>,parameters)),:);
-0697         info.SumAtten = strtrim(regexprep((info.Power(1,:)),<span class="string">'SumAtten'</span>,<span class="string">''</span>));
-0698         info.SumAttenStart = strtrim(regexprep(parameters((strmatch(<span class="string">'SumAttenStart'</span>,parameters)),:),<span class="string">'SumAttenStart'</span>,<span class="string">''</span>));
-0699         info.SumAttenWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'SumAttenWidth'</span>,parameters)),:),<span class="string">'SumAttenWidth'</span>,<span class="string">''</span>));
-0700         <span class="comment">% fieldCtrl</span>
-0701         info.FieldResol = str2num(regexprep(parameters((strmatch(<span class="string">'FieldResol'</span>,parameters)),:),<span class="string">'FieldResol'</span>,<span class="string">''</span>));
-0702         <span class="comment">% ftBridge</span>
-0703         info.Attenuation = strtrim(regexprep(parameters((strmatch(<span class="string">'Attenuation'</span>,parameters)),:),<span class="string">'Attenuation'</span>,<span class="string">''</span>));
-0704         info.ELDORAtt = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORAtt'</span>,parameters)),:),<span class="string">'ELDORAtt'</span>,<span class="string">''</span>));
-0705         info.FrequencyA = strtrim(regexprep(parameters((strmatch(<span class="string">'FrequencyA'</span>,parameters)),:),<span class="string">'FrequencyA'</span>,<span class="string">''</span>));
-0706         info.VideoBW = strtrim(regexprep(parameters((strmatch(<span class="string">'VideoBW'</span>,parameters)),:),<span class="string">'VideoBW'</span>,<span class="string">''</span>));
-0707         info.VideoGain = strtrim(regexprep(parameters((strmatch(<span class="string">'VideoGain'</span>,parameters)),:),<span class="string">'VideoGain'</span>,<span class="string">''</span>));
-0708         <span class="comment">% ftEpr</span>
-0709         info.AutoTimeOut = strtrim(regexprep(parameters((strmatch(<span class="string">'AutoTimeOut'</span>,parameters)),:),<span class="string">'AutoTimeOut'</span>,<span class="string">''</span>));
-0710         info.AveragesPerScan = str2num(regexprep(parameters((strmatch(<span class="string">'AveragesPerScan'</span>,parameters)),:),<span class="string">'AveragesPerScan'</span>,<span class="string">''</span>));
-0711         info.ELDORFreqStart = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORFreqStart'</span>,parameters)),:),<span class="string">'ELDORFreqStart'</span>,<span class="string">''</span>));
-0712         info.ELDORFreqWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORFreqWidth'</span>,parameters)),:),<span class="string">'ELDORFreqWidth'</span>,<span class="string">''</span>));
-0713         info.FTAcqModeSlct = strtrim(regexprep(parameters((strmatch(<span class="string">'FTAcqModeSlct'</span>,parameters)),:),<span class="string">'FTAcqModeSlct'</span>,<span class="string">''</span>));
-0714         info.PPExtTrg = parameters((strmatch(<span class="string">'PPExtTrg'</span>,parameters)),:);
-0715         info.PPExtTrg = strtrim(regexprep((info.PPExtTrg(1,:)),<span class="string">'PPExtTrg'</span>,<span class="string">''</span>));
-0716         info.PPExtTrgSlope = strtrim(regexprep(parameters((strmatch(<span class="string">'PPExtTrgSlope'</span>,parameters)),:),<span class="string">'PPExtTrgSlope'</span>,<span class="string">''</span>));
-0717         info.PlsSPELEXPSlct = strtrim(regexprep(parameters((strmatch(<span class="string">'PlsSPELEXPSlct'</span>,parameters)),:),<span class="string">'PlsSPELEXPSlct'</span>,<span class="string">''</span>));
-0718         info.ReplaceMode = parameters((strmatch(<span class="string">'ReplaceMode'</span>,parameters)),:);
-0719         info.ReplaceMode_ftEpr = strtrim(regexprep((info.ReplaceMode(1,:)),<span class="string">'ReplaceMode'</span>,<span class="string">''</span>));
-0720         info.ReplaceMode_recorder = strtrim(regexprep((info.ReplaceMode(2,:)),<span class="string">'ReplaceMode'</span>,<span class="string">''</span>));
-0721         clear info.ReplaceMode
-0722         info.ShotRepTime = strtrim(regexprep(parameters((strmatch(<span class="string">'ShotRepTime'</span>,parameters)),:),<span class="string">'ShotRepTime'</span>,<span class="string">''</span>));
-0723         info.ShotsPLoop = strtrim(regexprep(parameters((strmatch(<span class="string">'ShotsPLoop'</span>,parameters)),:),<span class="string">'ShotsPLoop'</span>,<span class="string">''</span>));
-0724         info.SptProgress = strtrim(regexprep(parameters((strmatch(<span class="string">'SptProgress'</span>,parameters)),:),<span class="string">'SptProgress'</span>,<span class="string">''</span>));
-0725         info.SweepsPExp = strtrim(regexprep(parameters((strmatch(<span class="string">'SweepsPExp'</span>,parameters)),:),<span class="string">'SweepsPExp'</span>,<span class="string">''</span>));
-0726         info.TriggerTimeOut = strtrim(regexprep(parameters((strmatch(<span class="string">'TriggerTimeOut'</span>,parameters)),:),<span class="string">'TriggerTimeOut'</span>,<span class="string">''</span>));
-0727         info.XAxisQuant = strtrim(regexprep(parameters((strmatch(<span class="string">'XAxisQuant'</span>,parameters)),:),<span class="string">'XAxisQuant'</span>,<span class="string">''</span>));
-0728         info.XSpecRes = str2num(regexprep(parameters((strmatch(<span class="string">'XSpecRes'</span>,parameters)),:),<span class="string">'XSpecRes'</span>,<span class="string">''</span>));
-0729         info.YAxisQuant = strtrim(regexprep(parameters((strmatch(<span class="string">'YAxisQuant'</span>,parameters)),:),<span class="string">'YAxisQuant'</span>,<span class="string">''</span>));
-0730         info.YSpecRes = str2num(regexprep(parameters((strmatch(<span class="string">'YSpecRes'</span>,parameters)),:),<span class="string">'YSpecRes'</span>,<span class="string">''</span>));
-0731         
-0732 
-0733         varargout{1} = x;
-0734         varargout{2} = y;
-0735         varargout{3} = z;
-0736         varargout{4} = info;
-0737         
-0738     <span class="keyword">otherwise</span>
-0739         varargout{1} = x;
-0740         varargout{2} = y;
-0741 <span class="keyword">end</span>
-0742 
-0743 <span class="comment">%                         Figure plotting</span>
-0744 <span class="comment">% ========================================================================</span>
-0745 
-0746 <span class="comment">% Check if figure plotting is selected</span>
-0747 <span class="keyword">if</span> isequal(graph,<span class="string">'plot'</span>)
-0748     figure(<span class="string">'name'</span> , [<span class="string">'BrukerRead: '</span> name], <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
-0749     set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
-0750     axis tight;
-0751     
-0752     <span class="comment">% PULSE EXPERIMENTS</span>
-0753     <span class="keyword">switch</span> info.EXPT
-0754         <span class="keyword">case</span> <span class="string">'PLS'</span>
-0755             <span class="keyword">switch</span> info.XNAM
-0756                     <span class="comment">% For FSEs</span>
-0757                 <span class="keyword">case</span> <span class="string">'''Field'''</span>
-0758                     plot(x/10,y.real,<span class="string">'k-'</span> , x/10,y.imag,<span class="string">'r-'</span>);
-0759                     xlabel(<span class="string">'Magnetic Field / mT'</span>);
-0760                     ylabel(<span class="string">'Intensity'</span>);
-0761                     legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>);
-0762                     
-0763                     <span class="comment">% For FIDs</span>
-0764                 <span class="keyword">case</span> <span class="string">'''Time'''</span>
-0765                     <span class="keyword">if</span> isfield(y,<span class="string">'real'</span>)
-0766                         plot(x,y.real,<span class="string">'k-'</span> , x,y.imag,<span class="string">'r-'</span>);
-0767                         legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>);
-0768                     <span class="keyword">else</span>
-0769                         plot(x,y);
-0770                     <span class="keyword">end</span>
-0771                     xlabel(<span class="string">'Time / ns'</span>);
-0772                     ylabel(<span class="string">'Intensity'</span>);
-0773                     
-0774                     
-0775                     <span class="comment">% For ENDOR</span>
-0776                 <span class="keyword">case</span> <span class="string">'''RF'''</span>
-0777                     plot(x,y.real,<span class="string">'k-'</span> , x,y.imag,<span class="string">'r-'</span>);
-0778                     xlabel(<span class="string">'Radio frequency / MHz'</span>);
-0779                     ylabel(<span class="string">'Intensity'</span>);
-0780                     legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>);
-0781                     
-0782                 <span class="comment">% For some reason HYSCORE and ESEEM experiments do not have</span>
-0783                 <span class="comment">% an XNAM field so we need to use XUNI to distinguish</span>
-0784                 <span class="comment">% between experiments.</span>
-0785                 <span class="keyword">otherwise</span>
-0786                     <span class="keyword">switch</span> info.XUNI
-0787                         <span class="comment">% For HYSCORE</span>
-0788                         <span class="keyword">case</span> <span class="string">'''GHz'''</span>
-0789                             contour(x*1000,y*1000,z);
-0790                             xlabel(<span class="string">'\nu_1 / MHz'</span>);
-0791                             ylabel(<span class="string">'\nu_2 / MHz'</span>);
-0792                             axis normal;
-0793                         
-0794                         <span class="comment">% ESEEM</span>
-0795                         <span class="keyword">case</span> <span class="string">'&quot;ns&quot;'</span>
-0796                             plot(x,y.real,<span class="string">'k-'</span> , x,y.imag,<span class="string">'r-'</span>);
-0797                             xlabel(<span class="string">'Time / ns'</span>);
-0798                             ylabel(<span class="string">'Intensity'</span>);
-0799                             legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>);
-0800                             
-0801                         <span class="comment">% DONUT</span>
-0802                         <span class="keyword">case</span> <span class="string">'''ns'''</span>
-0803                             plot(x,y.real,<span class="string">'k-'</span> , x,y.imag,<span class="string">'r-'</span>);
-0804                             xlabel(<span class="string">'Time / ns'</span>);
-0805                             ylabel(<span class="string">'Intensity'</span>);
-0806                             legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>);
-0807                             
-0808                         <span class="comment">% Try plotting for other experiments (ie ENDOR)</span>
-0809                         <span class="keyword">otherwise</span>
-0810                             <span class="keyword">try</span>
-0811                                 plot(x,y.real,<span class="string">'k-'</span> , x,y.imag,<span class="string">'r-'</span>);
-0812                                 legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>)
-0813                             <span class="keyword">end</span>
-0814                     <span class="keyword">end</span>
-0815             <span class="keyword">end</span>
-0816             
-0817     <span class="comment">% CW EXPERIMENTS</span>
-0818         <span class="keyword">case</span> <span class="string">'CW'</span>
-0819             plot(x/10,y);
-0820             xlabel(<span class="string">'Magnetic Field / mT'</span>);
-0821     <span class="keyword">end</span>
-0822     
-0823 <span class="keyword">end</span>
-0824 
-0825 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0650         <span class="comment">% Generate info section</span>
+0651         info.DSRC = strtrim(regexprep(parameters((strmatch(<span class="string">'DSRC'</span>,parameters)),:),<span class="string">'DSRC'</span>,<span class="string">''</span>));
+0652         info.BSEQ = strtrim(regexprep(parameters((strmatch(<span class="string">'BSEQ'</span>,parameters)),:),<span class="string">'BSEQ'</span>,<span class="string">''</span>));
+0653         info.IKKF = strtrim(regexprep(parameters((strmatch(<span class="string">'IKKF'</span>,parameters)),:),<span class="string">'IKKF'</span>,<span class="string">''</span>));
+0654         info.ZTYP = strtrim(regexprep(parameters((strmatch(<span class="string">'ZTYP'</span>,parameters)),:),<span class="string">'ZTYP'</span>,<span class="string">''</span>));
+0655         
+0656         info.IRFMT = strtrim(regexprep(parameters((strmatch(<span class="string">'IRFMT'</span>,parameters)),:),<span class="string">'IRFMT'</span>,<span class="string">''</span>));
+0657         info.IRUNI = strtrim(regexprep(parameters((strmatch(<span class="string">'IRUNI'</span>,parameters)),:),<span class="string">'IRUNI'</span>,<span class="string">''</span>));
+0658         info.OPER = strtrim(regexprep(parameters((strmatch(<span class="string">'OPER'</span>,parameters)),:),<span class="string">'OPER'</span>,<span class="string">''</span>));
+0659         info.DATE = strtrim(regexprep(parameters((strmatch(<span class="string">'DATE'</span>,parameters)),:),<span class="string">'DATE'</span>,<span class="string">''</span>));
+0660         info.TIME = strtrim(regexprep(parameters((strmatch(<span class="string">'TIME'</span>,parameters)),:),<span class="string">'TIME'</span>,<span class="string">''</span>));
+0661         info.CMNT = strtrim(regexprep(parameters((strmatch(<span class="string">'CMNT'</span>,parameters)),:),<span class="string">'CMNT'</span>,<span class="string">''</span>));
+0662         info.SAMP = strtrim(regexprep(parameters((strmatch(<span class="string">'SAMP'</span>,parameters)),:),<span class="string">'SAMP'</span>,<span class="string">''</span>));
+0663         info.SFOR = strtrim(regexprep(parameters((strmatch(<span class="string">'SFOR'</span>,parameters)),:),<span class="string">'SFOR'</span>,<span class="string">''</span>));
+0664         info.STAG = strtrim(regexprep(parameters((strmatch(<span class="string">'STAG'</span>,parameters)),:),<span class="string">'STAG'</span>,<span class="string">''</span>));
+0665         info.OXS1 = strtrim(regexprep(parameters((strmatch(<span class="string">'OXS1'</span>,parameters)),:),<span class="string">'OXS1'</span>,<span class="string">''</span>));
+0666         info.AXS1 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS1'</span>,parameters)),:),<span class="string">'AXS1'</span>,<span class="string">''</span>));
+0667         info.AXS2 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS2'</span>,parameters)),:),<span class="string">'AXS2'</span>,<span class="string">''</span>));
+0668         info.AXS3 = strtrim(regexprep(parameters((strmatch(<span class="string">'AXS3'</span>,parameters)),:),<span class="string">'AXS3'</span>,<span class="string">''</span>));
+0669         info.A1CT = str2num(regexprep(parameters((strmatch(<span class="string">'A1CT'</span>,parameters)),:),<span class="string">'A1CT'</span>,<span class="string">''</span>));
+0670         info.A1SW = str2num(regexprep(parameters((strmatch(<span class="string">'A1SW'</span>,parameters)),:),<span class="string">'A1SW'</span>,<span class="string">''</span>));
+0671         info.MWFQ = str2num(regexprep(parameters((strmatch(<span class="string">'MWFQ'</span>,parameters)),:),<span class="string">'MWFQ'</span>,<span class="string">''</span>));
+0672         info.MWPW = str2num(regexprep(parameters((strmatch(<span class="string">'MWPW'</span>,parameters)),:),<span class="string">'MWPW'</span>,<span class="string">''</span>));
+0673         info.AVGS = str2num(regexprep(parameters((strmatch(<span class="string">'AVGS'</span>,parameters)),:),<span class="string">'AVGS'</span>,<span class="string">''</span>));
+0674         
+0675         info.CenterField = strtrim(regexprep(parameters((strmatch(<span class="string">'CenterField'</span>,parameters)),:),<span class="string">'CenterField'</span>,<span class="string">''</span>));
+0676         info.FieldFlyback = strtrim(regexprep(parameters((strmatch(<span class="string">'FieldFlyback'</span>,parameters)),:),<span class="string">'FieldFlyback'</span>,<span class="string">''</span>));
+0677         info.FieldWait = strtrim(regexprep(parameters((strmatch(<span class="string">'FieldWait'</span>,parameters)),:),<span class="string">'FieldWait'</span>,<span class="string">''</span>));
+0678         info.GFactor = str2num(regexprep(parameters((strmatch(<span class="string">'GFactor'</span>,parameters)),:),<span class="string">'GFactor'</span>,<span class="string">''</span>));
+0679         info.SetToSampleG = strtrim(regexprep(parameters((strmatch(<span class="string">'SetToSampleG'</span>,parameters)),:),<span class="string">'SetToSampleG'</span>,<span class="string">''</span>));
+0680         info.SweepDirection = strtrim(regexprep(parameters((strmatch(<span class="string">'SweepDirection'</span>,parameters)),:),<span class="string">'SweepDirection'</span>,<span class="string">''</span>));
+0681         
+0682         info.FrequencyMon = strtrim(regexprep(parameters((strmatch(<span class="string">'FrequencyMon'</span>,parameters)),:),<span class="string">'FrequencyMon'</span>,<span class="string">''</span>));
+0683         info.QMonitBridge = strtrim(regexprep(parameters((strmatch(<span class="string">'QMonitBridge'</span>,parameters)),:),<span class="string">'QMonitBridge'</span>,<span class="string">''</span>));
+0684         <span class="comment">% Power is different because strmatch for 'Power' finds Power and</span>
+0685         <span class="comment">% PowerAtten</span>
+0686         info.Power = parameters((strmatch(<span class="string">'Power'</span>,parameters)),:);
+0687         info.Power = strtrim(regexprep((info.Power(1,:)),<span class="string">'Power'</span>,<span class="string">''</span>));
+0688         info.PowerAtten = strtrim(regexprep(parameters((strmatch(<span class="string">'PowerAtten'</span>,parameters)),:),<span class="string">'PowerAtten'</span>,<span class="string">''</span>));
+0689         info.BaselineCorr = strtrim(regexprep(parameters((strmatch(<span class="string">'BaselineCorr'</span>,parameters)),:),<span class="string">'BaselineCorr'</span>,<span class="string">''</span>));
+0690         info.NbScansAcc = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansAcc'</span>,parameters)),:),<span class="string">'NbScansAcc'</span>,<span class="string">''</span>));
+0691         info.NbScansDone = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansDone'</span>,parameters)),:),<span class="string">'NbScansDone'</span>,<span class="string">''</span>));
+0692         info.NbScansToDo = str2num(regexprep(parameters((strmatch(<span class="string">'NbScansToDo'</span>,parameters)),:),<span class="string">'NbScansToDo'</span>,<span class="string">''</span>));
+0693         
+0694         <span class="comment">% Pulsed information</span>
+0695         <span class="comment">% documentation text</span>
+0696         info.IIFMT = strtrim(regexprep(parameters((strmatch(<span class="string">'IIFMT'</span>,parameters)),:),<span class="string">'IIFMT'</span>,<span class="string">''</span>));
+0697         info.IIUNI = strtrim(regexprep(parameters((strmatch(<span class="string">'IIUNI'</span>,parameters)),:),<span class="string">'IIUNI'</span>,<span class="string">''</span>));
+0698         
+0699         info.Delay = parameters((strmatch(<span class="string">'Delay'</span>,parameters)),:);
+0700         info.Delay = strtrim(regexprep((info.Delay(1,:)),<span class="string">'Delay'</span>,<span class="string">''</span>));
+0701         <span class="comment">% cw bridge</span>
+0702         info.AcqFineTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqFineTuning'</span>,parameters)),:),<span class="string">'AcqFineTuning'</span>,<span class="string">''</span>));
+0703         info.AcqScanFTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqScanFTuning'</span>,parameters)),:),<span class="string">'AcqScanFTuning'</span>,<span class="string">''</span>));
+0704         info.AcqSliceFTuning = strtrim(regexprep(parameters((strmatch(<span class="string">'AcqSliceFTuning'</span>,parameters)),:),<span class="string">'AcqSliceFTuning'</span>,<span class="string">''</span>));
+0705         <span class="comment">% endor</span>
+0706         info.EIEENDORFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEENDORFreq'</span>,parameters)),:),<span class="string">'EIEENDORFreq'</span>,<span class="string">''</span>));
+0707         info.EIEIsotope = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEIsotope'</span>,parameters)),:),<span class="string">'EIEIsotope'</span>,<span class="string">''</span>));
+0708         info.EIERFSweepDir = strtrim(regexprep(parameters((strmatch(<span class="string">'EIERFSweepDir'</span>,parameters)),:),<span class="string">'EIERFSweepDir'</span>,<span class="string">''</span>));
+0709         info.EIEStaticField = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEStaticField'</span>,parameters)),:),<span class="string">'EIEStaticField'</span>,<span class="string">''</span>));
+0710         info.EIEStaticRF = strtrim(regexprep(parameters((strmatch(<span class="string">'EIEStaticRF'</span>,parameters)),:),<span class="string">'EIEStaticRF'</span>,<span class="string">''</span>));
+0711         info.ENDORType = strtrim(regexprep(parameters((strmatch(<span class="string">'ENDORType'</span>,parameters)),:),<span class="string">'ENDORType'</span>,<span class="string">''</span>));
+0712         info.RF1Atten = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1Atten'</span>,parameters)),:),<span class="string">'RF1Atten'</span>,<span class="string">''</span>));
+0713         info.RF1FreqPos = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1FreqPos'</span>,parameters)),:),<span class="string">'RF1FreqPos'</span>,<span class="string">''</span>));
+0714         info.RF1StartFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1StartFreq'</span>,parameters)),:),<span class="string">'RF1StartFreq'</span>,<span class="string">''</span>));
+0715         info.RF1SweepWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'RF1SweepWidth'</span>,parameters)),:),<span class="string">'RF1SweepWidth'</span>,<span class="string">''</span>));
+0716         info.RF2Atten = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2Atten'</span>,parameters)),:),<span class="string">'RF2Atten'</span>,<span class="string">''</span>));
+0717         info.RF2FreqPos = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2FreqPos'</span>,parameters)),:),<span class="string">'RF2FreqPos'</span>,<span class="string">''</span>));
+0718         info.RF2StartFreq = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2StartFreq'</span>,parameters)),:),<span class="string">'RF2StartFreq'</span>,<span class="string">''</span>));
+0719         info.RF2SweepWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'RF2SweepWidth'</span>,parameters)),:),<span class="string">'RF2SweepWidth'</span>,<span class="string">''</span>));
+0720         info.RFSrcMixing = strtrim(regexprep(parameters((strmatch(<span class="string">'RFSrcMixing'</span>,parameters)),:),<span class="string">'RFSrcMixing'</span>,<span class="string">''</span>));
+0721         info.SumAtten = parameters((strmatch(<span class="string">'SumAtten'</span>,parameters)),:);
+0722         info.SumAtten = strtrim(regexprep((info.Power(1,:)),<span class="string">'SumAtten'</span>,<span class="string">''</span>));
+0723         info.SumAttenStart = strtrim(regexprep(parameters((strmatch(<span class="string">'SumAttenStart'</span>,parameters)),:),<span class="string">'SumAttenStart'</span>,<span class="string">''</span>));
+0724         info.SumAttenWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'SumAttenWidth'</span>,parameters)),:),<span class="string">'SumAttenWidth'</span>,<span class="string">''</span>));
+0725         <span class="comment">% fieldCtrl</span>
+0726         info.FieldResol = str2num(regexprep(parameters((strmatch(<span class="string">'FieldResol'</span>,parameters)),:),<span class="string">'FieldResol'</span>,<span class="string">''</span>));
+0727         <span class="comment">% ftBridge</span>
+0728         info.Attenuation = strtrim(regexprep(parameters((strmatch(<span class="string">'Attenuation'</span>,parameters)),:),<span class="string">'Attenuation'</span>,<span class="string">''</span>));
+0729         info.ELDORAtt = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORAtt'</span>,parameters)),:),<span class="string">'ELDORAtt'</span>,<span class="string">''</span>));
+0730         info.FrequencyA = strtrim(regexprep(parameters((strmatch(<span class="string">'FrequencyA'</span>,parameters)),:),<span class="string">'FrequencyA'</span>,<span class="string">''</span>));
+0731         info.VideoBW = strtrim(regexprep(parameters((strmatch(<span class="string">'VideoBW'</span>,parameters)),:),<span class="string">'VideoBW'</span>,<span class="string">''</span>));
+0732         info.VideoGain = strtrim(regexprep(parameters((strmatch(<span class="string">'VideoGain'</span>,parameters)),:),<span class="string">'VideoGain'</span>,<span class="string">''</span>));
+0733         <span class="comment">% ftEpr</span>
+0734         info.AutoTimeOut = strtrim(regexprep(parameters((strmatch(<span class="string">'AutoTimeOut'</span>,parameters)),:),<span class="string">'AutoTimeOut'</span>,<span class="string">''</span>));
+0735         info.AveragesPerScan = str2num(regexprep(parameters((strmatch(<span class="string">'AveragesPerScan'</span>,parameters)),:),<span class="string">'AveragesPerScan'</span>,<span class="string">''</span>));
+0736         info.ELDORFreqStart = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORFreqStart'</span>,parameters)),:),<span class="string">'ELDORFreqStart'</span>,<span class="string">''</span>));
+0737         info.ELDORFreqWidth = strtrim(regexprep(parameters((strmatch(<span class="string">'ELDORFreqWidth'</span>,parameters)),:),<span class="string">'ELDORFreqWidth'</span>,<span class="string">''</span>));
+0738         info.FTAcqModeSlct = strtrim(regexprep(parameters((strmatch(<span class="string">'FTAcqModeSlct'</span>,parameters)),:),<span class="string">'FTAcqModeSlct'</span>,<span class="string">''</span>));
+0739         info.PPExtTrg = parameters((strmatch(<span class="string">'PPExtTrg'</span>,parameters)),:);
+0740         info.PPExtTrg = strtrim(regexprep((info.PPExtTrg(1,:)),<span class="string">'PPExtTrg'</span>,<span class="string">''</span>));
+0741         info.PPExtTrgSlope = strtrim(regexprep(parameters((strmatch(<span class="string">'PPExtTrgSlope'</span>,parameters)),:),<span class="string">'PPExtTrgSlope'</span>,<span class="string">''</span>));
+0742         info.PlsSPELEXPSlct = strtrim(regexprep(parameters((strmatch(<span class="string">'PlsSPELEXPSlct'</span>,parameters)),:),<span class="string">'PlsSPELEXPSlct'</span>,<span class="string">''</span>));
+0743         info.ReplaceMode = parameters((strmatch(<span class="string">'ReplaceMode'</span>,parameters)),:);
+0744         info.ReplaceMode_ftEpr = strtrim(regexprep((info.ReplaceMode(1,:)),<span class="string">'ReplaceMode'</span>,<span class="string">''</span>));
+0745         info.ReplaceMode_recorder = strtrim(regexprep((info.ReplaceMode(2,:)),<span class="string">'ReplaceMode'</span>,<span class="string">''</span>));
+0746         clear info.ReplaceMode
+0747         info.ShotRepTime = strtrim(regexprep(parameters((strmatch(<span class="string">'ShotRepTime'</span>,parameters)),:),<span class="string">'ShotRepTime'</span>,<span class="string">''</span>));
+0748         info.ShotsPLoop = strtrim(regexprep(parameters((strmatch(<span class="string">'ShotsPLoop'</span>,parameters)),:),<span class="string">'ShotsPLoop'</span>,<span class="string">''</span>));
+0749         info.SptProgress = strtrim(regexprep(parameters((strmatch(<span class="string">'SptProgress'</span>,parameters)),:),<span class="string">'SptProgress'</span>,<span class="string">''</span>));
+0750         info.SweepsPExp = strtrim(regexprep(parameters((strmatch(<span class="string">'SweepsPExp'</span>,parameters)),:),<span class="string">'SweepsPExp'</span>,<span class="string">''</span>));
+0751         info.TriggerTimeOut = strtrim(regexprep(parameters((strmatch(<span class="string">'TriggerTimeOut'</span>,parameters)),:),<span class="string">'TriggerTimeOut'</span>,<span class="string">''</span>));
+0752         info.XAxisQuant = strtrim(regexprep(parameters((strmatch(<span class="string">'XAxisQuant'</span>,parameters)),:),<span class="string">'XAxisQuant'</span>,<span class="string">''</span>));
+0753         info.XSpecRes = str2num(regexprep(parameters((strmatch(<span class="string">'XSpecRes'</span>,parameters)),:),<span class="string">'XSpecRes'</span>,<span class="string">''</span>));
+0754         info.YAxisQuant = strtrim(regexprep(parameters((strmatch(<span class="string">'YAxisQuant'</span>,parameters)),:),<span class="string">'YAxisQuant'</span>,<span class="string">''</span>));
+0755         info.YSpecRes = str2num(regexprep(parameters((strmatch(<span class="string">'YSpecRes'</span>,parameters)),:),<span class="string">'YSpecRes'</span>,<span class="string">''</span>));
+0756         
+0757 
+0758         varargout{1} = x;
+0759         varargout{2} = y;
+0760         varargout{3} = z;
+0761         varargout{4} = info;
+0762         
+0763     <span class="keyword">otherwise</span>
+0764         varargout{1} = x;
+0765         varargout{2} = y;
+0766 <span class="keyword">end</span>
+0767 
+0768 <span class="comment">%                         Figure plotting</span>
+0769 <span class="comment">% ========================================================================</span>
+0770 
+0771 <span class="comment">% Check if figure plotting is selected</span>
+0772 <span class="keyword">if</span> isequal(graph,<span class="string">'plot'</span>)
+0773     <span class="keyword">try</span>
+0774         figure(<span class="string">'name'</span> , [<span class="string">'BrukerRead: '</span> name], <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0775         set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0776         axis tight;
+0777         
+0778         <span class="comment">% PULSE EXPERIMENTS</span>
+0779         <span class="keyword">switch</span> info.EXPT
+0780             <span class="keyword">case</span> <span class="string">'PLS'</span>
+0781                 <span class="keyword">switch</span> info.XNAM
+0782                     <span class="comment">% For FSEs</span>
+0783                     <span class="keyword">case</span> <span class="string">'''Field'''</span>
+0784                         plot(x/10,y.real,<span class="string">'k-'</span> , x/10,y.imag,<span class="string">'r-'</span>);
+0785                         xlabel(<span class="string">'Magnetic Field / mT'</span>);
+0786                         ylabel(<span class="string">'Intensity'</span>);
+0787                         legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>);
+0788                         
+0789                         <span class="comment">% For FIDs</span>
+0790                     <span class="keyword">case</span> <span class="string">'''Time'''</span>
+0791                         <span class="keyword">if</span> isfield(y,<span class="string">'real'</span>)
+0792                             plot(x,y.real,<span class="string">'k-'</span> , x,y.imag,<span class="string">'r-'</span>);
+0793                             legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>);
+0794                         <span class="keyword">else</span>
+0795                             plot(x,y);
+0796                         <span class="keyword">end</span>
+0797                         xlabel(<span class="string">'Time / ns'</span>);
+0798                         ylabel(<span class="string">'Intensity'</span>);
+0799                         
+0800                         
+0801                         <span class="comment">% For ENDOR</span>
+0802                     <span class="keyword">case</span> <span class="string">'''RF'''</span>
+0803                         plot(x,y.real,<span class="string">'k-'</span> , x,y.imag,<span class="string">'r-'</span>);
+0804                         xlabel(<span class="string">'Radio frequency / MHz'</span>);
+0805                         ylabel(<span class="string">'Intensity'</span>);
+0806                         legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>);
+0807                         
+0808                         <span class="comment">% For some reason HYSCORE and ESEEM experiments do not have</span>
+0809                         <span class="comment">% an XNAM field so we need to use XUNI to distinguish</span>
+0810                         <span class="comment">% between experiments.</span>
+0811                     <span class="keyword">otherwise</span>
+0812                         <span class="keyword">switch</span> info.XUNI
+0813                             <span class="comment">% For HYSCORE</span>
+0814                             <span class="keyword">case</span> <span class="string">'''GHz'''</span>
+0815                                 contour(x*1000,y*1000,z);
+0816                                 xlabel(<span class="string">'\nu_1 / MHz'</span>);
+0817                                 ylabel(<span class="string">'\nu_2 / MHz'</span>);
+0818                                 axis normal;
+0819                                 
+0820                                 <span class="comment">% ESEEM</span>
+0821                             <span class="keyword">case</span> <span class="string">'&quot;ns&quot;'</span>
+0822                                 plot(x,y.real,<span class="string">'k-'</span> , x,y.imag,<span class="string">'r-'</span>);
+0823                                 xlabel(<span class="string">'Time / ns'</span>);
+0824                                 ylabel(<span class="string">'Intensity'</span>);
+0825                                 legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>);
+0826                                 
+0827                                 <span class="comment">% DONUT</span>
+0828                             <span class="keyword">case</span> <span class="string">'''ns'''</span>
+0829                                 plot(x,y.real,<span class="string">'k-'</span> , x,y.imag,<span class="string">'r-'</span>);
+0830                                 xlabel(<span class="string">'Time / ns'</span>);
+0831                                 ylabel(<span class="string">'Intensity'</span>);
+0832                                 legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>);
+0833                                 
+0834                                 <span class="comment">% Try plotting for other experiments (ie ENDOR)</span>
+0835                             <span class="keyword">otherwise</span>
+0836                                 <span class="keyword">try</span>
+0837                                     plot(x,y.real,<span class="string">'k-'</span> , x,y.imag,<span class="string">'r-'</span>);
+0838                                     legend(<span class="string">'Real'</span>,<span class="string">'Imaginary'</span>)
+0839                                 <span class="keyword">end</span>
+0840                         <span class="keyword">end</span>
+0841                 <span class="keyword">end</span>
+0842                 
+0843                 <span class="comment">% CW EXPERIMENTS</span>
+0844             <span class="keyword">case</span> <span class="string">'CW'</span>
+0845                 plot(x/10,y);
+0846                 xlabel(<span class="string">'Magnetic Field / mT'</span>);
+0847                 
+0848             <span class="keyword">otherwise</span>
+0849                 <span class="keyword">try</span>
+0850                     plot(x/10,y);
+0851                     xlabel(<span class="string">'Magnetic Field / mT'</span>);
+0852                 <span class="keyword">end</span>
+0853                 
+0854         <span class="keyword">end</span>
+0855     <span class="keyword">catch</span>
+0856         error(<span class="string">'Woops! Looks like that can''t be plotted'</span>);
+0857     <span class="keyword">end</span>
+0858 <span class="keyword">end</span>
+0859 
+0860 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

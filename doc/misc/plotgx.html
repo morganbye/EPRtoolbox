@@ -119,168 +119,174 @@ This function is called by:
 0042 <span class="comment">%                       __/ |                   __/ |</span>
 0043 <span class="comment">%                      |___/                   |___/</span>
 0044 <span class="comment">%</span>
-0045 <span class="comment">%</span>
-0046 <span class="comment">% M. Bye v11.9</span>
-0047 <span class="comment">%</span>
-0048 <span class="comment">% Author:       Morgan Bye</span>
-0049 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
-0050 <span class="comment">%               University of East Anglia</span>
-0051 <span class="comment">%               NORWICH, UK</span>
-0052 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
-0053 <span class="comment">% Website:      http://www.morganbye.net/</span>
-0054 <span class="comment">% Sept 2011;    Last revision: 06-September-2011</span>
-0055 
-0056 <span class="keyword">switch</span> nargin
-0057     <span class="keyword">case</span> 2
-0058         mwFreq = 9.75;
-0059         disp(<span class="string">'No microwave frequency defined. X-band (9.75 GHz) assumed.'</span>);
-0060         
-0061     <span class="keyword">case</span> 3
-0062         <span class="comment">% mwFreq = varargin{3};</span>
-0063         
-0064 <span class="keyword">end</span>
-0065 
-0066 figure;
-0067 plot(x,y);
-0068 
-0069 <span class="comment">% Move plot down so g-values will fit</span>
-0070 a = get(gca,<span class="string">'Position'</span>);
-0071 set (gca,<span class="string">'Position'</span>,[a(1) a(2) a(3) a(4)-0.04]);
-0072 
-0073 
-0074 <span class="comment">% Get tick positions</span>
-0075 xlim = get(gca,<span class="string">'XLim'</span>);
-0076 x_ticks = get(gca,<span class="string">'XTick'</span>);
-0077 
-0078 <span class="comment">% Convert ticks to g values</span>
-0079 <span class="keyword">for</span> k = 1:numel(x_ticks)
-0080     g(k) = ((6.626068e-34 * mwFreq) / (9.27e-24 * x_ticks(k))) * 1e13;
-0081 <span class="keyword">end</span>
-0082 
-0083 <span class="keyword">if</span> g(1) &lt; 10
-0084     g = round(g/0.01)*0.01;     <span class="comment">% round to nearest 0.01</span>
-0085     g = unique(g);              <span class="comment">% remove duplicates</span>
-0086     g = g(end:-1:1);            <span class="comment">% flip order</span>
-0087     
-0088 <span class="keyword">else</span>
-0089     g = round(g/0.1)*0.1;
-0090     g = unique(g);
-0091     g = g(end:-1:1);
-0092 <span class="keyword">end</span>
-0093 
-0094 <span class="comment">% Call function</span>
-0095 equation = sprintf(<span class="string">'(((( 6.626068e-34 .* %f) ./ x)./  9.2740e-24).*1e13)'</span>,mwFreq);
-0096 
-0097 gx = <a href="#_sub1" class="code" title="subfunction tah = addtxaxis(ah,transform,ticks,txlabel,ticklabels)">addtxaxis</a>(gca,equation,g);
-0098 
-0099 <span class="comment">% Tidy up, make sure same number of significant figures on all labels</span>
-0100 <span class="keyword">if</span> g(1) &lt; 10
-0101     set(gx,<span class="string">'XTickLabel'</span>, num2str(str2num(get(gx,<span class="string">'XTickLabel'</span>)),<span class="string">'%4.2f'</span>));
-0102 <span class="keyword">else</span>
-0103     set(gx,<span class="string">'XTickLabel'</span>, num2str(str2num(get(gx,<span class="string">'XTickLabel'</span>)),<span class="string">'%4.1f'</span>));
-0104 <span class="keyword">end</span>
-0105 
-0106 linkaxes([gca gx],<span class="string">'xy'</span>)
-0107 
-0108 xlabel(gx,<span class="string">'g / arb. unit'</span>)
-0109 xlabel(gca,<span class="string">'Magnetic field / Gauss'</span>)
-0110 ylabel(<span class="string">'Relative intensity / arb. unit'</span>)
+0045 <span class="comment">% M. Bye v13.09</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% v13.09 - current</span>
+0048 <span class="comment">%               Chemical Physics Department</span>
+0049 <span class="comment">%               Weizmann Institute of Science</span>
+0050 <span class="comment">%               76100 REHOVOT, Israel</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% v11.06 - v13.08</span>
+0053 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0054 <span class="comment">%               University of East Anglia</span>
+0055 <span class="comment">%               NORWICH, UK</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0058 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/cwplot</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">% Last updated  06-September-2011</span>
+0061 
+0062 <span class="keyword">switch</span> nargin
+0063     <span class="keyword">case</span> 2
+0064         mwFreq = 9.75;
+0065         disp(<span class="string">'No microwave frequency defined. X-band (9.75 GHz) assumed.'</span>);
+0066         
+0067     <span class="keyword">case</span> 3
+0068         <span class="comment">% mwFreq = varargin{3};</span>
+0069         
+0070 <span class="keyword">end</span>
+0071 
+0072 figure;
+0073 plot(x,y);
+0074 
+0075 <span class="comment">% Move plot down so g-values will fit</span>
+0076 a = get(gca,<span class="string">'Position'</span>);
+0077 set (gca,<span class="string">'Position'</span>,[a(1) a(2) a(3) a(4)-0.04]);
+0078 
+0079 
+0080 <span class="comment">% Get tick positions</span>
+0081 xlim = get(gca,<span class="string">'XLim'</span>);
+0082 x_ticks = get(gca,<span class="string">'XTick'</span>);
+0083 
+0084 <span class="comment">% Convert ticks to g values</span>
+0085 <span class="keyword">for</span> k = 1:numel(x_ticks)
+0086     g(k) = ((6.626068e-34 * mwFreq) / (9.27e-24 * x_ticks(k))) * 1e13;
+0087 <span class="keyword">end</span>
+0088 
+0089 <span class="keyword">if</span> g(1) &lt; 10
+0090     g = round(g/0.01)*0.01;     <span class="comment">% round to nearest 0.01</span>
+0091     g = unique(g);              <span class="comment">% remove duplicates</span>
+0092     g = g(end:-1:1);            <span class="comment">% flip order</span>
+0093     
+0094 <span class="keyword">else</span>
+0095     g = round(g/0.1)*0.1;
+0096     g = unique(g);
+0097     g = g(end:-1:1);
+0098 <span class="keyword">end</span>
+0099 
+0100 <span class="comment">% Call function</span>
+0101 equation = sprintf(<span class="string">'(((( 6.626068e-34 .* %f) ./ x)./  9.2740e-24).*1e13)'</span>,mwFreq);
+0102 
+0103 gx = <a href="#_sub1" class="code" title="subfunction tah = addtxaxis(ah,transform,ticks,txlabel,ticklabels)">addtxaxis</a>(gca,equation,g);
+0104 
+0105 <span class="comment">% Tidy up, make sure same number of significant figures on all labels</span>
+0106 <span class="keyword">if</span> g(1) &lt; 10
+0107     set(gx,<span class="string">'XTickLabel'</span>, num2str(str2num(get(gx,<span class="string">'XTickLabel'</span>)),<span class="string">'%4.2f'</span>));
+0108 <span class="keyword">else</span>
+0109     set(gx,<span class="string">'XTickLabel'</span>, num2str(str2num(get(gx,<span class="string">'XTickLabel'</span>)),<span class="string">'%4.1f'</span>));
+0110 <span class="keyword">end</span>
 0111 
-0112 
-0113 <span class="comment">%% ================== USE OF NON EPR-TOOLBOX CODE ====================</span>
-0114 
-0115 <span class="comment">% The following code is modified from addtxaxis by Francois Bouffard</span>
-0116 <span class="comment">% (fbouffar@gel.ulaval.ca) available from the MATLAB file exchange</span>
-0117 <span class="comment">% http://www.mathworks.com/matlabcentral/fileexchange/4036-addtxaxis</span>
-0118 <span class="comment">%</span>
-0119 <span class="comment">% It is recommended that if you are interested in this code to use the</span>
-0120 <span class="comment">% original source code and direct any questions to the author directly</span>
-0121 
-0122 
-0123 <a name="_sub1" href="#_subfunctions" class="code">function tah = addtxaxis(ah,transform,ticks,txlabel,ticklabels)</a>
-0124 
-0125 <span class="keyword">if</span> nargin&lt;5
-0126     ticklabels = <span class="string">''</span>;
-0127 <span class="keyword">end</span>;
-0128 <span class="keyword">if</span> nargin&lt;4
-0129     txlabel = <span class="string">''</span>;
-0130 <span class="keyword">end</span>;
-0131 <span class="keyword">if</span> nargin&lt;3 &amp; ~strcmp(transform,<span class="string">'clear'</span>)
-0132     error(<span class="string">'Not enough input arguments'</span>);
+0112 linkaxes([gca gx],<span class="string">'xy'</span>)
+0113 
+0114 xlabel(gx,<span class="string">'g / arb. unit'</span>)
+0115 xlabel(gca,<span class="string">'Magnetic field / Gauss'</span>)
+0116 ylabel(<span class="string">'Relative intensity / arb. unit'</span>)
+0117 
+0118 
+0119 <span class="comment">%% ================== USE OF NON EPR-TOOLBOX CODE ====================</span>
+0120 
+0121 <span class="comment">% The following code is modified from addtxaxis by Francois Bouffard</span>
+0122 <span class="comment">% (fbouffar@gel.ulaval.ca) available from the MATLAB file exchange</span>
+0123 <span class="comment">% http://www.mathworks.com/matlabcentral/fileexchange/4036-addtxaxis</span>
+0124 <span class="comment">%</span>
+0125 <span class="comment">% It is recommended that if you are interested in this code to use the</span>
+0126 <span class="comment">% original source code and direct any questions to the author directly</span>
+0127 
+0128 
+0129 <a name="_sub1" href="#_subfunctions" class="code">function tah = addtxaxis(ah,transform,ticks,txlabel,ticklabels)</a>
+0130 
+0131 <span class="keyword">if</span> nargin&lt;5
+0132     ticklabels = <span class="string">''</span>;
 0133 <span class="keyword">end</span>;
-0134 <span class="keyword">if</span> strcmp(transform,<span class="string">'clear'</span>);
-0135     <a href="#_sub3" class="code" title="subfunction clear_axes(tah)">clear_axes</a>(ah);
-0136     tah = [];
-0137 <span class="keyword">else</span>
-0138     tah = <a href="#_sub2" class="code" title="subfunction tah = set_transformed_axes(ah,transform,ticks,txlabel,ticklabels)">set_transformed_axes</a>(ah,transform,ticks,txlabel,ticklabels);
+0134 <span class="keyword">if</span> nargin&lt;4
+0135     txlabel = <span class="string">''</span>;
+0136 <span class="keyword">end</span>;
+0137 <span class="keyword">if</span> nargin&lt;3 &amp; ~strcmp(transform,<span class="string">'clear'</span>)
+0138     error(<span class="string">'Not enough input arguments'</span>);
 0139 <span class="keyword">end</span>;
-0140 
-0141 <span class="comment">% Setting up transformed axes</span>
-0142 <a name="_sub2" href="#_subfunctions" class="code">function tah = set_transformed_axes(ah,transform,ticks,txlabel,ticklabels)</a>
-0143 
-0144 <span class="comment">% Creating and setting up second axis</span>
-0145 original.pos = get(ah,<span class="string">'Position'</span>);
-0146 original.color = get(ah,<span class="string">'Color'</span>);
-0147 original.units = get(ah,<span class="string">'units'</span>);
-0148 ahpos = original.pos;
-0149 <span class="keyword">if</span> ~isempty(txlabel)
-0150     ahpos(4) = ahpos(4)*0.95;
-0151     set(ah,<span class="string">'Position'</span>,ahpos);
-0152 <span class="keyword">end</span>;
-0153 tah = axes(<span class="string">'units'</span>,original.units,<span class="string">'Position'</span>,ahpos,<span class="string">'Box'</span>,<span class="string">'off'</span>);
-0154 <a href="#_sub4" class="code" title="subfunction switch_objects_depth(parenthandle,obj1,obj2)">switch_objects_depth</a>(gcf,ah,tah);
-0155 set(ah,<span class="string">'Tag'</span>,[<span class="string">'main_'</span> num2str(tah)],<span class="keyword">...</span>
-0156     <span class="string">'UserData'</span>,original);
-0157 set(ah,<span class="string">'Color'</span>,<span class="string">'none'</span>,<span class="string">'Box'</span>,<span class="string">'off'</span>);
-0158 set(tah,<span class="string">'XAxisLocation'</span>,<span class="string">'Top'</span>,<span class="keyword">...</span>
-0159     <span class="string">'YAxisLocation'</span>,<span class="string">'Right'</span>,<span class="keyword">...</span>
-0160     <span class="string">'YTick'</span>,[],<span class="keyword">...</span>
-0161     <span class="string">'XLim'</span>,get(ah,<span class="string">'XLim'</span>),<span class="keyword">...</span>
-0162     <span class="string">'XScale'</span>,get(ah,<span class="string">'XScale'</span>),<span class="keyword">...</span>
-0163     <span class="string">'XDir'</span>,get(ah,<span class="string">'Xdir'</span>));
-0164 set(get(tah,<span class="string">'XLabel'</span>),<span class="string">'String'</span>,txlabel);
-0165 
-0166 <span class="comment">% Applying transform</span>
-0167 x = ticks;
-0168 <span class="keyword">if</span> strcmp(transform(end),<span class="string">';'</span>);
-0169     transform = transform(1:end-1);
-0170 <span class="keyword">end</span>;
+0140 <span class="keyword">if</span> strcmp(transform,<span class="string">'clear'</span>);
+0141     <a href="#_sub3" class="code" title="subfunction clear_axes(tah)">clear_axes</a>(ah);
+0142     tah = [];
+0143 <span class="keyword">else</span>
+0144     tah = <a href="#_sub2" class="code" title="subfunction tah = set_transformed_axes(ah,transform,ticks,txlabel,ticklabels)">set_transformed_axes</a>(ah,transform,ticks,txlabel,ticklabels);
+0145 <span class="keyword">end</span>;
+0146 
+0147 <span class="comment">% Setting up transformed axes</span>
+0148 <a name="_sub2" href="#_subfunctions" class="code">function tah = set_transformed_axes(ah,transform,ticks,txlabel,ticklabels)</a>
+0149 
+0150 <span class="comment">% Creating and setting up second axis</span>
+0151 original.pos = get(ah,<span class="string">'Position'</span>);
+0152 original.color = get(ah,<span class="string">'Color'</span>);
+0153 original.units = get(ah,<span class="string">'units'</span>);
+0154 ahpos = original.pos;
+0155 <span class="keyword">if</span> ~isempty(txlabel)
+0156     ahpos(4) = ahpos(4)*0.95;
+0157     set(ah,<span class="string">'Position'</span>,ahpos);
+0158 <span class="keyword">end</span>;
+0159 tah = axes(<span class="string">'units'</span>,original.units,<span class="string">'Position'</span>,ahpos,<span class="string">'Box'</span>,<span class="string">'off'</span>);
+0160 <a href="#_sub4" class="code" title="subfunction switch_objects_depth(parenthandle,obj1,obj2)">switch_objects_depth</a>(gcf,ah,tah);
+0161 set(ah,<span class="string">'Tag'</span>,[<span class="string">'main_'</span> num2str(tah)],<span class="keyword">...</span>
+0162     <span class="string">'UserData'</span>,original);
+0163 set(ah,<span class="string">'Color'</span>,<span class="string">'none'</span>,<span class="string">'Box'</span>,<span class="string">'off'</span>);
+0164 set(tah,<span class="string">'XAxisLocation'</span>,<span class="string">'Top'</span>,<span class="keyword">...</span>
+0165     <span class="string">'YAxisLocation'</span>,<span class="string">'Right'</span>,<span class="keyword">...</span>
+0166     <span class="string">'YTick'</span>,[],<span class="keyword">...</span>
+0167     <span class="string">'XLim'</span>,get(ah,<span class="string">'XLim'</span>),<span class="keyword">...</span>
+0168     <span class="string">'XScale'</span>,get(ah,<span class="string">'XScale'</span>),<span class="keyword">...</span>
+0169     <span class="string">'XDir'</span>,get(ah,<span class="string">'Xdir'</span>));
+0170 set(get(tah,<span class="string">'XLabel'</span>),<span class="string">'String'</span>,txlabel);
 0171 
-0172 evalin(<span class="string">'base'</span>,<span class="string">'if exist(''x''); org_x = x; end'</span>);
-0173 assignin(<span class="string">'base'</span>,<span class="string">'x'</span>,ticks);
-0174 tx = evalin(<span class="string">'base'</span>,transform,transform);
-0175 evalin(<span class="string">'base'</span>,<span class="string">'if exist(''org_x''); x = org_x; clear org_x; end'</span>);
-0176 
-0177 <span class="comment">% Displaying ticks and tick labels</span>
-0178 <span class="comment">% (sorting is necessary when transform</span>
-0179 <span class="comment">% reverses the axis)</span>
-0180 [sorted_tx,sorted_idx] = sort(tx);
-0181 <span class="keyword">if</span> isempty(ticklabels)
-0182     ticklabels = x(sorted_idx);
-0183 <span class="keyword">else</span>
-0184     ticklabels = ticklabels(sorted_idx);
-0185 <span class="keyword">end</span>;
-0186 set(tah,<span class="string">'XTick'</span>,sorted_tx,<span class="string">'XTickLabel'</span>,ticklabels);
-0187 axes(ah);
-0188 
-0189 <span class="comment">% Removing transformed axes and reverting</span>
-0190 <span class="comment">% to original state</span>
-0191 <a name="_sub3" href="#_subfunctions" class="code">function clear_axes(tah)</a>
-0192 ah = findobj(<span class="string">'Tag'</span>,[<span class="string">'main_'</span> num2str(tah)]);
-0193 delete(tah);
-0194 original = get(ah,<span class="string">'UserData'</span>);
-0195 set(ah,<span class="string">'Position'</span>,original.pos);
-0196 set(ah,<span class="string">'Color'</span>,original.color);
-0197 
-0198 <span class="comment">% This function is used to bring the original axes</span>
-0199 <span class="comment">% on the foreground and the transformed axis to the background</span>
-0200 <a name="_sub4" href="#_subfunctions" class="code">function switch_objects_depth(parenthandle,obj1,obj2)</a>
-0201 children = get(parenthandle,<span class="string">'Children'</span>);
-0202 obj1pos = find(children==obj1);
-0203 obj2pos = find(children==obj2);
-0204 children(obj1pos) = obj2;
-0205 children(obj2pos) = obj1;
-0206 set(parenthandle,<span class="string">'Children'</span>,children);</pre></div>
-<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0172 <span class="comment">% Applying transform</span>
+0173 x = ticks;
+0174 <span class="keyword">if</span> strcmp(transform(end),<span class="string">';'</span>);
+0175     transform = transform(1:end-1);
+0176 <span class="keyword">end</span>;
+0177 
+0178 evalin(<span class="string">'base'</span>,<span class="string">'if exist(''x''); org_x = x; end'</span>);
+0179 assignin(<span class="string">'base'</span>,<span class="string">'x'</span>,ticks);
+0180 tx = evalin(<span class="string">'base'</span>,transform,transform);
+0181 evalin(<span class="string">'base'</span>,<span class="string">'if exist(''org_x''); x = org_x; clear org_x; end'</span>);
+0182 
+0183 <span class="comment">% Displaying ticks and tick labels</span>
+0184 <span class="comment">% (sorting is necessary when transform</span>
+0185 <span class="comment">% reverses the axis)</span>
+0186 [sorted_tx,sorted_idx] = sort(tx);
+0187 <span class="keyword">if</span> isempty(ticklabels)
+0188     ticklabels = x(sorted_idx);
+0189 <span class="keyword">else</span>
+0190     ticklabels = ticklabels(sorted_idx);
+0191 <span class="keyword">end</span>;
+0192 set(tah,<span class="string">'XTick'</span>,sorted_tx,<span class="string">'XTickLabel'</span>,ticklabels);
+0193 axes(ah);
+0194 
+0195 <span class="comment">% Removing transformed axes and reverting</span>
+0196 <span class="comment">% to original state</span>
+0197 <a name="_sub3" href="#_subfunctions" class="code">function clear_axes(tah)</a>
+0198 ah = findobj(<span class="string">'Tag'</span>,[<span class="string">'main_'</span> num2str(tah)]);
+0199 delete(tah);
+0200 original = get(ah,<span class="string">'UserData'</span>);
+0201 set(ah,<span class="string">'Position'</span>,original.pos);
+0202 set(ah,<span class="string">'Color'</span>,original.color);
+0203 
+0204 <span class="comment">% This function is used to bring the original axes</span>
+0205 <span class="comment">% on the foreground and the transformed axis to the background</span>
+0206 <a name="_sub4" href="#_subfunctions" class="code">function switch_objects_depth(parenthandle,obj1,obj2)</a>
+0207 children = get(parenthandle,<span class="string">'Children'</span>);
+0208 obj1pos = find(children==obj1);
+0209 obj2pos = find(children==obj2);
+0210 children(obj1pos) = obj2;
+0211 children(obj2pos) = obj1;
+0212 set(parenthandle,<span class="string">'Children'</span>,children);</pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

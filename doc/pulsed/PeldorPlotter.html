@@ -96,160 +96,178 @@ This function is called by:
 0027 <span class="comment">%</span>
 0028 <span class="comment">% See also: EPRTOOLBOX CWPLOTTER</span>
 0029 
-0030 
-0031 <span class="comment">%                                        _                             _</span>
-0032 <span class="comment">%                                       | |                           | |</span>
-0033 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
-0034 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
-0035 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
-0036 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
-0037 <span class="comment">%                       __/ |                   __/ |</span>
-0038 <span class="comment">%                      |___/                   |___/</span>
-0039 <span class="comment">%</span>
+0030 <span class="comment">%                                        _                             _</span>
+0031 <span class="comment">%                                       | |                           | |</span>
+0032 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0033 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0034 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0035 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0036 <span class="comment">%                       __/ |                   __/ |</span>
+0037 <span class="comment">%                      |___/                   |___/</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% M. Bye v13.09</span>
 0040 <span class="comment">%</span>
-0041 <span class="comment">% M. Bye v13.06</span>
-0042 <span class="comment">%</span>
-0043 <span class="comment">% Author:       Morgan Bye</span>
-0044 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
-0045 <span class="comment">%               University of East Anglia</span>
-0046 <span class="comment">%               NORWICH, UK</span>
-0047 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
-0048 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/</span>
-0049 <span class="comment">% May 2013;     Last revision: 06-May-2013</span>
+0041 <span class="comment">% v13.09 - current</span>
+0042 <span class="comment">%               Chemical Physics Department</span>
+0043 <span class="comment">%               Weizmann Institute of Science</span>
+0044 <span class="comment">%               76100 REHOVOT, Israel</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% v11.06 - v13.08</span>
+0047 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0048 <span class="comment">%               University of East Anglia</span>
+0049 <span class="comment">%               NORWICH, UK</span>
 0050 <span class="comment">%</span>
-0051 <span class="comment">% Approximate coding time of file:</span>
-0052 <span class="comment">%               0 hours</span>
+0051 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0052 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
 0053 <span class="comment">%</span>
-0054 <span class="comment">%</span>
-0055 <span class="comment">% Version history:</span>
-0056 <span class="comment">% May 13        Initial release</span>
-0057 
+0054 <span class="comment">% Last updated  06-May-2013</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">% Version history:</span>
+0057 <span class="comment">% May 13        Initial release</span>
 0058 
-0059 <span class="comment">% GUI get file</span>
-0060 [file , directory] = uigetfile({<span class="string">'*.DTA;*.spc'</span>,<span class="string">'Bruker File (*.DTA,*.spc)'</span>; <span class="keyword">...</span>
-0061     <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="keyword">...</span>
-0062     <span class="string">'Load Bruker file'</span>);
-0063 
-0064 <span class="comment">% if user cancels command nothing happens</span>
-0065 <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
-0066     <span class="keyword">return</span>
-0067 <span class="keyword">end</span>
-0068 
-0069 <span class="comment">% File name/path manipulation</span>
-0070 address = [directory,file];
-0071 [~, name,extension] = fileparts(address);
-0072 
-0073 a = regexp(name,<span class="string">'-'</span>);
-0074 date = name(1:a(1)-1);
-0075 freq = name(a(1)+1:a(2)-1);
-0076 exp  = name(a(2)+1:a(3)-1);
-0077 temp = name(a(3)+1:a(4)-1);
-0078 samp = name(a(4)+1:end);
-0079 
-0080 <span class="comment">% Load files</span>
-0081 <span class="keyword">try</span>
-0082     [xT2,yT2]       = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'T2'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
-0083 <span class="keyword">end</span>
-0084 <span class="keyword">try</span>
-0085     [xT1,yT1]       = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'T1'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
-0086 <span class="keyword">end</span>
-0087 <span class="keyword">try</span>
-0088     [xFSE,yFSE]     = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'FSE'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0059 
+0060 <span class="comment">% GUI get file</span>
+0061 [file , directory] = uigetfile({<span class="string">'*.DTA;*.spc'</span>,<span class="string">'Bruker File (*.DTA,*.spc)'</span>; <span class="keyword">...</span>
+0062     <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="keyword">...</span>
+0063     <span class="string">'Load Bruker file'</span>);
+0064 
+0065 <span class="comment">% if user cancels command nothing happens</span>
+0066 <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0067     <span class="keyword">return</span>
+0068 <span class="keyword">end</span>
+0069 
+0070 <span class="comment">% File name/path manipulation</span>
+0071 address = [directory,file];
+0072 [~, name,extension] = fileparts(address);
+0073 
+0074 a = regexp(name,<span class="string">'-'</span>);
+0075 date = name(1:a(1)-1);
+0076 freq = name(a(1)+1:a(2)-1);
+0077 exp  = name(a(2)+1:a(3)-1);
+0078 temp = name(a(3)+1:a(4)-1);
+0079 samp = name(a(4)+1:end);
+0080 
+0081 <span class="comment">% Load files</span>
+0082 <span class="keyword">try</span>
+0083     [xT2,yT2]       = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'T2'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0084 <span class="keyword">catch</span>
+0085     <span class="keyword">try</span>
+0086         [xT2,yT2]       = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'T2'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0087     <span class="keyword">end</span>
+0088         
 0089 <span class="keyword">end</span>
 0090 <span class="keyword">try</span>
-0091     [x4PEL,y4PEL]   = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'4PEL'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
-0092 <span class="keyword">end</span>
-0093 
-0094 <span class="comment">% Page setup</span>
-0095 hF = figure;
-0096 set(gcf,<span class="string">'PaperType'</span>,<span class="string">'A4'</span>);
-0097 set(gcf,<span class="string">'PaperOrientation'</span>,<span class="string">'landscape'</span>);
-0098 set(gcf,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>);
-0099 rect=[1,1,27,19];
-0100 set(gcf,<span class="string">'PaperPosition'</span>,rect);
-0101 title([samp <span class="string">' at '</span> temp <span class="string">' K'</span>],<span class="string">'FontSize'</span>,16);
-0102 
-0103 
-0104 <span class="comment">% Plot T2</span>
-0105 h1 = subplot(2,2,1);
-0106 <span class="keyword">if</span> exist(<span class="string">'xT2'</span>,<span class="string">'var'</span>)
-0107     plot(xT2/1000,yT2.real);
-0108 <span class="keyword">else</span>
-0109     set(h1,<span class="string">'Color'</span>,[20,43,140]/255)
-0110     axis off
-0111     text(0.5,0.5,<span class="string">'File not found'</span>);
-0112 <span class="keyword">end</span>
-0113 
-0114 <span class="comment">% Plot T1</span>
-0115 h2 = subplot(2,2,2);
-0116 <span class="keyword">if</span> exist(<span class="string">'xT1'</span>,<span class="string">'var'</span>)
-0117     hold all
-0118     plot([0,(xT1(end)/1e6)],[0,0],<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'Color'</span>, <span class="string">'k'</span>);
-0119     plot(xT1/1e6,yT1.real,<span class="string">'Color'</span>, <span class="string">'b'</span>);
-0120     set(h2,<span class="string">'Box'</span>,<span class="string">'on'</span>)
-0121     hold off
-0122 <span class="keyword">else</span>
-0123     set(h2,<span class="string">'Color'</span>,[20,43,140]/255)
-0124     axis off
-0125     text(0.5,0.5,<span class="string">'File not found'</span>);
-0126 <span class="keyword">end</span>
-0127 
-0128 <span class="comment">% Plot FSE</span>
-0129 h3 = subplot(2,2,3);
-0130 <span class="keyword">if</span> exist(<span class="string">'xFSE'</span>,<span class="string">'var'</span>)
-0131     plot(xFSE,yFSE.real);
-0132 <span class="keyword">else</span>
-0133     set(h3,<span class="string">'Color'</span>,[20,43,140]/255)
-0134     axis off
-0135     text(0.5,0.5,<span class="string">'File not found'</span>);
-0136 <span class="keyword">end</span>
-0137 
-0138 <span class="comment">% Plot 4PEL</span>
-0139 h4 = subplot(2,2,4);
-0140 <span class="keyword">if</span> exist(<span class="string">'x4PEL'</span>,<span class="string">'var'</span>)
-0141     plot(x4PEL/1000,y4PEL.real);
-0142 <span class="keyword">else</span>
-0143     set(h4,<span class="string">'Color'</span>,[20,43,140]/255)
-0144     axis off
-0145     text(0.5,0.5,<span class="string">'File not found'</span>);
-0146 <span class="keyword">end</span>
-0147 
-0148 
-0149 axis(h1,<span class="string">'tight'</span>);
-0150 axis(h2,<span class="string">'tight'</span>);
-0151 axis(h3,<span class="string">'tight'</span>);
-0152 axis(h4,<span class="string">'tight'</span>);
-0153 
-0154 title(h1,<span class="string">'T_2'</span>,<span class="string">'FontSize'</span>,12);
-0155 title(h2,<span class="string">'T_1'</span>,<span class="string">'FontSize'</span>,12);
-0156 title(h3,<span class="string">'Field Swept Echo'</span>,<span class="string">'FontSize'</span>,12);
-0157 title(h4,<span class="string">'4 Pulse PELDOR'</span>,<span class="string">'FontSize'</span>,12);
-0158 
-0159 xlabel(h1,<span class="string">'Time / \mus'</span>);
-0160 xlabel(h2,<span class="string">'Time / ms'</span>);
-0161 xlabel(h3,<span class="string">'Magnetic field / Gauss'</span>);
-0162 xlabel(h4,<span class="string">'Time / \mus'</span>);
-0163 
-0164 <span class="comment">% hs = getappdata(gcf,'PrintHeaderHeaderSpec');</span>
-0165 <span class="comment">% if isappdata(gcf, hs)</span>
-0166 <span class="comment">%        rmappdata(gcf, hs);</span>
-0167 <span class="comment">% end</span>
-0168 <span class="comment">% %if isempty(hs)</span>
-0169 <span class="comment">% hs = struct('dateformat','none',...</span>
-0170 <span class="comment">% 'string',[samp ' at ' temp ' K'],...</span>
-0171 <span class="comment">% 'fontname','Times',...</span>
-0172 <span class="comment">% 'fontsize',16,... % in points</span>
-0173 <span class="comment">% 'fontweight','normal',...</span>
-0174 <span class="comment">% 'fontangle','normal',...</span>
-0175 <span class="comment">% 'margin',72); % in points</span>
-0176 <span class="comment">% %end</span>
-0177 <span class="comment">%</span>
-0178 <span class="comment">% %hs.string = [samp ' at ' temp ' K'];</span>
-0179 <span class="comment">% setappdata(gcf,'PrintHeaderHeaderSpec',hs);</span>
-0180 
-0181 print(gcf, <span class="string">'-dpdf'</span>,  [directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'PDF'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.pdf'</span>]);
-0182 
-0183 close(hF);</pre></div>
-<hr><address>Generated on Sun 07-Jul-2013 12:41:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0091     [xT1,yT1]       = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'T1'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0092 <span class="keyword">catch</span>
+0093     <span class="keyword">try</span>
+0094         [xT1,yT1]       = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'T1'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0095     <span class="keyword">end</span>
+0096 <span class="keyword">end</span>
+0097 <span class="keyword">try</span>
+0098     [xFSE,yFSE]     = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'FSE'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0099 <span class="keyword">catch</span>
+0100     <span class="keyword">try</span>
+0101         [xFSE,yFSE]     = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'FSE'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0102     <span class="keyword">end</span>
+0103 <span class="keyword">end</span>
+0104 <span class="keyword">try</span>
+0105     [x4PEL,y4PEL]   = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'4PEL'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0106 <span class="keyword">catch</span>
+0107     <span class="keyword">try</span>
+0108         [x4PEL,y4PEL]   = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'4PEL'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0109     <span class="keyword">end</span>
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="comment">% Page setup</span>
+0113 hF = figure;
+0114 set(gcf,<span class="string">'PaperType'</span>,<span class="string">'A4'</span>);
+0115 set(gcf,<span class="string">'PaperOrientation'</span>,<span class="string">'landscape'</span>);
+0116 set(gcf,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>);
+0117 rect=[1,1,27,19];
+0118 set(gcf,<span class="string">'PaperPosition'</span>,rect);
+0119 title([samp <span class="string">' at '</span> temp <span class="string">' K'</span>],<span class="string">'FontSize'</span>,16);
+0120 
+0121 
+0122 <span class="comment">% Plot T2</span>
+0123 h1 = subplot(2,2,1);
+0124 <span class="keyword">if</span> exist(<span class="string">'xT2'</span>,<span class="string">'var'</span>)
+0125     plot(xT2/1000,yT2.real);
+0126 <span class="keyword">else</span>
+0127     set(h1,<span class="string">'Color'</span>,[20,43,140]/255)
+0128     axis off
+0129     text(0.5,0.5,<span class="string">'File not found'</span>);
+0130 <span class="keyword">end</span>
+0131 
+0132 <span class="comment">% Plot T1</span>
+0133 h2 = subplot(2,2,2);
+0134 <span class="keyword">if</span> exist(<span class="string">'xT1'</span>,<span class="string">'var'</span>)
+0135     hold all
+0136     plot([0,(xT1(end)/1e6)],[0,0],<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'Color'</span>, <span class="string">'k'</span>);
+0137     plot(xT1/1e6,yT1.real,<span class="string">'Color'</span>, <span class="string">'b'</span>);
+0138     set(h2,<span class="string">'Box'</span>,<span class="string">'on'</span>)
+0139     hold off
+0140 <span class="keyword">else</span>
+0141     set(h2,<span class="string">'Color'</span>,[20,43,140]/255)
+0142     axis off
+0143     text(0.5,0.5,<span class="string">'File not found'</span>);
+0144 <span class="keyword">end</span>
+0145 
+0146 <span class="comment">% Plot FSE</span>
+0147 h3 = subplot(2,2,3);
+0148 <span class="keyword">if</span> exist(<span class="string">'xFSE'</span>,<span class="string">'var'</span>)
+0149     plot(xFSE,yFSE.real);
+0150 <span class="keyword">else</span>
+0151     set(h3,<span class="string">'Color'</span>,[20,43,140]/255)
+0152     axis off
+0153     text(0.5,0.5,<span class="string">'File not found'</span>);
+0154 <span class="keyword">end</span>
+0155 
+0156 <span class="comment">% Plot 4PEL</span>
+0157 h4 = subplot(2,2,4);
+0158 <span class="keyword">if</span> exist(<span class="string">'x4PEL'</span>,<span class="string">'var'</span>)
+0159     plot(x4PEL/1000,y4PEL.real);
+0160 <span class="keyword">else</span>
+0161     set(h4,<span class="string">'Color'</span>,[20,43,140]/255)
+0162     axis off
+0163     text(0.5,0.5,<span class="string">'File not found'</span>);
+0164 <span class="keyword">end</span>
+0165 
+0166 
+0167 axis(h1,<span class="string">'tight'</span>);
+0168 axis(h2,<span class="string">'tight'</span>);
+0169 axis(h3,<span class="string">'tight'</span>);
+0170 axis(h4,<span class="string">'tight'</span>);
+0171 
+0172 title(h1,<span class="string">'T_2'</span>,<span class="string">'FontSize'</span>,12);
+0173 title(h2,<span class="string">'T_1'</span>,<span class="string">'FontSize'</span>,12);
+0174 title(h3,<span class="string">'Field Swept Echo'</span>,<span class="string">'FontSize'</span>,12);
+0175 title(h4,<span class="string">'4 Pulse PELDOR'</span>,<span class="string">'FontSize'</span>,12);
+0176 
+0177 xlabel(h1,<span class="string">'Time / \mus'</span>);
+0178 xlabel(h2,<span class="string">'Time / ms'</span>);
+0179 xlabel(h3,<span class="string">'Magnetic field / Gauss'</span>);
+0180 xlabel(h4,<span class="string">'Time / \mus'</span>);
+0181 
+0182 <span class="comment">% hs = getappdata(gcf,'PrintHeaderHeaderSpec');</span>
+0183 <span class="comment">% if isappdata(gcf, hs)</span>
+0184 <span class="comment">%        rmappdata(gcf, hs);</span>
+0185 <span class="comment">% end</span>
+0186 <span class="comment">% %if isempty(hs)</span>
+0187 <span class="comment">% hs = struct('dateformat','none',...</span>
+0188 <span class="comment">% 'string',[samp ' at ' temp ' K'],...</span>
+0189 <span class="comment">% 'fontname','Times',...</span>
+0190 <span class="comment">% 'fontsize',16,... % in points</span>
+0191 <span class="comment">% 'fontweight','normal',...</span>
+0192 <span class="comment">% 'fontangle','normal',...</span>
+0193 <span class="comment">% 'margin',72); % in points</span>
+0194 <span class="comment">% %end</span>
+0195 <span class="comment">%</span>
+0196 <span class="comment">% %hs.string = [samp ' at ' temp ' K'];</span>
+0197 <span class="comment">% setappdata(gcf,'PrintHeaderHeaderSpec',hs);</span>
+0198 
+0199 print(gcf, <span class="string">'-dpdf'</span>,  [directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'PDF'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.pdf'</span>]);
+0200 
+0201 close(hF);</pre></div>
+<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
