@@ -39,6 +39,10 @@ Images are presented by default in vector format. Then a LaTeX (.tex) file
 is generated. On a Linux system the .tex file is automatically compiled to
 generate a formal report (PDF) on A4 paper for easy printing.
 
+NEW FEATURE: Lcurving
+=====================
+Takes a DeerAnalysis L-curve result file and generates a PDF figure report
+
 SpecManRead
 ===========
 > Complete rewrite of how experimental data is processed
@@ -72,7 +76,9 @@ PulseGen
 > Additional robustness
 > Better error handling and reporting
 
-
+PowerSat
+========
+> Added "Export to Origin" options
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v13.12 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
