@@ -91,7 +91,7 @@ function varargout = reportbuilder(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v14.04
+% M. Bye v14.05
 %
 % v13.09 - current
 %               Chemical Physics Department
@@ -104,6 +104,15 @@ function varargout = reportbuilder(varargin)
 % Last updated  Last revision: 09-March-2014
 %
 % Version history:
+% May 14        Update to LaTex requires slight modification to script
+%                   > + \usepackage[export]{adjustbox}
+%                   > includegraphics line now uses
+%                       max width = \linewidth 
+%                       NOT
+%                       width = \textwidth so
+%                       that eps is correctly converted to pdf and
+%                       displayed by pdflatex command
+%
 % Mar 14        Splitting into subfunctions and added loop function for
 %               multiple experiments to be loaded into a single report.
 %
@@ -179,30 +188,37 @@ switch computer
         if ~system('which latex')
             
             system(sprintf('latex %s',[directory file '.tex']));
-            system(sprintf('pdflatex %s',[directory file '.tex']));
+            
+            % Update to LaTex means that calling pdflatex doesnt correctly
+            % convert the images to the pdf. Previously we used:
+            %     system(sprintf('pdflatex %s',[directory file '.tex']));
             
             % Remove chaff
             system(sprintf('rm %s',[directory file '.log']));
             system(sprintf('rm %s',[directory file '.dvi']));
             system(sprintf('rm %s',[directory file '.aux']));
-            system(sprintf('rm %s',[directory name '-eps-converted-to.pdf']));
+            % system(sprintf('rm %s',[directory name '-eps-converted-to.pdf']));
+            
+            % Message user to run pdflatex command manually:
+            fprintf('Now open a terminal and run:\n')
+            fprintf('pdflatex %s\n',[directory file '.tex'])
         
         % If "latex" cant be found then show the user the output locations
         else
-            sprintf('The files:\n')
-            sprintf('%s\n',[directory file '.tex'])
-            sprintf('%s\n',[directory file '.eps'])
-            sprintf('have been generated.\n\n')
-            sprintf('To complete report generation %s must now be run.\n'...
+            fprintf('The files:\n')
+            fprintf('%s\n',[directory file '.tex'])
+            fprintf('%s\n',[directory file '.eps'])
+            fprintf('have been generated.\n\n')
+            fprintf('To complete report generation %s must now be run.\n'...
                 ,[directory file '.tex'])
         end
         
     otherwise
-        sprintf('The files:\n')
-        sprintf('%s\n',[directory file '.tex'])
-        sprintf('%s\n',[directory file '.eps'])
-        sprintf('have been generated.\n\n')
-        sprintf('To complete report generation %s must now be run.\n'...
+        fprintf('The files:\n')
+        fprintf('%s\n',[directory file '.tex'])
+        fprintf('%s\n',[directory file '.eps'])
+        fprintf('have been generated.\n\n')
+        fprintf('To complete report generation %s must now be run.\n'...
             ,[directory file '.tex'])
 
 end
@@ -494,6 +510,8 @@ end
 % TeX header
 fprintf(tex_launch,'\\documentclass[a4paper]{report}\n');
 fprintf(tex_launch,'\\usepackage{graphicx}\n');
+fprintf(tex_launch,'\\usepackage{epstopdf}\n');
+fprintf(tex_launch,'\\usepackage[export]{adjustbox}\n');
 fprintf(tex_launch,'\\usepackage{subcaption}\n');
 fprintf(tex_launch,'\\begin{document}\n');
 
@@ -507,14 +525,14 @@ function tex_launch = texFigure(tex_launch,info,fileInfo)
 fprintf(tex_launch,'\\begin{table}[t]\n');
 
 %% Figure
-fprintf(tex_launch,'\\begin{minipage}[c]{.65\\textwidth }\n');
+fprintf(tex_launch,'\\begin{minipage}[c]{.65\\linewidth }\n');
 fprintf(tex_launch,'\\centering\n');
-fprintf(tex_launch,'\\includegraphics[width=0.9\\textwidth]{%s}\n',...
+fprintf(tex_launch,'\\includegraphics[max width=0.9\\linewidth]{%s}\n',...
     [fileInfo.name '.eps']);
 fprintf(tex_launch,'\\end{minipage}\n');
 
 %% Parameters table
-fprintf(tex_launch,'\\begin{minipage}[c]{.3\\textwidth}\n');
+fprintf(tex_launch,'\\begin{minipage}[c]{.3\\linewidth}\n');
 fprintf(tex_launch,'\\centering\n');
 fprintf(tex_launch,'\\footnotesize\n');
 fprintf(tex_launch,'\\begin{tabular}{ccc}\n');

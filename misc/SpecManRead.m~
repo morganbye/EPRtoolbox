@@ -91,13 +91,8 @@ function varargout = SpecManRead(varargin)
 %
 % Version history:
 % Jun 14        Line 379 
-%                       ax.t=='S' || ax.t=='I'
-%                   replaced with in if statement
-%                       strcmp(ax.t,'S') || strcmp(ax.t,'I') 
-%
-%               Had to add a try statement to the x-axis generation switch
-%               for the otherwise statement, so that some Nutation
-%               experiments do not fail on sweep0 loop.
+
+strcmp(ax.t,'S') || strcmp(ax.t,'I') 
 %
 % Apr 14        Line 371 trim should be strtrim
 %

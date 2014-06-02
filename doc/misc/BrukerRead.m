@@ -570,9 +570,9 @@ switch nargout
                             
                         case 'CW'
                             % document text
-                            info.YFMT = strtrim(regexprep(parameters((strmatch('YFMT',parameters)),:),'YFMT',''));
-                            info.YNAM = strtrim(regexprep(parameters((strmatch('YNAM',parameters)),:),'YNAM',''));
-                            info.YUNI = strtrim(regexprep(parameters((strmatch('YUNI',parameters)),:),'YUNI',''));
+%                            info.YFMT = strtrim(regexprep(parameters((strmatch('YFMT',parameters)),:),'YFMT',''));
+%                            info.YNAM = strtrim(regexprep(parameters((strmatch('YNAM',parameters)),:),'YNAM',''));
+%                            info.YUNI = strtrim(regexprep(parameters((strmatch('YUNI',parameters)),:),'YUNI',''));
                             % standard parameter
                             info.RESO = strtrim(regexprep(parameters((strmatch('RESO',parameters)),:),'RESO',''));
                             info.SPTP = str2num(regexprep(parameters((strmatch('SPTP',parameters)),:),'SPTP',''));
@@ -591,7 +591,7 @@ switch nargout
                             %            info.SweepWidth_fieldCtrl = strtrim(regexprep((info.SweepWidth(1,:)),'SweepWidth',''));
                             %            info.SweepWidth_ramp2 = strtrim(regexprep((info.SweepWidth(2,:)),'SweepWidth',''));
                             clear info.SweepWidth
-                            info.Delay = strtrim(regexprep(parameters((strmatch('Delay',parameters,'exact')),:),'Delay',''));
+%                            info.Delay = strtrim(regexprep(parameters((strmatch('Delay',parameters,'exact')),:),'Delay',''));
                             info.ReplaceMode = strtrim(regexprep(parameters((strmatch('ReplaceMode',parameters)),:),'ReplaceMode',''));
                             % signalChannel
                             info.AFCTrap = strtrim(regexprep(parameters((strmatch('AFCTrap',parameters)),:),'AFCTrap',''));

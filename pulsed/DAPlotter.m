@@ -154,8 +154,8 @@ axis(h1,'tight');
 axis(h2,'tight');
 axis(h3,'tight');
 
-title(h1,'4 Pulse PELDOR experiment','FontSize',12);
-title(h2,'Background subtracted PELDOR trace','FontSize',12);
+title(h1,'4 Pulse DEER experiment','FontSize',12);
+title(h2,'Background subtracted DEER trace','FontSize',12);
 title(h3,'Distance distribution','FontSize',12);
 
 xlabel(h1,'Time / \mus');
