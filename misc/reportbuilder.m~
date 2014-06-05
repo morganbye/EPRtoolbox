@@ -232,15 +232,17 @@ switch computer
         end
 
         fprintf('\n')
-        fprintf('To complete report generation:')
+        fprintf('To complete report generation
         fprintf('1) Open a terminal')
         fprintf('2) Run:')
         fprintf('    cd %s',directory)
         fprintf('3) Run:')
-        fprintf('    latex %s',[directory file '.tex'])
-        fprintf('4) Run:')
-        fprintf('    pdflatex %s',[directory file '.tex'])
-        fprintf('5) Enjoy!\n\n')
+        fprintf('    latex %s',directory)
+
+        
+        %s must now be run.\n'...
+            ,[directory file '.tex'])
+
 end
 
 
