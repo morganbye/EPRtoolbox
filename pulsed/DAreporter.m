@@ -298,4 +298,29 @@ fileType  = fileInfo.fileType;
 hF = figure;
 
 switch fileType
-    case 
+    case 'raw'
+        xlabel(hF,'Time / \mus');
+        set(hF,'YTick',[]);
+
+    case 'bckg'
+        xlabel(hF,'Time / \mus');
+
+        
+    case 'Pake'
+        xlabel(hF,'Frequency / MHz');
+
+    case 'L'
+        xlabel(hF,'\it{log(\rho)}');
+        ylabel(hF,'\it{log(\eta)}');
+        
+    case 'distance'
+        xlabel(hF,'r / nm');
+        ylabel(hF,'\it{p(r)}');
+        set(hF,'YTick',[]);
+
+        
+end
+
+% Finishing
+axis tight;
+set(h2,'Box','on');

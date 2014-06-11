@@ -222,24 +222,24 @@ switch computer
 %         end
         
     otherwise
-        fprintf('Dear user,\n\n')
-        fprintf('We''re nearly there, so far we''ve generated:')
+        fprintf('\nDear user,\n\n')
+        fprintf('We''re nearly there, so far we''ve generated:\n')
 
         fprintf('%s\n',[directory file '.tex'])
         
         for k = 1:noFiles
-            fprintf('%s%s.eps',directory,fileInfo{k}.file)
+            fprintf('%s%s.eps\n',directory,fileInfo{k}.file)
         end
 
         fprintf('\n')
-        fprintf('To complete report generation:')
-        fprintf('1) Open a terminal')
-        fprintf('2) Run:')
-        fprintf('    cd %s',directory)
-        fprintf('3) Run:')
-        fprintf('    latex %s',[directory file '.tex'])
-        fprintf('4) Run:')
-        fprintf('    pdflatex %s',[directory file '.tex'])
+        fprintf('To complete report generation:\n')
+        fprintf('1) Open a terminal\n')
+        fprintf('2) Run:\n')
+        fprintf('    cd %s\n',directory)
+        fprintf('3) Run:\n')
+        fprintf('    latex %s\n',[directory file '.tex'])
+        fprintf('4) Run:\n')
+        fprintf('    pdflatex %s\n',[directory file '.tex'])
         fprintf('5) Enjoy!\n\n')
 end
 
@@ -305,13 +305,17 @@ switch fileType
         % Test for Curve fitting toolbox, do fit
         if license('test', 'curve_fitting_toolbox')
             
-            % Single decay
-            f = fittype('a*exp(b*x)');
+            % Single decay,
+            %
+            % Where a is the y offset
+            %       b is the amplitude
+            %       c is the decay time
+            f = fittype('a+b*exp(-x/c)');
 
             options             = fitoptions(f);
-            options.StartPoint  = [30.0 5000];
-            options.Lower       = [ 0.0 -inf];
-            options.Upper       = [ inf  0.0];
+            options.StartPoint  = [ 0.0   1.5  2000];
+            options.Lower       = [-inf   0.0   0.0];
+            options.Upper       = [ inf   inf  10000];
             options.MaxFunEvals = 1200;
             options.MaxIter     = 800;
             
@@ -330,12 +334,18 @@ switch fileType
                 if gof.rsquare < 0.95
                     
                     % Double decay
-                    f = fittype('(a*exp(b*x))+(c*exp(d*x))');
+                    %
+                    % Where a is the y offset
+                    %       b is amplitude 1 
+                    %       c is decay time 1
+                    %       b is amplitude 2
+                    %       c is decay time 2
+                    f = fittype('a+(b*exp(-x/c))+(d*exp(-x/e))');
                     
                     options             = fitoptions(f);
-                    options.StartPoint  = [30.0 -0.005  30.0 -0.005];
-                    options.Lower       = [ 0.0   -inf   0.0   -inf];
-                    options.Upper       = [ inf    0.0   inf    0.0];
+                    options.StartPoint  = [ 0.0  5e-7 2e-6 5e-7 2e-6];
+                    options.Lower       = [-inf   0.0  0.0  0.0  0.0];
+                    options.Upper       = [ inf   inf 1e-6  inf 1e-6];
                     options.MaxFunEvals = 1200;
                     options.MaxIter     = 800;
                     
@@ -393,12 +403,20 @@ switch fileType
         % If Curve fitting is installed then do the fit
         if license('test', 'curve_fitting_toolbox')
             
-            f = fittype('a*(b-exp(-c*x))');
+            % Inversion recovery fit
+            %
+            % Using:
+            % y = y0*(1-exp(-x/T1))
+            %
+            % a = y offset (max)
+            % b = T1
+            
+            f = fittype('a*(1-exp(-x/b))');
             
             options             = fitoptions(f);
-            options.StartPoint  = [25.0  0.5  1.0];
-            options.Lower       = [ 0.0  0.0  0.0];
-            options.Upper       = [ inf  inf  inf];
+            options.StartPoint  = [max(y)*0.98 0.001];
+            options.Lower       = [max(y)*0.9  0.00];
+            options.Upper       = [max(y)*1.1  0.01];
             options.MaxFunEvals = 1200;
             options.MaxIter     = 800;
             
