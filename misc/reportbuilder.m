@@ -104,6 +104,12 @@ function varargout = reportbuilder(varargin)
 % Last updated  Last revision: 09-March-2014
 %
 % Version history:
+% Jun 14        > More LaTeX updates
+%               > Removed autorun for linux
+%               > Command list printed in command window to successfully
+%                   compile the PDF, ie. cd here, latex this, pdflatex this
+%               > Added run time to DEER info table for SpecMan
+%
 % May 14        Update to LaTex requires slight modification to script
 %                   > + \usepackage[export]{adjustbox}
 %                   > includegraphics line now uses
@@ -300,7 +306,7 @@ switch fileType
         
         x = x*1E9;
         
-        plot(x,y);
+        plot(x/1000,y);
         
         % Test for Curve fitting toolbox, do fit
         if license('test', 'curve_fitting_toolbox')
@@ -623,6 +629,7 @@ switch fileInfo.extension
                 d = strsplit(info.Parameters.tau,';');
                 fprintf(tex_launch,'Source 1 & %s  \\\\      \n',info.Source1.Frequency);
                 fprintf(tex_launch,'Source 2 & %s  \\\\      \n',info.Source2.Frequency);
+                fprintf(tex_launch,'Exp. time & %s  \\\\     \n',info.General.totaltime);
       
         end
         
@@ -641,30 +648,35 @@ fprintf(tex_launch,'\\hline\n');
 % If fitting was conducted then add the fitting results to the table
 if isfield(fileInfo,'FitConf')
     
-    fprintf(tex_launch,' & \\\\ \n');
-    fprintf(tex_launch,' & \\\\ \n');
-    fprintf(tex_launch,'\\hline\n');
-    fprintf(tex_launch,'Fitting & \\\\ \n');
-    fprintf(tex_launch,'\\hline\n');
-    
-    switch fileInfo.fileType
-        case 'T2'
-            switch size(fileInfo.FitValues,2)
-                case 2
-                   fprintf(tex_launch,'$T_{2}$ & %.4g us  \\\\ \n',fileInfo.FitValues(2));
-                   fprintf(tex_launch,'$R^{2}$ & %.4g     \\\\ \n',fileInfo.gof.rsquare);
-
-                case 4
-                   fprintf(tex_launch,'$T_{2}$ (slow) & %.4g us  \\\\ \n',fileInfo.FitValues(2));
-                   fprintf(tex_launch,'$T_{2}$ (fast) & %.4g us  \\\\ \n',fileInfo.FitValues(4));
-                   fprintf(tex_launch,'$R^{2}$ & %.4g            \\\\ \n',fileInfo.gof.rsquare);
-            end
-        case 'T1'
-            fprintf(tex_launch,'$T_{1}$ & %.4g ms  \\\\ \n',fileInfo.FitValues(3));
-            fprintf(tex_launch,'$R^{2}$ & %.4g     \\\\ \n',fileInfo.gof.rsquare);
+    % But only if the fit was reasonable
+    if fileInfo.gof.rsquare >= 0.90
+        
+        fprintf(tex_launch,' & \\\\ \n');
+        fprintf(tex_launch,' & \\\\ \n');
+        fprintf(tex_launch,'\\hline\n');
+        fprintf(tex_launch,'Fitting & \\\\ \n');
+        fprintf(tex_launch,'\\hline\n');
+        
+        switch fileInfo.fileType
+            case 'T2'
+                switch size(fileInfo.FitValues,2)
+                    case 3
+                        fprintf(tex_launch,'$T_{2}$ & %.4g ns  \\\\ \n',fileInfo.FitValues(3));
+                        fprintf(tex_launch,'$R^{2}$ & %.4g     \\\\ \n',fileInfo.gof.rsquare);
+                        
+                    case 5
+                        fprintf(tex_launch,'$T_{2}$ (slow) & %.4g ns  \\\\ \n',fileInfo.FitValues(2));
+                        fprintf(tex_launch,'$T_{2}$ (fast) & %.4g ns  \\\\ \n',fileInfo.FitValues(4));
+                        fprintf(tex_launch,'$R^{2}$ & %.4g            \\\\ \n',fileInfo.gof.rsquare);
+                end
+            case 'T1'
+                fprintf(tex_launch,'$T_{1}$ & %.4g ms  \\\\ \n',fileInfo.FitValues(2)*1e9);
+                fprintf(tex_launch,'$R^{2}$ & %.4g     \\\\ \n',fileInfo.gof.rsquare);
+        end
+        
+        fprintf(tex_launch,'\\hline\n');
+        
     end
-    
-    fprintf(tex_launch,'\\hline\n');
 end
 
 %% End table section

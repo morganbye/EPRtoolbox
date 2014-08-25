@@ -131,7 +131,7 @@ end
 daLoaded = false;
 
 % File name/path manipulation
-fileroot = regexprep(file,'_distr.dat','');
+da.root = regexprep(da.file,'_distr.dat','');
 
 % Check to see if DA files exist
 if exist([da.root '_bckg.dat'],'file')
@@ -145,7 +145,7 @@ if exist([da.root '_bckg.dat'],'file')
         return
     end
     
-    fit_file  = [dir name '_fit.dat'];
+    fit_file  = [da.dir '/' da.root '_fit.dat'];
     
     if ~exist(fit_file,'file'),
         error('File %s missing, load aborted',...
@@ -153,7 +153,7 @@ if exist([da.root '_bckg.dat'],'file')
         return
     end
     
-    distr_file  = [dir name '_distr.dat'];
+    distr_file  = [da.dir '/' da.root '_distr.dat'];
     
     if ~exist(distr_file,'file'),
         error('File %s missing, load aborted',...
@@ -204,10 +204,7 @@ ydd = (rawdd(:,2) - min_y)/(max_y - min_y);
             
 %% Data loaded, let's make some figures!
 
-drawFigure(x,y,info)
-
-
-
+% drawFigure(x,y,info)
 
 
 % Page setup
@@ -269,13 +266,13 @@ set(h3,'YTick',[]);
 switch output
     case 'eps'
         set(gcf, 'PaperPositionMode', 'auto');
-        print(gcf, '-depsc',  [fileroot '_DA.eps']);
+        print(gcf, '-depsc',  [da.directory '/' da.root '_DA.eps']);
         
     case 'pdf'
         set(hF,'PaperUnits','centimeters');
         set(hF,'PaperSize',[30 10]);
         set(hF,'PaperPosition', [0 0 30 10]);
-        print(gcf, '-dpdf',  [fileroot '.pdf']);
+        print(gcf, '-dpdf',  [da.directory '/' da.root '.pdf']);
 end
 
 
