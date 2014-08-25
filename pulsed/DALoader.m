@@ -1,9 +1,10 @@
 function [x,y] = DALoader
 
-% DALOADER take a saved DeerAnalysis analysis and load the figures quickly
-%   into the workspace
+% DALOADER is a companion script to DAPLOTTER. DALOADER takes the saved
+%   DeerAnalysis analysis files and loads the data quickly into the
+%   workspace
 %
-% [x,y] = DALOADER
+%   [x,y] = DALOADER
 %
 % Inputs:
 %    input0     - a graphical interface for file selection
@@ -22,7 +23,7 @@ function [x,y] = DALoader
 %                       > dd  - distance distribution
 % 
 % Example:
-%
+%    [x,y] = DALOADER
 %
 % Other m-files required:   none
 %
@@ -31,7 +32,7 @@ function [x,y] = DALoader
 % MAT-files required:       none
 %
 %
-% See also: EPRTOOLBOX DAPLOTTER
+% See also: EPRTOOLBOX DAPLOTTER DACOMPARE
 
 %                                        _                             _   
 %                                       | |                           | |  

@@ -1,10 +1,11 @@
 function DACompare
 
-% DACOMPARE take a set of PELDOR experiments which have been analysed with
-%   DeerAnalysis and plot them quickly
+% DACOMPARE is a companion script to DAPLOTTER. DACOMPARE takes two or more
+%   saved DeerAnalysis analysis sets of files and quickly presents them in
+%   a combined figure.
 %
-% FUNCTION ()
-% FUNCTION ('export format')
+%   DACOMPARE ()
+%   DACOMPARE ('export format')
 %
 % Inputs:
 %    input0     - a graphical interface for file selection
@@ -15,7 +16,7 @@ function DACompare
 %    output1    - An image file
 % 
 % Example:
-%
+%    DACOMPARE ('pdf')
 %
 % Other m-files required:   none
 %
@@ -24,7 +25,7 @@ function DACompare
 % MAT-files required:       none
 %
 %
-% See also: EPRTOOLBOX CWPLOTTER
+% See also: EPRTOOLBOX DALOADER DAPLOTTER
 
 %                                        _                             _   
 %                                       | |                           | |  
@@ -42,11 +43,10 @@ function DACompare
 %               Weizmann Institute of Science
 %               76100 REHOVOT, Israel
 % 
-%
 % Email:        morgan.bye@weizmann.ac.il
 % Website:      http://morganbye.net/eprtoolbox/
 %
-% Last updated  21-August-2014
+% Last updated  25-August-2014
 %
 % Version history:
 % Aug 14        Initial release
