@@ -170,7 +170,9 @@ for k = 1:noFiles
         fileInfo{k}.fileType = 'FSE';
     elseif strfind(fileInfo{k}.file,'NUT')
         fileInfo{k}.fileType = 'NUT';
-    elseif strfind(fileInfo{k}.file,'4PEL') | strfind(fileInfo{k}.file,'DEER')
+    elseif strfind(fileInfo{k}.file,'4PEL')
+        fileInfo{k}.fileType = '4PEL';
+    elseif strfind(fileInfo{k}.file,'DEER')
         fileInfo{k}.fileType = '4PEL';
     elseif strfind(fileInfo{k}.file,'Freq')
         fileInfo{k}.fileType = 'Freq';
