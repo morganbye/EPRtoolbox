@@ -250,7 +250,7 @@ switch computer
         fprintf('\nDear user,\n\n')
         fprintf('We''re nearly there, so far we''ve generated:\n')
 
-        fprintf('%s\n',[directory file '.tex'])
+        fprintf('%s\n',[directory name '-reportbuilder.tex'])
         
         for k = 1:noFiles
             fprintf('%s%s.eps\n',directory,fileInfo{k}.file)
@@ -262,9 +262,9 @@ switch computer
         fprintf('2) Run:\n')
         fprintf('    cd %s\n',directory)
         fprintf('3) Run:\n')
-        fprintf('    latex %s\n',[directory file '.tex'])
+        fprintf('    latex %s\n',[directory name '-reportbuilder.tex'])
         fprintf('4) Run:\n')
-        fprintf('    pdflatex %s\n',[directory file '.tex'])
+        fprintf('    pdflatex %s\n',[directory name '-reportbuilder.tex'])
         fprintf('5) Enjoy!\n\n')
 end
 
@@ -565,7 +565,7 @@ function tex_launch = texHeader(fileInfo)
 % Write the header section to the tex file
 
 %% Open file
-tex_launch = fopen([fileInfo{1}.directory fileInfo{1}.file '.tex'],'w');
+tex_launch = fopen([fileInfo{1}.directory fileInfo{1}.name '-reportbuilder.tex'],'w');
 
 %% File header
 header = [...
