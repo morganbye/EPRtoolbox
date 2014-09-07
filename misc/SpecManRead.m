@@ -470,7 +470,7 @@ for k = 1:size(sweepax, 1)
            % doesn't then we need to skip it, otherwise it might overwrite
            % the correct axis
            
-           if ~ str2double(splitstr{1}{1}) == str2double(splitstr{1}{4})
+           if str2double(splitstr{1}{1}) ~= str2double(splitstr{1}{4})
            
                % Now start building the x-axis
                switch splitstr{1}{3}

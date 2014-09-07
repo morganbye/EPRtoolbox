@@ -516,7 +516,7 @@ switch fileType
     case 'Echo'
         
         plot(x,y);
-        xlabel('Data point');
+        xlabel('Time / ns');
         ylabel('Relative intensity');
         
         
