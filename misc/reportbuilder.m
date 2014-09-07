@@ -170,7 +170,7 @@ for k = 1:noFiles
         fileInfo{k}.fileType = 'FSE';
     elseif strfind(fileInfo{k}.file,'NUT')
         fileInfo{k}.fileType = 'NUT';
-    elseif strfind(fileInfo{k}.file,'4PEL') || strfind(fileInfo{k}.file,'DEER')
+    elseif strfind(fileInfo{k}.file,'4PEL') | strfind(fileInfo{k}.file,'DEER')
         fileInfo{k}.fileType = '4PEL';
     elseif strfind(fileInfo{k}.file,'Freq')
         fileInfo{k}.fileType = 'Freq';
@@ -515,12 +515,17 @@ switch fileType
         
     case 'Echo'
         
+        x = x*1E9;
+        
         plot(x,y);
         xlabel('Time / ns');
         ylabel('Relative intensity');
         
         
     case 'Freq'
+        
+        y = mean(y,2);
+        x = x/1E9;
         
         plot(x,y);
         xlabel('Frequency / GHz');
