@@ -105,7 +105,7 @@ This function calls:
 </ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="reportbuilder.html" class="code" title="function varargout = reportbuilder(varargin)">reportbuilder</a>	REPORTBUILDER is a complete script that aims to take all the hassle of</li></ul>
+<li><a href="reportbuilder.html" class="code" title="function varargout = reportbuilder(varargin)">reportbuilder</a>	REPORTBUILDER is a complete script that aims to take all the hassle of</li><li><a href="../pulsed/DAreporter.html" class="code" title="function DAreporter(varargin)">DAreporter</a>	DAREPORTER take a set of DEER experiments which have been analysed with</li></ul>
 <!-- crossreference -->
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
@@ -195,7 +195,7 @@ This function is called by:
 0080 <span class="comment">%                       __/ |                   __/ |</span>
 0081 <span class="comment">%                      |___/                   |___/</span>
 0082 <span class="comment">%</span>
-0083 <span class="comment">% M. Bye v14.04</span>
+0083 <span class="comment">% M. Bye v14.09</span>
 0084 <span class="comment">%</span>
 0085 <span class="comment">%               Chemical Physics Department</span>
 0086 <span class="comment">%               Weizmann Institute of Science</span>
@@ -205,565 +205,626 @@ This function is called by:
 0090 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
 0091 <span class="comment">%</span>
 0092 <span class="comment">% Version history:</span>
-0093 <span class="comment">% Mar 14        Complete rewrite of how the data is imported - now we scan</span>
-0094 <span class="comment">%                   through the parameters section, find the variable that</span>
-0095 <span class="comment">%                   changes, then look for that variable and see how it</span>
-0096 <span class="comment">%                   increases. Based on whether it is a &quot;x to y&quot;, &quot;x step</span>
-0097 <span class="comment">%                   y&quot; or &quot;x, y, z ...&quot; experiment the axis is then</span>
-0098 <span class="comment">%                   generated.</span>
-0099 <span class="comment">%</span>
-0100 <span class="comment">%               As this is terribly complicated there is a lot of</span>
-0101 <span class="comment">%                   commenting for this section. It should now work for</span>
-0102 <span class="comment">%                   almost all experiment types. But testing is the only</span>
-0103 <span class="comment">%                   way to tell for sure.</span>
-0104 <span class="comment">%</span>
-0105 <span class="comment">% Jan 14        Made the x axis generation functional</span>
-0106 <span class="comment">%</span>
-0107 <span class="comment">% Dec 13        S transient switch</span>
-0108 <span class="comment">%</span>
-0109 <span class="comment">% Nov 13        Initial release</span>
-0110 <span class="comment">%</span>
-0111 
-0112 <span class="comment">%% Input arguments</span>
-0113 <span class="comment">% ========================================================================</span>
-0114 
-0115 <span class="keyword">switch</span> nargin
-0116     <span class="keyword">case</span> 0
-0117         <span class="comment">% GUI get file</span>
-0118         [file , directory] = uigetfile({<span class="string">'*.d01'</span>,<span class="string">'SpecMan File (*.d01)'</span>; <span class="keyword">...</span>
-0119             <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load SpecMan file'</span>);
-0120         
-0121         <span class="comment">% if user cancels command nothing happens</span>
-0122         <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
-0123             <span class="keyword">return</span>
-0124         <span class="keyword">end</span>
-0125         
-0126         graph = <span class="string">'plot'</span>;
-0127                 
-0128         <span class="comment">% File name/path manipulation</span>
-0129         address = [directory,file];
-0130         [directory,name,extension] = fileparts(address);
-0131         
-0132     <span class="keyword">case</span> 1
-0133         <span class="keyword">if</span> strcmp(varargin{1},<span class="string">'plot'</span>)
-0134             graph = <span class="string">'plot'</span>;
-0135             
-0136             <span class="comment">% GUI get file</span>
-0137             [file , directory] = uigetfile({<span class="string">'*.d01'</span>,<span class="string">'SpecMan File (*.d01)'</span>; <span class="keyword">...</span>
-0138                 <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load SpecMan file'</span>);
-0139             
-0140             <span class="comment">% if user cancels command nothing happens</span>
-0141             <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
-0142                 <span class="keyword">return</span>
-0143             <span class="keyword">end</span>
-0144             
-0145             <span class="comment">% File name/path manipulation</span>
-0146             address = [directory,file];
-0147         <span class="keyword">else</span>
-0148             address = varargin{1};
-0149             graph   = <span class="string">''</span>;
-0150         <span class="keyword">end</span>
-0151 
-0152         [directory,name,extension] = fileparts(address);
-0153         
-0154     <span class="keyword">case</span> 2
-0155         address = varargin{1};
-0156         [directory,name,extension] = fileparts(address);
-0157         
-0158         graph = varargin{2};
-0159 
-0160 <span class="keyword">end</span>
-0161 
-0162 <span class="comment">% Check that file exists</span>
-0163 <span class="keyword">if</span> ~exist(address,<span class="string">'file'</span>)
-0164     error(<span class="string">'SpecManRead: File could not be found.'</span>)
-0165     <span class="keyword">return</span> 
-0166 <span class="keyword">end</span>
-0167 
-0168 <span class="comment">%% Parameters file (*.exp) loading</span>
-0169 <span class="comment">% ========================================================================</span>
-0170 
-0171 filepar = [ directory <span class="string">'/'</span> name <span class="string">'.exp'</span>];
-0172 fid = fopen(filepar , <span class="string">'r'</span>);
-0173 
-0174 <span class="keyword">if</span> isequal(fid,-1)
-0175     error(<span class="string">'SpecManRead: Could not open the desired *.exp file.'</span>)
-0176     <span class="keyword">return</span>
-0177 <span class="keyword">end</span>
-0178 
-0179 <span class="comment">% While there's remaining lines, write them</span>
-0180 tline = fgetl(fid);
-0181 k = 1;
-0182 <span class="keyword">while</span> ischar(tline)
-0183     par{k} = sprintf(<span class="string">'%-80s'</span>,tline);
-0184     tline = fgetl(fid);
-0185     k = k+1;
-0186 <span class="keyword">end</span>
-0187 
-0188 fclose(fid);
-0189 
-0190 <span class="comment">%% Parameter sorting - required</span>
-0191 <span class="comment">% ========================================================================</span>
-0192 
-0193 <span class="comment">% These parameters are defined as required and appear in every SpecMan file</span>
-0194 
-0195 <span class="comment">% Empty lines</span>
-0196 pEmptyLines      = find(not(cellfun(<span class="string">'isempty'</span>,strfind(par,<span class="string">'                                                                                '</span>))));
-0197 
-0198 <span class="comment">% Generate parameters</span>
-0199 parameters = {};
-0200 
-0201 parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[general]'</span>    ,parameters,<span class="string">'General'</span>);
-0202 parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[sweep]'</span>      ,parameters,<span class="string">'Sweep'</span>);
-0203 parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[params]'</span>     ,parameters,<span class="string">'Parameters'</span>);
-0204 parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[streams]'</span>    ,parameters,<span class="string">'Streams'</span>);
-0205 parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[aquisition]'</span> ,parameters,<span class="string">'Aquisition'</span>);
-0206 
+0093 <span class="comment">% Sep 14        Updates reflecting new experiments</span>
+0094 <span class="comment">%                   &gt; Echo profile</span>
+0095 <span class="comment">%                   &gt; Frequency sweep</span>
+0096 <span class="comment">%</span>
+0097 <span class="comment">% Jun 14        Line 379</span>
+0098 <span class="comment">%                       ax.t=='S' || ax.t=='I'</span>
+0099 <span class="comment">%                   replaced with in if statement</span>
+0100 <span class="comment">%                       strcmp(ax.t,'S') || strcmp(ax.t,'I')</span>
+0101 <span class="comment">%</span>
+0102 <span class="comment">%               Had to add a try statement to the x-axis generation switch</span>
+0103 <span class="comment">%               for the otherwise statement, so that some Nutation</span>
+0104 <span class="comment">%               experiments do not fail on sweep0 loop.</span>
+0105 <span class="comment">%</span>
+0106 <span class="comment">% Apr 14        Line 371 trim should be strtrim</span>
+0107 <span class="comment">%</span>
+0108 <span class="comment">% Mar 14        Complete rewrite of how the data is imported - now we scan</span>
+0109 <span class="comment">%                   through the parameters section, find the variable that</span>
+0110 <span class="comment">%                   changes, then look for that variable and see how it</span>
+0111 <span class="comment">%                   increases. Based on whether it is a &quot;x to y&quot;, &quot;x step</span>
+0112 <span class="comment">%                   y&quot; or &quot;x, y, z ...&quot; experiment the axis is then</span>
+0113 <span class="comment">%                   generated.</span>
+0114 <span class="comment">%</span>
+0115 <span class="comment">%               As this is terribly complicated there is a lot of</span>
+0116 <span class="comment">%                   commenting for this section. It should now work for</span>
+0117 <span class="comment">%                   almost all experiment types. But testing is the only</span>
+0118 <span class="comment">%                   way to tell for sure.</span>
+0119 <span class="comment">%</span>
+0120 <span class="comment">% Jan 14        Made the x axis generation functional</span>
+0121 <span class="comment">%</span>
+0122 <span class="comment">% Dec 13        S transient switch</span>
+0123 <span class="comment">%</span>
+0124 <span class="comment">% Nov 13        Initial release</span>
+0125 <span class="comment">%</span>
+0126 
+0127 <span class="comment">%% Input arguments</span>
+0128 <span class="comment">% ========================================================================</span>
+0129 
+0130 <span class="keyword">switch</span> nargin
+0131     <span class="keyword">case</span> 0
+0132         <span class="comment">% GUI get file</span>
+0133         [file , directory] = uigetfile({<span class="string">'*.d01'</span>,<span class="string">'SpecMan File (*.d01)'</span>; <span class="keyword">...</span>
+0134             <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load SpecMan file'</span>);
+0135         
+0136         <span class="comment">% if user cancels command nothing happens</span>
+0137         <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0138             <span class="keyword">return</span>
+0139         <span class="keyword">end</span>
+0140         
+0141         graph = <span class="string">'plot'</span>;
+0142                 
+0143         <span class="comment">% File name/path manipulation</span>
+0144         address = [directory,file];
+0145         [directory,name,extension] = fileparts(address);
+0146         
+0147     <span class="keyword">case</span> 1
+0148         <span class="keyword">if</span> strcmp(varargin{1},<span class="string">'plot'</span>)
+0149             graph = <span class="string">'plot'</span>;
+0150             
+0151             <span class="comment">% GUI get file</span>
+0152             [file , directory] = uigetfile({<span class="string">'*.d01'</span>,<span class="string">'SpecMan File (*.d01)'</span>; <span class="keyword">...</span>
+0153                 <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load SpecMan file'</span>);
+0154             
+0155             <span class="comment">% if user cancels command nothing happens</span>
+0156             <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0157                 <span class="keyword">return</span>
+0158             <span class="keyword">end</span>
+0159             
+0160             <span class="comment">% File name/path manipulation</span>
+0161             address = [directory,file];
+0162         <span class="keyword">else</span>
+0163             address = varargin{1};
+0164             graph   = <span class="string">''</span>;
+0165         <span class="keyword">end</span>
+0166 
+0167         [directory,name,extension] = fileparts(address);
+0168         
+0169     <span class="keyword">case</span> 2
+0170         address = varargin{1};
+0171         [directory,name,extension] = fileparts(address);
+0172         
+0173         graph = varargin{2};
+0174 
+0175 <span class="keyword">end</span>
+0176 
+0177 <span class="comment">% Check that file exists</span>
+0178 <span class="keyword">if</span> ~exist(address,<span class="string">'file'</span>)
+0179     error(<span class="string">'SpecManRead: File could not be found.'</span>)
+0180     <span class="keyword">return</span> 
+0181 <span class="keyword">end</span>
+0182 
+0183 <span class="comment">%% Parameters file (*.exp) loading</span>
+0184 <span class="comment">% ========================================================================</span>
+0185 
+0186 filepar = [ directory <span class="string">'/'</span> name <span class="string">'.exp'</span>];
+0187 fid = fopen(filepar , <span class="string">'r'</span>);
+0188 
+0189 <span class="keyword">if</span> isequal(fid,-1)
+0190     error(<span class="string">'SpecManRead: Could not open the desired *.exp file.'</span>)
+0191     <span class="keyword">return</span>
+0192 <span class="keyword">end</span>
+0193 
+0194 <span class="comment">% While there's remaining lines, write them</span>
+0195 tline = fgetl(fid);
+0196 k = 1;
+0197 <span class="keyword">while</span> ischar(tline)
+0198     par{k} = sprintf(<span class="string">'%-80s'</span>,tline);
+0199     tline = fgetl(fid);
+0200     k = k+1;
+0201 <span class="keyword">end</span>
+0202 
+0203 fclose(fid);
+0204 
+0205 <span class="comment">%% Parameter sorting - required</span>
+0206 <span class="comment">% ========================================================================</span>
 0207 
-0208 <span class="comment">%% Parameter sorting - optional</span>
-0209 <span class="comment">% ========================================================================</span>
-0210 
-0211 <span class="comment">% These parameters are defined as optional and will be machine dependent</span>
+0208 <span class="comment">% These parameters are defined as required and appear in every SpecMan file</span>
+0209 
+0210 <span class="comment">% Empty lines</span>
+0211 pEmptyLines      = find(not(cellfun(<span class="string">'isempty'</span>,strfind(par,<span class="string">'                                                                                '</span>))));
 0212 
-0213 <span class="keyword">try</span>
-0214     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[text]'</span>     ,parameters,<span class="string">'Text'</span>);
-0215 <span class="keyword">end</span>
-0216 <span class="keyword">try</span>
-0217     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[decision]'</span> ,parameters,<span class="string">'Decision'</span>);
-0218 <span class="keyword">end</span>
-0219 <span class="keyword">try</span>
-0220     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[program]'</span>  ,parameters,<span class="string">'Program'</span>);
-0221 <span class="keyword">end</span>
-0222 <span class="keyword">try</span>
-0223     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[presetup]'</span> ,parameters,<span class="string">'PreSetup'</span>);
-0224 <span class="keyword">end</span>
-0225 <span class="keyword">try</span>
-0226     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[postsetup]'</span>,parameters,<span class="string">'PostSetup'</span>);
-0227 <span class="keyword">end</span>
+0213 <span class="comment">% Generate parameters</span>
+0214 parameters = {};
+0215 
+0216 parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[general]'</span>    ,parameters,<span class="string">'General'</span>);
+0217 parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[sweep]'</span>      ,parameters,<span class="string">'Sweep'</span>);
+0218 parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[params]'</span>     ,parameters,<span class="string">'Parameters'</span>);
+0219 parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[streams]'</span>    ,parameters,<span class="string">'Streams'</span>);
+0220 parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[aquisition]'</span> ,parameters,<span class="string">'Aquisition'</span>);
+0221 
+0222 
+0223 <span class="comment">%% Parameter sorting - optional</span>
+0224 <span class="comment">% ========================================================================</span>
+0225 
+0226 <span class="comment">% These parameters are defined as optional and will be machine dependent</span>
+0227 
 0228 <span class="keyword">try</span>
-0229     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[pack]'</span>     ,parameters,<span class="string">'Pack'</span>);
+0229     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[text]'</span>     ,parameters,<span class="string">'Text'</span>);
 0230 <span class="keyword">end</span>
 0231 <span class="keyword">try</span>
-0232     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[warmup]'</span>   ,parameters,<span class="string">'Warmup'</span>);
+0232     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[decision]'</span> ,parameters,<span class="string">'Decision'</span>);
 0233 <span class="keyword">end</span>
 0234 <span class="keyword">try</span>
-0235     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[System]'</span>   ,parameters,<span class="string">'System'</span>);
+0235     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[program]'</span>  ,parameters,<span class="string">'Program'</span>);
 0236 <span class="keyword">end</span>
 0237 <span class="keyword">try</span>
-0238     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[SOURCE]'</span>   ,parameters,<span class="string">'Source1'</span>);
+0238     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[presetup]'</span> ,parameters,<span class="string">'PreSetup'</span>);
 0239 <span class="keyword">end</span>
 0240 <span class="keyword">try</span>
-0241     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[SOURCE2]'</span>  ,parameters,<span class="string">'Source2'</span>);
+0241     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[postsetup]'</span>,parameters,<span class="string">'PostSetup'</span>);
 0242 <span class="keyword">end</span>
 0243 <span class="keyword">try</span>
-0244     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[SOURCE3]'</span>  ,parameters,<span class="string">'Source3'</span>);
+0244     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[pack]'</span>     ,parameters,<span class="string">'Pack'</span>);
 0245 <span class="keyword">end</span>
 0246 <span class="keyword">try</span>
-0247     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[PB400]'</span>    ,parameters,<span class="string">'PB400'</span>);
+0247     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[warmup]'</span>   ,parameters,<span class="string">'Warmup'</span>);
 0248 <span class="keyword">end</span>
 0249 <span class="keyword">try</span>
-0250     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[Aquiris]'</span>  ,parameters,<span class="string">'Aquiris'</span>);
+0250     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[System]'</span>   ,parameters,<span class="string">'System'</span>);
 0251 <span class="keyword">end</span>
 0252 <span class="keyword">try</span>
-0253     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[Field]'</span>    ,parameters,<span class="string">'Field'</span>);
+0253     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[SOURCE]'</span>   ,parameters,<span class="string">'Source1'</span>);
 0254 <span class="keyword">end</span>
 0255 <span class="keyword">try</span>
-0256     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[sample_info]'</span>,parameters,<span class="string">'SampleInfo'</span>);
+0256     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[SOURCE2]'</span>  ,parameters,<span class="string">'Source2'</span>);
 0257 <span class="keyword">end</span>
 0258 <span class="keyword">try</span>
-0259     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[exp_info]'</span>    ,parameters,<span class="string">'ExpInfo'</span>);
+0259     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[SOURCE3]'</span>  ,parameters,<span class="string">'Source3'</span>);
 0260 <span class="keyword">end</span>
-0261 
-0262 
-0263 <span class="comment">%% Data files - loading</span>
-0264 <span class="comment">% ========================================================================</span>
-0265 
-0266 <span class="comment">% SpecMan file information from:</span>
-0267 <span class="comment">% http://www.specman4epr.com/Manual/exp_file_format.html</span>
-0268 
-0269 <span class="comment">% Open file</span>
-0270 fid = fopen(address,<span class="string">'r'</span>,<span class="string">'ieee-le'</span>);
-0271 
-0272 <span class="comment">% Check the file was opened</span>
-0273 <span class="keyword">if</span> fid &lt; 1
-0274    error([<span class="string">'File '''</span>,name,<span class="string">''' could not be opened, both *.d01 and *.exp files are required to open the file.'</span>])
-0275    <span class="keyword">return</span>
-0276 <span class="keyword">end</span>
+0261 <span class="keyword">try</span>
+0262     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[PB400]'</span>    ,parameters,<span class="string">'PB400'</span>);
+0263 <span class="keyword">end</span>
+0264 <span class="keyword">try</span>
+0265     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[Aquiris]'</span>  ,parameters,<span class="string">'Aquiris'</span>);
+0266 <span class="keyword">end</span>
+0267 <span class="keyword">try</span>
+0268     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[Field]'</span>    ,parameters,<span class="string">'Field'</span>);
+0269 <span class="keyword">end</span>
+0270 <span class="keyword">try</span>
+0271     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[sample_info]'</span>,parameters,<span class="string">'SampleInfo'</span>);
+0272 <span class="keyword">end</span>
+0273 <span class="keyword">try</span>
+0274     parameters = <a href="#_sub1" class="code" title="subfunction parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)">ParameterLoad</a> (par,pEmptyLines,<span class="string">'[exp_info]'</span>    ,parameters,<span class="string">'ExpInfo'</span>);
+0275 <span class="keyword">end</span>
+0276 
 0277 
-0278 <span class="comment">% Read initial parameters</span>
-0279 DataAmount = fread(fid,1,<span class="string">'uint32'</span>);
+0278 <span class="comment">%% Data files - loading</span>
+0279 <span class="comment">% ========================================================================</span>
 0280 
-0281 <span class="comment">% Get data format</span>
-0282 DataFormat = fread(fid,1,<span class="string">'uint32'</span>);
+0281 <span class="comment">% SpecMan file information from:</span>
+0282 <span class="comment">% http://www.specman4epr.com/Manual/exp_file_format.html</span>
 0283 
-0284 <span class="comment">% Data format</span>
-0285 <span class="keyword">switch</span> DataFormat
-0286     <span class="keyword">case</span> 0
-0287         DataType = <span class="string">'double'</span>;
-0288     <span class="keyword">case</span> 1
-0289         DataType = <span class="string">'float'</span>;
-0290 <span class="keyword">end</span>
-0291 
-0292 <span class="comment">% Setup data dimensions</span>
-0293 DataDimension       = cell(DataAmount,1);
-0294 ArrayOfDimensions   = cell(DataAmount,1);
-0295 OverallDataSize     = cell(DataAmount,1);
-0296 
-0297 <span class="comment">% Get data dimensions for each data stream</span>
-0298 <span class="keyword">for</span> n = 1:DataAmount
-0299     DataDimension{n}     = fread(fid,1,<span class="string">'int32'</span>);
-0300     ArrayOfDimensions{n} = fread(fid,4,<span class="string">'int32'</span>);
-0301     OverallDataSize{n}   = fread(fid,1,<span class="string">'int32'</span>);
-0302 <span class="keyword">end</span>
-0303 
-0304 <span class="comment">% Create structure to read streams into</span>
-0305 Data = cell(DataAmount,1);
+0284 <span class="comment">% Open file</span>
+0285 fid = fopen(address,<span class="string">'r'</span>,<span class="string">'ieee-le'</span>);
+0286 
+0287 <span class="comment">% Check the file was opened</span>
+0288 <span class="keyword">if</span> fid &lt; 1
+0289    error([<span class="string">'File '''</span>,name,<span class="string">''' could not be opened, both *.d01 and *.exp files are required to open the file.'</span>])
+0290    <span class="keyword">return</span>
+0291 <span class="keyword">end</span>
+0292 
+0293 <span class="comment">% Read initial parameters</span>
+0294 DataAmount = fread(fid,1,<span class="string">'uint32'</span>);
+0295 
+0296 <span class="comment">% Get data format</span>
+0297 DataFormat = fread(fid,1,<span class="string">'uint32'</span>);
+0298 
+0299 <span class="comment">% Data format</span>
+0300 <span class="keyword">switch</span> DataFormat
+0301     <span class="keyword">case</span> 0
+0302         DataType = <span class="string">'double'</span>;
+0303     <span class="keyword">case</span> 1
+0304         DataType = <span class="string">'float'</span>;
+0305 <span class="keyword">end</span>
 0306 
-0307 <span class="comment">% Read in the data</span>
-0308 <span class="keyword">for</span> n = 1:DataAmount
-0309     Data{n} = fread(fid,OverallDataSize{n},DataType);
-0310 <span class="keyword">end</span>
+0307 <span class="comment">% Setup data dimensions</span>
+0308 DataDimension       = cell(DataAmount,1);
+0309 ArrayOfDimensions   = cell(DataAmount,1);
+0310 OverallDataSize     = cell(DataAmount,1);
 0311 
-0312 <span class="comment">% With data read, close file from memory</span>
-0313 fclose(fid);
-0314 
-0315 <span class="comment">% Manipulate data into proper cell arrays</span>
-0316 data = cell(DataAmount,1);
-0317 <span class="keyword">for</span> n = 1:DataAmount
-0318     imx = ArrayOfDimensions{n}(1);
-0319     jmx = ArrayOfDimensions{n}(2);
-0320     kmx = ArrayOfDimensions{n}(3);
-0321     lmx = ArrayOfDimensions{n}(4);
-0322     <span class="keyword">for</span> l = 1:lmx
-0323         <span class="keyword">for</span> k = 1:kmx
-0324             <span class="keyword">for</span> j = 1:jmx
-0325                 m1 = 1+((j-1)+((k-1)*jmx)+((l-1)*kmx*jmx))*imx;
-0326                 m2 = m1+imx-1;
-0327                 data{n}(:,j,k,l) = Data{n}(m1:m2);
-0328             <span class="keyword">end</span>
-0329         <span class="keyword">end</span>
-0330     <span class="keyword">end</span>
-0331 <span class="keyword">end</span>
-0332 
-0333 <span class="comment">%% Data files - Processing - Finding the axes</span>
-0334 <span class="comment">% ========================================================================</span>
-0335 
-0336 <span class="comment">% NOTE: this section quickly gets very confusing. As SpecMan saves only the</span>
-0337 <span class="comment">% experiment type by the name from the template file we have to investigate</span>
-0338 <span class="comment">% the experiment description.</span>
-0339 <span class="comment">%</span>
-0340 <span class="comment">% In short we need to look at the parameters.Sweep section and observe what</span>
-0341 <span class="comment">% is being sweeped and then try to build an x-axis from this.</span>
-0342 <span class="comment">%</span>
-0343 <span class="comment">% This is made slightly more complicated as SpecMan saves in SI prefixes</span>
-0344 <span class="comment">% rather than using SI units and scientific numbering.</span>
-0345 
-0346 <span class="comment">% Unit conversion</span>
-0347 prefix = [  <span class="string">'p'</span>,  <span class="string">'n'</span>,  <span class="string">'u'</span>,  <span class="string">'m'</span>, <span class="string">' '</span>, <span class="string">'k'</span>, <span class="string">'M'</span>, <span class="string">'G'</span>,  <span class="string">'T'</span>];
-0348 coeff  = [1E-12, 1E-9, 1E-6, 1E-3, 1E1, 1E3, 1E6, 1E9, 1E12];
-0349 
+0312 <span class="comment">% Get data dimensions for each data stream</span>
+0313 <span class="keyword">for</span> n = 1:DataAmount
+0314     DataDimension{n}     = fread(fid,1,<span class="string">'int32'</span>);
+0315     ArrayOfDimensions{n} = fread(fid,4,<span class="string">'int32'</span>);
+0316     OverallDataSize{n}   = fread(fid,1,<span class="string">'int32'</span>);
+0317 <span class="keyword">end</span>
+0318 
+0319 <span class="comment">% Create structure to read streams into</span>
+0320 Data = cell(DataAmount,1);
+0321 
+0322 <span class="comment">% Read in the data</span>
+0323 <span class="keyword">for</span> n = 1:DataAmount
+0324     Data{n} = fread(fid,OverallDataSize{n},DataType);
+0325 <span class="keyword">end</span>
+0326 
+0327 <span class="comment">% With data read, close file from memory</span>
+0328 fclose(fid);
+0329 
+0330 <span class="comment">% Manipulate data into proper cell arrays</span>
+0331 data = cell(DataAmount,1);
+0332 <span class="keyword">for</span> n = 1:DataAmount
+0333     imx = ArrayOfDimensions{n}(1);
+0334     jmx = ArrayOfDimensions{n}(2);
+0335     kmx = ArrayOfDimensions{n}(3);
+0336     lmx = ArrayOfDimensions{n}(4);
+0337     <span class="keyword">for</span> l = 1:lmx
+0338         <span class="keyword">for</span> k = 1:kmx
+0339             <span class="keyword">for</span> j = 1:jmx
+0340                 m1 = 1+((j-1)+((k-1)*jmx)+((l-1)*kmx*jmx))*imx;
+0341                 m2 = m1+imx-1;
+0342                 data{n}(:,j,k,l) = Data{n}(m1:m2);
+0343             <span class="keyword">end</span>
+0344         <span class="keyword">end</span>
+0345     <span class="keyword">end</span>
+0346 <span class="keyword">end</span>
+0347 
+0348 <span class="comment">%% Data files - Processing - Finding the axes</span>
+0349 <span class="comment">% ========================================================================</span>
 0350 
-0351 <span class="comment">% Get number of triggers</span>
-0352 triggers = parameters.Streams.triggers;
-0353 
-0354 <span class="comment">% Transient format:</span>
-0355 <span class="comment">% Axis type, Number of data points, Number of shots per point, Variables</span>
-0356 <span class="comment">% eg 'I,500,50,a'</span>
-0357 
-0358 <span class="comment">% Setup the Sweep loop</span>
-0359 fieldName = <span class="string">'transient'</span>;
-0360 idx       = 0;
-0361 sweepax   = {};
-0362 
-0363 <span class="comment">% Begin loop - this is not the most elegant solution, but by using the</span>
-0364 <span class="comment">% while loop we can set the loop to use transient on the first pass and</span>
-0365 <span class="comment">% then on each additional pass use sweepX</span>
-0366 
-0367 <span class="keyword">while</span> isfield(parameters.Sweep, fieldName)
+0351 <span class="comment">% NOTE: this section quickly gets very confusing. As SpecMan saves only the</span>
+0352 <span class="comment">% experiment type by the name from the template file we have to investigate</span>
+0353 <span class="comment">% the experiment description.</span>
+0354 <span class="comment">%</span>
+0355 <span class="comment">% In short we need to look at the parameters.Sweep section and observe what</span>
+0356 <span class="comment">% is being sweeped and then try to build an x-axis from this.</span>
+0357 <span class="comment">%</span>
+0358 <span class="comment">% This is made slightly more complicated as SpecMan saves in SI prefixes</span>
+0359 <span class="comment">% rather than using SI units and scientific numbering.</span>
+0360 
+0361 <span class="comment">% Unit conversion</span>
+0362 prefix = [  <span class="string">'p'</span>,  <span class="string">'n'</span>,  <span class="string">'u'</span>,  <span class="string">'m'</span>, <span class="string">' '</span>, <span class="string">'k'</span>, <span class="string">'M'</span>, <span class="string">'G'</span>,  <span class="string">'T'</span>];
+0363 coeff  = [1E-12, 1E-9, 1E-6, 1E-3, 1E1, 1E3, 1E6, 1E9, 1E12];
+0364 
+0365 
+0366 <span class="comment">% Get number of triggers</span>
+0367 triggers = parameters.Streams.triggers;
 0368 
-0369     <span class="comment">% Get the detection type</span>
-0370     [ax.t, str]    = strtok(parameters.Sweep.(fieldName),<span class="string">','</span>);
-0371     ax.t           = trim(ax.t);
-0372     
-0373     <span class="comment">% Get the number of data points</span>
-0374     [ax.size, str] = strtok(str(2:end), <span class="string">','</span>);
-0375     
-0376     <span class="comment">% Determine axis size</span>
-0377     <span class="keyword">if</span> ax.t==<span class="string">'S'</span> || ax.t==<span class="string">'I'</span>
-0378         ax.size = 1;
-0379     <span class="keyword">else</span>
-0380         ax.size = str2double(ax.size);
-0381     <span class="keyword">end</span>
-0382     
-0383     <span class="comment">% Get the number of reps</span>
-0384     [ax.reps, str] = strtok(str(2:end), <span class="string">','</span>);
-0385     ax.reps        = str2double(ax.reps);
-0386     
-0387     <span class="comment">% Get axis variables</span>
-0388     <span class="comment">% - create array</span>
-0389     ax.var = {};
-0390     <span class="comment">% - loop to fill array</span>
-0391     <span class="keyword">while</span> ~isempty(str)
-0392         [ax.var{end+1}, str] = strtok(str(2:end), <span class="string">','</span>);
-0393     <span class="keyword">end</span>
-0394     
-0395     <span class="comment">% Write axis to sweepax cell for multi-axes experiments</span>
-0396     sweepax{end+1,1} = ax;
+0369 <span class="comment">% Transient format:</span>
+0370 <span class="comment">% Axis type, Number of data points, Number of shots per point, Variables</span>
+0371 <span class="comment">% eg 'I,500,50,a'</span>
+0372 
+0373 <span class="comment">% Setup the Sweep loop</span>
+0374 fieldName = <span class="string">'transient'</span>;
+0375 idx       = 0;
+0376 sweepax   = {};
+0377 
+0378 <span class="comment">% Begin loop - this is not the most elegant solution, but by using the</span>
+0379 <span class="comment">% while loop we can set the loop to use transient on the first pass and</span>
+0380 <span class="comment">% then on each additional pass use sweepX</span>
+0381 
+0382 <span class="keyword">while</span> isfield(parameters.Sweep, fieldName)
+0383 
+0384     <span class="comment">% Get the detection type</span>
+0385     [ax.t, str]    = strtok(parameters.Sweep.(fieldName),<span class="string">','</span>);
+0386     ax.t           = strtrim(ax.t);
+0387     
+0388     <span class="comment">% Get the number of data points</span>
+0389     [ax.size, str] = strtok(str(2:end), <span class="string">','</span>);
+0390     
+0391     <span class="comment">% Determine axis size</span>
+0392     <span class="keyword">if</span> strcmp(ax.t,<span class="string">'S'</span>) || strcmp(ax.t,<span class="string">'I'</span>) <span class="comment">%ax.t=='S' || ax.t=='I'</span>
+0393         ax.size = 1;
+0394     <span class="keyword">else</span>
+0395         ax.size = str2double(ax.size);
+0396     <span class="keyword">end</span>
 0397     
-0398     <span class="comment">% Update the axis that we're looking at</span>
-0399     fieldName = [<span class="string">'sweep'</span>, num2str(idx)];
-0400     idx = idx +1;
-0401 <span class="keyword">end</span>
-0402 
-0403 <span class="comment">% If we have multiple triggers then this needs to be reflected in the</span>
-0404 <span class="comment">% transient size</span>
-0405 sweepax{1}.size=sweepax{1}.size*triggers;
-0406 
-0407 
-0408 <span class="comment">%% Data files - Processing - Generating the axes</span>
-0409 <span class="comment">% ========================================================================</span>
-0410 
-0411 <span class="comment">% Start the loop</span>
-0412 <span class="comment">% ==============</span>
-0413 
-0414 <span class="comment">% For the number of axis fields</span>
-0415 <span class="keyword">for</span> k = 1:size(sweepax, 1)
-0416     
-0417     <span class="comment">% Setup arrays</span>
-0418     asize = sweepax{k}.size;
-0419     
-0420     <span class="comment">% Error check to see that we have more than one axis</span>
-0421     <span class="keyword">if</span> asize &gt; 1
-0422         <span class="comment">% Switch according to the detection type</span>
-0423         <span class="keyword">switch</span> sweepax{k}.t
-0424             <span class="keyword">case</span> <span class="string">'I'</span>
-0425                 tempparam = <span class="string">'trans'</span>;
-0426                 
-0427             <span class="keyword">case</span> <span class="string">'T'</span>
-0428                 tempparam = <span class="string">'trans'</span>;
-0429                 
-0430             <span class="keyword">otherwise</span>
-0431                 <span class="comment">% temp. parameter = the last value of transient but we need</span>
-0432                 <span class="comment">% to replace all non letter characters with '_'</span>
-0433                 tempparam = sweepax{k}.var{1};
-0434                 tempparam(findstr(tempparam, <span class="string">' '</span>)) = <span class="string">'_'</span>;
-0435                 tempparam(findstr(tempparam, <span class="string">'.'</span>)) = <span class="string">'_'</span>;
-0436                 tempparam(findstr(tempparam, <span class="string">','</span>)) = <span class="string">'_'</span>;
-0437         <span class="keyword">end</span>
-0438         
-0439         <span class="comment">% Now we have the temp parameter, we need to check if this is a</span>
-0440         <span class="comment">% parameter</span>
-0441         
-0442         <span class="keyword">if</span> isfield(parameters.Parameters,tempparam)
-0443            <span class="comment">% If it is then we need to process it</span>
-0444            
-0445            <span class="comment">% Get the string of the field in Parameters</span>
-0446            str = eval([<span class="string">'parameters.Parameters.'</span> tempparam]);
-0447            
-0448            <span class="comment">% Now split the string</span>
-0449            splitstr = textscan(str,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>, <span class="string">',; '</span>);
-0450            
-0451            <span class="comment">% Now we have to build the axis based upon on how the experiment</span>
-0452            <span class="comment">% was set up</span>
-0453            
-0454            <span class="keyword">switch</span> splitstr{1}{3}
-0455                <span class="comment">% Variable of kind 10 ns to 100 ns</span>
-0456                <span class="keyword">case</span> <span class="string">'to'</span>
-0457                    <span class="comment">% Get numerical values</span>
-0458                    axStart = str2double(splitstr{1}{1});
-0459                    axEnd   = str2double(splitstr{1}{4});
-0460                    
-0461                    <span class="comment">% Get the unit prefix, but if there's no prefix in the</span>
-0462                    <span class="comment">% next step we only want to multiply by 1</span>
-0463                    <span class="keyword">if</span> size(splitstr{1}{2},2) &gt; 1
-0464                        unitPrefixStart = findstr(prefix,splitstr{1}{2}(1));
-0465                    <span class="keyword">else</span>
-0466                        unitPrefixStart = 1;
-0467                    <span class="keyword">end</span>
-0468                    <span class="keyword">if</span> size(splitstr{1}{5},2) &gt; 1
-0469                        unitPrefixEnd   = findstr(prefix,splitstr{1}{5}(1));
-0470                    <span class="keyword">else</span>
-0471                        unitPrefixEnd   = 1;
-0472                    <span class="keyword">end</span>
-0473                    
-0474                    <span class="comment">% Multiple the value by the unit</span>
-0475                    axStart   = axStart * coeff(unitPrefixStart);
-0476                    axEnd     = axEnd   * coeff(unitPrefixEnd);
+0398     <span class="comment">% Get the number of reps</span>
+0399     [ax.reps, str] = strtok(str(2:end), <span class="string">','</span>);
+0400     ax.reps        = str2double(ax.reps);
+0401     
+0402     <span class="comment">% Get axis variables</span>
+0403     <span class="comment">% - create array</span>
+0404     ax.var = {};
+0405     <span class="comment">% - loop to fill array</span>
+0406     <span class="keyword">while</span> ~isempty(str)
+0407         [ax.var{end+1}, str] = strtok(str(2:end), <span class="string">','</span>);
+0408     <span class="keyword">end</span>
+0409     
+0410     <span class="comment">% Write axis to sweepax cell for multi-axes experiments</span>
+0411     sweepax{end+1,1} = ax;
+0412     
+0413     <span class="comment">% Update the axis that we're looking at</span>
+0414     fieldName = [<span class="string">'sweep'</span>, num2str(idx)];
+0415     idx = idx +1;
+0416 <span class="keyword">end</span>
+0417 
+0418 <span class="comment">% If we have multiple triggers then this needs to be reflected in the</span>
+0419 <span class="comment">% transient size</span>
+0420 sweepax{1}.size=sweepax{1}.size*triggers;
+0421 
+0422 
+0423 <span class="comment">%% Data files - Processing - Generating the axes</span>
+0424 <span class="comment">% ========================================================================</span>
+0425 
+0426 <span class="comment">% Start the loop</span>
+0427 <span class="comment">% ==============</span>
+0428 
+0429 <span class="comment">% For the number of axis fields</span>
+0430 <span class="keyword">for</span> k = 1:size(sweepax, 1)
+0431     
+0432     <span class="comment">% Setup arrays</span>
+0433     asize = sweepax{k}.size;
+0434     
+0435     <span class="comment">% Error check to see that we have more than one axis</span>
+0436     <span class="keyword">if</span> asize &gt; 1
+0437         <span class="comment">% Switch according to the detection type</span>
+0438         <span class="keyword">switch</span> sweepax{k}.t
+0439             <span class="keyword">case</span> <span class="string">'I'</span>
+0440                 tempparam = <span class="string">'trans'</span>;
+0441                 
+0442             <span class="keyword">case</span> <span class="string">'T'</span>
+0443                 tempparam = <span class="string">'trans'</span>;
+0444                 
+0445             <span class="keyword">otherwise</span>
+0446                 <span class="comment">% temp. parameter = the last value of transient but we need</span>
+0447                 <span class="comment">% to replace all non letter characters with '_'</span>
+0448                 tempparam = sweepax{k}.var{1};
+0449                 tempparam(findstr(tempparam, <span class="string">' '</span>)) = <span class="string">'_'</span>;
+0450                 tempparam(findstr(tempparam, <span class="string">'.'</span>)) = <span class="string">'_'</span>;
+0451                 tempparam(findstr(tempparam, <span class="string">','</span>)) = <span class="string">'_'</span>;
+0452         <span class="keyword">end</span>
+0453         
+0454         <span class="comment">% Now we have the temp parameter, we need to check if this is a</span>
+0455         <span class="comment">% parameter</span>
+0456         
+0457         <span class="keyword">if</span> isfield(parameters.Parameters,tempparam)
+0458            <span class="comment">% If it is then we need to process it</span>
+0459            
+0460            <span class="comment">% Get the string of the field in Parameters</span>
+0461            str = eval([<span class="string">'parameters.Parameters.'</span> tempparam]);
+0462            
+0463            <span class="comment">% Now split the string</span>
+0464            splitstr = textscan(str,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>, <span class="string">',; '</span>);
+0465            
+0466            <span class="comment">% Now we have to build the axis based upon on how the experiment</span>
+0467            <span class="comment">% was set up</span>
+0468            
+0469            <span class="comment">% But first let's check that this axis actually moves, and if it</span>
+0470            <span class="comment">% doesn't then we need to skip it, otherwise it might overwrite</span>
+0471            <span class="comment">% the correct axis</span>
+0472            
+0473            <span class="keyword">if</span> str2double(splitstr{1}{1}) ~= str2double(splitstr{1}{4})
+0474            
+0475                <span class="comment">% Now start building the x-axis</span>
+0476                <span class="keyword">switch</span> splitstr{1}{3}
 0477                    
-0478                    <span class="comment">% Calculate the step</span>
-0479                    axStep  = (axEnd-axStart)/(imx-1);
-0480                             
-0481                    <span class="comment">% Generate the axis</span>
-0482                    ax = axStart : axStep : axEnd;
-0483                    x = ax';
-0484                    
-0485                <span class="comment">% Variable of kind 10 ns step 50 ns</span>
-0486                <span class="keyword">case</span> <span class="string">'step'</span>
-0487                    <span class="comment">% Get numerical values</span>
-0488                    axStart = str2double(splitstr{1}{1});
-0489                    axStep  = str2double(splitstr{1}{4});
-0490                    
-0491                    <span class="comment">% Get the unit prefix, but if there's no prefix in the</span>
-0492                    <span class="comment">% next step we only want to multiply by 1</span>
-0493                    <span class="keyword">if</span> size(splitstr{1}{2},2) &gt; 1
-0494                        unitPrefixStart = findstr(prefix,splitstr{1}{2}(1));
-0495                    <span class="keyword">else</span>
-0496                        unitPrefixStart = 1;
-0497                    <span class="keyword">end</span>
-0498                    <span class="keyword">if</span> size(splitstr{1}{5},2) &gt; 1
-0499                        unitPrefixStep  = findstr(prefix,splitstr{1}{5}(1));
-0500                    <span class="keyword">else</span>
-0501                        unitPrefixStep  = 1;
-0502                    <span class="keyword">end</span>
-0503                    
-0504                    <span class="comment">% Multiple the value by the unit</span>
-0505                    axStart   = axStart * coeff(unitPrefixStart);
-0506                    axStep    = axStep  * coeff(unitPrefixStep);
-0507                    
-0508                    <span class="comment">% Generate the axis</span>
-0509                    ax = axStart : axStep : axStart+(axStep*(imx-1));
-0510                    x = ax';
-0511                    
-0512                <span class="comment">% Variable is a manual list</span>
-0513                <span class="keyword">otherwise</span>
-0514                    
-0515                    <span class="comment">% Create array</span>
-0516                    x = [];
-0517                    
-0518                    <span class="comment">% Split the string at the first comma</span>
-0519                    [tk1, str1] = strtok(str1, <span class="string">','</span>);
-0520                    
-0521                    <span class="comment">% Stick the remaining string in a &quot;while not empty&quot; loop</span>
-0522                     <span class="keyword">while</span> ~isempty(tk1)
-0523                         
-0524                         <span class="comment">% Split the first comma value</span>
-0525                         splitstr = strsplit(tk1);
-0526                         axStep   = str2double(splitstr{1});
-0527                         
-0528                         <span class="comment">% Convert the unit if necessary</span>
-0529                         <span class="keyword">if</span> size(splitstr{2},2) &gt; 1
-0530                             unitPrefixStep = findstr(prefix,splitstr{2}(1));
-0531                         <span class="keyword">else</span>
-0532                             unitPrefixStep = 1;
-0533                         <span class="keyword">end</span>
-0534                         
-0535                         <span class="comment">% Multiple value by the unit</span>
-0536                         x(end+1)    = axStep * coeff(unitPrefixStart);
-0537 
-0538                         <span class="comment">% Increment to the next loop value</span>
-0539                         [tk1, str1] = gettoken(str1, <span class="string">','</span>);
-0540                         
-0541                         <span class="comment">% If there is no remaining string then we need to</span>
-0542                         <span class="comment">% terminate the loop</span>
-0543                         <span class="keyword">if</span> isempty(tk1) &amp;&amp; ~isempty(str1)
-0544                             tk1 = str1; str1 = [];
-0545                         <span class="keyword">end</span>
-0546                     <span class="keyword">end</span>
-0547                    
-0548            <span class="keyword">end</span>
-0549            
-0550         <span class="keyword">end</span>
-0551             
-0552         <span class="keyword">else</span>
-0553             
-0554 <span class="comment">%     else</span>
-0555 <span class="comment">%         % ERROR</span>
-0556 <span class="comment">%         error('SpecManRead: The selected file could not be correctly loaded as the parameters file reports only one axis in the Parameters section')</span>
-0557     <span class="keyword">end</span>
-0558     
-0559 <span class="keyword">end</span>
-0560 
-0561 
-0562 <span class="comment">%% Outputs</span>
-0563 <span class="comment">% ========================================================================</span>
-0564 
-0565 y = data{1};
-0566 
-0567 <span class="comment">% Number of outputs arguments</span>
-0568 <span class="comment">%</span>
-0569 <span class="comment">% Case 0: plot a figure, do nothing else</span>
-0570 <span class="comment">%      1: gives the intensities (y-axis)</span>
-0571 <span class="comment">%      2: gives x and y</span>
-0572 <span class="comment">%      3: gives x, y and comments in header</span>
-0573 
-0574 <span class="keyword">switch</span> nargout
-0575     <span class="keyword">case</span> 0
-0576         <span class="keyword">try</span>
-0577             h = figure(<span class="string">'name'</span> , [<span class="string">'SpecManRead: '</span> name], <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
-0578             plot(x,y);
-0579             xlabel(xlegend);
-0580         <span class="keyword">catch</span>
-0581             close(h);
-0582         <span class="keyword">end</span>
-0583         
-0584         <span class="comment">% try assigning to workspace if it's free</span>
-0585         <span class="keyword">if</span> exist(<span class="string">'x'</span>,<span class="string">'var'</span>)
-0586             assignin(<span class="string">'base'</span>,<span class="string">'x'</span>,x)
-0587         <span class="keyword">end</span>
-0588         <span class="keyword">if</span> exist(<span class="string">'y'</span>,<span class="string">'var'</span>)
-0589             assignin(<span class="string">'base'</span>,<span class="string">'y'</span>,y)
-0590         <span class="keyword">end</span>
-0591         
-0592     <span class="keyword">case</span> 1
-0593         varargout{1} = y;
-0594         
-0595     <span class="keyword">case</span> 2
-0596         varargout{1} = x;
-0597         varargout{2} = y;
-0598         
-0599     <span class="keyword">case</span> 3
-0600         varargout{1} = x;
-0601         varargout{2} = y;
-0602         varargout{3} = parameters;
-0603         
-0604     <span class="keyword">otherwise</span>
-0605         varargout{1} = x;
-0606         varargout{2} = y;
-0607 <span class="keyword">end</span>
-0608 
-0609 <span class="comment">% Plot the figure if the input has been selected</span>
-0610 <span class="keyword">if</span> nargin &gt; 0
-0611     <span class="keyword">if</span> strcmp(graph,<span class="string">'plot'</span>)
-0612         <span class="keyword">try</span>
-0613             h = figure(<span class="string">'name'</span> , [<span class="string">'SpecManRead: '</span> name], <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
-0614             plot(x,y);
-0615             xlabel(xlegend);
-0616         <span class="keyword">catch</span>
-0617             close(h);
-0618             disp(<span class="string">'SpecManRead: Graphing error - graph could not be displayed'</span>)
-0619         <span class="keyword">end</span>
-0620     <span class="keyword">end</span>
-0621 <span class="keyword">end</span>
+0478                    <span class="comment">% Variable of kind 10 ns to 100 ns</span>
+0479                    <span class="keyword">case</span> <span class="string">'to'</span>
+0480                        <span class="comment">% Get numerical values</span>
+0481                        axStart = str2double(splitstr{1}{1});
+0482                        axEnd   = str2double(splitstr{1}{4});
+0483                        
+0484                        <span class="comment">% Get the unit prefix, but if there's no prefix in the</span>
+0485                        <span class="comment">% next step we only want to multiply by 1</span>
+0486                        <span class="keyword">if</span> size(splitstr{1}{2},2) &gt; 1
+0487                            unitPrefixStart = findstr(prefix,splitstr{1}{2}(1));
+0488                        <span class="keyword">else</span>
+0489                            unitPrefixStart = 1;
+0490                        <span class="keyword">end</span>
+0491                        <span class="keyword">if</span> size(splitstr{1}{5},2) &gt; 1
+0492                            unitPrefixEnd   = findstr(prefix,splitstr{1}{5}(1));
+0493                        <span class="keyword">else</span>
+0494                            unitPrefixEnd   = 1;
+0495                        <span class="keyword">end</span>
+0496                        
+0497                        <span class="comment">% Multiple the value by the unit</span>
+0498                        axStart   = axStart * coeff(unitPrefixStart);
+0499                        axEnd     = axEnd   * coeff(unitPrefixEnd);
+0500                        
+0501                        <span class="comment">% Calculate the step</span>
+0502                        axStep  = (axEnd-axStart)/(imx-1);
+0503                        
+0504                        <span class="comment">% Generate the axis</span>
+0505                        ax = axStart : axStep : axEnd;
+0506                        x = ax';
+0507                        
+0508                    <span class="comment">% Variable of kind 10 ns step 50 ns</span>
+0509                    <span class="keyword">case</span> <span class="string">'step'</span>
+0510                        <span class="comment">% Get numerical values</span>
+0511                        axStart = str2double(splitstr{1}{1});
+0512                        axStep  = str2double(splitstr{1}{4});
+0513                        
+0514                        <span class="comment">% Get the unit prefix, but if there's no prefix in the</span>
+0515                        <span class="comment">% next step we only want to multiply by 1</span>
+0516                        <span class="keyword">if</span> size(splitstr{1}{2},2) &gt; 1
+0517                            unitPrefixStart = findstr(prefix,splitstr{1}{2}(1));
+0518                        <span class="keyword">else</span>
+0519                            unitPrefixStart = 1;
+0520                        <span class="keyword">end</span>
+0521                        <span class="keyword">if</span> size(splitstr{1}{5},2) &gt; 1
+0522                            unitPrefixStep  = findstr(prefix,splitstr{1}{5}(1));
+0523                        <span class="keyword">else</span>
+0524                            unitPrefixStep  = 1;
+0525                        <span class="keyword">end</span>
+0526                        
+0527                        <span class="comment">% Multiple the value by the unit</span>
+0528                        axStart   = axStart * coeff(unitPrefixStart);
+0529                        axStep    = axStep  * coeff(unitPrefixStep);
+0530                        
+0531                        <span class="comment">% Generate the axis</span>
+0532                        ax = axStart : axStep : axStart+(axStep*(imx-1));
+0533                        x = ax';
+0534                        
+0535                    <span class="comment">% Variable is a manual list</span>
+0536                    <span class="keyword">otherwise</span>
+0537                        
+0538                        <span class="comment">% But not always - ie. some nutation experiments</span>
+0539                        <span class="comment">% This is bad coding and needs to be improved</span>
+0540                        <span class="keyword">try</span>
+0541                            <span class="comment">% Create array</span>
+0542                            x = [];
+0543                            
+0544                            <span class="comment">% Split the string at the first comma</span>
+0545                            [tk1, str1] = strtok(str1, <span class="string">','</span>);
+0546                            
+0547                            <span class="comment">% Stick the remaining string in a &quot;while not empty&quot; loop</span>
+0548                            <span class="keyword">while</span> ~isempty(tk1)
+0549                                
+0550                                <span class="comment">% Split the first comma value</span>
+0551                                splitstr = strsplit(tk1);
+0552                                axStep   = str2double(splitstr{1});
+0553                                
+0554                                <span class="comment">% Convert the unit if necessary</span>
+0555                                <span class="keyword">if</span> size(splitstr{2},2) &gt; 1
+0556                                    unitPrefixStep = findstr(prefix,splitstr{2}(1));
+0557                                <span class="keyword">else</span>
+0558                                    unitPrefixStep = 1;
+0559                                <span class="keyword">end</span>
+0560                                
+0561                                <span class="comment">% Multiple value by the unit</span>
+0562                                x(end+1)    = axStep * coeff(unitPrefixStart);
+0563                                
+0564                                <span class="comment">% Increment to the next loop value</span>
+0565                                [tk1, str1] = gettoken(str1, <span class="string">','</span>);
+0566                                
+0567                                <span class="comment">% If there is no remaining string then we need to</span>
+0568                                <span class="comment">% terminate the loop</span>
+0569                                <span class="keyword">if</span> isempty(tk1) &amp;&amp; ~isempty(str1)
+0570                                    tk1 = str1; str1 = [];
+0571                                <span class="keyword">end</span>
+0572                            <span class="keyword">end</span>
+0573                        <span class="keyword">end</span>
+0574                        
+0575                <span class="keyword">end</span>
+0576            <span class="keyword">end</span>
+0577         
+0578         <span class="comment">% Needed for echo profiles, where nothing is swept</span>
+0579         <span class="keyword">else</span>
+0580            
+0581             <span class="comment">% If we have an Acquiris we can check the sampling rate of the</span>
+0582             <span class="comment">% scope. If we don't then we need to set an arbitary scale for</span>
+0583             <span class="comment">% the data points ie. data point 1,2,3...</span>
+0584             
+0585             <span class="keyword">if</span> isfield(parameters,<span class="string">'Aquiris'</span>)
+0586                 Sampling = textscan(parameters.Aquiris.Sampling,<span class="string">'%s'</span>,<span class="string">'Delimiter'</span>, <span class="string">',; '</span>);
+0587                 axStep = str2double(Sampling{1}(1));
+0588                 
+0589                 <span class="comment">% Convert the unit if necessary</span>
+0590                 <span class="keyword">if</span> size(Sampling{1},1) &gt; 1
+0591                     unitPrefixStep = findstr(prefix,Sampling{1}{2}(1));
+0592                 <span class="keyword">else</span>
+0593                     unitPrefixStep = 1;
+0594                 <span class="keyword">end</span>
+0595                 
+0596                 <span class="comment">% Multiple the value by the unit</span>
+0597                 axStart   = 0;
+0598                 axStep    = axStep  * coeff(unitPrefixStep);
+0599                    
+0600                 <span class="comment">% Generate the axis</span>
+0601                 ax = axStart : axStep : axStart+(axStep*(imx-1));
+0602                 x = ax';
+0603                       
+0604             <span class="keyword">else</span>
+0605                 
+0606                 x = 1:1:size(Data{1},1);
+0607                 x = x';
+0608             
+0609             <span class="keyword">end</span>
+0610             
+0611         <span class="keyword">end</span>
+0612             
+0613         <span class="keyword">else</span>
+0614             
+0615 <span class="comment">%     else</span>
+0616 <span class="comment">%         % ERROR</span>
+0617 <span class="comment">%         error('SpecManRead: The selected file could not be correctly loaded as the parameters file reports only one axis in the Parameters section')</span>
+0618     <span class="keyword">end</span>
+0619     
+0620 <span class="keyword">end</span>
+0621 
 0622 
-0623 <span class="keyword">end</span>
-0624 
+0623 <span class="comment">%% Outputs</span>
+0624 <span class="comment">% ========================================================================</span>
 0625 
-0626 <span class="comment">%%</span>
-0627 <a name="_sub1" href="#_subfunctions" class="code">function parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)</a>
-0628 
-0629 <span class="comment">% Function to scan the parameter file for a term and output that section to</span>
-0630 <span class="comment">% parameters.outputName with each lines as a field</span>
-0631 
-0632 <span class="comment">% Raw parameters list</span>
-0633 <span class="comment">% empty lines list</span>
-0634 <span class="comment">% Input string to find ie '[general]'</span>
-0635 <span class="comment">% Output parameters structure</span>
-0636 <span class="comment">% Output field name</span>
-0637 
-0638 startline            = find(not(cellfun(<span class="string">'isempty'</span>,strfind(par,inputString))));
-0639 endLine              = find(emptyLines&gt;startline,1,<span class="string">'first'</span>);
-0640 rangeLine            = par(startline:emptyLines(endLine));
-0641 
-0642 <span class="keyword">for</span> k = 2:numel(rangeLine)-1
-0643     <span class="comment">% textscan(line,'%s = %s') wont work here if there are spaces in the</span>
-0644     <span class="comment">% answer, so the inelegant solution of strtok and trimming is used</span>
-0645     <span class="comment">% instead</span>
-0646     [m,n] = strtok(rangeLine{k},<span class="string">'='</span>);
-0647     m = strtok(m,<span class="string">' '</span>);
-0648     [arb,n] = strtok(n,<span class="string">' '</span>);
-0649     parameters.(outputName).(m) = strtrim(n);
-0650 <span class="keyword">end</span>
-0651 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0626 y = data{1};
+0627 
+0628 <span class="comment">% Number of outputs arguments</span>
+0629 <span class="comment">%</span>
+0630 <span class="comment">% Case 0: plot a figure, do nothing else</span>
+0631 <span class="comment">%      1: gives the intensities (y-axis)</span>
+0632 <span class="comment">%      2: gives x and y</span>
+0633 <span class="comment">%      3: gives x, y and comments in header</span>
+0634 
+0635 <span class="keyword">switch</span> nargout
+0636     <span class="keyword">case</span> 0
+0637         <span class="keyword">try</span>
+0638             h = figure(<span class="string">'name'</span> , [<span class="string">'SpecManRead: '</span> name], <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0639             plot(x,y);
+0640             xlabel(xlegend);
+0641         <span class="keyword">catch</span>
+0642             close(h);
+0643         <span class="keyword">end</span>
+0644         
+0645         <span class="comment">% try assigning to workspace if it's free</span>
+0646         <span class="keyword">if</span> exist(<span class="string">'x'</span>,<span class="string">'var'</span>)
+0647             assignin(<span class="string">'base'</span>,<span class="string">'x'</span>,x)
+0648         <span class="keyword">end</span>
+0649         <span class="keyword">if</span> exist(<span class="string">'y'</span>,<span class="string">'var'</span>)
+0650             assignin(<span class="string">'base'</span>,<span class="string">'y'</span>,y)
+0651         <span class="keyword">end</span>
+0652         
+0653     <span class="keyword">case</span> 1
+0654         varargout{1} = y;
+0655         
+0656     <span class="keyword">case</span> 2
+0657         varargout{1} = x;
+0658         varargout{2} = y;
+0659         
+0660     <span class="keyword">case</span> 3
+0661         varargout{1} = x;
+0662         varargout{2} = y;
+0663         varargout{3} = parameters;
+0664         
+0665     <span class="keyword">otherwise</span>
+0666         varargout{1} = x;
+0667         varargout{2} = y;
+0668 <span class="keyword">end</span>
+0669 
+0670 <span class="comment">% Plot the figure if the input has been selected</span>
+0671 <span class="keyword">if</span> nargin &gt; 0
+0672     <span class="keyword">if</span> strcmp(graph,<span class="string">'plot'</span>)
+0673         <span class="keyword">try</span>
+0674             h = figure(<span class="string">'name'</span> , [<span class="string">'SpecManRead: '</span> name], <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0675             plot(x,y);
+0676             xlabel(xlegend);
+0677         <span class="keyword">catch</span>
+0678             close(h);
+0679             disp(<span class="string">'SpecManRead: Graphing error - graph could not be displayed'</span>)
+0680         <span class="keyword">end</span>
+0681     <span class="keyword">end</span>
+0682 <span class="keyword">end</span>
+0683 
+0684 <span class="keyword">end</span>
+0685 
+0686 
+0687 <span class="comment">%%</span>
+0688 <a name="_sub1" href="#_subfunctions" class="code">function parameters = ParameterLoad (par,emptyLines,inputString,parameters,outputName)</a>
+0689 
+0690 <span class="comment">% Function to scan the parameter file for a term and output that section to</span>
+0691 <span class="comment">% parameters.outputName with each lines as a field</span>
+0692 
+0693 <span class="comment">% Raw parameters list</span>
+0694 <span class="comment">% empty lines list</span>
+0695 <span class="comment">% Input string to find ie '[general]'</span>
+0696 <span class="comment">% Output parameters structure</span>
+0697 <span class="comment">% Output field name</span>
+0698 
+0699 startline            = find(not(cellfun(<span class="string">'isempty'</span>,strfind(par,inputString))));
+0700 endLine              = find(emptyLines&gt;startline,1,<span class="string">'first'</span>);
+0701 rangeLine            = par(startline:emptyLines(endLine));
+0702 
+0703 <span class="keyword">for</span> k = 2:numel(rangeLine)-1
+0704     <span class="comment">% textscan(line,'%s = %s') wont work here if there are spaces in the</span>
+0705     <span class="comment">% answer, so the inelegant solution of strtok and trimming is used</span>
+0706     <span class="comment">% instead</span>
+0707     [m,n] = strtok(rangeLine{k},<span class="string">'='</span>);
+0708     m = strtok(m,<span class="string">' '</span>);
+0709     [arb,n] = strtok(n,<span class="string">' '</span>);
+0710     parameters.(outputName).(m) = strtrim(n);
+0711 <span class="keyword">end</span>
+0712 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -1,0 +1,215 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of errorbar_x</title>
+  <meta name="keywords" content="errorbar_x">
+  <meta name="description" content="ERRORBAR Error bar plot.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="index.html">HADDOCK</a> &gt; errorbar_x.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/HADDOCK&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>errorbar_x
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>ERRORBAR Error bar plot.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function hh = errorbar_x(x, y, l,u,symbol) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment">ERRORBAR Error bar plot.
+   ERRORBAR_X(X,Y,L,U) plots the graph of vector X vs. vector Y with 
+   error bars specified by the vectors L and U in horizontal direction.  
+   L and U contain the lower and upper error ranges for each point 
+   in X (lower = left side, upper = right side).  Each error bar is 
+   L(i) + U(i) long and is drawn a distance of U(i) from the right 
+   and L(i) from the left the points in (X,Y).  The vectors X,Y,L 
+   and U must all be the same length.  If X,Y,L and U are matrices 
+   then each column produces a separate line.
+
+   ERRORBAR_X(X,Y,E) or ERRORBAR(Y,E) plots X with error bars [X-E X+E].
+   ERRORBAR_X(...,'LineSpec') uses the color and linestyle specified by
+   the string 'LineSpec'.  See PLOT for possibilities.
+
+   H = ERRORBAR_X(...) returns a vector of line handles.
+
+   For example,
+      x = 1:10;
+      y = sin(x);
+      e = std(y)*ones(size(x));
+      errorbar_x(x,y,e)
+   draws symmetric error bars of unit standard deviation.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="HADDOCK_CLUSTERS_PROCESSING.html" class="code" title="function varargout = HADDOCK_CLUSTERS_PROCESSING(varargin)">HADDOCK_CLUSTERS_PROCESSING</a>	HADDOCK_CLUSTERS_PROCESSING takes the output of HADDOCK ana_clusters script</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function hh = errorbar_x(x, y, l,u,symbol)</a>
+0002 <span class="comment">%ERRORBAR Error bar plot.</span>
+0003 <span class="comment">%   ERRORBAR_X(X,Y,L,U) plots the graph of vector X vs. vector Y with</span>
+0004 <span class="comment">%   error bars specified by the vectors L and U in horizontal direction.</span>
+0005 <span class="comment">%   L and U contain the lower and upper error ranges for each point</span>
+0006 <span class="comment">%   in X (lower = left side, upper = right side).  Each error bar is</span>
+0007 <span class="comment">%   L(i) + U(i) long and is drawn a distance of U(i) from the right</span>
+0008 <span class="comment">%   and L(i) from the left the points in (X,Y).  The vectors X,Y,L</span>
+0009 <span class="comment">%   and U must all be the same length.  If X,Y,L and U are matrices</span>
+0010 <span class="comment">%   then each column produces a separate line.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%   ERRORBAR_X(X,Y,E) or ERRORBAR(Y,E) plots X with error bars [X-E X+E].</span>
+0013 <span class="comment">%   ERRORBAR_X(...,'LineSpec') uses the color and linestyle specified by</span>
+0014 <span class="comment">%   the string 'LineSpec'.  See PLOT for possibilities.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%   H = ERRORBAR_X(...) returns a vector of line handles.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%   For example,</span>
+0019 <span class="comment">%      x = 1:10;</span>
+0020 <span class="comment">%      y = sin(x);</span>
+0021 <span class="comment">%      e = std(y)*ones(size(x));</span>
+0022 <span class="comment">%      errorbar_x(x,y,e)</span>
+0023 <span class="comment">%   draws symmetric error bars of unit standard deviation.</span>
+0024 
+0025 <span class="comment">%   L. Shure 5-17-88, 10-1-91 B.A. Jones 4-5-93</span>
+0026 <span class="comment">%   Copyright 1984-2002 The MathWorks, Inc.</span>
+0027 <span class="comment">%   $Revision: 5.19 $  $Date: 2002/06/05 20:05:14 $</span>
+0028 
+0029 <span class="comment">%   modified for plotting error bars in a logarithmic graph by:</span>
+0030 <span class="comment">%   Goetz Huesken</span>
+0031 <span class="comment">%   e-mail: goetz.huesken(at)gmx.de</span>
+0032 <span class="comment">%   Date: 10/23/2006</span>
+0033 
+0034 
+0035 <span class="keyword">if</span> min(size(x))==1,
+0036   npt = length(x);
+0037   x = x(:);
+0038   y = y(:);
+0039     <span class="keyword">if</span> nargin &gt; 2,
+0040         <span class="keyword">if</span> ~isstr(l),  
+0041             l = l(:);
+0042         <span class="keyword">end</span>
+0043         <span class="keyword">if</span> nargin &gt; 3
+0044             <span class="keyword">if</span> ~isstr(u)
+0045                 u = u(:);
+0046             <span class="keyword">end</span>
+0047         <span class="keyword">end</span>
+0048     <span class="keyword">end</span>
+0049 <span class="keyword">else</span>
+0050   [npt,n] = size(x);
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">if</span> nargin == 3
+0054     <span class="keyword">if</span> ~isstr(l)  
+0055         u = l;
+0056         symbol = <span class="string">'-'</span>;
+0057     <span class="keyword">else</span>
+0058         symbol = l;
+0059         l = y;
+0060         u = y;
+0061         y = x;
+0062         [m,n] = size(y);
+0063         x(:) = (1:npt)'*ones(1,n);;
+0064     <span class="keyword">end</span>
+0065 <span class="keyword">end</span>
+0066 
+0067 <span class="keyword">if</span> nargin == 4
+0068     <span class="keyword">if</span> isstr(u),    
+0069         symbol = u;
+0070         u = l;
+0071     <span class="keyword">else</span>
+0072         symbol = <span class="string">'-'</span>;
+0073     <span class="keyword">end</span>
+0074 <span class="keyword">end</span>
+0075 
+0076 
+0077 <span class="keyword">if</span> nargin == 2
+0078     l = y;
+0079     u = y;
+0080     y = x;
+0081     [m,n] = size(y);
+0082     x(:) = (1:npt)'*ones(1,n);;
+0083     symbol = <span class="string">'-'</span>;
+0084 <span class="keyword">end</span>
+0085 
+0086 u = abs(u);
+0087 l = abs(l);
+0088     
+0089 <span class="keyword">if</span> isstr(x) | isstr(y) | isstr(u) | isstr(l)
+0090     error(<span class="string">'Arguments must be numeric.'</span>)
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="keyword">if</span> ~isequal(size(x),size(y)) | ~isequal(size(x),size(l)) | ~isequal(size(x),size(u)),
+0094   error(<span class="string">'The sizes of X, Y, L and U must be the same.'</span>);
+0095 <span class="keyword">end</span>
+0096 
+0097 m = size(y,1);                      <span class="comment">% modification for plotting error bars in x-direction</span>
+0098 <span class="keyword">if</span> m == 1                           <span class="comment">%</span>
+0099   tee = abs(y)/40;                  <span class="comment">%</span>
+0100 <span class="keyword">else</span>                                <span class="comment">%</span>
+0101   tee = (max(y(:))-min(y(:)))/40;   <span class="comment">%</span>
+0102 <span class="keyword">end</span>                                 <span class="comment">%</span>
+0103                                     <span class="comment">%</span>
+0104 xl = x - l;                         <span class="comment">%</span>
+0105 xr = x + u;                         <span class="comment">%</span>
+0106 ytop = y + tee;                     <span class="comment">%</span>
+0107 ybot = y - tee;                     <span class="comment">%</span>
+0108 n = size(y,2); 
+0109 
+0110 <span class="comment">% Plot graph and bars</span>
+0111 hold_state = ishold;
+0112 cax = newplot;
+0113 next = lower(get(cax,<span class="string">'NextPlot'</span>));
+0114 
+0115 <span class="comment">% build up nan-separated vector for bars</span>
+0116 xb = zeros(npt*9,n);    <span class="comment">% modification for plotting error bars in in x-direction</span>
+0117 xb(1:9:<span class="keyword">end</span>,:) = xr;     <span class="comment">%</span>
+0118 xb(2:9:<span class="keyword">end</span>,:) = xl;     <span class="comment">%</span>
+0119 xb(3:9:<span class="keyword">end</span>,:) = NaN;    <span class="comment">%</span>
+0120 xb(4:9:<span class="keyword">end</span>,:) = xr;     <span class="comment">%</span>
+0121 xb(5:9:<span class="keyword">end</span>,:) = xr;     <span class="comment">%</span>
+0122 xb(6:9:<span class="keyword">end</span>,:) = NaN;    <span class="comment">%</span>
+0123 xb(7:9:<span class="keyword">end</span>,:) = xl;     <span class="comment">%</span>
+0124 xb(8:9:<span class="keyword">end</span>,:) = xl;     <span class="comment">%</span>
+0125 xb(9:9:<span class="keyword">end</span>,:) = NaN;    <span class="comment">%</span>
+0126 
+0127 yb = zeros(npt*9,n);    <span class="comment">% modification for plotting error bars in in x-direction</span>
+0128 yb(1:9:<span class="keyword">end</span>,:) = y;      <span class="comment">%</span>
+0129 yb(2:9:<span class="keyword">end</span>,:) = y;      <span class="comment">%</span>
+0130 yb(3:9:<span class="keyword">end</span>,:) = NaN;    <span class="comment">%</span>
+0131 yb(4:9:<span class="keyword">end</span>,:) = ytop;   <span class="comment">%</span>
+0132 yb(5:9:<span class="keyword">end</span>,:) = ybot;   <span class="comment">%</span>
+0133 yb(6:9:<span class="keyword">end</span>,:) = NaN;    <span class="comment">%</span>
+0134 yb(7:9:<span class="keyword">end</span>,:) = ytop;   <span class="comment">%</span>
+0135 yb(8:9:<span class="keyword">end</span>,:) = ybot;   <span class="comment">%</span>
+0136 yb(9:9:<span class="keyword">end</span>,:) = NaN;    <span class="comment">%</span>
+0137 
+0138 [ls,col,mark,msg] = colstyle(symbol); <span class="keyword">if</span> ~isempty(msg), error(msg); <span class="keyword">end</span>
+0139 symbol = [ls mark col]; <span class="comment">% Use marker only on data part</span>
+0140 esymbol = [<span class="string">'-'</span> col]; <span class="comment">% Make sure bars are solid</span>
+0141 
+0142 h = plot(xb,yb,esymbol); hold on
+0143 h = [h;plot(x,y,symbol)]; 
+0144 
+0145 <span class="keyword">if</span> ~hold_state, hold off; <span class="keyword">end</span>
+0146 
+0147 <span class="keyword">if</span> nargout&gt;0, hh = h; <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

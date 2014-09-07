@@ -53,7 +53,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-</ul>
+<li><a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>	CV_PLOT Plotting function for cwViewer</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 <li><a href="eprViewer.html" class="code" title="function varargout = eprViewer(varargin)">eprViewer</a>	CWVIEWER Open, analyse and plot cw-EPR experiments.</li></ul>
@@ -249,7 +249,7 @@ This function is called by:
 0183 setappdata(cwview, <span class="string">'Var'</span> , Var);
 0184 
 0185 <span class="comment">% Call the plot command</span>
-0186 cv_plot;
+0186 <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0187 
 0188 
 0189 <span class="comment">% --- Executes on button press in radio_single.</span>
@@ -275,7 +275,7 @@ This function is called by:
 0209 setappdata(cwview, <span class="string">'Var'</span> , Var);
 0210 
 0211 <span class="comment">% Call plot command</span>
-0212 cv_plot;
+0212 <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0213 
 0214 
 0215 <span class="comment">% --- Executes on button press in radio_staggered.</span>
@@ -296,7 +296,7 @@ This function is called by:
 0230 Var.Slider.Visible  = <span class="string">'off'</span>;
 0231 setappdata(cwview, <span class="string">'Var'</span> , Var);
 0232 
-0233 cv_plot;
+0233 <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0234 
 0235 
 0236 <span class="comment">% Staggered options</span>
@@ -308,7 +308,7 @@ This function is called by:
 0242 hView   = getappdata(cwview,<span class="string">'hView'</span>);
 0243 
 0244 <span class="keyword">if</span> get(hView.radio_staggered ,<span class="string">'Value'</span>) == 1
-0245     cv_plot;
+0245     <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0246 <span class="keyword">end</span>
 0247 
 0248 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
@@ -331,7 +331,7 @@ This function is called by:
 0265 hView   = getappdata(cwview,<span class="string">'hView'</span>);
 0266 
 0267 <span class="keyword">if</span> get(hView.radio_staggered ,<span class="string">'Value'</span>) == 1
-0268     cv_plot;
+0268     <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0269 <span class="keyword">end</span>
 0270 
 0271 
@@ -355,7 +355,7 @@ This function is called by:
 0289 hView   = getappdata(cwview,<span class="string">'hView'</span>);
 0290 
 0291 <span class="keyword">if</span> get(hView.radio_staggered ,<span class="string">'Value'</span>) == 1
-0292     cv_plot;
+0292     <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0293 <span class="keyword">end</span>
 0294 
 0295 <span class="comment">% --- Executes on button press in checkbox_xaxis.</span>
@@ -365,7 +365,7 @@ This function is called by:
 0299 hView   = getappdata(cwview,<span class="string">'hView'</span>);
 0300 
 0301 <span class="keyword">if</span> get(hView.radio_staggered ,<span class="string">'Value'</span>) == 1
-0302     cv_plot;
+0302     <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0303 <span class="keyword">end</span>
 0304 
 0305 
@@ -404,7 +404,7 @@ This function is called by:
 0338 setappdata(cwview, <span class="string">'Var'</span> , Var);
 0339 
 0340 <span class="comment">% Call plot command</span>
-0341 cv_plot;
+0341 <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0342 
 0343 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
 0344 <a name="_sub14" href="#_subfunctions" class="code">function radio_manual_CreateFcn(hObject, eventdata, handles)</a>
@@ -429,7 +429,7 @@ This function is called by:
 0363 setappdata(cwview, <span class="string">'Var'</span> , Var);
 0364 
 0365 <span class="comment">% Call plot command</span>
-0366 cv_plot;
+0366 <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0367 
 0368 
 0369 
@@ -443,7 +443,7 @@ This function is called by:
 0377 Var    = getappdata(cwview,<span class="string">'Var'</span>);
 0378 
 0379 <span class="keyword">if</span> strcmp(Var.View.Axes_Button , <span class="string">'Manual'</span>)
-0380     cv_plot;
+0380     <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0381 <span class="keyword">end</span>
 0382 
 0383 
@@ -467,7 +467,7 @@ This function is called by:
 0401 Var    = getappdata(cwview,<span class="string">'Var'</span>);
 0402 
 0403 <span class="keyword">if</span> strcmp(Var.View.Axes_Button , <span class="string">'Manual'</span>)
-0404     cv_plot;
+0404     <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0405 <span class="keyword">end</span>
 0406 
 0407 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
@@ -490,7 +490,7 @@ This function is called by:
 0424 Var    = getappdata(cwview,<span class="string">'Var'</span>);
 0425 
 0426 <span class="keyword">if</span> strcmp(Var.View.Axes_Button , <span class="string">'Manual'</span>)
-0427     cv_plot;
+0427     <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0428 <span class="keyword">end</span>
 0429 
 0430 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
@@ -513,7 +513,7 @@ This function is called by:
 0447 Var    = getappdata(cwview,<span class="string">'Var'</span>);
 0448 
 0449 <span class="keyword">if</span> strcmp(Var.View.Axes_Button , <span class="string">'Manual'</span>)
-0450     cv_plot;
+0450     <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0451 <span class="keyword">end</span>
 0452 
 0453 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
@@ -534,18 +534,18 @@ This function is called by:
 0468 <span class="comment">% --- Executes on button press</span>
 0469 <a name="_sub24" href="#_subfunctions" class="code">function checkbox_g_Callback(hObject, eventdata, handles)</a>
 0470 
-0471 cv_plot;
+0471 <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0472 
 0473 <a name="_sub25" href="#_subfunctions" class="code">function checkbox_reference_Callback(hObject, eventdata, handles)</a>
 0474 
-0475 cv_plot;
+0475 <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0476 
 0477 <a name="_sub26" href="#_subfunctions" class="code">function edit_refg_Callback(hObject, eventdata, handles)</a>
 0478 
-0479 cv_plot;
+0479 <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0480 
 0481 <a name="_sub27" href="#_subfunctions" class="code">function edit_refFreq_Callback(hObject, eventdata, handles)</a>
-0482 cv_plot;
+0482 <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0483 
 0484 
 0485 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
@@ -638,6 +638,6 @@ This function is called by:
 0572 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
 0573     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
 0574 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

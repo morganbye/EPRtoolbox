@@ -1,0 +1,335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of AAconverter</title>
+  <meta name="keywords" content="AAconverter">
+  <meta name="description" content="AACONVERTER">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="index.html">misc</a> &gt; AAconverter.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/misc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>AAconverter
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>AACONVERTER</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function varargout = AAconverter(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> AACONVERTER 
+      AACONVERTER, is a simple tool for the obtaining of amino acid
+      sequences in either 1 letter or 3 letter code from the other.
+
+      Copy and Paste buttons are included for easy manipulation from and
+      to the clipboard.
+
+
+ See also: EPRTOOLBOX</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function AAconverter_OpeningFcn(hObject, eventdata, handles, varargin)</a></li><li><a href="#_sub2" class="code">function varargout = AAconverter_OutputFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub3" class="code">function button_1to3_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub4" class="code">function button_3to1_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub5" class="code">function edit_3letter_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub6" class="code">function edit_3letter_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub7" class="code">function edit_1letter_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub8" class="code">function edit_1letter_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub9" class="code">function button1_copy_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub10" class="code">function button1_paste_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub11" class="code">function button3_copy_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub12" class="code">function button3_paste_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub13" class="code">function c = linewrap(s, maxchars)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = AAconverter(varargin)</a>
+0002 
+0003 <span class="comment">% AACONVERTER</span>
+0004 <span class="comment">%      AACONVERTER, is a simple tool for the obtaining of amino acid</span>
+0005 <span class="comment">%      sequences in either 1 letter or 3 letter code from the other.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%      Copy and Paste buttons are included for easy manipulation from and</span>
+0008 <span class="comment">%      to the clipboard.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% See also: EPRTOOLBOX</span>
+0012 
+0013 <span class="comment">%                                        _                             _</span>
+0014 <span class="comment">%                                       | |                           | |</span>
+0015 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0016 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0017 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0018 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0019 <span class="comment">%                       __/ |                   __/ |</span>
+0020 <span class="comment">%                      |___/                   |___/</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">% M. Bye v13.09</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% v13.09 - current</span>
+0025 <span class="comment">%               Chemical Physics Department</span>
+0026 <span class="comment">%               Weizmann Institute of Science</span>
+0027 <span class="comment">%               76100 REHOVOT, Israel</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% v11.06 - v13.08</span>
+0030 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0031 <span class="comment">%               University of East Anglia</span>
+0032 <span class="comment">%               NORWICH, UK</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0035 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/cwplot</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% Last updated</span>
+0038 
+0039 <span class="comment">% Last Modified by GUIDE v2.5 15-Jun-2011 13:10:50</span>
+0040 
+0041 <span class="comment">% Begin initialization code - DO NOT EDIT</span>
+0042 gui_Singleton = 1;
+0043 gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+0044                    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+0045                    <span class="string">'gui_OpeningFcn'</span>, @<a href="#_sub1" class="code" title="subfunction AAconverter_OpeningFcn(hObject, eventdata, handles, varargin)">AAconverter_OpeningFcn</a>, <span class="keyword">...</span>
+0046                    <span class="string">'gui_OutputFcn'</span>,  @<a href="#_sub2" class="code" title="subfunction varargout = AAconverter_OutputFcn(hObject, eventdata, handles)">AAconverter_OutputFcn</a>, <span class="keyword">...</span>
+0047                    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+0048                    <span class="string">'gui_Callback'</span>,   []);
+0049 <span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+0050     gui_State.gui_Callback = str2func(varargin{1});
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="keyword">if</span> nargout
+0054     [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+0055 <span class="keyword">else</span>
+0056     gui_mainfcn(gui_State, varargin{:});
+0057 <span class="keyword">end</span>
+0058 <span class="comment">% End initialization code - DO NOT EDIT</span>
+0059 
+0060 
+0061 <span class="comment">% --- Executes just before AAconverter is made visible.</span>
+0062 <a name="_sub1" href="#_subfunctions" class="code">function AAconverter_OpeningFcn(hObject, eventdata, handles, varargin)</a>
+0063 
+0064 <span class="comment">% Choose default command line output for AAconverter</span>
+0065 handles.output = hObject;
+0066 set(handles.edit_1letter,<span class="string">'Max'</span>,2)
+0067 set(handles.edit_3letter,<span class="string">'Max'</span>,2)
+0068 
+0069 <span class="comment">% Update handles structure</span>
+0070 guidata(hObject, handles);
+0071 
+0072 <span class="comment">% UIWAIT makes AAconverter wait for user response (see UIRESUME)</span>
+0073 <span class="comment">% uiwait(handles.figure1);</span>
+0074 
+0075 
+0076 <span class="comment">% --- Outputs from this function are returned to the command line.</span>
+0077 <a name="_sub2" href="#_subfunctions" class="code">function varargout = AAconverter_OutputFcn(hObject, eventdata, handles) </a>
+0078 
+0079 varargout{1} = handles.output;
+0080 
+0081 
+0082 <span class="comment">% --- Executes on button press in button_1to3.</span>
+0083 <a name="_sub3" href="#_subfunctions" class="code">function button_1to3_Callback(hObject, eventdata, handles)</a>
+0084 
+0085 data = get(handles.edit_1letter);
+0086 
+0087 <span class="comment">% Convert to numbers</span>
+0088 data.String = regexprep(data.String,<span class="string">'A'</span>,<span class="string">' 1 '</span>,<span class="string">'ignorecase'</span>);
+0089 data.String = regexprep(data.String,<span class="string">'C'</span>,<span class="string">' 2 '</span>,<span class="string">'ignorecase'</span>);
+0090 data.String = regexprep(data.String,<span class="string">'D'</span>,<span class="string">' 3 '</span>,<span class="string">'ignorecase'</span>);
+0091 data.String = regexprep(data.String,<span class="string">'E'</span>,<span class="string">' 4 '</span>,<span class="string">'ignorecase'</span>);
+0092 data.String = regexprep(data.String,<span class="string">'F'</span>,<span class="string">' 5 '</span>,<span class="string">'ignorecase'</span>);
+0093 data.String = regexprep(data.String,<span class="string">'G'</span>,<span class="string">' 6 '</span>,<span class="string">'ignorecase'</span>);
+0094 data.String = regexprep(data.String,<span class="string">'H'</span>,<span class="string">' 7 '</span>,<span class="string">'ignorecase'</span>);
+0095 data.String = regexprep(data.String,<span class="string">'I'</span>,<span class="string">' 8 '</span>,<span class="string">'ignorecase'</span>);
+0096 data.String = regexprep(data.String,<span class="string">'K'</span>,<span class="string">' 9 '</span>,<span class="string">'ignorecase'</span>);
+0097 data.String = regexprep(data.String,<span class="string">'L'</span>,<span class="string">' 10 '</span>,<span class="string">'ignorecase'</span>);
+0098 data.String = regexprep(data.String,<span class="string">'M'</span>,<span class="string">' 11 '</span>,<span class="string">'ignorecase'</span>);
+0099 data.String = regexprep(data.String,<span class="string">'N'</span>,<span class="string">' 12 '</span>,<span class="string">'ignorecase'</span>);
+0100 data.String = regexprep(data.String,<span class="string">'P'</span>,<span class="string">' 13 '</span>,<span class="string">'ignorecase'</span>);
+0101 data.String = regexprep(data.String,<span class="string">'Q'</span>,<span class="string">' 14 '</span>,<span class="string">'ignorecase'</span>);
+0102 data.String = regexprep(data.String,<span class="string">'R'</span>,<span class="string">' 15 '</span>,<span class="string">'ignorecase'</span>);
+0103 data.String = regexprep(data.String,<span class="string">'S'</span>,<span class="string">' 16 '</span>,<span class="string">'ignorecase'</span>);
+0104 data.String = regexprep(data.String,<span class="string">'T'</span>,<span class="string">' 17 '</span>,<span class="string">'ignorecase'</span>);
+0105 data.String = regexprep(data.String,<span class="string">'V'</span>,<span class="string">' 18 '</span>,<span class="string">'ignorecase'</span>);
+0106 data.String = regexprep(data.String,<span class="string">'W'</span>,<span class="string">' 19 '</span>,<span class="string">'ignorecase'</span>);
+0107 data.String = regexprep(data.String,<span class="string">'Y'</span>,<span class="string">' 20 '</span>,<span class="string">'ignorecase'</span>);
+0108 
+0109 data.String = regexprep(data.String,<span class="string">' 1 '</span>,<span class="string">' ALA '</span>,<span class="string">'ignorecase'</span>);
+0110 data.String = regexprep(data.String,<span class="string">' 2 '</span>,<span class="string">' CYS '</span>,<span class="string">'ignorecase'</span>);
+0111 data.String = regexprep(data.String,<span class="string">' 3 '</span>,<span class="string">' ASP '</span>,<span class="string">'ignorecase'</span>);
+0112 data.String = regexprep(data.String,<span class="string">' 4 '</span>,<span class="string">' GLU '</span>,<span class="string">'ignorecase'</span>);
+0113 data.String = regexprep(data.String,<span class="string">' 5 '</span>,<span class="string">' PHE '</span>,<span class="string">'ignorecase'</span>);
+0114 data.String = regexprep(data.String,<span class="string">' 6 '</span>,<span class="string">' GLY '</span>,<span class="string">'ignorecase'</span>);
+0115 data.String = regexprep(data.String,<span class="string">' 7 '</span>,<span class="string">' HIS '</span>,<span class="string">'ignorecase'</span>);
+0116 data.String = regexprep(data.String,<span class="string">' 8 '</span>,<span class="string">' ILE '</span>,<span class="string">'ignorecase'</span>);
+0117 data.String = regexprep(data.String,<span class="string">' 9 '</span>,<span class="string">' LYS '</span>,<span class="string">'ignorecase'</span>);
+0118 data.String = regexprep(data.String,<span class="string">' 10 '</span>,<span class="string">' LEU '</span>,<span class="string">'ignorecase'</span>);
+0119 data.String = regexprep(data.String,<span class="string">' 11 '</span>,<span class="string">' MET '</span>,<span class="string">'ignorecase'</span>);
+0120 data.String = regexprep(data.String,<span class="string">' 12 '</span>,<span class="string">' ASN '</span>,<span class="string">'ignorecase'</span>);
+0121 data.String = regexprep(data.String,<span class="string">' 13 '</span>,<span class="string">' PRO '</span>,<span class="string">'ignorecase'</span>);
+0122 data.String = regexprep(data.String,<span class="string">' 14 '</span>,<span class="string">' GLN '</span>,<span class="string">'ignorecase'</span>);
+0123 data.String = regexprep(data.String,<span class="string">' 15 '</span>,<span class="string">' ARG '</span>,<span class="string">'ignorecase'</span>);
+0124 data.String = regexprep(data.String,<span class="string">' 16 '</span>,<span class="string">' SER '</span>,<span class="string">'ignorecase'</span>);
+0125 data.String = regexprep(data.String,<span class="string">' 17 '</span>,<span class="string">' THR '</span>,<span class="string">'ignorecase'</span>);
+0126 data.String = regexprep(data.String,<span class="string">' 18 '</span>,<span class="string">' VAL '</span>,<span class="string">'ignorecase'</span>);
+0127 data.String = regexprep(data.String,<span class="string">' 19 '</span>,<span class="string">' TRP '</span>,<span class="string">'ignorecase'</span>);
+0128 data.String = regexprep(data.String,<span class="string">' 20 '</span>,<span class="string">' TYR '</span>,<span class="string">'ignorecase'</span>);
+0129 
+0130 <span class="comment">% Reformat for ouput</span>
+0131 data.String = regexprep(data.String,<span class="string">'[^\w'']'</span>,<span class="string">''</span>);                                    <span class="comment">% Remove white space</span>
+0132 data.String_formatted = sprintf(<span class="string">'%c%c%c %c%c%c %c%c%c %c%c%c %c%c%c   '</span>,data.String); <span class="comment">% Format</span>
+0133 data.String_lines = <a href="#_sub13" class="code" title="subfunction c = linewrap(s, maxchars)">linewrap</a>(data.String_formatted,45);                               <span class="comment">% Linewrap</span>
+0134 out = textwrap(handles.edit_3letter,data.String_lines);                               <span class="comment">% Textwrap</span>
+0135 set(handles.edit_3letter,<span class="string">'String'</span>,out);                                               <span class="comment">% Update display</span>
+0136 
+0137 <span class="comment">% Reformat the input window into nice format</span>
+0138 reformat = get(handles.edit_1letter);
+0139 reformat.String = regexprep(reformat.String,<span class="string">'[^\w'']'</span>,<span class="string">''</span>);
+0140 reformat.String_formatted = sprintf(<span class="string">'%c%c%c%c%c%c%c%c%c%c '</span>,reformat.String);
+0141 reformat.String_lines = <a href="#_sub13" class="code" title="subfunction c = linewrap(s, maxchars)">linewrap</a>(reformat.String_formatted,45);
+0142 out = textwrap(handles.edit_1letter,reformat.String_lines);
+0143 set(handles.edit_1letter,<span class="string">'String'</span>,out);
+0144 
+0145 
+0146 
+0147 
+0148 <span class="comment">% --- Executes on button press in button_3to1.</span>
+0149 <a name="_sub4" href="#_subfunctions" class="code">function button_3to1_Callback(hObject, eventdata, handles)</a>
+0150 <span class="comment">% hObject    handle to button_3to1 (see GCBO)</span>
+0151 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0152 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0153 
+0154 <span class="keyword">if</span> strcmp(get(handles.edit_3letter,<span class="string">'String'</span>),<span class="string">'Paste in amino acid chain'</span>) == 0
+0155     
+0156     data = get(handles.edit_3letter);
+0157     
+0158     data.String = regexprep(data.String,<span class="string">'ALA'</span>,<span class="string">'A'</span>,<span class="string">'ignorecase'</span>);
+0159     data.String = regexprep(data.String,<span class="string">'CYS'</span>,<span class="string">'C'</span>,<span class="string">'ignorecase'</span>);
+0160     data.String = regexprep(data.String,<span class="string">'ASP'</span>,<span class="string">'D'</span>,<span class="string">'ignorecase'</span>);
+0161     data.String = regexprep(data.String,<span class="string">'GLU'</span>,<span class="string">'E'</span>,<span class="string">'ignorecase'</span>);
+0162     data.String = regexprep(data.String,<span class="string">'PHE'</span>,<span class="string">'F'</span>,<span class="string">'ignorecase'</span>);
+0163     data.String = regexprep(data.String,<span class="string">'GLY'</span>,<span class="string">'G'</span>,<span class="string">'ignorecase'</span>);
+0164     data.String = regexprep(data.String,<span class="string">'HIS'</span>,<span class="string">'H'</span>,<span class="string">'ignorecase'</span>);
+0165     data.String = regexprep(data.String,<span class="string">'ILE'</span>,<span class="string">'I'</span>,<span class="string">'ignorecase'</span>);
+0166     data.String = regexprep(data.String,<span class="string">'LYS'</span>,<span class="string">'K'</span>,<span class="string">'ignorecase'</span>);
+0167     data.String = regexprep(data.String,<span class="string">'LEU'</span>,<span class="string">'L'</span>,<span class="string">'ignorecase'</span>);
+0168     data.String = regexprep(data.String,<span class="string">'MET'</span>,<span class="string">'M'</span>,<span class="string">'ignorecase'</span>);
+0169     data.String = regexprep(data.String,<span class="string">'ASN'</span>,<span class="string">'N'</span>,<span class="string">'ignorecase'</span>);
+0170     data.String = regexprep(data.String,<span class="string">'PRO'</span>,<span class="string">'P'</span>,<span class="string">'ignorecase'</span>);
+0171     data.String = regexprep(data.String,<span class="string">'GLN'</span>,<span class="string">'Q'</span>,<span class="string">'ignorecase'</span>);
+0172     data.String = regexprep(data.String,<span class="string">'ARG'</span>,<span class="string">'R'</span>,<span class="string">'ignorecase'</span>);
+0173     data.String = regexprep(data.String,<span class="string">'SER'</span>,<span class="string">'S'</span>,<span class="string">'ignorecase'</span>);
+0174     data.String = regexprep(data.String,<span class="string">'THR'</span>,<span class="string">'T'</span>,<span class="string">'ignorecase'</span>);
+0175     data.String = regexprep(data.String,<span class="string">'VAL'</span>,<span class="string">'V'</span>,<span class="string">'ignorecase'</span>);
+0176     data.String = regexprep(data.String,<span class="string">'TRP'</span>,<span class="string">'W'</span>,<span class="string">'ignorecase'</span>);
+0177     data.String = regexprep(data.String,<span class="string">'TYR'</span>,<span class="string">'Y'</span>,<span class="string">'ignorecase'</span>);
+0178     
+0179     data.String = regexprep(data.String,<span class="string">'[^\w'']'</span>,<span class="string">''</span>);
+0180     data.String = sprintf(<span class="string">'%c%c%c%c%c%c%c%c%c%c '</span>,data.String{:});
+0181     data.String = <a href="#_sub13" class="code" title="subfunction c = linewrap(s, maxchars)">linewrap</a>(data.String,45);
+0182     out1 = textwrap(handles.edit_1letter,data.String);
+0183     set(handles.edit_1letter,<span class="string">'String'</span>,out1);
+0184     
+0185     
+0186     <span class="comment">% Reformat the input window into nice format</span>
+0187     reformat = get(handles.edit_3letter);
+0188     reformat.String = regexprep(reformat.String,<span class="string">'[^\w'']'</span>,<span class="string">''</span>);
+0189     reformat.String = sprintf(<span class="string">'%c%c%c %c%c%c %c%c%c %c%c%c %c%c%c   '</span>,reformat.String{:});
+0190     reformat.String = <a href="#_sub13" class="code" title="subfunction c = linewrap(s, maxchars)">linewrap</a>(reformat.String,45);
+0191     out3 = textwrap(handles.edit_3letter,reformat.String);
+0192     set(handles.edit_3letter,<span class="string">'String'</span>,out3);
+0193     
+0194 <span class="keyword">else</span>
+0195     warndlg(<span class="string">'No code has been input'</span>);
+0196 <span class="keyword">end</span>
+0197 
+0198 
+0199 
+0200 <a name="_sub5" href="#_subfunctions" class="code">function edit_3letter_Callback(hObject, eventdata, handles)</a>
+0201 
+0202 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0203 <a name="_sub6" href="#_subfunctions" class="code">function edit_3letter_CreateFcn(hObject, eventdata, handles)</a>
+0204 
+0205 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0206     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0207 <span class="keyword">end</span>
+0208 
+0209 <a name="_sub7" href="#_subfunctions" class="code">function edit_1letter_Callback(hObject, eventdata, handles)</a>
+0210 
+0211 
+0212 
+0213 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0214 <a name="_sub8" href="#_subfunctions" class="code">function edit_1letter_CreateFcn(hObject, eventdata, handles)</a>
+0215 
+0216 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0217     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0218 <span class="keyword">end</span>
+0219 
+0220 
+0221 
+0222 
+0223 <span class="comment">% --- Executes on button press in button1_copy.</span>
+0224 <a name="_sub9" href="#_subfunctions" class="code">function button1_copy_Callback(hObject, eventdata, handles)</a>
+0225 
+0226 data = get(handles.edit_1letter);
+0227 output = cell2mat(reshape(data.String,1,[]));
+0228 clipboard(<span class="string">'copy'</span>,output);
+0229 
+0230 
+0231 <span class="comment">% --- Executes on button press in button1_paste.</span>
+0232 <a name="_sub10" href="#_subfunctions" class="code">function button1_paste_Callback(hObject, eventdata, handles)</a>
+0233 
+0234 data = get(handles.edit_1letter);
+0235 input = clipboard(<span class="string">'paste'</span>);
+0236 data.String = input;
+0237 set(handles.edit_1letter,<span class="string">'String'</span>,data.String);
+0238 
+0239 
+0240 <span class="comment">% --- Executes on button press in button3_copy.</span>
+0241 <a name="_sub11" href="#_subfunctions" class="code">function button3_copy_Callback(hObject, eventdata, handles)</a>
+0242 
+0243 data = get(handles.edit_3letter);
+0244 output = cell2mat(reshape(data.String,1,[]));
+0245 clipboard(<span class="string">'copy'</span>,output);
+0246 
+0247 <span class="comment">% --- Executes on button press in button3_paste.</span>
+0248 <a name="_sub12" href="#_subfunctions" class="code">function button3_paste_Callback(hObject, eventdata, handles)</a>
+0249 
+0250 data = get(handles.edit_3letter);
+0251 input = clipboard(<span class="string">'paste'</span>);
+0252 data.String = input;
+0253 set(handles.edit_3letter,<span class="string">'String'</span>,data.String);
+0254 
+0255 
+0256 
+0257 
+0258 
+0259 
+0260 
+0261 
+0262 <a name="_sub13" href="#_subfunctions" class="code">function c = linewrap(s, maxchars)</a>
+0263 
+0264 <span class="keyword">if</span> nargin &lt; 2
+0265    <span class="comment">% Default value for second input argument.</span>
+0266    maxchars = 80;
+0267 <span class="keyword">end</span>
+0268 
+0269 s = strtrim(s);
+0270 
+0271 exp = sprintf(<span class="string">'(\\S\\S{%d,}|.{1,%d})(?:\\s+|$)'</span>, maxchars, maxchars);
+0272 
+0273 tokens = regexp(s, exp, <span class="string">'tokens'</span>).';
+0274 
+0275 get_contents = @(f) f{1};
+0276 c = cellfun(get_contents, tokens, <span class="string">'UniformOutput'</span>, false);
+0277 
+0278 c = deblank(c);</pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

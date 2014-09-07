@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of cwnorm</title>
+  <meta name="keywords" content="cwnorm">
+  <meta name="description" content="CWNORM  Normalises spectra between an upper and lower limit.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="index.html">cw</a> &gt; cwnorm.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/cw&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>cwnorm
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>CWNORM  Normalises spectra between an upper and lower limit.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function y = cwnorm(y,varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> CWNORM  Normalises spectra between an upper and lower limit.
+
+ By default CWNORM will normalise data between -1 and 1. However, with an
+ additional input argument we can specify any number range or we can use
+ the string 'true' to give a true normalisation between 0 and 1.
+ 
+ Syntax:
+       CWNORM (y)
+       CWNORM (y , about)
+       y = CWNORM ...
+ 
+ Inputs:
+       input1          - the array / spectra to normalise
+       input2          - about is the +/- about zero
+                           ie. 100 for a range of -100 to +100
+                       - or the string 'true'
+                           for normalisation between 0 and 1
+
+ Outputs:
+       output1         - the transformed array
+
+ By default CWNORM normalises between -1 and 1 unless &quot;about&quot; is stated
+
+ Example:
+
+ y = cwnorm(y,100)
+       normalise array y between -100 and +100 back into array y
+
+ More examples available at:
+ http://morganbye.net/eprtoolbox/cwnorm
+
+ Other m-files required:
+       n/a
+
+ Subfunctions:         none
+
+ MAT-files required:   none
+
+ See also: <a href="cwplot.html" class="code" title="function cwplot(x,y,varargin)">CWPLOT</a> <a href="cwzero.html" class="code" title="function y = cwzero(y)">CWZERO</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function y = cwnorm(y,varargin)</a>
+0002 
+0003 <span class="comment">% CWNORM  Normalises spectra between an upper and lower limit.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% By default CWNORM will normalise data between -1 and 1. However, with an</span>
+0006 <span class="comment">% additional input argument we can specify any number range or we can use</span>
+0007 <span class="comment">% the string 'true' to give a true normalisation between 0 and 1.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Syntax:</span>
+0010 <span class="comment">%       CWNORM (y)</span>
+0011 <span class="comment">%       CWNORM (y , about)</span>
+0012 <span class="comment">%       y = CWNORM ...</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Inputs:</span>
+0015 <span class="comment">%       input1          - the array / spectra to normalise</span>
+0016 <span class="comment">%       input2          - about is the +/- about zero</span>
+0017 <span class="comment">%                           ie. 100 for a range of -100 to +100</span>
+0018 <span class="comment">%                       - or the string 'true'</span>
+0019 <span class="comment">%                           for normalisation between 0 and 1</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Outputs:</span>
+0022 <span class="comment">%       output1         - the transformed array</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% By default CWNORM normalises between -1 and 1 unless &quot;about&quot; is stated</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Example:</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% y = cwnorm(y,100)</span>
+0029 <span class="comment">%       normalise array y between -100 and +100 back into array y</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% More examples available at:</span>
+0032 <span class="comment">% http://morganbye.net/eprtoolbox/cwnorm</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% Other m-files required:</span>
+0035 <span class="comment">%       n/a</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% Subfunctions:         none</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% MAT-files required:   none</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">% See also: CWPLOT CWZERO</span>
+0042 
+0043 
+0044 <span class="comment">%                                        _                             _</span>
+0045 <span class="comment">%                                       | |                           | |</span>
+0046 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0047 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0048 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0049 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0050 <span class="comment">%                       __/ |                   __/ |</span>
+0051 <span class="comment">%                      |___/                   |___/</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">% M. Bye v13.09</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% v13.09 - current</span>
+0056 <span class="comment">%               Chemical Physics Department</span>
+0057 <span class="comment">%               Weizmann Institute of Science</span>
+0058 <span class="comment">%               76100 REHOVOT, Israel</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">% v11.06 - v13.08</span>
+0061 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0062 <span class="comment">%               University of East Anglia</span>
+0063 <span class="comment">%               NORWICH, UK</span>
+0064 <span class="comment">%</span>
+0065 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0066 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/cwplot</span>
+0067 <span class="comment">%</span>
+0068 <span class="comment">% Last updated  07-December-2012</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% Version history:</span>
+0071 <span class="comment">% Dec 2012      &gt; Update for quicker size determination, also better</span>
+0072 <span class="comment">%                   compatibility with Windows systems</span>
+0073 <span class="comment">%               &gt; Switch from ifs to Switch statements</span>
+0074 <span class="comment">%               &gt; Addition of 'true' argument for 0 to 1 normalisation</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">% Oct 2011      &gt; Reworking of the calculation to work with arrays with</span>
+0077 <span class="comment">%                   more than one column.</span>
+0078 
+0079 
+0080 <span class="keyword">switch</span> nargin
+0081     
+0082     <span class="keyword">case</span> 0
+0083         warndlg(<span class="string">'No array has been selected to normalise'</span>,<span class="string">'Error:cwnorm'</span>);
+0084     
+0085     <span class="keyword">case</span> 1
+0086         about = 1;
+0087         
+0088     <span class="keyword">case</span> 2
+0089         about = varargin{1};
+0090         
+0091     <span class="keyword">otherwise</span>
+0092         warndlg(<span class="string">'Too many inputs for cwnorm.'</span>,<span class="string">'Error:cwnorm'</span>);
+0093 <span class="keyword">end</span>
+0094 
+0095 c = size(y,2);
+0096 
+0097 <span class="comment">% Singe column data</span>
+0098 <span class="keyword">switch</span> c
+0099     <span class="keyword">case</span> 1
+0100         
+0101         <span class="comment">% Set min and max values</span>
+0102         max_y = max(y);
+0103         min_y = min(y);
+0104         
+0105         <span class="comment">% Do the normalisation</span>
+0106         <span class="keyword">if</span> ischar(about) &amp;&amp; strcmp(<span class="string">'true'</span>,about)
+0107             y = (y - min_y)/(max_y - min_y);
+0108         <span class="keyword">else</span>
+0109             <span class="comment">% Non-true normalisation requires a scaling factor at end</span>
+0110             y = (( y - min_y)/(max_y - min_y) - 0.5) *2*about;
+0111         <span class="keyword">end</span>
+0112         
+0113         
+0114         
+0115         <span class="comment">% Multi column data</span>
+0116     <span class="keyword">otherwise</span>
+0117         
+0118         <span class="keyword">if</span> ischar(about) &amp;&amp; strcmp(<span class="string">'true'</span>,about)
+0119                        
+0120             <span class="keyword">for</span> k = 1:c
+0121                 max_y = max(y(:,k));
+0122                 min_y = min(y(:,k));
+0123                 y(:,k) = (y(:,k) - min_y)/(max_y - min_y);
+0124             <span class="keyword">end</span>
+0125             
+0126         <span class="keyword">else</span>
+0127             
+0128             <span class="keyword">for</span> k = 1:c
+0129                 max_y = max(y(:,k));
+0130                 min_y = min(y(:,k));
+0131                 y(:,k) = (( y(:,k) - min_y)/(max_y - min_y) - 0.5) *2*about;
+0132             <span class="keyword">end</span>
+0133             
+0134         <span class="keyword">end</span>
+0135 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

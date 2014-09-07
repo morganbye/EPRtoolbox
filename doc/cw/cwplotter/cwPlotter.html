@@ -59,7 +59,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-</ul>
+<li><a href="../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
@@ -686,7 +686,7 @@ This function is called by:
 0614 
 0615 clear <span class="keyword">global</span> x y info
 0616 
-0617 [x,y,info] = BrukerRead;
+0617 [x,y,info] = <a href="../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>;
 0618 
 0619 <span class="comment">% set handles for data</span>
 0620 warning off
@@ -737,7 +737,7 @@ This function is called by:
 0665     waitbar(k / numel(dtaFiles),progress,sprintf(<span class="string">'Loading file %d of %d'</span>,k,numel(dtaFiles)));
 0666     
 0667     file = [folder,<span class="string">'/'</span>,(dtaFiles(k).name)];
-0668     [x_,y_,z_] = BrukerRead(file);
+0668     [x_,y_,z_] = <a href="../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(file);
 0669     x(:,k) = x_(:);
 0670     y(:,k) = y_(:);
 0671     info(k) = z_(:);
@@ -860,7 +860,7 @@ This function is called by:
 0788 
 0789 clear <span class="keyword">global</span> x y info
 0790 
-0791 [x,y,info] = BrukerRead;
+0791 [x,y,info] = <a href="../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>;
 0792 
 0793 <span class="comment">% set handles for data</span>
 0794 warning off
@@ -908,7 +908,7 @@ This function is called by:
 0836     waitbar(k / numel(dtaFiles),progress,sprintf(<span class="string">'Loading file %d of %d'</span>,k,numel(dtaFiles)));
 0837     
 0838     file = [folder,<span class="string">'/'</span>,(dtaFiles(k).name)];
-0839     [x_,y_,z_] = BrukerRead(file);
+0839     [x_,y_,z_] = <a href="../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(file);
 0840     x(:,k) = x_(:);
 0841     y(:,k) = y_(:);
 0842     info(k) = z_(:);
@@ -1326,6 +1326,6 @@ This function is called by:
 1254 <span class="comment">% adjusts the new figure accordingly</span>
 1255 set(newFig,<span class="string">'Units'</span>,axes_units);
 1256 set(newFig,<span class="string">'Position'</span>,[15 5 axes_pos(3)+30 axes_pos(4)+10]);</pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

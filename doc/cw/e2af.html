@@ -89,7 +89,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-</ul>
+<li><a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 </ul>
@@ -332,7 +332,7 @@ This function is called by:
 0232         waitbar((k/noFiles),h,sprintf(<span class="string">'Converting file %d of %d'</span>,k,noFiles));
 0233                 
 0234         <span class="comment">% Load the file</span>
-0235         [x , y , info] = BrukerRead([folder <span class="string">'/'</span> dtaFiles(k).name]);
+0235         [x , y , info] = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([folder <span class="string">'/'</span> dtaFiles(k).name]);
 0236               
 0237         <span class="comment">% Create file name</span>
 0238         file = [outAddress <span class="string">'/'</span> regexprep(dtaFiles(k).name,<span class="string">'.DTA'</span>,extension)];
@@ -401,6 +401,6 @@ This function is called by:
 0301     error(<span class="string">'e2af: No files could be found in that folder'</span>)
 0302 <span class="keyword">end</span>
 0303</pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

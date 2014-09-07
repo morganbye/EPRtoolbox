@@ -1,0 +1,395 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DAreporter</title>
+  <meta name="keywords" content="DAreporter">
+  <meta name="description" content="DAREPORTER take a set of DEER experiments which have been analysed with">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">pulsed</a> &gt; DAreporter.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for pulsed&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>DAreporter
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>DAREPORTER take a set of DEER experiments which have been analysed with</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function DAreporter(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DAREPORTER take a set of DEER experiments which have been analysed with
+   DeerAnalysis and plot them quickly
+
+ DAREPORTER ()
+
+ Inputs:
+    input1     - the raw spectrometer file
+    input2     - the DeerAnalysis results
+
+ Outputs:
+    output1    - a tex file for compilation of report
+    output2    - several .eps files for the figures
+ 
+ Example:
+
+
+ Other m-files required:   none
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: EPRTOOLBOX CWPLOTTER</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the</li><li><a href="../misc/SpecManRead.html" class="code" title="function varargout = SpecManRead(varargin)">SpecManRead</a>	SPECMANREAD Open SpecMan format data files</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [fileInfo] = drawFigure(x,y,fileInfo)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function DAreporter(varargin)</a>
+0002 
+0003 <span class="comment">% DAREPORTER take a set of DEER experiments which have been analysed with</span>
+0004 <span class="comment">%   DeerAnalysis and plot them quickly</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% DAREPORTER ()</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Inputs:</span>
+0009 <span class="comment">%    input1     - the raw spectrometer file</span>
+0010 <span class="comment">%    input2     - the DeerAnalysis results</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Outputs:</span>
+0013 <span class="comment">%    output1    - a tex file for compilation of report</span>
+0014 <span class="comment">%    output2    - several .eps files for the figures</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Example:</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Other m-files required:   none</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Subfunctions:             none</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% MAT-files required:       none</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% See also: EPRTOOLBOX CWPLOTTER</span>
+0027 
+0028 <span class="comment">%                                        _                             _</span>
+0029 <span class="comment">%                                       | |                           | |</span>
+0030 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0031 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0032 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0033 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0034 <span class="comment">%                       __/ |                   __/ |</span>
+0035 <span class="comment">%                      |___/                   |___/</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% M. Bye v14.06</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% v13.09 - current</span>
+0040 <span class="comment">%               Chemical Physics Department</span>
+0041 <span class="comment">%               Weizmann Institute of Science</span>
+0042 <span class="comment">%               76100 REHOVOT, Israel</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0045 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% Last updated  06-May-2013</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% Version history:</span>
+0050 <span class="comment">% May 14        Initial release</span>
+0051 
+0052 <span class="comment">%% GUI get data file</span>
+0053 
+0054 [spec.file , spec.directory] = uigetfile({<span class="keyword">...</span>
+0055     <span class="string">'*.d01'</span>             ,<span class="string">'SpecMan File (*.d01)'</span>; <span class="keyword">...</span>
+0056     <span class="string">'*.DTA;*.spc'</span>       ,<span class="string">'Bruker File (*.DTA,*.spc)'</span>; <span class="keyword">...</span>
+0057     <span class="string">'*.txt;*.dat;*.asc'</span> ,<span class="string">'ASCII file (*.txt,*.dat,*.asc)'</span>; <span class="keyword">...</span>
+0058     <span class="string">'*.txt;*.dat'</span>       ,<span class="string">'DeerAnalysis (*.txt,*.dat)'</span>},<span class="keyword">...</span>
+0059     <span class="string">'Load a DEER file'</span>);
+0060 
+0061 <span class="comment">% if user cancels command nothing happens</span>
+0062 <span class="keyword">if</span> isequal(spec.file,0)
+0063     <span class="keyword">return</span>
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="comment">% File name/path manipulation</span>
+0067 spec.address = [spec.directory,spec.file];
+0068 [spec.dir, spec.name, spec.extension] = fileparts(spec.address);
+0069 
+0070 <span class="comment">%% GUI get DeerAnalysis file</span>
+0071 [da.file , da.directory] = uigetfile({<span class="string">'*_distr.dat'</span>,<span class="string">'DeerAnalysis distance distribution file (*_distr.dat)'</span>; <span class="keyword">...</span>
+0072     <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="keyword">...</span>
+0073     <span class="string">'Load DeerAnalysis distance distribution file'</span>);
+0074 
+0075 <span class="comment">% if user cancels command nothing happens</span>
+0076 <span class="keyword">if</span> isequal(da.file,0)
+0077     <span class="keyword">return</span>
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="comment">% File name/path manipulation</span>
+0081 da.address = [da.directory,da.file];
+0082 [da.dir, da.name, da.extension] = fileparts(da.address);
+0083 
+0084 
+0085 <span class="comment">%% Data file manipulation</span>
+0086 
+0087 infoLoaded = false;
+0088 
+0089 <span class="keyword">switch</span> spec.extension
+0090   
+0091 <span class="comment">% Bruker</span>
+0092 <span class="comment">% ========================================================================</span>
+0093     <span class="keyword">case</span> <span class="string">'.DTA'</span>
+0094        [x,y,info] = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(spec.address);
+0095        
+0096        infoLoaded = true;
+0097  
+0098         <span class="keyword">switch</span> info.DSRC
+0099             <span class="comment">% Normal experiment</span>
+0100             <span class="keyword">case</span> <span class="string">'EXP'</span>
+0101                 <span class="comment">% Do nothing</span>
+0102             <span class="comment">% CPMG experiment</span>
+0103             <span class="keyword">case</span> <span class="string">'MAN'</span>
+0104 
+0105         <span class="keyword">end</span>
+0106     
+0107 <span class="comment">% SpecMan</span>
+0108 <span class="comment">% ========================================================================</span>
+0109     <span class="keyword">case</span> <span class="string">'.d01'</span>
+0110         [x,y,info] = <a href="../misc/SpecManRead.html" class="code" title="function varargout = SpecManRead(varargin)">SpecManRead</a>(spec.address);
+0111         
+0112         infoLoaded = true;
+0113         
+0114         <span class="keyword">switch</span> isfield(info.Sweep,<span class="string">'transient'</span>)
+0115             <span class="comment">% Normal experiment</span>
+0116             <span class="keyword">case</span> 0
+0117                
+0118             <span class="comment">% CPMG experiment</span>
+0119             <span class="keyword">case</span> 1
+0120                 
+0121         <span class="keyword">end</span>
+0122 
+0123 <span class="comment">% ASCII</span>
+0124 <span class="comment">% ========================================================================</span>
+0125     <span class="keyword">otherwise</span>
+0126        <span class="comment">% Do nothing</span>
+0127 <span class="keyword">end</span>
+0128 
+0129 <span class="comment">%% DeerAnalysis Manipulation</span>
+0130 
+0131 daLoaded = false;
+0132 
+0133 <span class="comment">% File name/path manipulation</span>
+0134 da.root = regexprep(da.file,<span class="string">'_distr.dat'</span>,<span class="string">''</span>);
+0135 
+0136 <span class="comment">% Check to see if DA files exist</span>
+0137 <span class="keyword">if</span> exist([da.root <span class="string">'_bckg.dat'</span>],<span class="string">'file'</span>)
+0138     
+0139     <span class="comment">% Check that all DA files are present</span>
+0140     bckg_file = [da.root <span class="string">'_bckg.dat'</span>];
+0141     
+0142     <span class="keyword">if</span> ~exist(bckg_file,<span class="string">'file'</span>),
+0143         error(<span class="string">'File %s missing, load aborted'</span>,<span class="keyword">...</span>
+0144             [da.name <span class="string">'_bckg.dat'</span>])
+0145         <span class="keyword">return</span>
+0146     <span class="keyword">end</span>
+0147     
+0148     fit_file  = [da.dir <span class="string">'/'</span> da.root <span class="string">'_fit.dat'</span>];
+0149     
+0150     <span class="keyword">if</span> ~exist(fit_file,<span class="string">'file'</span>),
+0151         error(<span class="string">'File %s missing, load aborted'</span>,<span class="keyword">...</span>
+0152             [da.name <span class="string">'_fit.dat'</span>])
+0153         <span class="keyword">return</span>
+0154     <span class="keyword">end</span>
+0155     
+0156     distr_file  = [da.dir <span class="string">'/'</span> da.root <span class="string">'_distr.dat'</span>];
+0157     
+0158     <span class="keyword">if</span> ~exist(distr_file,<span class="string">'file'</span>),
+0159         error(<span class="string">'File %s missing, load aborted'</span>,<span class="keyword">...</span>
+0160             [da.name <span class="string">'_distr.dat'</span>])
+0161         <span class="keyword">return</span>
+0162     <span class="keyword">end</span>
+0163     
+0164 <span class="keyword">else</span>
+0165     error(<span class="string">'File %s missing, load aborted'</span>,<span class="keyword">...</span>
+0166         [da.name <span class="string">'_bckg.dat'</span>])
+0167     <span class="keyword">return</span>
+0168 <span class="keyword">end</span>
+0169     
+0170 <span class="comment">%% If all DA files are present then we can load them</span>
+0171 
+0172 <span class="comment">% Original data file</span>
+0173 <span class="comment">% ==================</span>
+0174 
+0175 rawbckg = importdata(bckg_file);
+0176 
+0177 xbckg = rawbckg(:,1);
+0178 ybckg = rawbckg(:,2);
+0179 
+0180 <span class="comment">% Fit data file</span>
+0181 <span class="comment">% =============</span>
+0182 
+0183 rawfit = importdata(fit_file);
+0184 
+0185 xfit    = rawfit(:,1);
+0186 yfitExp = rawfit(:,2);
+0187 yfitFit = rawfit(:,3);
+0188 
+0189 
+0190 <span class="comment">% Distance distribution file</span>
+0191 <span class="comment">% ==========================</span>
+0192 
+0193 rawdd = importdata(distr_file);
+0194 
+0195 xdd = rawdd(:,1);
+0196 
+0197 <span class="comment">% Normalize the distance distribtion to 1</span>
+0198 max_y = max(rawdd(:,2));
+0199 min_y = min(rawdd(:,2));
+0200 
+0201 ydd = (rawdd(:,2) - min_y)/(max_y - min_y);
+0202 
+0203 
+0204             
+0205 <span class="comment">%% Data loaded, let's make some figures!</span>
+0206 
+0207 <span class="comment">% drawFigure(x,y,info)</span>
+0208 
+0209 
+0210 <span class="comment">% Page setup</span>
+0211 <span class="comment">% ==========</span>
+0212 
+0213 hF = figure(<span class="string">'pos'</span>,[0 0 900 300]);
+0214 
+0215 <span class="comment">% Plot raw data</span>
+0216 h1 = subplot(1,3,1);
+0217 <span class="keyword">if</span> exist(<span class="string">'xbckg'</span>,<span class="string">'var'</span>)
+0218     plot(xbckg,ybckg);
+0219 <span class="keyword">else</span>
+0220     set(h1,<span class="string">'Color'</span>,[20,43,140]/255)
+0221     axis off
+0222     text(0.5,0.5,<span class="string">'File not found'</span>);
+0223 <span class="keyword">end</span>
+0224 
+0225 <span class="comment">% Plot background subtracted</span>
+0226 h2 = subplot(1,3,2);
+0227 <span class="keyword">if</span> exist(<span class="string">'xfit'</span>,<span class="string">'var'</span>)
+0228     hold all
+0229     plot(xfit,yfitExp,<span class="string">'Color'</span>, <span class="string">'b'</span>);
+0230     plot(xfit,yfitFit,<span class="string">'Color'</span>, <span class="string">'r'</span>);
+0231     set(h2,<span class="string">'Box'</span>,<span class="string">'on'</span>)
+0232     hold off
+0233 <span class="keyword">else</span>
+0234     set(h2,<span class="string">'Color'</span>,[20,43,140]/255)
+0235     axis off
+0236     text(0.5,0.5,<span class="string">'File not found'</span>);
+0237 <span class="keyword">end</span>
+0238 
+0239 <span class="comment">% Plot distance distribution</span>
+0240 h3 = subplot(1,3,3);
+0241 <span class="keyword">if</span> exist(<span class="string">'xdd'</span>,<span class="string">'var'</span>)
+0242     plot(xdd,ydd);
+0243 <span class="keyword">else</span>
+0244     set(h3,<span class="string">'Color'</span>,[20,43,140]/255)
+0245     axis off
+0246     text(0.5,0.5,<span class="string">'File not found'</span>);
+0247 <span class="keyword">end</span>
+0248 
+0249 axis(h1,<span class="string">'tight'</span>);
+0250 axis(h2,<span class="string">'tight'</span>);
+0251 axis(h3,<span class="string">'tight'</span>);
+0252 
+0253 title(h1,<span class="string">'4 Pulse DEER experiment'</span>,<span class="string">'FontSize'</span>,12);
+0254 title(h2,<span class="string">'Background subtracted DEER trace'</span>,<span class="string">'FontSize'</span>,12);
+0255 title(h3,<span class="string">'Distance distribution'</span>,<span class="string">'FontSize'</span>,12);
+0256 
+0257 xlabel(h1,<span class="string">'Time / \mus'</span>);
+0258 xlabel(h2,<span class="string">'Time / \mus'</span>);
+0259 xlabel(h3,<span class="string">'Distance / nm'</span>);
+0260 
+0261 set(h1,<span class="string">'YTick'</span>,[]);
+0262 set(h3,<span class="string">'YTick'</span>,[]);
+0263 
+0264 
+0265 
+0266 <span class="keyword">switch</span> output
+0267     <span class="keyword">case</span> <span class="string">'eps'</span>
+0268         set(gcf, <span class="string">'PaperPositionMode'</span>, <span class="string">'auto'</span>);
+0269         print(gcf, <span class="string">'-depsc'</span>,  [da.directory <span class="string">'/'</span> da.root <span class="string">'_DA.eps'</span>]);
+0270         
+0271     <span class="keyword">case</span> <span class="string">'pdf'</span>
+0272         set(hF,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>);
+0273         set(hF,<span class="string">'PaperSize'</span>,[30 10]);
+0274         set(hF,<span class="string">'PaperPosition'</span>, [0 0 30 10]);
+0275         print(gcf, <span class="string">'-dpdf'</span>,  [da.directory <span class="string">'/'</span> da.root <span class="string">'.pdf'</span>]);
+0276 <span class="keyword">end</span>
+0277 
+0278 
+0279 
+0280 close(hF);
+0281 
+0282 <a name="_sub1" href="#_subfunctions" class="code">function [fileInfo] = drawFigure(x,y,fileInfo)</a>
+0283 
+0284 <span class="comment">% Draw the figure, do the fitting if required</span>
+0285 
+0286 <span class="comment">%% Setup variables</span>
+0287 directory = fileInfo.directory;
+0288 file      = fileInfo.file;
+0289 name      = fileInfo.name;
+0290 extension = fileInfo.extension;
+0291 fileType  = fileInfo.fileType;
+0292 
+0293 
+0294 <span class="comment">%% Plot figure</span>
+0295 hF = figure;
+0296 
+0297 <span class="keyword">switch</span> fileType
+0298     <span class="keyword">case</span> <span class="string">'raw'</span>
+0299         xlabel(hF,<span class="string">'Time / \mus'</span>);
+0300         set(hF,<span class="string">'YTick'</span>,[]);
+0301 
+0302     <span class="keyword">case</span> <span class="string">'bckg'</span>
+0303         xlabel(hF,<span class="string">'Time / \mus'</span>);
+0304 
+0305         
+0306     <span class="keyword">case</span> <span class="string">'Pake'</span>
+0307         xlabel(hF,<span class="string">'Frequency / MHz'</span>);
+0308 
+0309     <span class="keyword">case</span> <span class="string">'L'</span>
+0310         xlabel(hF,<span class="string">'\it{log(\rho)}'</span>);
+0311         ylabel(hF,<span class="string">'\it{log(\eta)}'</span>);
+0312         
+0313     <span class="keyword">case</span> <span class="string">'distance'</span>
+0314         xlabel(hF,<span class="string">'r / nm'</span>);
+0315         ylabel(hF,<span class="string">'\it{p(r)}'</span>);
+0316         set(hF,<span class="string">'YTick'</span>,[]);
+0317 
+0318         
+0319 <span class="keyword">end</span>
+0320 
+0321 <span class="comment">% Finishing</span>
+0322 axis tight;
+0323 set(h2,<span class="string">'Box'</span>,<span class="string">'on'</span>);</pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

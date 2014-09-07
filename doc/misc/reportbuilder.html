@@ -40,7 +40,7 @@
  REPORTBUILDER is fully functional with both Bruker and SpecMan data
  files, however due to limitations in the experiment description files the
  file must have the experiment in the file name. Therefore it is
- recommended to conform you file names in a manner such as:
+ recommended to conform your file names in a manner such as:
 
  DATE-FREQ-TEMP-EXP-SAMPLE_NAME.exp
 
@@ -65,11 +65,14 @@
  along with the R^2 value will appear in the parameter table.
 
  REPORTBUILDER has been tested with:
-       &gt; T2
-       &gt; T1 (inversion recovery)
-       &gt; FSE
-       &gt; Nutation
-       &gt; DEER / PELDOR
+       Experiment                 Label
+       &gt; T2                       - T2
+       &gt; T1 (inversion recovery)  - T1
+       &gt; Field Swept Echo         - FSE
+       &gt; Nutation                 - NUT
+       &gt; DEER / PELDOR            - DEER or 4PEL
+       &gt; Echo profile (SpecMan)   - Echo
+       &gt; Freq sweep (SpecMan)     - Freq
 
  Inputs:
     input0     - graphical user file selection
@@ -139,7 +142,7 @@ This function is called by:
 0013 <span class="comment">% REPORTBUILDER is fully functional with both Bruker and SpecMan data</span>
 0014 <span class="comment">% files, however due to limitations in the experiment description files the</span>
 0015 <span class="comment">% file must have the experiment in the file name. Therefore it is</span>
-0016 <span class="comment">% recommended to conform you file names in a manner such as:</span>
+0016 <span class="comment">% recommended to conform your file names in a manner such as:</span>
 0017 <span class="comment">%</span>
 0018 <span class="comment">% DATE-FREQ-TEMP-EXP-SAMPLE_NAME.exp</span>
 0019 <span class="comment">%</span>
@@ -164,587 +167,707 @@ This function is called by:
 0038 <span class="comment">% along with the R^2 value will appear in the parameter table.</span>
 0039 <span class="comment">%</span>
 0040 <span class="comment">% REPORTBUILDER has been tested with:</span>
-0041 <span class="comment">%       &gt; T2</span>
-0042 <span class="comment">%       &gt; T1 (inversion recovery)</span>
-0043 <span class="comment">%       &gt; FSE</span>
-0044 <span class="comment">%       &gt; Nutation</span>
-0045 <span class="comment">%       &gt; DEER / PELDOR</span>
-0046 <span class="comment">%</span>
-0047 <span class="comment">% Inputs:</span>
-0048 <span class="comment">%    input0     - graphical user file selection</span>
+0041 <span class="comment">%       Experiment                 Label</span>
+0042 <span class="comment">%       &gt; T2                       - T2</span>
+0043 <span class="comment">%       &gt; T1 (inversion recovery)  - T1</span>
+0044 <span class="comment">%       &gt; Field Swept Echo         - FSE</span>
+0045 <span class="comment">%       &gt; Nutation                 - NUT</span>
+0046 <span class="comment">%       &gt; DEER / PELDOR            - DEER or 4PEL</span>
+0047 <span class="comment">%       &gt; Echo profile (SpecMan)   - Echo</span>
+0048 <span class="comment">%       &gt; Freq sweep (SpecMan)     - Freq</span>
 0049 <span class="comment">%</span>
-0050 <span class="comment">%</span>
-0051 <span class="comment">% Outputs:</span>
-0052 <span class="comment">%    output1    - file.eps</span>
-0053 <span class="comment">%                   an encapsulated postcript file of the experiment result</span>
-0054 <span class="comment">%    output2    - file.tex</span>
-0055 <span class="comment">%                   a LaTex file for generating a report page with spectra,</span>
-0056 <span class="comment">%                   fitting, parameters table and fitting report</span>
-0057 <span class="comment">%    output3    - file.pdf</span>
-0058 <span class="comment">%                   in Linux systems MatLab will attempt to run the .tex</span>
-0059 <span class="comment">%                   file to generate a PDF. This requires that the &quot;latex&quot;</span>
-0060 <span class="comment">%                   and &quot;pdflatex&quot; are accessible from a terminal</span>
-0061 <span class="comment">%</span>
-0062 <span class="comment">%</span>
-0063 <span class="comment">%                   Files are saved into the same directory as the first</span>
-0064 <span class="comment">%                   file that was selected.</span>
+0050 <span class="comment">% Inputs:</span>
+0051 <span class="comment">%    input0     - graphical user file selection</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% Outputs:</span>
+0055 <span class="comment">%    output1    - file.eps</span>
+0056 <span class="comment">%                   an encapsulated postcript file of the experiment result</span>
+0057 <span class="comment">%    output2    - file.tex</span>
+0058 <span class="comment">%                   a LaTex file for generating a report page with spectra,</span>
+0059 <span class="comment">%                   fitting, parameters table and fitting report</span>
+0060 <span class="comment">%    output3    - file.pdf</span>
+0061 <span class="comment">%                   in Linux systems MatLab will attempt to run the .tex</span>
+0062 <span class="comment">%                   file to generate a PDF. This requires that the &quot;latex&quot;</span>
+0063 <span class="comment">%                   and &quot;pdflatex&quot; are accessible from a terminal</span>
+0064 <span class="comment">%</span>
 0065 <span class="comment">%</span>
-0066 <span class="comment">%</span>
-0067 <span class="comment">% Example:</span>
-0068 <span class="comment">%    REPORTBUILDER</span>
-0069 <span class="comment">%               GUI load a folder, figure generated shows</span>
-0070 <span class="comment">%</span>
-0071 <span class="comment">%</span>
-0072 <span class="comment">% Other m-files required:   SpecManRead.m</span>
-0073 <span class="comment">%                           BrukerRead.m</span>
+0066 <span class="comment">%                   Files are saved into the same directory as the first</span>
+0067 <span class="comment">%                   file that was selected.</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% Example:</span>
+0071 <span class="comment">%    REPORTBUILDER</span>
+0072 <span class="comment">%               GUI load a folder, figure generated shows</span>
+0073 <span class="comment">%</span>
 0074 <span class="comment">%</span>
-0075 <span class="comment">% Subfunctions:             guiLoad</span>
-0076 <span class="comment">%                           drawFigure</span>
-0077 <span class="comment">%                           texHeader</span>
-0078 <span class="comment">%                           texFigure</span>
-0079 <span class="comment">%</span>
-0080 <span class="comment">% MAT-files required:       none</span>
-0081 <span class="comment">%</span>
+0075 <span class="comment">% Other m-files required:   SpecManRead.m</span>
+0076 <span class="comment">%                           BrukerRead.m</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">% Subfunctions:             guiLoad</span>
+0079 <span class="comment">%                           drawFigure</span>
+0080 <span class="comment">%                           texHeader</span>
+0081 <span class="comment">%                           texFigure</span>
 0082 <span class="comment">%</span>
-0083 <span class="comment">% See also: EPRTOOLBOX BRUKERREAD SPECMANREAD</span>
-0084 
-0085 <span class="comment">%                                        _                             _</span>
-0086 <span class="comment">%                                       | |                           | |</span>
-0087 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
-0088 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
-0089 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
-0090 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
-0091 <span class="comment">%                       __/ |                   __/ |</span>
-0092 <span class="comment">%                      |___/                   |___/</span>
-0093 <span class="comment">%</span>
-0094 <span class="comment">% M. Bye v14.04</span>
-0095 <span class="comment">%</span>
-0096 <span class="comment">% v13.09 - current</span>
-0097 <span class="comment">%               Chemical Physics Department</span>
-0098 <span class="comment">%               Weizmann Institute of Science</span>
-0099 <span class="comment">%               76100 REHOVOT, Israel</span>
-0100 <span class="comment">%</span>
-0101 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
-0102 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
+0083 <span class="comment">% MAT-files required:       none</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">%</span>
+0086 <span class="comment">% See also: EPRTOOLBOX BRUKERREAD SPECMANREAD</span>
+0087 
+0088 <span class="comment">%                                        _                             _</span>
+0089 <span class="comment">%                                       | |                           | |</span>
+0090 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0091 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0092 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0093 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0094 <span class="comment">%                       __/ |                   __/ |</span>
+0095 <span class="comment">%                      |___/                   |___/</span>
+0096 <span class="comment">%</span>
+0097 <span class="comment">% M. Bye v14.09</span>
+0098 <span class="comment">%</span>
+0099 <span class="comment">% v13.09 - current</span>
+0100 <span class="comment">%               Chemical Physics Department</span>
+0101 <span class="comment">%               Weizmann Institute of Science</span>
+0102 <span class="comment">%               76100 REHOVOT, Israel</span>
 0103 <span class="comment">%</span>
-0104 <span class="comment">% Last updated  Last revision: 09-March-2014</span>
-0105 <span class="comment">%</span>
-0106 <span class="comment">% Version history:</span>
-0107 <span class="comment">% Mar 14        Splitting into subfunctions and added loop function for</span>
-0108 <span class="comment">%               multiple experiments to be loaded into a single report.</span>
-0109 <span class="comment">%</span>
-0110 <span class="comment">% Jan 14        First release</span>
-0111 
-0112 <span class="comment">%% Input dialogue</span>
-0113 NoFiles = inputdlg(<span class="string">'How many files are we presenting today?'</span>,<span class="keyword">...</span>
-0114                         <span class="string">'ReportBuilder: Number of files'</span>,<span class="keyword">...</span>
-0115                         1,<span class="keyword">...</span>
-0116                         {<span class="string">'1'</span>});
-0117 
-0118 <span class="comment">% Convert input into a number, return if fail</span>
-0119 <span class="keyword">try</span>
-0120     noFiles = str2double(NoFiles);
-0121 <span class="keyword">catch</span>
-0122     error(<span class="string">'You must select a number of files to report!'</span>)
-0123     <span class="keyword">return</span>
-0124 <span class="keyword">end</span>
-0125 
-0126 <span class="comment">%% Start the loop</span>
-0127 <span class="keyword">for</span> k = 1:noFiles
-0128     <span class="comment">% First load the file(s) - by having seperate loops, the user can</span>
-0129     <span class="comment">% select all the files then walk away while the data is processed</span>
-0130     [x{k},y{k},info{k},fileInfo{k}] = <a href="#_sub1" class="code" title="subfunction [x,y,info,fileInfo] = guiLoad">guiLoad</a>;
-0131 <span class="keyword">end</span>
-0132 
-0133 <span class="comment">%% Start the file write</span>
-0134 tex_launch = <a href="#_sub3" class="code" title="subfunction tex_launch = texHeader(fileInfo)">texHeader</a>(fileInfo);
-0135 
-0136 <span class="comment">%% Start the processing loop</span>
-0137 <span class="keyword">for</span> k = 1:noFiles
-0138     
-0139     <span class="comment">% Get experiment type</span>
-0140     <span class="keyword">if</span> strfind(fileInfo{k}.file,<span class="string">'T2'</span>)
-0141         fileInfo{k}.fileType = <span class="string">'T2'</span>;
-0142     <span class="keyword">elseif</span> strfind(fileInfo{k}.file,<span class="string">'T1'</span>)
-0143         fileInfo{k}.fileType = <span class="string">'T1'</span>;
-0144     <span class="keyword">elseif</span> strfind(fileInfo{k}.file,<span class="string">'FSE'</span>)
-0145         fileInfo{k}.fileType = <span class="string">'FSE'</span>;
-0146     <span class="keyword">elseif</span> strfind(fileInfo{k}.file,<span class="string">'NUT'</span>)
-0147         fileInfo{k}.fileType = <span class="string">'NUT'</span>;
-0148     <span class="keyword">elseif</span> strfind(fileInfo{k}.file,<span class="string">'4PEL'</span>)
-0149         fileInfo{k}.fileType = <span class="string">'4PEL'</span>;
-0150     <span class="keyword">end</span>
-0151     
-0152     <span class="comment">% Plot the figure</span>
-0153     [fileInfo{k}] = <a href="#_sub2" class="code" title="subfunction [fileInfo] = drawFigure(x,y,fileInfo)">drawFigure</a>(x{k},y{k},fileInfo{k});
-0154     
-0155     <span class="comment">% Update the tex file</span>
-0156     tex_launch = <a href="#_sub4" class="code" title="subfunction tex_launch = texFigure(tex_launch,info,fileInfo)">texFigure</a>(tex_launch,info{k},fileInfo{k});
-0157 <span class="keyword">end</span>
-0158 
-0159 <span class="comment">%% Close the tex file</span>
+0104 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0105 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
+0106 <span class="comment">%</span>
+0107 <span class="comment">% Last updated  Last revision: 07-September-2014</span>
+0108 <span class="comment">%</span>
+0109 <span class="comment">% Version history:</span>
+0110 <span class="comment">% Sep 14        &gt; Update for new file types for SpecMan</span>
+0111 <span class="comment">%                   &gt; Echo profile</span>
+0112 <span class="comment">%                   &gt; Freq sweep</span>
+0113 <span class="comment">%               &gt; Allow DEER or 4PEL</span>
+0114 <span class="comment">%               &gt; Error handling if file type not recognised</span>
+0115 <span class="comment">%</span>
+0116 <span class="comment">%</span>
+0117 <span class="comment">% Jun 14        &gt; More LaTeX updates</span>
+0118 <span class="comment">%               &gt; Removed autorun for linux</span>
+0119 <span class="comment">%               &gt; Command list printed in command window to successfully</span>
+0120 <span class="comment">%                   compile the PDF, ie. cd here, latex this, pdflatex this</span>
+0121 <span class="comment">%               &gt; Added run time to DEER info table for SpecMan</span>
+0122 <span class="comment">%</span>
+0123 <span class="comment">% May 14        Update to LaTex requires slight modification to script</span>
+0124 <span class="comment">%                   &gt; + \usepackage[export]{adjustbox}</span>
+0125 <span class="comment">%                   &gt; includegraphics line now uses</span>
+0126 <span class="comment">%                       max width = \linewidth</span>
+0127 <span class="comment">%                       NOT</span>
+0128 <span class="comment">%                       width = \textwidth so</span>
+0129 <span class="comment">%                       that eps is correctly converted to pdf and</span>
+0130 <span class="comment">%                       displayed by pdflatex command</span>
+0131 <span class="comment">%</span>
+0132 <span class="comment">% Mar 14        Splitting into subfunctions and added loop function for</span>
+0133 <span class="comment">%               multiple experiments to be loaded into a single report.</span>
+0134 <span class="comment">%</span>
+0135 <span class="comment">% Jan 14        First release</span>
+0136 
+0137 <span class="comment">%% Input dialogue</span>
+0138 NoFiles = inputdlg(<span class="string">'How many files are we presenting today?'</span>,<span class="keyword">...</span>
+0139                         <span class="string">'ReportBuilder: Number of files'</span>,<span class="keyword">...</span>
+0140                         1,<span class="keyword">...</span>
+0141                         {<span class="string">'1'</span>});
+0142 
+0143 <span class="comment">% Convert input into a number, return if fail</span>
+0144 <span class="keyword">try</span>
+0145     noFiles = str2double(NoFiles);
+0146 <span class="keyword">catch</span>
+0147     error(<span class="string">'You must select a number of files to report!'</span>)
+0148     <span class="keyword">return</span>
+0149 <span class="keyword">end</span>
+0150 
+0151 <span class="comment">%% Start the loop</span>
+0152 <span class="keyword">for</span> k = 1:noFiles
+0153     <span class="comment">% First load the file(s) - by having seperate loops, the user can</span>
+0154     <span class="comment">% select all the files then walk away while the data is processed</span>
+0155     [x{k},y{k},info{k},fileInfo{k}] = <a href="#_sub1" class="code" title="subfunction [x,y,info,fileInfo] = guiLoad">guiLoad</a>;
+0156 <span class="keyword">end</span>
+0157 
+0158 <span class="comment">%% Start the file write</span>
+0159 tex_launch = <a href="#_sub3" class="code" title="subfunction tex_launch = texHeader(fileInfo)">texHeader</a>(fileInfo);
 0160 
-0161 <span class="comment">% TeX end</span>
-0162 fprintf(tex_launch,<span class="string">'\\end{document}\n'</span>);
-0163 
-0164 <span class="comment">% Close file</span>
-0165 fclose(tex_launch);
-0166 
-0167 <span class="comment">%% RUN</span>
-0168 <span class="comment">%</span>
-0169 
-0170 directory = fileInfo{1}.directory;
-0171 name      = fileInfo{1}.name;
-0172 file      = fileInfo{1}.file;
-0173 
-0174 
-0175 <span class="keyword">switch</span> computer
-0176     <span class="keyword">case</span> <span class="string">'GLNXA64'</span>
-0177         
-0178         <span class="comment">% Test if the &quot;latex&quot; command is accessible</span>
-0179         <span class="keyword">if</span> ~system(<span class="string">'which latex'</span>)
-0180             
-0181             system(sprintf(<span class="string">'latex %s'</span>,[directory file <span class="string">'.tex'</span>]));
-0182             system(sprintf(<span class="string">'pdflatex %s'</span>,[directory file <span class="string">'.tex'</span>]));
-0183             
-0184             <span class="comment">% Remove chaff</span>
-0185             system(sprintf(<span class="string">'rm %s'</span>,[directory file <span class="string">'.log'</span>]));
-0186             system(sprintf(<span class="string">'rm %s'</span>,[directory file <span class="string">'.dvi'</span>]));
-0187             system(sprintf(<span class="string">'rm %s'</span>,[directory file <span class="string">'.aux'</span>]));
-0188             system(sprintf(<span class="string">'rm %s'</span>,[directory name <span class="string">'-eps-converted-to.pdf'</span>]));
-0189         
-0190         <span class="comment">% If &quot;latex&quot; cant be found then show the user the output locations</span>
-0191         <span class="keyword">else</span>
-0192             sprintf(<span class="string">'The files:\n'</span>)
-0193             sprintf(<span class="string">'%s\n'</span>,[directory file <span class="string">'.tex'</span>])
-0194             sprintf(<span class="string">'%s\n'</span>,[directory file <span class="string">'.eps'</span>])
-0195             sprintf(<span class="string">'have been generated.\n\n'</span>)
-0196             sprintf(<span class="string">'To complete report generation %s must now be run.\n'</span><span class="keyword">...</span>
-0197                 ,[directory file <span class="string">'.tex'</span>])
-0198         <span class="keyword">end</span>
-0199         
-0200     <span class="keyword">otherwise</span>
-0201         sprintf(<span class="string">'The files:\n'</span>)
-0202         sprintf(<span class="string">'%s\n'</span>,[directory file <span class="string">'.tex'</span>])
-0203         sprintf(<span class="string">'%s\n'</span>,[directory file <span class="string">'.eps'</span>])
-0204         sprintf(<span class="string">'have been generated.\n\n'</span>)
-0205         sprintf(<span class="string">'To complete report generation %s must now be run.\n'</span><span class="keyword">...</span>
-0206             ,[directory file <span class="string">'.tex'</span>])
+0161 <span class="comment">%% Start the processing loop</span>
+0162 <span class="keyword">for</span> k = 1:noFiles
+0163     
+0164     <span class="comment">% Get experiment type</span>
+0165     <span class="keyword">if</span> strfind(fileInfo{k}.file,<span class="string">'T2'</span>)
+0166         fileInfo{k}.fileType = <span class="string">'T2'</span>;
+0167     <span class="keyword">elseif</span> strfind(fileInfo{k}.file,<span class="string">'T1'</span>)
+0168         fileInfo{k}.fileType = <span class="string">'T1'</span>;
+0169     <span class="keyword">elseif</span> strfind(fileInfo{k}.file,<span class="string">'FSE'</span>)
+0170         fileInfo{k}.fileType = <span class="string">'FSE'</span>;
+0171     <span class="keyword">elseif</span> strfind(fileInfo{k}.file,<span class="string">'NUT'</span>)
+0172         fileInfo{k}.fileType = <span class="string">'NUT'</span>;
+0173     <span class="keyword">elseif</span> strfind(fileInfo{k}.file,<span class="string">'4PEL'</span>)
+0174         fileInfo{k}.fileType = <span class="string">'4PEL'</span>;
+0175     <span class="keyword">elseif</span> strfind(fileInfo{k}.file,<span class="string">'DEER'</span>)
+0176         fileInfo{k}.fileType = <span class="string">'4PEL'</span>;
+0177     <span class="keyword">elseif</span> strfind(fileInfo{k}.file,<span class="string">'Freq'</span>)
+0178         fileInfo{k}.fileType = <span class="string">'Freq'</span>;
+0179     <span class="keyword">elseif</span> strfind(fileInfo{k}.file,<span class="string">'Echo'</span>)
+0180         fileInfo{k}.fileType = <span class="string">'Echo'</span>;  
+0181     <span class="keyword">else</span>
+0182         error(<span class="string">'Could not determine the file type in file %s'</span>,fileInfo{k}.file)
+0183         <span class="keyword">return</span>
+0184     <span class="keyword">end</span>
+0185     
+0186     <span class="comment">% Plot the figure</span>
+0187     [fileInfo{k}] = <a href="#_sub2" class="code" title="subfunction [fileInfo] = drawFigure(x,y,fileInfo)">drawFigure</a>(x{k},y{k},fileInfo{k});
+0188     
+0189     <span class="comment">% Update the tex file</span>
+0190     tex_launch = <a href="#_sub4" class="code" title="subfunction tex_launch = texFigure(tex_launch,info,fileInfo)">texFigure</a>(tex_launch,info{k},fileInfo{k});
+0191 <span class="keyword">end</span>
+0192 
+0193 <span class="comment">%% Close the tex file</span>
+0194 
+0195 <span class="comment">% TeX end</span>
+0196 fprintf(tex_launch,<span class="string">'\\end{document}\n'</span>);
+0197 
+0198 <span class="comment">% Close file</span>
+0199 fclose(tex_launch);
+0200 
+0201 <span class="comment">%% RUN</span>
+0202 <span class="comment">%</span>
+0203 
+0204 directory = fileInfo{1}.directory;
+0205 name      = fileInfo{1}.name;
+0206 file      = fileInfo{1}.file;
 0207 
-0208 <span class="keyword">end</span>
-0209 
+0208 
+0209 <span class="keyword">switch</span> computer
 0210 
-0211 <a name="_sub1" href="#_subfunctions" class="code">function [x,y,info,fileInfo] = guiLoad</a>
-0212 
-0213 <span class="comment">% Select and load a Bruker/SpecMan file</span>
-0214 
-0215 <span class="comment">%% Select file</span>
-0216 
-0217 <span class="comment">% GUI get file</span>
-0218 [fileInfo.file , fileInfo.directory] = uigetfile({<span class="keyword">...</span>
-0219     <span class="string">'*.d01'</span>,<span class="string">'SpecMan File (*.d01,*.exp)'</span>; <span class="keyword">...</span><span class="comment">    </span>
-0220     <span class="string">'*.DTA;*.spc'</span>,<span class="string">'Bruker File (*.DTA,*.spc)'</span>; <span class="keyword">...</span>
-0221     <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="keyword">...</span>
-0222     <span class="string">'Load file'</span>);
-0223 
-0224 <span class="comment">% if user cancels command nothing happens</span>
-0225 <span class="keyword">if</span> isequal(fileInfo.file,0) <span class="comment">%|| isequal(directory,0)</span>
-0226     <span class="keyword">return</span>
-0227 <span class="keyword">end</span>
-0228 
-0229 <span class="comment">% File name/path manipulation</span>
-0230 fileInfo.address = [fileInfo.directory,fileInfo.file];
-0231 [~, fileInfo.name,fileInfo.extension] = fileparts(fileInfo.address);
-0232 
-0233 <span class="comment">%% Load file</span>
-0234 <span class="keyword">switch</span> fileInfo.extension
-0235     <span class="keyword">case</span> <span class="string">'.d01'</span>
-0236         [x,y,info] = <a href="SpecManRead.html" class="code" title="function varargout = SpecManRead(varargin)">SpecManRead</a>(fileInfo.address);
-0237         
-0238     <span class="keyword">case</span> <span class="string">'.DTA'</span>
-0239         [x,y,info] = <a href="BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(fileInfo.address);
-0240         
-0241         <span class="keyword">if</span> isarray(y)
-0242             y = y.real;
-0243         <span class="keyword">end</span>
-0244 <span class="keyword">end</span>
-0245 
-0246 
-0247 <a name="_sub2" href="#_subfunctions" class="code">function [fileInfo] = drawFigure(x,y,fileInfo)</a>
-0248 
-0249 <span class="comment">% Draw the figure, do the fitting if required</span>
-0250 
-0251 <span class="comment">%% Setup variables</span>
-0252 directory = fileInfo.directory;
-0253 file      = fileInfo.file;
-0254 name      = fileInfo.name;
-0255 extension = fileInfo.extension;
-0256 fileType  = fileInfo.fileType;
-0257 
+0211 <span class="comment">%     This is all pointless now, as MatLab insists on using it's own C</span>
+0212 <span class="comment">%     and latex libraries. So even though the commands will work from a</span>
+0213 <span class="comment">%     users terminal - it will most not likely work from Matlab with the</span>
+0214 <span class="comment">%     &quot;system&quot; command. Namely, hbox size errors and epstopdf file</span>
+0215 <span class="comment">%     conversion. And yes we have to use eps because Matlab messes up</span>
+0216 <span class="comment">%     printing to PDF.</span>
+0217 <span class="comment">%</span>
+0218 <span class="comment">%     case 'GLNXA64'</span>
+0219 <span class="comment">%</span>
+0220 <span class="comment">%         % Test if the &quot;latex&quot; command is accessible</span>
+0221 <span class="comment">%         if ~system('which latex')</span>
+0222 <span class="comment">%</span>
+0223 <span class="comment">%             system(sprintf('latex %s',[directory file '.tex']));</span>
+0224 <span class="comment">%</span>
+0225 <span class="comment">%             % Update to LaTex means that calling pdflatex doesnt correctly</span>
+0226 <span class="comment">%             % convert the images to the pdf. Previously we used:</span>
+0227 <span class="comment">%             %     system(sprintf('pdflatex %s',[directory file '.tex']));</span>
+0228 <span class="comment">%</span>
+0229 <span class="comment">%             % Remove chaff</span>
+0230 <span class="comment">%             system(sprintf('rm %s',[directory file '.log']));</span>
+0231 <span class="comment">%             system(sprintf('rm %s',[directory file '.dvi']));</span>
+0232 <span class="comment">%             system(sprintf('rm %s',[directory file '.aux']));</span>
+0233 <span class="comment">%             % system(sprintf('rm %s',[directory name '-eps-converted-to.pdf']));</span>
+0234 <span class="comment">%</span>
+0235 <span class="comment">%             % Message user to run pdflatex command manually:</span>
+0236 <span class="comment">%             fprintf('Now open a terminal and run:\n')</span>
+0237 <span class="comment">%             fprintf('pdflatex %s\n',[directory file '.tex'])</span>
+0238 <span class="comment">%</span>
+0239 <span class="comment">%         % If &quot;latex&quot; cant be found then show the user the output locations</span>
+0240 <span class="comment">%         else</span>
+0241 <span class="comment">%             fprintf('The files:\n')</span>
+0242 <span class="comment">%             fprintf('%s\n',[directory file '.tex'])</span>
+0243 <span class="comment">%             fprintf('%s\n',[directory file '.eps'])</span>
+0244 <span class="comment">%             fprintf('have been generated.\n\n')</span>
+0245 <span class="comment">%             fprintf('To complete report generation %s must now be run.\n'...</span>
+0246 <span class="comment">%                 ,[directory file '.tex'])</span>
+0247 <span class="comment">%         end</span>
+0248         
+0249     <span class="keyword">otherwise</span>
+0250         fprintf(<span class="string">'\nDear user,\n\n'</span>)
+0251         fprintf(<span class="string">'We''re nearly there, so far we''ve generated:\n'</span>)
+0252 
+0253         fprintf(<span class="string">'%s\n'</span>,[directory name <span class="string">'-reportbuilder.tex'</span>])
+0254         
+0255         <span class="keyword">for</span> k = 1:noFiles
+0256             fprintf(<span class="string">'%s%s.eps\n'</span>,directory,fileInfo{k}.file)
+0257         <span class="keyword">end</span>
 0258 
-0259 <span class="comment">%% Plot figure</span>
-0260 hF = figure;
-0261 
-0262 <span class="keyword">switch</span> fileType
-0263     <span class="keyword">case</span> <span class="string">'T2'</span>
-0264         
-0265         x = x*1E9;
-0266         
-0267         plot(x,y);
-0268         
-0269         <span class="comment">% Test for Curve fitting toolbox, do fit</span>
-0270         <span class="keyword">if</span> license(<span class="string">'test'</span>, <span class="string">'curve_fitting_toolbox'</span>)
-0271             
-0272             <span class="comment">% Single decay</span>
-0273             f = fittype(<span class="string">'a*exp(b*x)'</span>);
-0274 
-0275             options             = fitoptions(f);
-0276             options.StartPoint  = [30.0 5000];
-0277             options.Lower       = [ 0.0 -inf];
-0278             options.Upper       = [ inf  0.0];
-0279             options.MaxFunEvals = 1200;
-0280             options.MaxIter     = 800;
-0281             
-0282             f = setoptions(f, options);
-0283             
-0284             <span class="comment">% Try the fit, if it fails then the reportbuilder continues</span>
-0285             <span class="comment">% with no fit</span>
-0286             <span class="keyword">try</span>
-0287                 [fitting,gof] = fit(x,y,f);
-0288                 
-0289                 fileInfo.FitValues = coeffvalues(fitting);
-0290                 fileInfo.FitConf   = confint(fitting);
-0291                 fileInfo.gof       = gof;
-0292                 
-0293                 <span class="comment">% If fit quality is poor then move to a double decay</span>
-0294                 <span class="keyword">if</span> gof.rsquare &lt; 0.95
-0295                     
-0296                     <span class="comment">% Double decay</span>
-0297                     f = fittype(<span class="string">'(a*exp(b*x))+(c*exp(d*x))'</span>);
-0298                     
-0299                     options             = fitoptions(f);
-0300                     options.StartPoint  = [30.0 -0.005  30.0 -0.005];
-0301                     options.Lower       = [ 0.0   -inf   0.0   -inf];
-0302                     options.Upper       = [ inf    0.0   inf    0.0];
-0303                     options.MaxFunEvals = 1200;
-0304                     options.MaxIter     = 800;
-0305                     
-0306                     f = setoptions(f, options);
-0307                     
-0308                     <span class="keyword">try</span>
-0309                         <span class="comment">% Do the fit</span>
-0310                         fitting = fit(x,y,f);
-0311                         
-0312                         fileInfo.FitValues = coeffvalues(fitting);
-0313                         fileInfo.FitConf   = confint(fitting);
-0314                         fileInfo.gof       = gof;
-0315                         
-0316                         <span class="comment">% If the quality of fit is still poor then remove the fit</span>
-0317                         <span class="comment">% from the report</span>
-0318                         <span class="keyword">if</span> gof.rsquare &lt; 0.90
-0319                             clear fileInfo.FitValues
-0320                             clear fileInfo.FitConf
-0321                             clear fileInfo.gof
-0322                             
-0323                         <span class="keyword">else</span>
-0324                             hold on
-0325                             plot(fitting);
-0326                             hold off
-0327                             legend off
-0328                         <span class="keyword">end</span>
-0329                     <span class="keyword">end</span>
-0330                 <span class="keyword">end</span>
-0331             <span class="keyword">end</span>
+0259         fprintf(<span class="string">'\n'</span>)
+0260         fprintf(<span class="string">'To complete report generation:\n'</span>)
+0261         fprintf(<span class="string">'1) Open a terminal\n'</span>)
+0262         fprintf(<span class="string">'2) Run:\n'</span>)
+0263         fprintf(<span class="string">'    cd %s\n'</span>,directory)
+0264         fprintf(<span class="string">'3) Run:\n'</span>)
+0265         fprintf(<span class="string">'    latex %s\n'</span>,[directory name <span class="string">'-reportbuilder.tex'</span>])
+0266         fprintf(<span class="string">'4) Run:\n'</span>)
+0267         fprintf(<span class="string">'    pdflatex %s\n'</span>,[directory name <span class="string">'-reportbuilder.tex'</span>])
+0268         fprintf(<span class="string">'5) Enjoy!\n\n'</span>)
+0269 <span class="keyword">end</span>
+0270 
+0271 
+0272 <a name="_sub1" href="#_subfunctions" class="code">function [x,y,info,fileInfo] = guiLoad</a>
+0273 
+0274 <span class="comment">% Select and load a Bruker/SpecMan file</span>
+0275 
+0276 <span class="comment">%% Select file</span>
+0277 
+0278 <span class="comment">% GUI get file</span>
+0279 [fileInfo.file , fileInfo.directory] = uigetfile({<span class="keyword">...</span>
+0280     <span class="string">'*.d01'</span>,<span class="string">'SpecMan File (*.d01,*.exp)'</span>; <span class="keyword">...</span><span class="comment">    </span>
+0281     <span class="string">'*.DTA;*.spc'</span>,<span class="string">'Bruker File (*.DTA,*.spc)'</span>; <span class="keyword">...</span>
+0282     <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="keyword">...</span>
+0283     <span class="string">'Load file'</span>);
+0284 
+0285 <span class="comment">% if user cancels command nothing happens</span>
+0286 <span class="keyword">if</span> isequal(fileInfo.file,0) <span class="comment">%|| isequal(directory,0)</span>
+0287     <span class="keyword">return</span>
+0288 <span class="keyword">end</span>
+0289 
+0290 <span class="comment">% File name/path manipulation</span>
+0291 fileInfo.address = [fileInfo.directory,fileInfo.file];
+0292 [~, fileInfo.name,fileInfo.extension] = fileparts(fileInfo.address);
+0293 
+0294 <span class="comment">%% Load file</span>
+0295 <span class="keyword">switch</span> fileInfo.extension
+0296     <span class="keyword">case</span> <span class="string">'.d01'</span>
+0297         [x,y,info] = <a href="SpecManRead.html" class="code" title="function varargout = SpecManRead(varargin)">SpecManRead</a>(fileInfo.address);
+0298         
+0299     <span class="keyword">case</span> <span class="string">'.DTA'</span>
+0300         [x,y,info] = <a href="BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(fileInfo.address);
+0301         
+0302         <span class="keyword">if</span> isarray(y)
+0303             y = y.real;
+0304         <span class="keyword">end</span>
+0305 <span class="keyword">end</span>
+0306 
+0307 
+0308 <a name="_sub2" href="#_subfunctions" class="code">function [fileInfo] = drawFigure(x,y,fileInfo)</a>
+0309 
+0310 <span class="comment">% Draw the figure, do the fitting if required</span>
+0311 
+0312 <span class="comment">%% Setup variables</span>
+0313 directory = fileInfo.directory;
+0314 file      = fileInfo.file;
+0315 name      = fileInfo.name;
+0316 extension = fileInfo.extension;
+0317 fileType  = fileInfo.fileType;
+0318 
+0319 
+0320 <span class="comment">%% Plot figure</span>
+0321 hF = figure;
+0322 
+0323 <span class="keyword">switch</span> fileType
+0324     <span class="keyword">case</span> <span class="string">'T2'</span>
+0325         
+0326         x = x*1E9;
+0327         
+0328         plot(x/1000,y);
+0329         
+0330         <span class="comment">% Test for Curve fitting toolbox, do fit</span>
+0331         <span class="keyword">if</span> license(<span class="string">'test'</span>, <span class="string">'curve_fitting_toolbox'</span>)
 0332             
-0333            
-0334             
-0335         <span class="keyword">end</span>
-0336         
-0337         xlabel(<span class="string">'Time / \mus'</span>);
-0338         ylabel(<span class="string">'Relative intensity'</span>);
-0339         
-0340     <span class="keyword">case</span> <span class="string">'T1'</span>
-0341         
-0342         <span class="keyword">switch</span> extension
-0343             <span class="keyword">case</span> <span class="string">'.d01'</span>
-0344                 x = x/1e6;
-0345             <span class="keyword">case</span> <span class="string">'.DTA'</span>
-0346                 x = x/1e3;
-0347         <span class="keyword">end</span>
-0348         
-0349         hold on
-0350         plot(x,y,<span class="string">'Color'</span>, <span class="string">'b'</span>);
-0351         
-0352         <span class="comment">% If a Bruker file draw a dashed line across zero intensity</span>
-0353         <span class="keyword">if</span> strcmp(extension,<span class="string">'.DTA'</span>)
-0354             plot([0,x(end)],[0,0],<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'Color'</span>, <span class="string">'k'</span>);
-0355         <span class="keyword">end</span>
-0356         
-0357         <span class="comment">% If Curve fitting is installed then do the fit</span>
-0358         <span class="keyword">if</span> license(<span class="string">'test'</span>, <span class="string">'curve_fitting_toolbox'</span>)
-0359             
-0360             f = fittype(<span class="string">'a*(b-exp(-c*x))'</span>);
-0361             
-0362             options             = fitoptions(f);
-0363             options.StartPoint  = [25.0  0.5  1.0];
-0364             options.Lower       = [ 0.0  0.0  0.0];
-0365             options.Upper       = [ inf  inf  inf];
-0366             options.MaxFunEvals = 1200;
-0367             options.MaxIter     = 800;
-0368             
-0369             f = setoptions(f, options);
-0370             
-0371             <span class="comment">% Do the fit</span>
-0372             <span class="keyword">try</span>
-0373                 [fitting,gof] = fit(x,y,f);
-0374                 
-0375                 fileInfo.FitValues = coeffvalues(fitting);
-0376                 fileInfo.FitConf   = confint(fitting);
-0377                 fileInfo.gof       = gof;
-0378                 
-0379                 <span class="comment">% If the quality of fit is still poor then remove the fit</span>
-0380                 <span class="comment">% from the report</span>
-0381                 <span class="keyword">if</span> gof.rsquare &lt; 0.90
-0382                     clear fileInfo.FitValues
-0383                     clear fileInfo.FitConf
-0384                     clear fileInfo.gof
-0385                     
-0386                 <span class="keyword">else</span>
-0387                     plot(fitting);
-0388                     legend off
-0389                 <span class="keyword">end</span>
-0390             <span class="keyword">end</span>
-0391             
-0392         <span class="keyword">end</span>
-0393         
-0394         hold off
-0395         xlabel(<span class="string">'Time / ms'</span>);
-0396         ylabel(<span class="string">'Relative intensity'</span>);
-0397         
-0398     <span class="keyword">case</span> <span class="string">'FSE'</span>
-0399                    
-0400         plot(x,y);
-0401         ylabel(<span class="string">'Relative intensity'</span>);
-0402         
-0403         <span class="keyword">switch</span> extension
-0404             <span class="keyword">case</span> <span class="string">'.d01'</span>
-0405                 xlabel(<span class="string">'Magnetic field / A'</span>);
-0406             <span class="keyword">case</span> <span class="string">'.DTA'</span>
-0407                 xlabel(<span class="string">'Magnetic field / Gauss'</span>);
-0408         <span class="keyword">end</span>
-0409     
-0410     <span class="keyword">case</span> <span class="string">'NUT'</span>
-0411         <span class="keyword">switch</span> extension
-0412             <span class="keyword">case</span> <span class="string">'.d01'</span>
-0413                 x = x*1E9;
-0414                 plot(x,y);
-0415                 
+0333             <span class="comment">% Single decay,</span>
+0334             <span class="comment">%</span>
+0335             <span class="comment">% Where a is the y offset</span>
+0336             <span class="comment">%       b is the amplitude</span>
+0337             <span class="comment">%       c is the decay time</span>
+0338             f = fittype(<span class="string">'a+b*exp(-x/c)'</span>);
+0339 
+0340             options             = fitoptions(f);
+0341             options.StartPoint  = [ 0.0   1.5  2000];
+0342             options.Lower       = [-inf   0.0   0.0];
+0343             options.Upper       = [ inf   inf  10000];
+0344             options.MaxFunEvals = 1200;
+0345             options.MaxIter     = 800;
+0346             
+0347             f = setoptions(f, options);
+0348             
+0349             <span class="comment">% Try the fit, if it fails then the reportbuilder continues</span>
+0350             <span class="comment">% with no fit</span>
+0351             <span class="keyword">try</span>
+0352                 [fitting,gof] = fit(x,y,f);
+0353                 
+0354                 fileInfo.FitValues = coeffvalues(fitting);
+0355                 fileInfo.FitConf   = confint(fitting);
+0356                 fileInfo.gof       = gof;
+0357                 
+0358                 <span class="comment">% If fit quality is poor then move to a double decay</span>
+0359                 <span class="keyword">if</span> gof.rsquare &lt; 0.95
+0360                     
+0361                     <span class="comment">% Double decay</span>
+0362                     <span class="comment">%</span>
+0363                     <span class="comment">% Where a is the y offset</span>
+0364                     <span class="comment">%       b is amplitude 1</span>
+0365                     <span class="comment">%       c is decay time 1</span>
+0366                     <span class="comment">%       b is amplitude 2</span>
+0367                     <span class="comment">%       c is decay time 2</span>
+0368                     f = fittype(<span class="string">'a+(b*exp(-x/c))+(d*exp(-x/e))'</span>);
+0369                     
+0370                     options             = fitoptions(f);
+0371                     options.StartPoint  = [ 0.0  5e-7 2e-6 5e-7 2e-6];
+0372                     options.Lower       = [-inf   0.0  0.0  0.0  0.0];
+0373                     options.Upper       = [ inf   inf 1e-6  inf 1e-6];
+0374                     options.MaxFunEvals = 1200;
+0375                     options.MaxIter     = 800;
+0376                     
+0377                     f = setoptions(f, options);
+0378                     
+0379                     <span class="keyword">try</span>
+0380                         <span class="comment">% Do the fit</span>
+0381                         fitting = fit(x,y,f);
+0382                         
+0383                         fileInfo.FitValues = coeffvalues(fitting);
+0384                         fileInfo.FitConf   = confint(fitting);
+0385                         fileInfo.gof       = gof;
+0386                         
+0387                         <span class="comment">% If the quality of fit is still poor then remove the fit</span>
+0388                         <span class="comment">% from the report</span>
+0389                         <span class="keyword">if</span> gof.rsquare &lt; 0.90
+0390                             clear fileInfo.FitValues
+0391                             clear fileInfo.FitConf
+0392                             clear fileInfo.gof
+0393                             
+0394                         <span class="keyword">else</span>
+0395                             hold on
+0396                             plot(fitting);
+0397                             hold off
+0398                             legend off
+0399                         <span class="keyword">end</span>
+0400                     <span class="keyword">end</span>
+0401                 <span class="keyword">end</span>
+0402             <span class="keyword">end</span>
+0403             
+0404            
+0405             
+0406         <span class="keyword">end</span>
+0407         
+0408         xlabel(<span class="string">'Time / \mus'</span>);
+0409         ylabel(<span class="string">'Relative intensity'</span>);
+0410         
+0411     <span class="keyword">case</span> <span class="string">'T1'</span>
+0412         
+0413         <span class="keyword">switch</span> extension
+0414             <span class="keyword">case</span> <span class="string">'.d01'</span>
+0415                 x = x/1e6;
 0416             <span class="keyword">case</span> <span class="string">'.DTA'</span>
-0417                 plot(y);
+0417                 x = x/1e3;
 0418         <span class="keyword">end</span>
-0419                 
-0420         plot(x,y);
-0421         xlabel(<span class="string">'Time / ns'</span>);
-0422         ylabel(<span class="string">'Relative intensity'</span>);
-0423         
-0424     <span class="keyword">case</span> <span class="string">'4PEL'</span>
-0425         
-0426         <span class="keyword">switch</span> extension
-0427             <span class="keyword">case</span> <span class="string">'.d01'</span>
-0428                 x = x*1E6;
-0429                 plot(x,y(:,1));
-0430                 
-0431             <span class="keyword">case</span> <span class="string">'.DTA'</span>
-0432                 x = x*1E6;
-0433                 plot(x/1000,y);
-0434         <span class="keyword">end</span>
-0435 
-0436         xlabel(<span class="string">'Time / \mus'</span>);
-0437         ylabel(<span class="string">'Relative intensity'</span>);
-0438 <span class="keyword">end</span>
-0439 
-0440 set(gca,<span class="string">'Box'</span>,<span class="string">'on'</span>)
-0441 axis tight
-0442 axesSize = axis;
-0443 axis([axesSize(1) <span class="keyword">...</span>
-0444     axesSize(2) <span class="keyword">...</span>
-0445     axesSize(3)-((axesSize(4)*1.05)-axesSize(4)) <span class="keyword">...</span>
-0446     axesSize(4)*1.05]);
-0447 
-0448 <span class="comment">% Print figure</span>
-0449 print(hF, <span class="string">'-depsc2'</span>,  [directory name <span class="string">'.eps'</span>]);
-0450 
-0451 <span class="comment">% Close figure</span>
-0452 close(hF);
-0453 
-0454 
-0455 
-0456 <a name="_sub3" href="#_subfunctions" class="code">function tex_launch = texHeader(fileInfo)</a>
-0457 
-0458 <span class="comment">% Write the header section to the tex file</span>
-0459 
-0460 <span class="comment">%% Open file</span>
-0461 tex_launch = fopen([fileInfo{1}.directory fileInfo{1}.file <span class="string">'.tex'</span>],<span class="string">'w'</span>);
-0462 
-0463 <span class="comment">%% Header</span>
-0464 header = [<span class="keyword">...</span>
-0465 <span class="string">'%                                        _                             _   '</span>;<span class="keyword">...</span>
-0466 <span class="string">'%                                       | |                           | |  '</span>;<span class="keyword">...</span>
-0467 <span class="string">'%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_ '</span>;<span class="keyword">...</span>
-0468 <span class="string">'% | ''_ ` _ \ / _ \| ''__/ _` |/ _` | ''_ \| ''_ \| | | |/ _ \ | ''_ \ / _ \ __|'</span>;<span class="keyword">...</span>
-0469 <span class="string">'% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_ '</span>;<span class="keyword">...</span>
-0470 <span class="string">'% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|'</span>;<span class="keyword">...</span>
-0471 <span class="string">'%                       __/ |                   __/ |                      '</span>;<span class="keyword">...</span>
-0472 <span class="string">'%                      |___/                   |___/                       '</span>;<span class="keyword">...</span>
-0473 <span class="string">'%                                                                          '</span>;<span class="keyword">...</span>
-0474 <span class="string">'%                                                                          '</span>;<span class="keyword">...</span>
-0475 <span class="string">'% M. Bye v14.04                                                            '</span>;<span class="keyword">...</span>
-0476 <span class="string">'%                                                                          '</span>;<span class="keyword">...</span>
-0477 <span class="string">'% Author:       Morgan Bye                                                 '</span>;<span class="keyword">...</span>
-0478 <span class="string">'% Work address: Department of Chemical Physics                             '</span>;<span class="keyword">...</span>
-0479 <span class="string">'%               Weizmann Institute of Science                              '</span>;<span class="keyword">...</span>
-0480 <span class="string">'%               REHOVOT, IL                                                '</span>;<span class="keyword">...</span>
-0481 <span class="string">'% Email:        morgan.bye@weizmann.ac.il                                  '</span>;<span class="keyword">...</span>
-0482 <span class="string">'% Website:      http://www.morganbye.net/eprtoolbox/                       '</span>;<span class="keyword">...</span>
-0483 <span class="string">'%                                                                          '</span>;<span class="keyword">...</span>
-0484 <span class="string">'% File created at:                                                         '</span>];
-0485 
-0486 header = [header ; sprintf(<span class="string">'%-75s'</span>, [<span class="string">'% '</span> datestr(now, <span class="string">'dd mmmm yyyy - HH:MM'</span>)])];
-0487 
-0488 header = [header ; <span class="string">'%                                                                          '</span>];
-0489 
-0490 <span class="keyword">for</span> k = 1:size(header,1)
-0491     fprintf(tex_launch,<span class="string">'%-75s\n'</span>,header(k,:));
-0492 <span class="keyword">end</span>
-0493 
-0494 <span class="comment">% TeX header</span>
-0495 fprintf(tex_launch,<span class="string">'\\documentclass[a4paper]{report}\n'</span>);
-0496 fprintf(tex_launch,<span class="string">'\\usepackage{graphicx}\n'</span>);
-0497 fprintf(tex_launch,<span class="string">'\\usepackage{subcaption}\n'</span>);
-0498 fprintf(tex_launch,<span class="string">'\\begin{document}\n'</span>);
-0499 
-0500 
-0501 
-0502 <a name="_sub4" href="#_subfunctions" class="code">function tex_launch = texFigure(tex_launch,info,fileInfo)</a>
-0503 
-0504 <span class="comment">% This section writes the individual figures to the tex file</span>
-0505 
-0506 <span class="comment">%% Setup table</span>
-0507 fprintf(tex_launch,<span class="string">'\\begin{table}[t]\n'</span>);
-0508 
-0509 <span class="comment">%% Figure</span>
-0510 fprintf(tex_launch,<span class="string">'\\begin{minipage}[c]{.65\\textwidth }\n'</span>);
-0511 fprintf(tex_launch,<span class="string">'\\centering\n'</span>);
-0512 fprintf(tex_launch,<span class="string">'\\includegraphics[width=0.9\\textwidth]{%s}\n'</span>,<span class="keyword">...</span>
-0513     [fileInfo.name <span class="string">'.eps'</span>]);
-0514 fprintf(tex_launch,<span class="string">'\\end{minipage}\n'</span>);
-0515 
-0516 <span class="comment">%% Parameters table</span>
-0517 fprintf(tex_launch,<span class="string">'\\begin{minipage}[c]{.3\\textwidth}\n'</span>);
-0518 fprintf(tex_launch,<span class="string">'\\centering\n'</span>);
-0519 fprintf(tex_launch,<span class="string">'\\footnotesize\n'</span>);
-0520 fprintf(tex_launch,<span class="string">'\\begin{tabular}{ccc}\n'</span>);
-0521 fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
-0522 fprintf(tex_launch,<span class="string">'Parameter &amp; \\\\ \n'</span>);
-0523 fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
-0524 
-0525 <span class="comment">% for k = 1:size(tbl,1)</span>
-0526 <span class="comment">%     fprintf(tex_launch,'%s\n',tbl(k,:));</span>
-0527 <span class="comment">% end</span>
-0528 
-0529 <span class="keyword">switch</span> fileInfo.extension
-0530     <span class="keyword">case</span> <span class="string">'.d01'</span>
-0531         t = strsplit(info.General.starttime,<span class="string">' '</span>);
-0532         
-0533         fprintf(tex_launch,<span class="string">'Date &amp; %s  \\\\       \n'</span>,[t{3} <span class="string">' '</span> t{2} <span class="string">' '</span> t{5}]);
-0534         fprintf(tex_launch,<span class="string">'Experiment &amp; %s  \\\\ \n'</span>,regexprep(info.General.name,<span class="string">'_'</span>,<span class="string">'-'</span>));
-0535         fprintf(tex_launch,<span class="string">'MW Freq &amp; %s \\\\     \n'</span>,info.Source1.Frequency);
-0536         fprintf(tex_launch,<span class="string">'Field &amp; %s  \\\\      \n'</span>,info.Field.Field);
-0537         
-0538         a = strsplit(info.Parameters.t90,<span class="string">';'</span>);
-0539         b = strsplit(info.Parameters.t180,<span class="string">';'</span>);
-0540         c = strsplit(info.Parameters.RepTime,<span class="string">';'</span>);
-0541         
-0542         fprintf(tex_launch,<span class="string">'$\\pi/2$ &amp; %s  \\\\       \n'</span>,a{1});
-0543         fprintf(tex_launch,<span class="string">'$\\pi$ &amp; %s  \\\\         \n'</span>,b{1});
-0544         fprintf(tex_launch,<span class="string">'SRT &amp; %s  \\\\        \n'</span>,c{1});
-0545         
-0546         <span class="keyword">switch</span> fileInfo.fileType
-0547             <span class="keyword">case</span> <span class="string">'T2'</span>
-0548                 d = strsplit(info.Parameters.tau,<span class="string">';'</span>);
-0549                 fprintf(tex_launch,<span class="string">'$\\tau$ &amp; %s  \\\\        \n'</span>,d{1});
-0550 
-0551             <span class="keyword">case</span> <span class="string">'T1'</span>
-0552                 d = strsplit(info.Parameters.tau,<span class="string">';'</span>);
-0553                 fprintf(tex_launch,<span class="string">'$\\tau$ &amp; %s  \\\\        \n'</span>,d{1});
-0554                 
-0555             <span class="keyword">case</span> <span class="string">'FSE'</span>
-0556                 d = strsplit(info.Parameters.tau,<span class="string">';'</span>);
-0557                 fprintf(tex_launch,<span class="string">'$\\tau$ &amp; %s  \\\\        \n'</span>,d{1});
-0558                 fprintf(tex_launch,<span class="string">'Sweep &amp; %s  \\\\         \n'</span>,info.Field.SweepRate);
-0559                 
-0560             <span class="keyword">case</span> <span class="string">'NUT'</span>
-0561                 d = strsplit(info.Parameters.tau,<span class="string">';'</span>);
-0562                 fprintf(tex_launch,<span class="string">'$\\tau$ &amp; %s  \\\\        \n'</span>,d{1});
-0563                 fprintf(tex_launch,<span class="string">'Source 1 &amp; %s  \\\\      \n'</span>,info.Source1.Frequency);
-0564                 fprintf(tex_launch,<span class="string">'Source 2 &amp; %s  \\\\      \n'</span>,info.Source2.Frequency);
-0565                 
-0566             <span class="keyword">case</span> <span class="string">'4PEL'</span>
-0567                 d = strsplit(info.Parameters.tau,<span class="string">';'</span>);
-0568                 fprintf(tex_launch,<span class="string">'Source 1 &amp; %s  \\\\      \n'</span>,info.Source1.Frequency);
-0569                 fprintf(tex_launch,<span class="string">'Source 2 &amp; %s  \\\\      \n'</span>,info.Source2.Frequency);
-0570       
-0571         <span class="keyword">end</span>
-0572         
-0573     <span class="keyword">case</span> <span class="string">'.DTA'</span>
-0574         fprintf(tex_launch,<span class="string">'MW Freq &amp; %s GHz \\\\    \n'</span>,info.MWFQ/10.^9);
-0575         fprintf(tex_launch,<span class="string">'Averages &amp; %d  \\\\      \n'</span>,info.AVGS);
-0576         fprintf(tex_launch,<span class="string">'Shots/Point &amp; %s  \\\\   \n'</span>,info.ShotsPLoop);
-0577         fprintf(tex_launch,<span class="string">'Shot Rep Time &amp; %s  \\\\ \n'</span>,info.ShotRepTime);
-0578         fprintf(tex_launch,<span class="string">'Video Gain &amp; %s  \\\\    \n'</span>,info.VideoGain);
-0579         fprintf(tex_launch,<span class="string">'Center Field &amp; %s  \\\\  \n'</span>,info.CenterField);
-0580 <span class="keyword">end</span>
-0581 
-0582 <span class="comment">% End the parameters section</span>
-0583 fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
-0584 
-0585 <span class="comment">% If fitting was conducted then add the fitting results to the table</span>
-0586 <span class="keyword">if</span> isfield(fileInfo,<span class="string">'FitConf'</span>)
-0587     
-0588     fprintf(tex_launch,<span class="string">' &amp; \\\\ \n'</span>);
-0589     fprintf(tex_launch,<span class="string">' &amp; \\\\ \n'</span>);
-0590     fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
-0591     fprintf(tex_launch,<span class="string">'Fitting &amp; \\\\ \n'</span>);
-0592     fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
-0593     
-0594     <span class="keyword">switch</span> fileInfo.fileType
-0595         <span class="keyword">case</span> <span class="string">'T2'</span>
-0596             <span class="keyword">switch</span> size(fileInfo.FitValues,2)
-0597                 <span class="keyword">case</span> 2
-0598                    fprintf(tex_launch,<span class="string">'$T_{2}$ &amp; %.4g us  \\\\ \n'</span>,fileInfo.FitValues(2));
-0599                    fprintf(tex_launch,<span class="string">'$R^{2}$ &amp; %.4g     \\\\ \n'</span>,fileInfo.gof.rsquare);
+0419         
+0420         hold on
+0421         plot(x,y,<span class="string">'Color'</span>, <span class="string">'b'</span>);
+0422         
+0423         <span class="comment">% If a Bruker file draw a dashed line across zero intensity</span>
+0424         <span class="keyword">if</span> strcmp(extension,<span class="string">'.DTA'</span>)
+0425             plot([0,x(end)],[0,0],<span class="string">'LineStyle'</span>,<span class="string">'--'</span>,<span class="string">'Color'</span>, <span class="string">'k'</span>);
+0426         <span class="keyword">end</span>
+0427         
+0428         <span class="comment">% If Curve fitting is installed then do the fit</span>
+0429         <span class="keyword">if</span> license(<span class="string">'test'</span>, <span class="string">'curve_fitting_toolbox'</span>)
+0430             
+0431             <span class="comment">% Inversion recovery fit</span>
+0432             <span class="comment">%</span>
+0433             <span class="comment">% Using:</span>
+0434             <span class="comment">% y = y0*(1-exp(-x/T1))</span>
+0435             <span class="comment">%</span>
+0436             <span class="comment">% a = y offset (max)</span>
+0437             <span class="comment">% b = T1</span>
+0438             
+0439             f = fittype(<span class="string">'a*(1-exp(-x/b))'</span>);
+0440             
+0441             options             = fitoptions(f);
+0442             options.StartPoint  = [max(y)*0.98 0.001];
+0443             options.Lower       = [max(y)*0.9  0.00];
+0444             options.Upper       = [max(y)*1.1  0.01];
+0445             options.MaxFunEvals = 1200;
+0446             options.MaxIter     = 800;
+0447             
+0448             f = setoptions(f, options);
+0449             
+0450             <span class="comment">% Do the fit</span>
+0451             <span class="keyword">try</span>
+0452                 [fitting,gof] = fit(x,y,f);
+0453                 
+0454                 fileInfo.FitValues = coeffvalues(fitting);
+0455                 fileInfo.FitConf   = confint(fitting);
+0456                 fileInfo.gof       = gof;
+0457                 
+0458                 <span class="comment">% If the quality of fit is still poor then remove the fit</span>
+0459                 <span class="comment">% from the report</span>
+0460                 <span class="keyword">if</span> gof.rsquare &lt; 0.90
+0461                     clear fileInfo.FitValues
+0462                     clear fileInfo.FitConf
+0463                     clear fileInfo.gof
+0464                     
+0465                 <span class="keyword">else</span>
+0466                     plot(fitting);
+0467                     legend off
+0468                 <span class="keyword">end</span>
+0469             <span class="keyword">end</span>
+0470             
+0471         <span class="keyword">end</span>
+0472         
+0473         hold off
+0474         xlabel(<span class="string">'Time / ms'</span>);
+0475         ylabel(<span class="string">'Relative intensity'</span>);
+0476         
+0477     <span class="keyword">case</span> <span class="string">'FSE'</span>
+0478                    
+0479         plot(x,y);
+0480         ylabel(<span class="string">'Relative intensity'</span>);
+0481         
+0482         <span class="keyword">switch</span> extension
+0483             <span class="keyword">case</span> <span class="string">'.d01'</span>
+0484                 xlabel(<span class="string">'Magnetic field / A'</span>);
+0485             <span class="keyword">case</span> <span class="string">'.DTA'</span>
+0486                 xlabel(<span class="string">'Magnetic field / Gauss'</span>);
+0487         <span class="keyword">end</span>
+0488     
+0489     <span class="keyword">case</span> <span class="string">'NUT'</span>
+0490         <span class="keyword">switch</span> extension
+0491             <span class="keyword">case</span> <span class="string">'.d01'</span>
+0492                 x = x*1E9;
+0493                 plot(x,y);
+0494                 
+0495             <span class="keyword">case</span> <span class="string">'.DTA'</span>
+0496                 plot(y);
+0497         <span class="keyword">end</span>
+0498                 
+0499         plot(x,y);
+0500         xlabel(<span class="string">'Time / ns'</span>);
+0501         ylabel(<span class="string">'Relative intensity'</span>);
+0502         
+0503     <span class="keyword">case</span> <span class="string">'4PEL'</span>
+0504         
+0505         <span class="keyword">switch</span> extension
+0506             <span class="keyword">case</span> <span class="string">'.d01'</span>
+0507                 x = x*1E6;
+0508                 plot(x,y(:,1));
+0509                 
+0510             <span class="keyword">case</span> <span class="string">'.DTA'</span>
+0511                 x = x*1E6;
+0512                 plot(x/1000,y);
+0513         <span class="keyword">end</span>
+0514 
+0515         xlabel(<span class="string">'Time / \mus'</span>);
+0516         ylabel(<span class="string">'Relative intensity'</span>);
+0517         
+0518     <span class="keyword">case</span> <span class="string">'Echo'</span>
+0519         
+0520         x = x*1E9;
+0521         
+0522         plot(x,y);
+0523         xlabel(<span class="string">'Time / ns'</span>);
+0524         ylabel(<span class="string">'Relative intensity'</span>);
+0525         
+0526         
+0527     <span class="keyword">case</span> <span class="string">'Freq'</span>
+0528         
+0529         y = mean(y,2);
+0530         x = x/1E9;
+0531         
+0532         plot(x,y);
+0533         xlabel(<span class="string">'Frequency / GHz'</span>);
+0534         ylabel(<span class="string">'Relative intensity'</span>);
+0535         
+0536 <span class="keyword">end</span>
+0537 
+0538 set(gca,<span class="string">'Box'</span>,<span class="string">'on'</span>)
+0539 axis tight
+0540 axesSize = axis;
+0541 
+0542 <span class="comment">% T2 ideally wants to go to zero, everything else wants to be visible</span>
+0543 <span class="keyword">if</span> strcmp(fileType,<span class="string">'T2'</span>)
+0544     axis([axesSize(1) <span class="keyword">...</span>
+0545         axesSize(2) <span class="keyword">...</span>
+0546         0 <span class="keyword">...</span>
+0547         axesSize(4)*1.05]);
+0548 <span class="keyword">else</span>
+0549     axis([axesSize(1) <span class="keyword">...</span>
+0550         axesSize(2) <span class="keyword">...</span>
+0551         axesSize(3)-((axesSize(4)*1.05)-axesSize(4)) <span class="keyword">...</span>
+0552         axesSize(4)*1.05]);
+0553 <span class="keyword">end</span>
+0554 
+0555 <span class="comment">% Print figure</span>
+0556 print(hF, <span class="string">'-depsc2'</span>,  [directory name <span class="string">'.eps'</span>]);
+0557 
+0558 <span class="comment">% Close figure</span>
+0559 close(hF);
+0560 
+0561 
+0562 
+0563 <a name="_sub3" href="#_subfunctions" class="code">function tex_launch = texHeader(fileInfo)</a>
+0564 
+0565 <span class="comment">% Write the header section to the tex file</span>
+0566 
+0567 <span class="comment">%% Open file</span>
+0568 tex_launch = fopen([fileInfo{1}.directory fileInfo{1}.name <span class="string">'-reportbuilder.tex'</span>],<span class="string">'w'</span>);
+0569 
+0570 <span class="comment">%% File header</span>
+0571 header = [<span class="keyword">...</span>
+0572 <span class="string">'%                                        _                             _   '</span>;<span class="keyword">...</span>
+0573 <span class="string">'%                                       | |                           | |  '</span>;<span class="keyword">...</span>
+0574 <span class="string">'%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_ '</span>;<span class="keyword">...</span>
+0575 <span class="string">'% | ''_ ` _ \ / _ \| ''__/ _` |/ _` | ''_ \| ''_ \| | | |/ _ \ | ''_ \ / _ \ __|'</span>;<span class="keyword">...</span>
+0576 <span class="string">'% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_ '</span>;<span class="keyword">...</span>
+0577 <span class="string">'% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|'</span>;<span class="keyword">...</span>
+0578 <span class="string">'%                       __/ |                   __/ |                      '</span>;<span class="keyword">...</span>
+0579 <span class="string">'%                      |___/                   |___/                       '</span>;<span class="keyword">...</span>
+0580 <span class="string">'%                                                                          '</span>;<span class="keyword">...</span>
+0581 <span class="string">'%                                                                          '</span>;<span class="keyword">...</span>
+0582 <span class="string">'% M. Bye v14.09                                                            '</span>;<span class="keyword">...</span>
+0583 <span class="string">'%                                                                          '</span>;<span class="keyword">...</span>
+0584 <span class="string">'% Author:       Morgan Bye                                                 '</span>;<span class="keyword">...</span>
+0585 <span class="string">'% Work address: Department of Chemical Physics                             '</span>;<span class="keyword">...</span>
+0586 <span class="string">'%               Weizmann Institute of Science                              '</span>;<span class="keyword">...</span>
+0587 <span class="string">'%               REHOVOT, IL                                                '</span>;<span class="keyword">...</span>
+0588 <span class="string">'% Email:        morgan.bye@weizmann.ac.il                                  '</span>;<span class="keyword">...</span>
+0589 <span class="string">'% Website:      http://www.morganbye.net/eprtoolbox/                       '</span>;<span class="keyword">...</span>
+0590 <span class="string">'%                                                                          '</span>;<span class="keyword">...</span>
+0591 <span class="string">'% File created at:                                                         '</span>];
+0592 
+0593 header = [header ; sprintf(<span class="string">'%-75s'</span>, [<span class="string">'% '</span> datestr(now, <span class="string">'dd mmmm yyyy - HH:MM'</span>)])];
+0594 
+0595 header = [header ; <span class="string">'%                                                                          '</span>];
+0596 
+0597 <span class="keyword">for</span> k = 1:size(header,1)
+0598     fprintf(tex_launch,<span class="string">'%-75s\n'</span>,header(k,:));
+0599 <span class="keyword">end</span>
 0600 
-0601                 <span class="keyword">case</span> 4
-0602                    fprintf(tex_launch,<span class="string">'$T_{2}$ (slow) &amp; %.4g us  \\\\ \n'</span>,fileInfo.FitValues(2));
-0603                    fprintf(tex_launch,<span class="string">'$T_{2}$ (fast) &amp; %.4g us  \\\\ \n'</span>,fileInfo.FitValues(4));
-0604                    fprintf(tex_launch,<span class="string">'$R^{2}$ &amp; %.4g            \\\\ \n'</span>,fileInfo.gof.rsquare);
-0605             <span class="keyword">end</span>
-0606         <span class="keyword">case</span> <span class="string">'T1'</span>
-0607             fprintf(tex_launch,<span class="string">'$T_{1}$ &amp; %.4g ms  \\\\ \n'</span>,fileInfo.FitValues(3));
-0608             fprintf(tex_launch,<span class="string">'$R^{2}$ &amp; %.4g     \\\\ \n'</span>,fileInfo.gof.rsquare);
-0609     <span class="keyword">end</span>
-0610     
-0611     fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
-0612 <span class="keyword">end</span>
-0613 
-0614 <span class="comment">%% End table section</span>
-0615 fprintf(tex_launch,<span class="string">'\\end{tabular}\n'</span>);
-0616 fprintf(tex_launch,<span class="string">'\\end{minipage}\n'</span>);
-0617 fprintf(tex_launch,<span class="string">'\\caption*{File: %s}\n'</span>,fileInfo.file);
-0618 
-0619 <span class="comment">%% Figure end</span>
-0620 fprintf(tex_launch,<span class="string">'\\end{table}\n'</span>);
-0621</pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0601 <span class="comment">%% TeX header</span>
+0602 fprintf(tex_launch,<span class="string">'\\documentclass[a4paper]{report}\n'</span>);
+0603 fprintf(tex_launch,<span class="string">'\\usepackage{graphicx}\n'</span>);
+0604 fprintf(tex_launch,<span class="string">'\\usepackage{epstopdf}\n'</span>);
+0605 fprintf(tex_launch,<span class="string">'\\usepackage[export]{adjustbox}\n'</span>);
+0606 fprintf(tex_launch,<span class="string">'\\usepackage{subcaption}\n'</span>);
+0607 fprintf(tex_launch,<span class="string">'\\begin{document}\n'</span>);
+0608 
+0609 
+0610 
+0611 <a name="_sub4" href="#_subfunctions" class="code">function tex_launch = texFigure(tex_launch,info,fileInfo)</a>
+0612 
+0613 <span class="comment">% This section writes the individual figures to the tex file</span>
+0614 
+0615 <span class="comment">%% Setup table</span>
+0616 fprintf(tex_launch,<span class="string">'\\begin{table}[t]\n'</span>);
+0617 
+0618 <span class="comment">%% Figure</span>
+0619 fprintf(tex_launch,<span class="string">'\\begin{minipage}[c]{.65\\linewidth }\n'</span>);
+0620 fprintf(tex_launch,<span class="string">'\\centering\n'</span>);
+0621 fprintf(tex_launch,<span class="string">'\\includegraphics[max width=0.9\\linewidth]{%s}\n'</span>,<span class="keyword">...</span>
+0622     [fileInfo.name <span class="string">'.eps'</span>]);
+0623 fprintf(tex_launch,<span class="string">'\\end{minipage}\n'</span>);
+0624 
+0625 <span class="comment">%% Parameters table</span>
+0626 fprintf(tex_launch,<span class="string">'\\begin{minipage}[c]{.3\\linewidth}\n'</span>);
+0627 fprintf(tex_launch,<span class="string">'\\centering\n'</span>);
+0628 fprintf(tex_launch,<span class="string">'\\footnotesize\n'</span>);
+0629 fprintf(tex_launch,<span class="string">'\\begin{tabular}{ccc}\n'</span>);
+0630 fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
+0631 fprintf(tex_launch,<span class="string">'Parameter &amp; \\\\ \n'</span>);
+0632 fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
+0633 
+0634 <span class="comment">% for k = 1:size(tbl,1)</span>
+0635 <span class="comment">%     fprintf(tex_launch,'%s\n',tbl(k,:));</span>
+0636 <span class="comment">% end</span>
+0637 
+0638 <span class="keyword">switch</span> fileInfo.extension
+0639     <span class="keyword">case</span> <span class="string">'.d01'</span>
+0640         t = strsplit(info.General.starttime,<span class="string">' '</span>);
+0641         
+0642         fprintf(tex_launch,<span class="string">'Date &amp; %s  \\\\       \n'</span>,[t{3} <span class="string">' '</span> t{2} <span class="string">' '</span> t{5}]);
+0643         fprintf(tex_launch,<span class="string">'Experiment &amp; %s  \\\\ \n'</span>,regexprep(info.General.name,<span class="string">'_'</span>,<span class="string">'-'</span>));
+0644         fprintf(tex_launch,<span class="string">'MW Freq &amp; %s \\\\     \n'</span>,info.Source1.Frequency);
+0645         fprintf(tex_launch,<span class="string">'Field &amp; %s  \\\\      \n'</span>,info.Field.Field);
+0646         
+0647         a = strsplit(info.Parameters.t90,<span class="string">';'</span>);
+0648         b = strsplit(info.Parameters.t180,<span class="string">';'</span>);
+0649         c = strsplit(info.Parameters.RepTime,<span class="string">';'</span>);
+0650         
+0651         fprintf(tex_launch,<span class="string">'$\\pi/2$ &amp; %s  \\\\       \n'</span>,a{1});
+0652         fprintf(tex_launch,<span class="string">'$\\pi$ &amp; %s  \\\\         \n'</span>,b{1});
+0653         fprintf(tex_launch,<span class="string">'SRT &amp; %s  \\\\        \n'</span>,c{1});
+0654         
+0655         <span class="keyword">switch</span> fileInfo.fileType
+0656             <span class="keyword">case</span> <span class="string">'T2'</span>
+0657                 d = strsplit(info.Parameters.tau,<span class="string">';'</span>);
+0658                 fprintf(tex_launch,<span class="string">'$\\tau$ &amp; %s  \\\\        \n'</span>,d{1});
+0659 
+0660             <span class="keyword">case</span> <span class="string">'T1'</span>
+0661                 d = strsplit(info.Parameters.tau,<span class="string">';'</span>);
+0662                 fprintf(tex_launch,<span class="string">'$\\tau$ &amp; %s  \\\\        \n'</span>,d{1});
+0663                 
+0664             <span class="keyword">case</span> <span class="string">'FSE'</span>
+0665                 d = strsplit(info.Parameters.tau,<span class="string">';'</span>);
+0666                 fprintf(tex_launch,<span class="string">'$\\tau$ &amp; %s  \\\\        \n'</span>,d{1});
+0667                 fprintf(tex_launch,<span class="string">'Sweep &amp; %s  \\\\         \n'</span>,info.Field.SweepRate);
+0668                 
+0669             <span class="keyword">case</span> <span class="string">'NUT'</span>
+0670                 d = strsplit(info.Parameters.tau,<span class="string">';'</span>);
+0671                 fprintf(tex_launch,<span class="string">'$\\tau$ &amp; %s  \\\\        \n'</span>,d{1});
+0672                 fprintf(tex_launch,<span class="string">'Source 1 &amp; %s  \\\\      \n'</span>,info.Source1.Frequency);
+0673                 fprintf(tex_launch,<span class="string">'Source 2 &amp; %s  \\\\      \n'</span>,info.Source2.Frequency);
+0674                 
+0675             <span class="keyword">case</span> <span class="string">'4PEL'</span>
+0676                 d = strsplit(info.Parameters.tau,<span class="string">';'</span>);
+0677                 fprintf(tex_launch,<span class="string">'Source 1 &amp; %s  \\\\      \n'</span>,info.Source1.Frequency);
+0678                 fprintf(tex_launch,<span class="string">'Source 2 &amp; %s  \\\\      \n'</span>,info.Source2.Frequency);
+0679                 fprintf(tex_launch,<span class="string">'Exp. time &amp; %s  \\\\     \n'</span>,info.General.totaltime);
+0680                 
+0681             <span class="keyword">case</span> <span class="string">'Echo'</span>
+0682                 
+0683             <span class="keyword">case</span> <span class="string">'Freq'</span>
+0684                 d = strsplit(info.Parameters.tau,<span class="string">';'</span>);
+0685                 fprintf(tex_launch,<span class="string">'Source 1 &amp; %s  \\\\      \n'</span>,d{1});
+0686         <span class="keyword">end</span>
+0687         
+0688     <span class="keyword">case</span> <span class="string">'.DTA'</span>
+0689         fprintf(tex_launch,<span class="string">'MW Freq &amp; %s GHz \\\\    \n'</span>,info.MWFQ/10.^9);
+0690         fprintf(tex_launch,<span class="string">'Averages &amp; %d  \\\\      \n'</span>,info.AVGS);
+0691         fprintf(tex_launch,<span class="string">'Shots/Point &amp; %s  \\\\   \n'</span>,info.ShotsPLoop);
+0692         fprintf(tex_launch,<span class="string">'Shot Rep Time &amp; %s  \\\\ \n'</span>,info.ShotRepTime);
+0693         fprintf(tex_launch,<span class="string">'Video Gain &amp; %s  \\\\    \n'</span>,info.VideoGain);
+0694         fprintf(tex_launch,<span class="string">'Center Field &amp; %s  \\\\  \n'</span>,info.CenterField);
+0695 <span class="keyword">end</span>
+0696 
+0697 <span class="comment">% End the parameters section</span>
+0698 fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
+0699 
+0700 <span class="comment">% If fitting was conducted then add the fitting results to the table</span>
+0701 <span class="keyword">if</span> isfield(fileInfo,<span class="string">'FitConf'</span>)
+0702     
+0703     <span class="comment">% But only if the fit was reasonable</span>
+0704     <span class="keyword">if</span> fileInfo.gof.rsquare &gt;= 0.90
+0705         
+0706         fprintf(tex_launch,<span class="string">' &amp; \\\\ \n'</span>);
+0707         fprintf(tex_launch,<span class="string">' &amp; \\\\ \n'</span>);
+0708         fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
+0709         fprintf(tex_launch,<span class="string">'Fitting &amp; \\\\ \n'</span>);
+0710         fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
+0711         
+0712         <span class="keyword">switch</span> fileInfo.fileType
+0713             <span class="keyword">case</span> <span class="string">'T2'</span>
+0714                 <span class="keyword">switch</span> size(fileInfo.FitValues,2)
+0715                     <span class="keyword">case</span> 3
+0716                         fprintf(tex_launch,<span class="string">'$T_{2}$ &amp; %.4g ns  \\\\ \n'</span>,fileInfo.FitValues(3));
+0717                         fprintf(tex_launch,<span class="string">'$R^{2}$ &amp; %.4g     \\\\ \n'</span>,fileInfo.gof.rsquare);
+0718                         
+0719                     <span class="keyword">case</span> 5
+0720                         fprintf(tex_launch,<span class="string">'$T_{2}$ (slow) &amp; %.4g ns  \\\\ \n'</span>,fileInfo.FitValues(2));
+0721                         fprintf(tex_launch,<span class="string">'$T_{2}$ (fast) &amp; %.4g ns  \\\\ \n'</span>,fileInfo.FitValues(4));
+0722                         fprintf(tex_launch,<span class="string">'$R^{2}$ &amp; %.4g            \\\\ \n'</span>,fileInfo.gof.rsquare);
+0723                 <span class="keyword">end</span>
+0724             <span class="keyword">case</span> <span class="string">'T1'</span>
+0725                 fprintf(tex_launch,<span class="string">'$T_{1}$ &amp; %.4g ms  \\\\ \n'</span>,fileInfo.FitValues(2)*1e9);
+0726                 fprintf(tex_launch,<span class="string">'$R^{2}$ &amp; %.4g     \\\\ \n'</span>,fileInfo.gof.rsquare);
+0727         <span class="keyword">end</span>
+0728         
+0729         fprintf(tex_launch,<span class="string">'\\hline\n'</span>);
+0730         
+0731     <span class="keyword">end</span>
+0732 <span class="keyword">end</span>
+0733 
+0734 <span class="comment">%% End table section</span>
+0735 fprintf(tex_launch,<span class="string">'\\end{tabular}\n'</span>);
+0736 fprintf(tex_launch,<span class="string">'\\end{minipage}\n'</span>);
+0737 fprintf(tex_launch,<span class="string">'\\caption*{File: %s}\n'</span>,fileInfo.file);
+0738 
+0739 <span class="comment">%% Figure end</span>
+0740 fprintf(tex_launch,<span class="string">'\\end{table}\n'</span>);
+0741</pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -55,10 +55,10 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-<li><a href="PS_PeakFind.html" class="code" title="function peak = PS_PeakFind(x,y,s,range)">PS_PeakFind</a>	PS_PEAKFIND finds peaks within a spectrum and outputs the x and y</li></ul>
+<li><a href="PS_PeakFind.html" class="code" title="function peak = PS_PeakFind(x,y,s,range)">PS_PeakFind</a>	PS_PEAKFIND finds peaks within a spectrum and outputs the x and y</li><li><a href="../../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../matlabicon.gif)">
-</ul>
+<li><a href="../../../cw/PowerSat/PowerSat.html" class="code" title="function varargout = PowerSat(varargin)">PowerSat</a>	POWERSAT Open, analyse and plot power saturation experiments</li></ul>
 <!-- crossreference -->
 
 
@@ -129,7 +129,7 @@ This function is called by:
 0063 <span class="keyword">switch</span> file
 0064     <span class="keyword">case</span> <span class="string">'file'</span>
 0065         <span class="keyword">try</span>
-0066             [x,y,info] = BrukerRead;
+0066             [x,y,info] = <a href="../../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>;
 0067         <span class="keyword">catch</span>
 0068             <span class="comment">% Do nothing rather than error</span>
 0069             <span class="keyword">return</span>
@@ -169,7 +169,7 @@ This function is called by:
 0103             waitbar(k/noFiles,h,sprintf(<span class="string">'Loading file %1d of %1d'</span>,k,noFiles));
 0104                 
 0105             <span class="comment">% Load the file</span>
-0106             [x_, y_ , info_] = BrukerRead([folder <span class="string">'/'</span> dtaFiles(k).name]);
+0106             [x_, y_ , info_] = <a href="../../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([folder <span class="string">'/'</span> dtaFiles(k).name]);
 0107              x(:,k)           = x_(:);
 0108             y(:,k)           = y_(:);
 0109             info.MWPW(k,:)   = info_.MWPW;
@@ -202,6 +202,6 @@ This function is called by:
 0136 vars.(exp).MaxPeak = maxpeak(1,1);
 0137 vars.(exp).MinPeak = minpeak(1,1);
 0138 warning on</pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

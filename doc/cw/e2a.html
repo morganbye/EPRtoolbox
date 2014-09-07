@@ -81,7 +81,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-</ul>
+<li><a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 </ul>
@@ -208,7 +208,7 @@ This function is called by:
 0116         
 0117         in_address = [directory,file];
 0118         
-0119         [mag_field, abs] = BrukerRead(in_address);
+0119         [mag_field, abs] = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(in_address);
 0120     
 0121         <span class="comment">% File selected via command line</span>
 0122     <span class="keyword">case</span> 1
@@ -224,7 +224,7 @@ This function is called by:
 0132             in_address = varargin{1};
 0133             [~,f,e] = fileparts(in_address);
 0134             file = [f e];
-0135             [mag_field, abs] = BrukerRead(in_address);
+0135             [mag_field, abs] = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(in_address);
 0136             
 0137             <span class="comment">% For delimiter</span>
 0138         <span class="keyword">elseif</span> ischar(varargin{1}) &amp;&amp; length(varargin{1}) == 1
@@ -243,7 +243,7 @@ This function is called by:
 0151             
 0152             in_address = [directory,file];
 0153             
-0154             [mag_field, abs] = BrukerRead(in_address);
+0154             [mag_field, abs] = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(in_address);
 0155         <span class="keyword">end</span>
 0156         
 0157         extension = <span class="string">'.csv'</span>;
@@ -255,7 +255,7 @@ This function is called by:
 0163             in_address = varargin{1};
 0164             [directory,name,ext] = fileparts(in_address);
 0165             file = [name ext];
-0166             [mag_field, abs] = BrukerRead(in_address);
+0166             [mag_field, abs] = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(in_address);
 0167         <span class="keyword">end</span>
 0168 
 0169         delimiter = varargin{2};
@@ -267,7 +267,7 @@ This function is called by:
 0175             in_address = varargin{1};
 0176             [directory,name,ext] = fileparts(in_address);
 0177             file = [name ext];
-0178             [mag_field, abs] = BrukerRead(in_address);
+0178             [mag_field, abs] = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(in_address);
 0179         <span class="keyword">end</span>
 0180         
 0181         delimiter = varargin{2};
@@ -280,7 +280,7 @@ This function is called by:
 0188             in_address = varargin{1};
 0189             [directory,name,ext] = fileparts(in_address);
 0190             file = [name ext];
-0191             [mag_field, abs] = BrukerRead(in_address);
+0191             [mag_field, abs] = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(in_address);
 0192         <span class="keyword">end</span>
 0193         
 0194         delimiter = varargin{2};
@@ -293,7 +293,7 @@ This function is called by:
 0201             in_address = varargin{1};
 0202             [directory,name,ext] = fileparts(in_address);
 0203             file = [name ext];
-0204             [mag_field, abs] = BrukerRead(in_address);
+0204             [mag_field, abs] = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(in_address);
 0205         <span class="keyword">end</span>
 0206         
 0207         delimiter = varargin{2};
@@ -393,6 +393,6 @@ This function is called by:
 0301 
 0302 <span class="comment">% Message user</span>
 0303 fprintf(<span class="string">'File %s has been successfully converted to %s%s \n \n'</span>, file, out_name, extension)</pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

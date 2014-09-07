@@ -1,0 +1,357 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PDBSplitter</title>
+  <meta name="keywords" content="PDBSplitter">
+  <meta name="description" content="This script takes a PDB from a local source or from rcsb.org">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="index.html">PDB</a> &gt; PDBSplitter.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/PDB&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>PDBSplitter
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This script takes a PDB from a local source or from rcsb.org</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> This script takes a PDB from a local source or from rcsb.org
+ (using PDB identifier code) and splits them into seperate PDBs. One for
+ each chain.
+ 
+ At the moment, this is to a maximum of 4 chains, though can easily be
+ expanded upon request.
+ 
+ Unfortunately, this script does require pdbread and pdbwrite from the
+ Bioinformatics Toolbox. As a result, the first line has a check to see if
+ the function can be called and will message the user if it is not
+ installed.
+
+ For more information see:
+ http://morganbye.net/eprtoolbox/PDB-splitter</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% This script takes a PDB from a local source or from rcsb.org</span>
+0002 <span class="comment">% (using PDB identifier code) and splits them into seperate PDBs. One for</span>
+0003 <span class="comment">% each chain.</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% At the moment, this is to a maximum of 4 chains, though can easily be</span>
+0006 <span class="comment">% expanded upon request.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Unfortunately, this script does require pdbread and pdbwrite from the</span>
+0009 <span class="comment">% Bioinformatics Toolbox. As a result, the first line has a check to see if</span>
+0010 <span class="comment">% the function can be called and will message the user if it is not</span>
+0011 <span class="comment">% installed.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% For more information see:</span>
+0014 <span class="comment">% http://morganbye.net/eprtoolbox/PDB-splitter</span>
+0015 <span class="comment">%</span>
+0016 
+0017 <span class="comment">%                                        _                             _</span>
+0018 <span class="comment">%                                       | |                           | |</span>
+0019 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0020 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0021 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0022 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0023 <span class="comment">%                       __/ |                   __/ |</span>
+0024 <span class="comment">%                      |___/                   |___/</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% M. Bye v13.09</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% v13.09 - current</span>
+0029 <span class="comment">%               Chemical Physics Department</span>
+0030 <span class="comment">%               Weizmann Institute of Science</span>
+0031 <span class="comment">%               76100 REHOVOT, Israel</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% v11.06 - v13.08</span>
+0034 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0035 <span class="comment">%               University of East Anglia</span>
+0036 <span class="comment">%               NORWICH, UK</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0039 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
+0040 
+0041 
+0042 <span class="comment">% ===================================================</span>
+0043 <span class="comment">% GUI open the PDB file from local or online source</span>
+0044 <span class="comment">% ===================================================</span>
+0045 
+0046 <span class="keyword">if</span> exist(<span class="string">'pdbread'</span>) == 0,
+0047     error(<span class="string">'Unfortunately the &quot;pdbread&quot; function was not found on your system. Please install the Bioinformatics toolbox and try again.'</span>)
+0048 <span class="keyword">end</span>
+0049 
+0050 clear all
+0051 
+0052 <span class="comment">% select pdb source</span>
+0053 Source = questdlg(<span class="string">'Where is the PDB file?'</span>,<span class="string">'PDB Source'</span>,<span class="string">'Local'</span>,<span class="string">'Online'</span>,<span class="string">'Local'</span>);
+0054 
+0055 <span class="comment">% get pdb</span>
+0056 <span class="keyword">switch</span> Source,
+0057     <span class="keyword">case</span> <span class="string">'Local'</span>,
+0058         [file, directory] = uigetfile(<span class="string">'*.pdb'</span>);
+0059         PDBName = fullfile(directory, file);
+0060         [~, name, extension] = fileparts(file);
+0061         disp(<span class="string">'Loading PDB...(this may take some time)'</span>)
+0062         input = pdbread(PDBName);
+0063                 
+0064     <span class="keyword">case</span> <span class="string">'Online'</span>,
+0065         PDBcode = inputdlg(<span class="string">'What is the PDB code for the protein?'</span>, <span class="string">'PDB code'</span>,1,{<span class="string">'xxxx'</span>});
+0066         PDBcode = char(PDBcode);
+0067         disp(<span class="string">'Fetching PDB...(this may take some time)'</span>)
+0068         input = getpdb(PDBcode);
+0069         name = PDBcode;
+0070         
+0071 <span class="keyword">end</span>
+0072 
+0073 <span class="comment">% ===================================================</span>
+0074 <span class="comment">% Scan through chains and export them to Chain matrix</span>
+0075 <span class="comment">% ===================================================</span>
+0076 
+0077 counter = 1;
+0078 
+0079 <span class="keyword">if</span> numel(input.Model) == 1
+0080     <span class="comment">% for x-ray structures that only have 1 model</span>
+0081     
+0082     <span class="keyword">for</span> Chains = 1:numel(input.Sequence);
+0083                 
+0084         <span class="keyword">for</span> k = 1:numel(input.Model.Atom)
+0085             
+0086             <span class="keyword">if</span> counter == 1;
+0087                 ChainID = <span class="string">'A'</span>;
+0088             <span class="keyword">elseif</span> counter == 2;
+0089                 ChainID = <span class="string">'B'</span>;
+0090             <span class="keyword">elseif</span> counter == 3;
+0091                 ChainID = <span class="string">'C'</span>;
+0092             <span class="keyword">elseif</span> counter == 4;
+0093                 ChainID = <span class="string">'D'</span>;
+0094             <span class="keyword">elseif</span> counter == 5;
+0095                 ChainID = <span class="string">'E'</span>;
+0096             <span class="keyword">elseif</span> counter == 6;
+0097                 ChainID = <span class="string">'F'</span>;
+0098             <span class="keyword">end</span>
+0099             
+0100             <span class="keyword">if</span> strcmp(ChainID , input.Model.Atom(k).chainID) == 1
+0101                 
+0102                 Chain(counter).Model.Atom(k) = input.Model.Atom(k);
+0103                 
+0104                 <span class="comment">% define PDB header section (without which you cant export)</span>
+0105                 Chain(Chains).Header = input.Header;
+0106                 Chain(Chains).Compound = input.Compound;
+0107                 Chain(Chains).Source = input.Source;
+0108                 Chain(Chains).Authors = input.Authors;
+0109                 Chain(Chains).RevisionDate = input.RevisionDate;
+0110                 Chain(Chains).Remark2 = input.Remark2;
+0111                 Chain(Chains).Remark3 = input.Remark3;
+0112                 Chain(Chains).Cryst1 = input.Cryst1;
+0113                 Chain(Chains).OriginX = input.OriginX;
+0114                 Chain(Chains).Scale = input.Scale;
+0115                 Chain(Chains).Master = input.Master;
+0116                 
+0117             <span class="keyword">end</span>
+0118             
+0119         <span class="keyword">end</span>
+0120         
+0121         fprintf(<span class="string">'Chain %s has been successfully loaded...\n \n'</span>, ChainID)
+0122         counter = counter + 1;
+0123         
+0124     <span class="keyword">end</span>
+0125     
+0126 <span class="keyword">else</span>
+0127     
+0128     <span class="comment">% for NMR structures which have more than one model we shall take the first model</span>
+0129     
+0130     <span class="keyword">for</span> Chains = 1:numel(input.Sequence);
+0131                 
+0132         <span class="keyword">for</span> k = 1:numel(input.Model(1,1).Atom)
+0133             
+0134             <span class="keyword">if</span> counter == 1;
+0135                 ChainID = <span class="string">'A'</span>;
+0136             <span class="keyword">elseif</span> counter == 2;
+0137                 ChainID = <span class="string">'B'</span>;
+0138             <span class="keyword">elseif</span> counter == 3;
+0139                 ChainID = <span class="string">'C'</span>;
+0140             <span class="keyword">elseif</span> counter == 4;
+0141                 ChainID = <span class="string">'D'</span>;
+0142             <span class="keyword">elseif</span> counter == 5;
+0143                 ChainID = <span class="string">'E'</span>;
+0144             <span class="keyword">elseif</span> counter == 6;
+0145                 ChainID = <span class="string">'F'</span>;
+0146             <span class="keyword">end</span>
+0147             
+0148             <span class="keyword">if</span> strcmp(ChainID , input.Model(1,1).Atom(k).chainID) == 1
+0149                 
+0150                 Chain(counter).Model.Atom(k) = input.Model(1,1).Atom(k);
+0151                 
+0152                 <span class="comment">% define PDB header section (without which you cant export)</span>
+0153                 Chain(Chains).Header = input.Header;
+0154                 Chain(Chains).Compound = input.Compound;
+0155                 Chain(Chains).Source = input.Source;
+0156                 Chain(Chains).Authors = input.Authors;
+0157                 Chain(Chains).RevisionDate = input.RevisionDate;
+0158                 Chain(Chains).Remark2 = input.Remark2;
+0159                 Chain(Chains).Remark3 = input.Remark3;
+0160                 Chain(Chains).Cryst1 = input.Cryst1;
+0161                 Chain(Chains).OriginX = input.OriginX;
+0162                 Chain(Chains).Scale = input.Scale;
+0163                 Chain(Chains).Master = input.Master;
+0164                 
+0165             <span class="keyword">end</span>
+0166             
+0167         <span class="keyword">end</span>
+0168         
+0169         fprintf(<span class="string">'Chain %s has been successfully loaded...\n \n'</span>, ChainID)
+0170         counter = counter + 1;
+0171         
+0172     <span class="keyword">end</span>
+0173 <span class="keyword">end</span>
+0174 
+0175 fprintf(<span class="string">'%d chains have been loaded.\n\nSplitting files...\n \n'</span>, Chains)
+0176 
+0177 <span class="comment">% =====================================================</span>
+0178 <span class="comment">% Scan complete, now export the chains as seperate PDBs</span>
+0179 <span class="comment">% =====================================================</span>
+0180 
+0181 <span class="comment">% Set output location</span>
+0182 <span class="keyword">if</span> strcmp(<span class="string">'Online'</span> , Source)
+0183     folder = uigetdir(<span class="string">''</span>, <span class="string">'Select ouput directory'</span>);
+0184     cd(folder);
+0185 <span class="keyword">else</span>
+0186     Save_local = questdlg(<span class="string">'Do you want to save the chains in the same location?'</span>,<span class="string">'Output location'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>,<span class="string">'Yes'</span>);
+0187     <span class="keyword">switch</span> Save_local
+0188         <span class="keyword">case</span> <span class="string">'Yes'</span>
+0189             <span class="comment">% do nothing</span>
+0190         <span class="keyword">case</span> <span class="string">'No'</span>
+0191             folder = uigetdir(<span class="string">''</span>, <span class="string">'Select ouput directory'</span>);
+0192             cd(folder);
+0193     <span class="keyword">end</span>
+0194 <span class="keyword">end</span>
+0195     
+0196 
+0197 <span class="comment">% Write Chain A</span>
+0198 <span class="comment">% =====================================================</span>
+0199 output = strcat(name , <span class="string">'_ChainA.pdb'</span>);
+0200 pdbwrite(output , Chain(1,1));
+0201     
+0202 <span class="comment">% For 2 chains, write Chain B</span>
+0203 <span class="comment">% =====================================================</span>
+0204 <span class="keyword">if</span> numel(Chain) &gt; 1
+0205     
+0206     <span class="comment">% Find the atom number where Chain B starts</span>
+0207     SoB = input.Model.Terminal(1,1).SerialNo; <span class="comment">% SoB = start of B</span>
+0208     
+0209     <span class="comment">% Remove all previous atoms in the Chain B PDB.</span>
+0210     Chain(1,2).Model.Atom = Chain(1,2).Model.Atom(1 , SoB:end);
+0211     
+0212     <span class="comment">% Write out Chain B</span>
+0213     output = strcat(name , <span class="string">'_ChainB.pdb'</span>);
+0214     pdbwrite(output , Chain(1,2));
+0215 <span class="keyword">end</span>
+0216 
+0217 <span class="comment">% For 3 chains, write Chain C</span>
+0218 <span class="comment">% =====================================================</span>
+0219 <span class="keyword">if</span> numel(Chain) &gt; 2
+0220     
+0221     <span class="comment">% Find the atom number where Chain C starts</span>
+0222     SoC = input.Model.Terminal(1,2).SerialNo;
+0223     
+0224     <span class="comment">% Remove all atoms that are before or after the chain.</span>
+0225     Chain(1,2).Model.Atom = Chain(1,2).Model.Atom(1 , SoB:SoC);
+0226     Chain(1,3).Model.Atom = Chain(1,3).Model.Atom(1 , SoC:end);
+0227     
+0228     <span class="comment">% NB: at this point Chain B has been trimmed. Chain C runs from the end</span>
+0229     <span class="comment">% of B to the end of atoms. If there is a Chain D it will be trimmed in</span>
+0230     <span class="comment">% the next step.</span>
+0231     
+0232     <span class="comment">% Write out Chain C</span>
+0233     output = strcat(name , <span class="string">'_ChainC.pdb'</span>);
+0234     pdbwrite(output , Chain(1,3));
+0235 <span class="keyword">end</span>
+0236 
+0237 <span class="comment">% For 4 chains, write Chain D</span>
+0238 <span class="comment">% =====================================================</span>
+0239 <span class="keyword">if</span> numel(Chain) &gt; 3
+0240     
+0241     <span class="comment">% Find the atom number where Chain D starts</span>
+0242     SoD = input.Model.Terminal(1,3).SerialNo;
+0243     
+0244     <span class="comment">% Remove all atoms that are before or after the chain.</span>
+0245     Chain(1,3).Model.Atom = Chain(1,3).Model.Atom(1 , SoC:SoD);
+0246     Chain(1,4).Model.Atom = Chain(1,4).Model.Atom(1 , SoD:end);
+0247     
+0248     <span class="comment">% Write out Chain D</span>
+0249     output = strcat(name , <span class="string">'_ChainD.pdb'</span>);
+0250     pdbwrite(output , Chain(1,4));
+0251 <span class="keyword">end</span>
+0252 
+0253 <span class="comment">% For 5 chains, write Chain E</span>
+0254 <span class="comment">% =====================================================</span>
+0255 <span class="keyword">if</span> numel(Chain) &gt; 4
+0256     
+0257     <span class="comment">% Find the atom number where Chain E starts</span>
+0258     SoE = input.Model.Terminal(1,4).SerialNo;
+0259     
+0260     <span class="comment">% Remove all atoms that are before or after the chain.</span>
+0261     Chain(1,4).Model.Atom = Chain(1,4).Model.Atom(1 , SoD:SoE);
+0262     Chain(1,5).Model.Atom = Chain(1,5).Model.Atom(1 , SoE:end);
+0263     
+0264     <span class="comment">% Write out Chain D</span>
+0265     output = strcat(name , <span class="string">'_ChainE.pdb'</span>);
+0266     pdbwrite(output , Chain(1,5));
+0267 <span class="keyword">end</span>
+0268 
+0269 <span class="comment">% For 6 chains, write Chain F</span>
+0270 <span class="comment">% =====================================================</span>
+0271 <span class="keyword">if</span> numel(Chain) &gt; 5
+0272     
+0273     <span class="comment">% Find the atom number where Chain F starts</span>
+0274     SoF = input.Model.Terminal(1,5).SerialNo;
+0275     
+0276     <span class="comment">% Remove all atoms that are before or after the chain.</span>
+0277     Chain(1,5).Model.Atom = Chain(1,5).Model.Atom(1 , SoE:SoF);
+0278     Chain(1,6).Model.Atom = Chain(1,6).Model.Atom(1 , SoF:end);
+0279     
+0280     <span class="comment">% Write out Chain F</span>
+0281     output = strcat(name , <span class="string">'_ChainF.pdb'</span>);
+0282     pdbwrite(output , Chain(1,6));
+0283 <span class="keyword">end</span>
+0284 
+0285 
+0286 <span class="comment">% Message user success</span>
+0287 <span class="comment">% =====================================================</span>
+0288 <span class="keyword">if</span> strcmp(<span class="string">'Local'</span> , Source)
+0289 fprintf(<span class="string">'%s has been successfully split into %d files\n \n'</span>, file, Chains)
+0290 <span class="keyword">end</span>
+0291 
+0292 <span class="keyword">if</span> strcmp(<span class="string">'Online'</span> , Source)
+0293 fprintf(<span class="string">'%s has been successfully split into %d files\n \n'</span>, PDBcode, Chains)
+0294 <span class="keyword">end</span>
+0295 
+0296 clear Chain ChainID Chains PDBName SoB SoC SoD SoE SoF Source counter directory<span class="keyword">...</span>
+0297     extension file input k name output folder Save_local PDBcode</pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

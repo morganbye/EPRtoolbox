@@ -1,0 +1,614 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of viewing_options</title>
+  <meta name="keywords" content="viewing_options">
+  <meta name="description" content="VIEWING_OPTIONS The Viewing Options window for cwViewer">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="../index.html">cw</a> &gt; <a href="index.html">cwViewer</a> &gt; viewing_options.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/cw/cwViewer&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>viewing_options
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>VIEWING_OPTIONS The Viewing Options window for cwViewer</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function varargout = viewing_options(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> VIEWING_OPTIONS The Viewing Options window for cwViewer
+
+ Syntax:       - n/a
+
+ Inputs:
+    input1     - n/a
+
+ Outputs:
+    output1    - n/a
+
+ Example: 
+    see http://morganbye.net/cwViewer
+
+ Other m-files required:   /private (directory)
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: <a href="cwViewer.html" class="code" title="function varargout = cwViewer(varargin)">CWVIEWER</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>	CV_PLOT Plotting function for cwViewer</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="cwViewer.html" class="code" title="function varargout = cwViewer(varargin)">cwViewer</a>	CWVIEWER Open, analyse and plot cw-EPR experiments.</li><li><a href="../../../EPRtoolbox/cw/eprViewer-BETA/eprViewer.html" class="code" title="function varargout = eprViewer(varargin)">eprViewer</a>	CWVIEWER Open, analyse and plot cw-EPR experiments.</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function viewing_options_OpeningFcn(hObject, eventdata, handles, varargin)</a></li><li><a href="#_sub2" class="code">function varargout = viewing_options_OutputFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub3" class="code">function radio_stacked_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub4" class="code">function radio_single_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub5" class="code">function radio_staggered_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub6" class="code">function edit_xaxis_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub7" class="code">function edit_xaxis_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub8" class="code">function edit_yaxis_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub9" class="code">function edit_yaxis_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub10" class="code">function checkbox_yaxis_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub11" class="code">function checkbox_xaxis_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub12" class="code">function radio_automatic_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub13" class="code">function radio_automatic_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub14" class="code">function radio_manual_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub15" class="code">function radio_manual_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub16" class="code">function edit_maglow_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub17" class="code">function edit_maglow_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub18" class="code">function edit_intlow_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub19" class="code">function edit_intlow_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub20" class="code">function edit_maghigh_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub21" class="code">function edit_maghigh_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub22" class="code">function edit_inthigh_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub23" class="code">function edit_inthigh_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub24" class="code">function checkbox_g_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub25" class="code">function checkbox_reference_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub26" class="code">function edit_refg_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub27" class="code">function edit_refFreq_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub28" class="code">function edit_refg_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub29" class="code">function edit_refField_Callback(hObject, eventdata, handles)</a></li><li><a href="#_sub30" class="code">function edit_refField_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub31" class="code">function edit_refFreq_CreateFcn(hObject, eventdata, handles)</a></li><li><a href="#_sub32" class="code">function figure1_CloseRequestFcn(hObject, eventdata, handles)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = viewing_options(varargin)</a>
+0002 
+0003 <span class="comment">% VIEWING_OPTIONS The Viewing Options window for cwViewer</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Syntax:       - n/a</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%    input1     - n/a</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Outputs:</span>
+0011 <span class="comment">%    output1    - n/a</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Example:</span>
+0014 <span class="comment">%    see http://morganbye.net/cwViewer</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Other m-files required:   /private (directory)</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Subfunctions:             none</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% MAT-files required:       none</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% See also: CWVIEWER</span>
+0024 
+0025 <span class="comment">%                           oooooo     oooo   o8o</span>
+0026 <span class="comment">%                            `888.     .8'    `&quot;'</span>
+0027 <span class="comment">%  .ooooo.  oooo oooo    ooo   `888.   .8'   oooo   .ooooo.  oooo oooo    ooo  .ooooo.  oooo d8b</span>
+0028 <span class="comment">% d88' `&quot;Y8  `88. `88.  .8'     `888. .8'    `888  d88' `88b  `88. `88.  .8'  d88' `88b `888&quot;&quot;8P</span>
+0029 <span class="comment">% 888         `88..]88..8'       `888.8'      888  888ooo888   `88..]88..8'   888ooo888  888</span>
+0030 <span class="comment">% 888   .o8    `888'`888'         `888'       888  888    .o    `888'`888'    888    .o  888</span>
+0031 <span class="comment">% `Y8bod8P'     `8'  `8'           `8'       o888o `Y8bod8P'     `8'  `8'     `Y8bod8P' d888b</span>
+0032 <span class="comment">%</span>
+0033 
+0034 <span class="comment">%                                        _                             _</span>
+0035 <span class="comment">%                                       | |                           | |</span>
+0036 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0037 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0038 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0039 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0040 <span class="comment">%                       __/ |                   __/ |</span>
+0041 <span class="comment">%                      |___/                   |___/</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% M. Bye v13.2</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% Author:       Morgan Bye</span>
+0047 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0048 <span class="comment">%               University of East Anglia</span>
+0049 <span class="comment">%               NORWICH, UK</span>
+0050 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0051 <span class="comment">% Website:      http://www.morganbye.net/eprtoolbox/cwviewer</span>
+0052 <span class="comment">% Jan 2013;     Last revision: 24-January-2012</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% Approximate coding time of file:</span>
+0055 <span class="comment">%               4 hours</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% Version history:</span>
+0059 <span class="comment">% Jan 13        Corrected Gauss for mT mistake</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">% Jun 12        &gt; Allow for x-axis to swap to g-value</span>
+0062 <span class="comment">%               &gt; Improved window placement on opening</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">% May 12        Initial release (open beta)</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">% Feb 12        First alpha</span>
+0067 
+0068 <span class="comment">% Last Modified by GUIDE v2.5 24-Jan-2013 18:54:48</span>
+0069 
+0070 <span class="comment">% Begin initialization code - DO NOT EDIT</span>
+0071 gui_Singleton = 1;
+0072 gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+0073                    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+0074                    <span class="string">'gui_OpeningFcn'</span>, @<a href="#_sub1" class="code" title="subfunction viewing_options_OpeningFcn(hObject, eventdata, handles, varargin)">viewing_options_OpeningFcn</a>, <span class="keyword">...</span>
+0075                    <span class="string">'gui_OutputFcn'</span>,  @<a href="#_sub2" class="code" title="subfunction varargout = viewing_options_OutputFcn(hObject, eventdata, handles)">viewing_options_OutputFcn</a>, <span class="keyword">...</span>
+0076                    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+0077                    <span class="string">'gui_Callback'</span>,   []);
+0078 <span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+0079     gui_State.gui_Callback = str2func(varargin{1});
+0080 <span class="keyword">end</span>
+0081 
+0082 <span class="keyword">if</span> nargout
+0083     [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+0084 <span class="keyword">else</span>
+0085     gui_mainfcn(gui_State, varargin{:});
+0086 <span class="keyword">end</span>
+0087 <span class="comment">% End initialization code - DO NOT EDIT</span>
+0088 
+0089 
+0090 <span class="comment">% --- Executes just before viewing_options is made visible.</span>
+0091 <a name="_sub1" href="#_subfunctions" class="code">function viewing_options_OpeningFcn(hObject, eventdata, handles, varargin)</a>
+0092 
+0093 <span class="comment">% Choose default command line output for viewing_options</span>
+0094 handles.output = hObject;
+0095 
+0096 <span class="comment">% Radio buttons</span>
+0097 <span class="comment">% set(handles.panel_range,'SelectionChangeFcn',@panel_range_SelectionChangeFcn);</span>
+0098 
+0099 <span class="comment">% Update handles structure</span>
+0100 guidata(hObject, handles);
+0101 
+0102 set(gcf,<span class="string">'Name'</span>,<span class="string">'Viewing options'</span>);
+0103 
+0104 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0105 setappdata(cwview,<span class="string">'wView'</span>,1);
+0106 setappdata(cwview,<span class="string">'hView'</span>,handles);
+0107 
+0108 Var.View.Axes_Button = <span class="string">'Automatic'</span>;
+0109 Var.View.Plot_Button = <span class="string">'Stacked'</span>;
+0110 setappdata(cwview,<span class="string">'Var'</span>,Var);
+0111 
+0112 
+0113 <span class="comment">% --- Outputs from this function are returned to the command line.</span>
+0114 <a name="_sub2" href="#_subfunctions" class="code">function varargout = viewing_options_OutputFcn(hObject, eventdata, handles) </a>
+0115 
+0116 <span class="comment">% Get default command line output from handles structure</span>
+0117 varargout{1} = handles.output;
+0118 
+0119 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0120 
+0121 set(gcf, <span class="string">'Units'</span> , <span class="string">'pixels'</span>);
+0122 
+0123 size = get(gcf,<span class="string">'OuterPosition'</span>);
+0124 setappdata(cwview,<span class="string">'Size_View'</span>,size);
+0125 
+0126 screen = getappdata(cwview,<span class="string">'screen'</span>);
+0127 
+0128 <span class="comment">% Get size of cwViewer window</span>
+0129 hcwView = getappdata(cwview,<span class="string">'hcwView'</span>);
+0130 h = get(hcwView.figure1);
+0131 Pos = h.Position;
+0132 
+0133 <span class="keyword">if</span> isappdata(cwview,<span class="string">'wFile'</span>)
+0134     
+0135     WinFile = getappdata(cwview,<span class="string">'Size_File'</span>);
+0136     
+0137     set(gcf, <span class="string">'OuterPosition'</span>, [<span class="keyword">...</span>
+0138         (Pos(1)-size(3)-5) , <span class="keyword">...</span>
+0139         (screen(4) - size(4) - WinFile(4) - 20) , <span class="keyword">...</span>
+0140         (size(3)),<span class="keyword">...</span>
+0141         (size(4))]);
+0142     
+0143 <span class="keyword">else</span>
+0144     set(gcf, <span class="string">'OuterPosition'</span>, [ <span class="keyword">...</span>
+0145     (Pos(1)-size(3)-5) , <span class="keyword">...</span>
+0146     (screen(4) - 5) , <span class="keyword">...</span>
+0147     (size(3)),<span class="keyword">...</span>
+0148     (size(4))]);
+0149 
+0150 <span class="keyword">end</span>
+0151 
+0152 
+0153 <span class="comment">% Plot options - radio buttons</span>
+0154 <span class="comment">% --------------------------------------------------------------------</span>
+0155 
+0156 
+0157 <span class="comment">% --- Executes on button press in radio_stacked.</span>
+0158 <a name="_sub3" href="#_subfunctions" class="code">function radio_stacked_Callback(hObject, eventdata, handles)</a>
+0159 
+0160 <span class="comment">% Load global variables</span>
+0161 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0162 hView  = getappdata(cwview,<span class="string">'hView'</span>);
+0163 Var    = getappdata(cwview,<span class="string">'Var'</span>);
+0164 hcwView = getappdata(cwview,<span class="string">'hcwView'</span>);
+0165 
+0166 <span class="comment">% Change handles for graphics</span>
+0167 set(hView.radio_stacked   , <span class="string">'Value'</span> , 1);
+0168 set(hView.radio_single    , <span class="string">'Value'</span> , 0);
+0169 set(hView.radio_staggered , <span class="string">'Value'</span> , 0);
+0170 
+0171 <span class="comment">% Show/hide slider in cwViewer window</span>
+0172 set(hcwView.slider , <span class="string">'Visible'</span> , <span class="string">'off'</span>);
+0173 
+0174 <span class="comment">% Change the variables for the plot command</span>
+0175 Var.View.Plot_Button = <span class="string">'Stacked'</span>;
+0176 Var.Slider.Visible  = <span class="string">'off'</span>;
+0177 setappdata(cwview, <span class="string">'Var'</span> , Var);
+0178 
+0179 <span class="comment">% Call the plot command</span>
+0180 <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0181 
+0182 
+0183 <span class="comment">% --- Executes on button press in radio_single.</span>
+0184 <a name="_sub4" href="#_subfunctions" class="code">function radio_single_Callback(hObject, eventdata, handles)</a>
+0185 
+0186 <span class="comment">% Load global variables</span>
+0187 cwview  = getappdata(0,<span class="string">'cwview'</span>);
+0188 hView   = getappdata(cwview,<span class="string">'hView'</span>);
+0189 Var     = getappdata(cwview,<span class="string">'Var'</span>);
+0190 hcwView = getappdata(cwview,<span class="string">'hcwView'</span>);
+0191 
+0192 <span class="comment">% Update GUI in Viewing options</span>
+0193 set(hView.radio_stacked   , <span class="string">'Value'</span> , 0);
+0194 set(hView.radio_single    , <span class="string">'Value'</span> , 1);
+0195 set(hView.radio_staggered , <span class="string">'Value'</span> , 0);
+0196 
+0197 <span class="comment">% Show/hide slider in cwViewer window</span>
+0198 set(hcwView.slider , <span class="string">'Visible'</span> , <span class="string">'on'</span>);
+0199 
+0200 <span class="comment">% Update variables</span>
+0201 Var.View.Plot_Button = <span class="string">'Single'</span>;
+0202 Var.Slider.Visible  = <span class="string">'on'</span>;
+0203 setappdata(cwview, <span class="string">'Var'</span> , Var);
+0204 
+0205 <span class="comment">% Call plot command</span>
+0206 <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0207 
+0208 
+0209 <span class="comment">% --- Executes on button press in radio_staggered.</span>
+0210 <a name="_sub5" href="#_subfunctions" class="code">function radio_staggered_Callback(hObject, eventdata, handles)</a>
+0211 
+0212 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0213 hView  = getappdata(cwview,<span class="string">'hView'</span>);
+0214 Var    = getappdata(cwview,<span class="string">'Var'</span>);
+0215 hcwView = getappdata(cwview,<span class="string">'hcwView'</span>);
+0216 
+0217 set(hView.radio_stacked   , <span class="string">'Value'</span> , 0);
+0218 set(hView.radio_single    , <span class="string">'Value'</span> , 0);
+0219 set(hView.radio_staggered , <span class="string">'Value'</span> , 1);
+0220 
+0221 set(hcwView.slider , <span class="string">'Visible'</span> , <span class="string">'off'</span>);
+0222 
+0223 Var.View.Plot_Button = <span class="string">'Staggered'</span>;
+0224 Var.Slider.Visible  = <span class="string">'off'</span>;
+0225 setappdata(cwview, <span class="string">'Var'</span> , Var);
+0226 
+0227 <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0228 
+0229 
+0230 <span class="comment">% Staggered options</span>
+0231 <span class="comment">% --------------------------------------------------------------------</span>
+0232 
+0233 <a name="_sub6" href="#_subfunctions" class="code">function edit_xaxis_Callback(hObject, eventdata, handles)</a>
+0234 
+0235 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0236 hView   = getappdata(cwview,<span class="string">'hView'</span>);
+0237 
+0238 <span class="keyword">if</span> get(hView.radio_staggered ,<span class="string">'Value'</span>) == 1
+0239     <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0240 <span class="keyword">end</span>
+0241 
+0242 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0243 <a name="_sub7" href="#_subfunctions" class="code">function edit_xaxis_CreateFcn(hObject, eventdata, handles)</a>
+0244 <span class="comment">% hObject    handle to edit_xaxis (see GCBO)</span>
+0245 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0246 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0247 
+0248 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0249 <span class="comment">%       See ISPC and COMPUTER.</span>
+0250 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0251     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0252 <span class="keyword">end</span>
+0253 
+0254 
+0255 
+0256 <a name="_sub8" href="#_subfunctions" class="code">function edit_yaxis_Callback(hObject, eventdata, handles)</a>
+0257 
+0258 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0259 hView   = getappdata(cwview,<span class="string">'hView'</span>);
+0260 
+0261 <span class="keyword">if</span> get(hView.radio_staggered ,<span class="string">'Value'</span>) == 1
+0262     <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0263 <span class="keyword">end</span>
+0264 
+0265 
+0266 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0267 <a name="_sub9" href="#_subfunctions" class="code">function edit_yaxis_CreateFcn(hObject, eventdata, handles)</a>
+0268 <span class="comment">% hObject    handle to edit_yaxis (see GCBO)</span>
+0269 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0270 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0271 
+0272 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0273 <span class="comment">%       See ISPC and COMPUTER.</span>
+0274 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0275     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0276 <span class="keyword">end</span>
+0277 
+0278 
+0279 <span class="comment">% --- Executes on button press in checkbox_yaxis.</span>
+0280 <a name="_sub10" href="#_subfunctions" class="code">function checkbox_yaxis_Callback(hObject, eventdata, handles)</a>
+0281 
+0282 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0283 hView   = getappdata(cwview,<span class="string">'hView'</span>);
+0284 
+0285 <span class="keyword">if</span> get(hView.radio_staggered ,<span class="string">'Value'</span>) == 1
+0286     <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0287 <span class="keyword">end</span>
+0288 
+0289 <span class="comment">% --- Executes on button press in checkbox_xaxis.</span>
+0290 <a name="_sub11" href="#_subfunctions" class="code">function checkbox_xaxis_Callback(hObject, eventdata, handles)</a>
+0291 
+0292 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0293 hView   = getappdata(cwview,<span class="string">'hView'</span>);
+0294 
+0295 <span class="keyword">if</span> get(hView.radio_staggered ,<span class="string">'Value'</span>) == 1
+0296     <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0297 <span class="keyword">end</span>
+0298 
+0299 
+0300 
+0301 
+0302 
+0303 <span class="comment">% Axes panel</span>
+0304 <span class="comment">% --------------------------------------------------------------------</span>
+0305 
+0306 
+0307 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0308 <a name="_sub12" href="#_subfunctions" class="code">function radio_automatic_CreateFcn(hObject, eventdata, handles)</a>
+0309 
+0310 <span class="comment">% cwview = getappdata(0,'cwview');</span>
+0311 <span class="comment">% hView   = getappdata(cwview,'hView');</span>
+0312 
+0313 <span class="comment">% set(hView.radio_automatic , 'Value' , 1);</span>
+0314 <span class="comment">% set(hView.radio_manual    , 'Value' , 0);</span>
+0315 
+0316 set(hObject , <span class="string">'Value'</span> , 1);
+0317 
+0318 <span class="comment">% --- Executes on button press in radio_automatic.</span>
+0319 <a name="_sub13" href="#_subfunctions" class="code">function radio_automatic_Callback(hObject, eventdata, handles)</a>
+0320 
+0321 <span class="comment">% Load global variables</span>
+0322 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0323 hView   = getappdata(cwview,<span class="string">'hView'</span>);
+0324 Var    = getappdata(cwview,<span class="string">'Var'</span>);
+0325 
+0326 <span class="comment">% Set local handles for graphical interface</span>
+0327 set(hView.radio_automatic , <span class="string">'Value'</span> , 1);
+0328 set(hView.radio_manual    , <span class="string">'Value'</span> , 0);
+0329 
+0330 <span class="comment">% Set global variable for plotting</span>
+0331 Var.View.Axes_Button= <span class="string">'Automatic'</span>;
+0332 setappdata(cwview, <span class="string">'Var'</span> , Var);
+0333 
+0334 <span class="comment">% Call plot command</span>
+0335 <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0336 
+0337 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0338 <a name="_sub14" href="#_subfunctions" class="code">function radio_manual_CreateFcn(hObject, eventdata, handles)</a>
+0339 
+0340 set(hObject , <span class="string">'Value'</span> , 0);
+0341 
+0342 
+0343 <span class="comment">% --- Executes on button press in radio_manual.</span>
+0344 <a name="_sub15" href="#_subfunctions" class="code">function radio_manual_Callback(hObject, eventdata, handles)</a>
+0345 
+0346 <span class="comment">% Load global variables</span>
+0347 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0348 hView   = getappdata(cwview,<span class="string">'hView'</span>);
+0349 Var    = getappdata(cwview,<span class="string">'Var'</span>);
+0350 
+0351 <span class="comment">% Set local handles for graphical interface</span>
+0352 set(hView.radio_automatic , <span class="string">'Value'</span> , 0);
+0353 set(hView.radio_manual    , <span class="string">'Value'</span> , 1);
+0354 
+0355 <span class="comment">% Set global variable for plotting</span>
+0356 Var.View.Axes_Button= <span class="string">'Manual'</span>;
+0357 setappdata(cwview, <span class="string">'Var'</span> , Var);
+0358 
+0359 <span class="comment">% Call plot command</span>
+0360 <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0361 
+0362 
+0363 
+0364 <span class="comment">% Axes panel - edit boxes</span>
+0365 <span class="comment">% --------------------------------------------------------------------</span>
+0366 
+0367 
+0368 <a name="_sub16" href="#_subfunctions" class="code">function edit_maglow_Callback(hObject, eventdata, handles)</a>
+0369 
+0370 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0371 Var    = getappdata(cwview,<span class="string">'Var'</span>);
+0372 
+0373 <span class="keyword">if</span> strcmp(Var.View.Axes_Button , <span class="string">'Manual'</span>)
+0374     <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0375 <span class="keyword">end</span>
+0376 
+0377 
+0378 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0379 <a name="_sub17" href="#_subfunctions" class="code">function edit_maglow_CreateFcn(hObject, eventdata, handles)</a>
+0380 <span class="comment">% hObject    handle to edit_maglow (see GCBO)</span>
+0381 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0382 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0383 
+0384 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0385 <span class="comment">%       See ISPC and COMPUTER.</span>
+0386 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0387     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0388 <span class="keyword">end</span>
+0389 
+0390 
+0391 
+0392 <a name="_sub18" href="#_subfunctions" class="code">function edit_intlow_Callback(hObject, eventdata, handles)</a>
+0393 
+0394 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0395 Var    = getappdata(cwview,<span class="string">'Var'</span>);
+0396 
+0397 <span class="keyword">if</span> strcmp(Var.View.Axes_Button , <span class="string">'Manual'</span>)
+0398     <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0399 <span class="keyword">end</span>
+0400 
+0401 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0402 <a name="_sub19" href="#_subfunctions" class="code">function edit_intlow_CreateFcn(hObject, eventdata, handles)</a>
+0403 <span class="comment">% hObject    handle to edit_intlow (see GCBO)</span>
+0404 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0405 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0406 
+0407 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0408 <span class="comment">%       See ISPC and COMPUTER.</span>
+0409 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0410     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0411 <span class="keyword">end</span>
+0412 
+0413 
+0414 
+0415 <a name="_sub20" href="#_subfunctions" class="code">function edit_maghigh_Callback(hObject, eventdata, handles)</a>
+0416 
+0417 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0418 Var    = getappdata(cwview,<span class="string">'Var'</span>);
+0419 
+0420 <span class="keyword">if</span> strcmp(Var.View.Axes_Button , <span class="string">'Manual'</span>)
+0421     <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0422 <span class="keyword">end</span>
+0423 
+0424 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0425 <a name="_sub21" href="#_subfunctions" class="code">function edit_maghigh_CreateFcn(hObject, eventdata, handles)</a>
+0426 <span class="comment">% hObject    handle to edit_maghigh (see GCBO)</span>
+0427 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0428 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0429 
+0430 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0431 <span class="comment">%       See ISPC and COMPUTER.</span>
+0432 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0433     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0434 <span class="keyword">end</span>
+0435 
+0436 
+0437 
+0438 <a name="_sub22" href="#_subfunctions" class="code">function edit_inthigh_Callback(hObject, eventdata, handles)</a>
+0439 
+0440 cwview = getappdata(0,<span class="string">'cwview'</span>);
+0441 Var    = getappdata(cwview,<span class="string">'Var'</span>);
+0442 
+0443 <span class="keyword">if</span> strcmp(Var.View.Axes_Button , <span class="string">'Manual'</span>)
+0444     <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0445 <span class="keyword">end</span>
+0446 
+0447 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0448 <a name="_sub23" href="#_subfunctions" class="code">function edit_inthigh_CreateFcn(hObject, eventdata, handles)</a>
+0449 <span class="comment">% hObject    handle to edit_inthigh (see GCBO)</span>
+0450 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0451 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0452 
+0453 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0454 <span class="comment">%       See ISPC and COMPUTER.</span>
+0455 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0456     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0457 <span class="keyword">end</span>
+0458 
+0459 <span class="comment">% X-axis - edit boxes</span>
+0460 <span class="comment">% --------------------------------------------------------------------</span>
+0461 
+0462 <span class="comment">% --- Executes on button press</span>
+0463 <a name="_sub24" href="#_subfunctions" class="code">function checkbox_g_Callback(hObject, eventdata, handles)</a>
+0464 
+0465 <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0466 
+0467 <a name="_sub25" href="#_subfunctions" class="code">function checkbox_reference_Callback(hObject, eventdata, handles)</a>
+0468 
+0469 <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0470 
+0471 <a name="_sub26" href="#_subfunctions" class="code">function edit_refg_Callback(hObject, eventdata, handles)</a>
+0472 
+0473 <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0474 
+0475 <a name="_sub27" href="#_subfunctions" class="code">function edit_refFreq_Callback(hObject, eventdata, handles)</a>
+0476 <a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
+0477 
+0478 
+0479 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0480 <a name="_sub28" href="#_subfunctions" class="code">function edit_refg_CreateFcn(hObject, eventdata, handles)</a>
+0481 <span class="comment">% hObject    handle to edit_refg (see GCBO)</span>
+0482 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0483 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0484 
+0485 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0486 <span class="comment">%       See ISPC and COMPUTER.</span>
+0487 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0488     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0489 <span class="keyword">end</span>
+0490 
+0491 <a name="_sub29" href="#_subfunctions" class="code">function edit_refField_Callback(hObject, eventdata, handles)</a>
+0492 <span class="comment">% hObject    handle to edit_refField (see GCBO)</span>
+0493 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0494 <span class="comment">% handles    structure with handles and user data (see GUIDATA)</span>
+0495 
+0496 <span class="comment">% Hints: get(hObject,'String') returns contents of edit_refField as text</span>
+0497 <span class="comment">%        str2double(get(hObject,'String')) returns contents of edit_refField as a double</span>
+0498 
+0499 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0500 <a name="_sub30" href="#_subfunctions" class="code">function edit_refField_CreateFcn(hObject, eventdata, handles)</a>
+0501 <span class="comment">% hObject    handle to edit_refField (see GCBO)</span>
+0502 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0503 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0504 
+0505 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0506 <span class="comment">%       See ISPC and COMPUTER.</span>
+0507 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0508     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0509 <span class="keyword">end</span>
+0510 
+0511 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
+0512 <a name="_sub31" href="#_subfunctions" class="code">function edit_refFreq_CreateFcn(hObject, eventdata, handles)</a>
+0513 <span class="comment">% hObject    handle to edit_refFreq (see GCBO)</span>
+0514 <span class="comment">% eventdata  reserved - to be defined in a future version of MATLAB</span>
+0515 <span class="comment">% handles    empty - handles not created until after all CreateFcns called</span>
+0516 
+0517 <span class="comment">% Hint: edit controls usually have a white background on Windows.</span>
+0518 <span class="comment">%       See ISPC and COMPUTER.</span>
+0519 <span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+0520     set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+0521 <span class="keyword">end</span>
+0522 
+0523 
+0524 <span class="comment">% Close the figure</span>
+0525 <span class="comment">% --------------------------------------------------------------------</span>
+0526 
+0527 <span class="comment">% --- Executes when user attempts to close figure1.</span>
+0528 <a name="_sub32" href="#_subfunctions" class="code">function figure1_CloseRequestFcn(hObject, eventdata, handles)</a>
+0529 
+0530 <span class="comment">% Update handles so WindowVisible = 0</span>
+0531 cwview = getappdata(0, <span class="string">'cwview'</span>);
+0532 Visible = getappdata(cwview,<span class="string">'WindowVisible'</span>);
+0533 
+0534 Visible.ViewingOptions = 0;
+0535 
+0536 setappdata(cwview,<span class="string">'WindowVisible'</span>,Visible);
+0537 
+0538 <span class="comment">% Change Window menu in cwViewer to off status</span>
+0539         <span class="comment">% Get handles for cwViewer window</span>
+0540 h = getappdata(cwview,<span class="string">'handles'</span>);
+0541         <span class="comment">% Change checked status</span>
+0542 set(h.cwViewer.menu_Window_View, <span class="string">'Checked'</span> , <span class="string">'off'</span>);
+0543 
+0544 
+0545 delete(hObject);</pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of JeolRead</title>
+  <meta name="keywords" content="JeolRead">
+  <meta name="description" content="JEOLREAD Open Jeol files (.esr)">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="index.html">misc</a> &gt; JeolRead.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/misc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>JeolRead
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>JEOLREAD Open Jeol files (.esr)</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function varargout = JeolRead(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> JEOLREAD Open Jeol files (.esr)
+
+ JEOLREAD ()
+ JEOLREAD ('/path/to/file')
+ JEOLREAD ('/path/to/file','plot')
+ [x, y] = JEOLREAD (...)
+ [x, y, info] = JEOLREAD (...)
+
+ JEOLREAD when run without any inputs, opens a GUI so that the user can
+ open the file themselves. JEOLREAD can also accept a path to a file as
+ an input if the path is put in 'quotes' and the extension (.esr) is left
+ on.
+
+ JEOLREAD can be run with the optional 'plot' input, to plot the file
+ being loaded
+
+ JEOLREAD a y matrix (intensity)
+
+ If no outputs are selected then the x and y values are plotted
+ With the plot option the data is also plotted.
+
+ Inputs:
+    input1     - a string input to the path of a file
+    input2     - 'plot' draws a plot of the imported file
+
+ Outputs:
+ CURRENTLY ONLY SUPPORTS Y AXIS UNTIL I OBTAIN SOME JEOL FILES TO PLAY
+ WITH
+    output1    - x axis
+                   Magnetic field
+    output2    - y axis
+                   Intensity
+    output3    - information
+                   Array of information about the loaded file
+
+ Example: 
+    [y] = JeolRead
+               GUI load a file
+
+    y = JeolRead('/path/to/file.esr','plot')
+               y of file.esr to the workspace and plot y as a new figure
+
+ Other m-files required:   none
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: EPRTOOLBOX CWPLOTTER <a href="BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BRUKERREAD</a> <a href="Fsc2Read.html" class="code" title="function varargout = Fsc2Read(varargin)">FSC2READ</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = JeolRead(varargin)</a>
+0002 
+0003 <span class="comment">% JEOLREAD Open Jeol files (.esr)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% JEOLREAD ()</span>
+0006 <span class="comment">% JEOLREAD ('/path/to/file')</span>
+0007 <span class="comment">% JEOLREAD ('/path/to/file','plot')</span>
+0008 <span class="comment">% [x, y] = JEOLREAD (...)</span>
+0009 <span class="comment">% [x, y, info] = JEOLREAD (...)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% JEOLREAD when run without any inputs, opens a GUI so that the user can</span>
+0012 <span class="comment">% open the file themselves. JEOLREAD can also accept a path to a file as</span>
+0013 <span class="comment">% an input if the path is put in 'quotes' and the extension (.esr) is left</span>
+0014 <span class="comment">% on.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% JEOLREAD can be run with the optional 'plot' input, to plot the file</span>
+0017 <span class="comment">% being loaded</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% JEOLREAD a y matrix (intensity)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% If no outputs are selected then the x and y values are plotted</span>
+0022 <span class="comment">% With the plot option the data is also plotted.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Inputs:</span>
+0025 <span class="comment">%    input1     - a string input to the path of a file</span>
+0026 <span class="comment">%    input2     - 'plot' draws a plot of the imported file</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% Outputs:</span>
+0029 <span class="comment">% CURRENTLY ONLY SUPPORTS Y AXIS UNTIL I OBTAIN SOME JEOL FILES TO PLAY</span>
+0030 <span class="comment">% WITH</span>
+0031 <span class="comment">%    output1    - x axis</span>
+0032 <span class="comment">%                   Magnetic field</span>
+0033 <span class="comment">%    output2    - y axis</span>
+0034 <span class="comment">%                   Intensity</span>
+0035 <span class="comment">%    output3    - information</span>
+0036 <span class="comment">%                   Array of information about the loaded file</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% Example:</span>
+0039 <span class="comment">%    [y] = JeolRead</span>
+0040 <span class="comment">%               GUI load a file</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%    y = JeolRead('/path/to/file.esr','plot')</span>
+0043 <span class="comment">%               y of file.esr to the workspace and plot y as a new figure</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">% Other m-files required:   none</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% Subfunctions:             none</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% MAT-files required:       none</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% See also: EPRTOOLBOX CWPLOTTER BRUKERREAD FSC2READ</span>
+0053 
+0054 <span class="comment">%                                        _                             _</span>
+0055 <span class="comment">%                                       | |                           | |</span>
+0056 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0057 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0058 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0059 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0060 <span class="comment">%                       __/ |                   __/ |</span>
+0061 <span class="comment">%                      |___/                   |___/</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">% M. Bye v13.09</span>
+0064 <span class="comment">%</span>
+0065 <span class="comment">% v13.09 - current</span>
+0066 <span class="comment">%               Chemical Physics Department</span>
+0067 <span class="comment">%               Weizmann Institute of Science</span>
+0068 <span class="comment">%               76100 REHOVOT, Israel</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% v11.06 - v13.08</span>
+0071 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0072 <span class="comment">%               University of East Anglia</span>
+0073 <span class="comment">%               NORWICH, UK</span>
+0074 <span class="comment">%</span>
+0075 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0076 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/cwplot</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">% Last updated  Last revision: 12-December-2011</span>
+0079 <span class="comment">%</span>
+0080 <span class="comment">% Version history:</span>
+0081 <span class="comment">% Jan 11        Initial release</span>
+0082 <span class="comment">%</span>
+0083 <span class="comment">% July 11       Beta release</span>
+0084 
+0085 <span class="comment">%                         Input arguments</span>
+0086 <span class="comment">% ========================================================================</span>
+0087 
+0088 <span class="keyword">switch</span> nargin
+0089     <span class="keyword">case</span> 0
+0090         <span class="comment">% GUI get file</span>
+0091         [file , directory] = uigetfile({<span class="string">'*.esr'</span>,<span class="string">'Jeol ESR File (*.ESR)'</span>; <span class="keyword">...</span>
+0092             <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load Bruker file'</span>);
+0093         
+0094         <span class="comment">% if user cancels command nothing happens</span>
+0095         <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0096             <span class="keyword">return</span>
+0097         <span class="keyword">end</span>
+0098                 
+0099         <span class="comment">% File name/path manipulation</span>
+0100         address = [directory,file];
+0101         [~, name,extension] = fileparts(address);
+0102         
+0103         
+0104     <span class="keyword">case</span> 1
+0105         address = varargin{1};
+0106         [directory,name,extension] = fileparts(address);
+0107         
+0108     <span class="keyword">case</span> 2
+0109         address = varargin{1};
+0110         [directory,name,extension] = fileparts(address);
+0111         graph = varargin{2};
+0112 <span class="keyword">end</span>
+0113 
+0114 <span class="comment">%                                Method</span>
+0115 <span class="comment">% ========================================================================</span>
+0116 
+0117 fid = fopen( [directory name <span class="string">'.esr'</span>] , <span class="string">'r'</span> , <span class="string">'ieee-le.l64'</span>);
+0118 [y,n] = fread(fid,inf,<span class="string">'float64'</span>);
+0119 fclose(fid);
+0120 
+0121 <span class="comment">%                           Output arguments</span>
+0122 <span class="comment">% ========================================================================</span>
+0123 
+0124 <span class="keyword">if</span> nargin == 2
+0125     <span class="keyword">if</span> strcmp(graph,<span class="string">'plot'</span>)
+0126         figure(<span class="string">'name'</span> , [<span class="string">'JeolRead: '</span> name], <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0127         plot(y);
+0128         xlabel(<span class="string">'Magnetic field / Gauss'</span>);
+0129         ylabel(<span class="string">'Relative intensity / arb. units'</span>);
+0130         set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0131         set(gca,<span class="string">'XGrid'</span>,<span class="string">'on'</span>);
+0132     <span class="keyword">end</span>
+0133 <span class="keyword">end</span>
+0134 
+0135 <span class="keyword">switch</span> nargout
+0136     <span class="keyword">case</span> 0
+0137         figure(<span class="string">'name'</span> , [<span class="string">'JeolRead: '</span> name], <span class="string">'NumberTitle'</span>,<span class="string">'off'</span>);
+0138         plot(y);
+0139         xlabel(<span class="string">'Magnetic field / Gauss'</span>);
+0140         ylabel(<span class="string">'Relative intensity / arb. units'</span>);
+0141         set(gcf,<span class="string">'color'</span>, <span class="string">'white'</span>);
+0142         set(gca,<span class="string">'XGrid'</span>,<span class="string">'on'</span>);
+0143         
+0144     <span class="keyword">case</span> 1
+0145         varargout{1} = y;
+0146         
+0147     <span class="keyword">case</span> 2
+0148         varargout{1} = x;
+0149         varargout{2} = y;
+0150 
+0151     <span class="keyword">case</span> 3
+0152         varargout{1} = x;
+0153         varargout{2} = y;
+0154         varargout{3} = info;
+0155 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

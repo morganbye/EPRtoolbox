@@ -24,9 +24,43 @@ EPRtoolbox
                                                          &
                                              Weizmann Institute of Science
 
-M. Bye v14.05
+M. Bye v14.09
 
-v14.05
+v14.09
+
+NEW FEATURE: DAPlotter
+======================
+Takes a saved DeerAnalysis file and plots it rapidly in a graphically
+pleasing way for notebooks. Figure 1, raw DEER data. Figure 2, raw data
+after background subtraction with fit. Figure 3, distance distribution
+
+NEW FEATURE: DALoader
+=====================
+Takes a saved DeerAnalysis analysis and loads the data to the workspace in
+a set of convienient x and y arrays.
+
+NEW FEATURE: DACompare
+======================
+Takes 2 or more saved DeerAnalysis analysis and plots in a similar way to
+DAPlotter but overlaid for direct comparison.
+
+NEW FEATURE: zerofill
+=====================
+Takes a dataset and zerofills the end, by doubling in size, by a percentage
+increase or to a set number of datapoints.
+
+SpecManRead
+===========
+Minor updates for better error handling as well as correct loading of echo
+profile and frequency sweep experiments
+
+reportbuilder
+=============
+A lot of updates regarding new versions of LaTex. Updated for new
+experiments in SpecMan - echo profile, frequency sweep
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% v14.05 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 NEW FEATURE: reportbuilder
 ==========================

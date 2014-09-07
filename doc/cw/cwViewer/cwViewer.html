@@ -88,7 +88,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>	CV_PLOT Plotting function for cwViewer</li><li><a href="data_man.html" class="code" title="function varargout = data_man(varargin)">data_man</a>	FILE_DETAILS The data manipulation window for cwViewer</li><li><a href="easyfitting.html" class="code" title="function varargout = easyfitting(varargin)">easyfitting</a>	EASYFITTING The send to EasySpin window for cwViewer</li><li><a href="file_details.html" class="code" title="function varargout = file_details(varargin)">file_details</a>	FILE_DETAILS The file details window for cwViewer</li><li><a href="viewing_options.html" class="code" title="function varargout = viewing_options(varargin)">viewing_options</a>	VIEWING_OPTIONS The Viewing Options window for cwViewer</li></ul>
+<li><a href="cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>	CV_PLOT Plotting function for cwViewer</li><li><a href="data_man.html" class="code" title="function varargout = data_man(varargin)">data_man</a>	FILE_DETAILS The data manipulation window for cwViewer</li><li><a href="easyfitting.html" class="code" title="function varargout = easyfitting(varargin)">easyfitting</a>	EASYFITTING The send to EasySpin window for cwViewer</li><li><a href="file_details.html" class="code" title="function varargout = file_details(varargin)">file_details</a>	FILE_DETAILS The file details window for cwViewer</li><li><a href="viewing_options.html" class="code" title="function varargout = viewing_options(varargin)">viewing_options</a>	VIEWING_OPTIONS The Viewing Options window for cwViewer</li><li><a href="../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the</li><li><a href="../../misc/BrukerWrite.html" class="code" title="function BrukerWrite(varargin)">BrukerWrite</a>	BRUKERWRITE save x and y MATLAB variables out to Bruker BES3T files (.DTA</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
@@ -555,7 +555,7 @@ This function is called by:
 0454 <span class="keyword">end</span>
 0455 
 0456 <span class="comment">% Load the file</span>
-0457 [x , y , info] = BrukerRead;
+0457 [x , y , info] = <a href="../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>;
 0458 
 0459 <span class="comment">% Move the file to data structure</span>
 0460 data.([<span class="string">'File'</span> mat2str(fileNum)]).x = x;
@@ -662,7 +662,7 @@ This function is called by:
 0561         <span class="keyword">end</span>
 0562         
 0563         <span class="comment">% Load the file</span>
-0564         [x , y , info] = BrukerRead([folder <span class="string">'/'</span> dtaFiles(k).name]);
+0564         [x , y , info] = <a href="../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([folder <span class="string">'/'</span> dtaFiles(k).name]);
 0565         
 0566         <span class="comment">% Move the file to data structure</span>
 0567         data.([<span class="string">'File'</span> mat2str(fileNum)]).x = x;
@@ -885,7 +885,7 @@ This function is called by:
 0784         <span class="keyword">end</span>
 0785         
 0786         <span class="keyword">if</span> size_x == 1 &amp;&amp; size_y == 1
-0787             BrukerWrite(exp.x_view,exp.y_view,out_add);
+0787             <a href="../../misc/BrukerWrite.html" class="code" title="function BrukerWrite(varargin)">BrukerWrite</a>(exp.x_view,exp.y_view,out_add);
 0788         
 0789         <span class="comment">% Many X, Single Y</span>
 0790         <span class="keyword">elseif</span> size_x ~= 1 &amp;&amp; size_y == 1
@@ -1219,6 +1219,6 @@ This function is called by:
 1118 
 1119 
 1120</pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

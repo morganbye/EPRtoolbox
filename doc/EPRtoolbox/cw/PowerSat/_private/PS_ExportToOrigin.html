@@ -1,0 +1,248 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PS_ExportToOrigin</title>
+  <meta name="keywords" content="PS_ExportToOrigin">
+  <meta name="description" content="PS_EXPORTTOORIGIN Export the power saturation spectra to an Origin">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="../../index.html">cw</a> &gt; <a href="../index.html">PowerSat</a> &gt; <a href="index.html">_private</a> &gt; PS_ExportToOrigin.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/cw/PowerSat/_private&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>PS_ExportToOrigin
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>PS_EXPORTTOORIGIN Export the power saturation spectra to an Origin</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function PS_ExportToOrigin(handles) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PS_EXPORTTOORIGIN Export the power saturation spectra to an Origin
+       compatible .csv
+
+ Syntax:  PS_EXPORTTOORIGIN
+
+ Inputs:
+    input1 - handles
+               define the GUI area (ie gcf for PowerSat)
+
+ Outputs:
+    output1 - *.csv file
+
+ Example: 
+    see http://morganbye.net/PowerSat
+
+ Other m-files required:
+    PowerSat.m
+
+ Subfunctions:         none
+
+ MAT-files required:   none</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="../../../../EPRtoolbox/cw/PowerSat/PowerSat.html" class="code" title="function varargout = PowerSat(varargin)">PowerSat</a>	POWERSAT Open, analyse and plot power saturation experiments</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function PS_ExportToOrigin(handles)</a>
+0002 
+0003 <span class="comment">% PS_EXPORTTOORIGIN Export the power saturation spectra to an Origin</span>
+0004 <span class="comment">%       compatible .csv</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Syntax:  PS_EXPORTTOORIGIN</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Inputs:</span>
+0009 <span class="comment">%    input1 - handles</span>
+0010 <span class="comment">%               define the GUI area (ie gcf for PowerSat)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Outputs:</span>
+0013 <span class="comment">%    output1 - *.csv file</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Example:</span>
+0016 <span class="comment">%    see http://morganbye.net/PowerSat</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Other m-files required:</span>
+0019 <span class="comment">%    PowerSat.m</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Subfunctions:         none</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% MAT-files required:   none</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%</span>
+0026 
+0027 <span class="comment">%                                        _                             _</span>
+0028 <span class="comment">%                                       | |                           | |</span>
+0029 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0030 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0031 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0032 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0033 <span class="comment">%                       __/ |                   __/ |</span>
+0034 <span class="comment">%                      |___/                   |___/</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">% M. Bye v13.07</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% Author:       Morgan Bye</span>
+0040 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0041 <span class="comment">%               University of East Anglia</span>
+0042 <span class="comment">%               NORWICH, UK</span>
+0043 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0044 <span class="comment">% Website:      http://www.morganbye.net/PowerSat</span>
+0045 <span class="comment">% Jul 13;       Last revision: 17-July-2012</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% Version history:</span>
+0048 <span class="comment">% Jul 13        &gt; Initial release</span>
+0049 
+0050 <span class="keyword">global</span> vars
+0051 
+0052 <span class="comment">% Get address</span>
+0053 [filename, pathname] = uiputfile({ <span class="string">'*.csv'</span>,<span class="string">'Comma seperated value (*.csv)'</span>},<span class="keyword">...</span>
+0054     <span class="string">'Save file as'</span>,<span class="string">'PowerSat'</span>);
+0055 fileCSV = [pathname filename];
+0056 
+0057 <span class="comment">% Open file</span>
+0058 fid = fopen(fileCSV,<span class="string">'w'</span>);
+0059 
+0060 <span class="comment">% Column long names</span>
+0061 fprintf(fid,<span class="string">'Oxy - mw Power, Oxy - Y'', Oxy - Y'' error, Oxy - mwFit, Oxy - YFit, N2 - mw Power, N2 - Y'', N2 - Y'' error, N2 - mwFit, N2 - YFit, NI - mw Power, NI - Y'', NI - Y'' error, NI - mwFit, NI - YFit\n'</span>);
+0062 
+0063 <span class="comment">% Column units</span>
+0064 fprintf(fid,<span class="string">'\\sqrt mW, , , \\sqrt mW, ,\\sqrt mW, , , \\sqrt mW, ,\\sqrt mW, , , \\sqrt mW, '</span>);
+0065 
+0066 <span class="comment">% File header</span>
+0067 header = [<span class="keyword">...</span>
+0068     <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0069     <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0070     <span class="string">'#  _____                       _____       _                               '</span>;<span class="keyword">...</span>
+0071     <span class="string">'# |  __ \                     / ____|     | |                              '</span>;<span class="keyword">...</span>
+0072     <span class="string">'# | |__) |____      _____ _ _| (___   __ _| |_                             '</span>;<span class="keyword">...</span>
+0073     <span class="string">'# |  ___/ _ \ \ /\ / / _ \ ''__\___ \ / _` | __|                            '</span>;<span class="keyword">...</span>
+0074     <span class="string">'# | |  | (_) \ V  V /  __/ |  ____) | (_| | |_                             '</span>;<span class="keyword">...</span>
+0075     <span class="string">'# |_|   \___/ \_/\_/ \___|_| |_____/ \__,_|\__|                            '</span>;<span class="keyword">...</span>
+0076     <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0077     <span class="string">'#  Part of the EPR toolbox:                           developed at         '</span>;<span class="keyword">...</span>
+0078     <span class="string">'#  morganbye.net/eprtoolbox                    University of East Anglia   '</span>;<span class="keyword">...</span>
+0079     <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0080     <span class="string">'# Data that cannot be found returns columns of zeros                       '</span>;<span class="keyword">...</span>
+0081     <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0082     <span class="string">'# This file has been created by DeerExtract - v13.07 at:                   '</span>];
+0083 
+0084 header = [header ; sprintf(<span class="string">'%-75s'</span>, [<span class="string">'# '</span> datestr(now, <span class="string">'dd mmmm yyyy - HH:MM'</span>)])];
+0085 
+0086 <span class="keyword">for</span> j = 1:size(header,1)
+0087     fprintf(fid,<span class="string">'%-75s\n'</span>,header(j,:));
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="comment">% Close the file (for C language operations/memory freeing)</span>
+0091 fclose(fid);
+0092 
+0093 <span class="comment">% Create output array</span>
+0094 output = zeros(512,15);
+0095 
+0096 <span class="keyword">if</span> isfield (vars.Oxy,<span class="string">'sqrtPower'</span>)
+0097     output(1:length(vars.Oxy.sqrtPower),1)  = vars.Oxy.sqrtPower';
+0098 <span class="keyword">end</span>
+0099 <span class="keyword">if</span> isfield (vars.Oxy,<span class="string">'Y'</span>)
+0100     output(1:length(vars.Oxy.Y),2)          = vars.Oxy.Y';
+0101 <span class="keyword">end</span>
+0102 <span class="keyword">if</span> isfield (vars.Oxy,<span class="string">'FitConfidence'</span>)
+0103     <span class="keyword">for</span> k = 1:length(vars.Oxy.Y)
+0104         output(k,3)                          = vars.Oxy.FitConfidence.P;
+0105     <span class="keyword">end</span> 
+0106 <span class="keyword">end</span>
+0107 <span class="keyword">if</span> isfield (vars.Oxy,<span class="string">'FitResults'</span>)
+0108     maxPower = vars.Oxy.sqrtPower(1) + 2;
+0109     incPower = maxPower / 512;
+0110     
+0111     <span class="keyword">for</span> k = 1:512
+0112        output(k,4) = incPower*k;
+0113        
+0114        <span class="comment">% PS Curves follow y = a*x*(1+(((2^(1/b)-1)*(x^2))/P))^(-b)</span>
+0115        output(k,5) = vars.Oxy.FitResults.A*<span class="keyword">...</span>
+0116            (incPower*k)*(1+(((2^(1/vars.Oxy.FitResults.B)-1)<span class="keyword">...</span>
+0117            *((incPower*k)^2))/vars.Oxy.FitResults.P))<span class="keyword">...</span>
+0118            ^(-vars.Oxy.FitResults.B);
+0119     <span class="keyword">end</span>
+0120 <span class="keyword">end</span>
+0121 
+0122 
+0123 
+0124 <span class="keyword">if</span> isfield (vars.N2,<span class="string">'sqrtPower'</span>)
+0125     output(1:length(vars.N2.sqrtPower),6)  = vars.N2.sqrtPower';
+0126 <span class="keyword">end</span>
+0127 <span class="keyword">if</span> isfield (vars.N2,<span class="string">'Y'</span>)
+0128     output(1:length(vars.N2.Y),7)          = vars.N2.Y';
+0129 <span class="keyword">end</span>
+0130 <span class="keyword">if</span> isfield (vars.N2,<span class="string">'FitConfidence'</span>)
+0131     <span class="keyword">for</span> k = 1:length(vars.N2.Y)
+0132         output(k,8)                          = vars.N2.FitConfidence.P;
+0133     <span class="keyword">end</span> 
+0134 <span class="keyword">end</span>
+0135 <span class="keyword">if</span> isfield (vars.N2,<span class="string">'FitResults'</span>)
+0136     maxPower = vars.N2.sqrtPower(1) + 2;
+0137     incPower = maxPower / 512;
+0138     
+0139     <span class="keyword">for</span> k = 1:512
+0140        output(k,9) = incPower*k;
+0141        
+0142        <span class="comment">% PS Curves follow y = a*x*(1+(((2^(1/b)-1)*(x^2))/P))^(-b)</span>
+0143        output(k,10) = vars.N2.FitResults.A*<span class="keyword">...</span>
+0144            (incPower*k)*(1+(((2^(1/vars.N2.FitResults.B)-1)<span class="keyword">...</span>
+0145            *((incPower*k)^2))/vars.N2.FitResults.P))<span class="keyword">...</span>
+0146            ^(-vars.N2.FitResults.B);
+0147     <span class="keyword">end</span>
+0148 <span class="keyword">end</span>
+0149 
+0150 
+0151 <span class="keyword">if</span> isfield (vars.Ni,<span class="string">'sqrtPower'</span>)
+0152     output(1:length(vars.Ni.sqrtPower),11)  = vars.Ni.sqrtPower';
+0153 <span class="keyword">end</span>
+0154 <span class="keyword">if</span> isfield (vars.Ni,<span class="string">'Y'</span>)
+0155     output(1:length(vars.Ni.Y),12)          = vars.Ni.Y';
+0156 <span class="keyword">end</span>
+0157 <span class="keyword">if</span> isfield (vars.Ni,<span class="string">'FitConfidence'</span>)
+0158     <span class="keyword">for</span> k = 1:length(vars.Ni.Y)
+0159         output(k,13)                          = vars.Ni.FitConfidence.P;
+0160     <span class="keyword">end</span> 
+0161 <span class="keyword">end</span>
+0162 <span class="keyword">if</span> isfield (vars.Ni,<span class="string">'FitResults'</span>)
+0163     maxPower = vars.Ni.sqrtPower(1) + 2;
+0164     incPower = maxPower / 512;
+0165     
+0166     <span class="keyword">for</span> k = 1:512
+0167        output(k,14) = incPower*k;
+0168        
+0169        <span class="comment">% PS Curves follow y = a*x*(1+(((2^(1/b)-1)*(x^2))/P))^(-b)</span>
+0170        output(k,15) = vars.Ni.FitResults.A*<span class="keyword">...</span>
+0171            (incPower*k)*(1+(((2^(1/vars.Ni.FitResults.B)-1)<span class="keyword">...</span>
+0172            *((incPower*k)^2))/vars.Ni.FitResults.P))<span class="keyword">...</span>
+0173            ^(-vars.Ni.FitResults.B);
+0174     <span class="keyword">end</span>
+0175 <span class="keyword">end</span>
+0176 
+0177 dlmwrite(fileCSV,<span class="keyword">...</span>
+0178     output,<span class="keyword">...</span>
+0179     <span class="string">'-append'</span>,<span class="keyword">...</span>
+0180     <span class="string">'delimiter'</span>, <span class="string">','</span>,<span class="keyword">...</span>
+0181     <span class="string">'precision'</span>, <span class="string">'%.13f'</span>);</pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of HADDOCK_CLUSTERS_TO_PYMOL</title>
+  <meta name="keywords" content="HADDOCK_CLUSTERS_TO_PYMOL">
+  <meta name="description" content="HADDOCK_CLUSTERS_TO_PYMOL takes the output from the HADDOCK ana_clusters">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="index.html">HADDOCK</a> &gt; HADDOCK_CLUSTERS_TO_PYMOL.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/HADDOCK&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>HADDOCK_CLUSTERS_TO_PYMOL
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>HADDOCK_CLUSTERS_TO_PYMOL takes the output from the HADDOCK ana_clusters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> HADDOCK_CLUSTERS_TO_PYMOL takes the output from the HADDOCK ana_clusters
+ script and plots top scoring models in PyMOL
+
+ HADDOCK_CLUSTERS_TO_PYMOL ()
+ HADDOCK_CLUSTERS_TO_PYMOL (4,4)
+ HADDOCK_CLUSTERS_TO_PYMOL ('path/to/folder',4,4)
+ HADDOCK_CLUSTERS_TO_PYMOL ('path/to/folder',4,4,'orient')
+ HADDOCK_CLUSTERS_TO_PYMOL ('path/to/folder',4,4,'reference','orient')
+
+ By default (without any input calls) HADDOCK_CLUSTERS_TO_PYMOL will load
+ the top 4 structures from the top 4 clusters. Each will be aligned to
+ each other using a full chain RMSD refinement process (based upon chain
+ B).
+
+ The top model of chain B is displayed as a cartoon model. The 16 chain
+ A's are displayed using colour coded line backbones, where blue is the
+ best scoring model and red is the 4th structure from the 4th cluster.
+
+ Inputs:
+    input0     - graphical user file selection
+
+    input1     - number of clusters
+                   the number of clusters to use, in descending HADDOCK
+                   score order
+                   ie - using 1, uses only the best cluster
+
+    input2     - number of structures
+                   the number of top structures to use from each of the
+                   clusters named in input1
+                   ie - 4 uses 4 structures from each cluster
+
+                   If one cluster has less than input then the number of
+                   available structures is used instead for that cluster.
+
+    input3     - command line folder selection
+
+    input4     - orient
+                   in the final stage of visualisation the model is
+                   orientated. By default, PyMOL will do this to display
+                   the whole molecule in its best orientation. This can
+                   also be set manually ie. '/1/B' will orient the model
+                   so that focus is on structure 1, chain B. This is
+                   useful for comparing multiple runs.
+
+    input5     - reference
+                   if the docking run is being compared to a known
+                   structure or model it may be useful to load it and
+                   display it compared to the docking runs
+
+                   Enter the full path to file, ie.
+                   'path/to/file.pdb'
+
+
+ Outputs:
+    output0    - HADDOCKtoPYMOL.pml
+                   a PyMOL script file for the loading of each model and
+                   setting of variables to correct display the structures.
+                   Image is automatically centred, auto-rotated to
+                   maximise data visualisation and ray-traced for
+                   publication quality images
+
+                   File is saved into the same HADDOCK run directory
+
+    output1    - LINUX AND MAC ONLY
+                   if PyMOL is already installed on the system and
+                   accessible to the system path then HADDOCKtoPYMOL.pml
+                   is automatically opened with PyMOL and the resulting
+                   image is exported to HADDOCK_run/HADDOCKtoPYMOL.png
+
+ Example: 
+    HADDOCK_CLUSTERS_TO_PYMOL
+               GUI load a folder, figure generated shows 16 (or less)
+               structures, the top 4 scoring structures from the top 4
+               scoring clusters
+
+   HADDOCK_CLUSTERS_TO_PYMOL(16,1)
+               GUI load a folder, figure generated shows 16 (or less)
+               structures, the top 16 scoring structures from top scoring
+               clusters
+
+ Other m-files required:   none
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: EPRTOOLBOX <a href="HADDOCK_CLUSTERS_PROCESSING.html" class="code" title="function varargout = HADDOCK_CLUSTERS_PROCESSING(varargin)">HADDOCK_CLUSTERS_PROCESSING</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = HADDOCK_CLUSTERS_TO_PYMOL(varargin)</a>
+0002 
+0003 <span class="comment">% HADDOCK_CLUSTERS_TO_PYMOL takes the output from the HADDOCK ana_clusters</span>
+0004 <span class="comment">% script and plots top scoring models in PyMOL</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% HADDOCK_CLUSTERS_TO_PYMOL ()</span>
+0007 <span class="comment">% HADDOCK_CLUSTERS_TO_PYMOL (4,4)</span>
+0008 <span class="comment">% HADDOCK_CLUSTERS_TO_PYMOL ('path/to/folder',4,4)</span>
+0009 <span class="comment">% HADDOCK_CLUSTERS_TO_PYMOL ('path/to/folder',4,4,'orient')</span>
+0010 <span class="comment">% HADDOCK_CLUSTERS_TO_PYMOL ('path/to/folder',4,4,'reference','orient')</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% By default (without any input calls) HADDOCK_CLUSTERS_TO_PYMOL will load</span>
+0013 <span class="comment">% the top 4 structures from the top 4 clusters. Each will be aligned to</span>
+0014 <span class="comment">% each other using a full chain RMSD refinement process (based upon chain</span>
+0015 <span class="comment">% B).</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% The top model of chain B is displayed as a cartoon model. The 16 chain</span>
+0018 <span class="comment">% A's are displayed using colour coded line backbones, where blue is the</span>
+0019 <span class="comment">% best scoring model and red is the 4th structure from the 4th cluster.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Inputs:</span>
+0022 <span class="comment">%    input0     - graphical user file selection</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%    input1     - number of clusters</span>
+0025 <span class="comment">%                   the number of clusters to use, in descending HADDOCK</span>
+0026 <span class="comment">%                   score order</span>
+0027 <span class="comment">%                   ie - using 1, uses only the best cluster</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%    input2     - number of structures</span>
+0030 <span class="comment">%                   the number of top structures to use from each of the</span>
+0031 <span class="comment">%                   clusters named in input1</span>
+0032 <span class="comment">%                   ie - 4 uses 4 structures from each cluster</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%                   If one cluster has less than input then the number of</span>
+0035 <span class="comment">%                   available structures is used instead for that cluster.</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    input3     - command line folder selection</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">%    input4     - orient</span>
+0040 <span class="comment">%                   in the final stage of visualisation the model is</span>
+0041 <span class="comment">%                   orientated. By default, PyMOL will do this to display</span>
+0042 <span class="comment">%                   the whole molecule in its best orientation. This can</span>
+0043 <span class="comment">%                   also be set manually ie. '/1/B' will orient the model</span>
+0044 <span class="comment">%                   so that focus is on structure 1, chain B. This is</span>
+0045 <span class="comment">%                   useful for comparing multiple runs.</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">%    input5     - reference</span>
+0048 <span class="comment">%                   if the docking run is being compared to a known</span>
+0049 <span class="comment">%                   structure or model it may be useful to load it and</span>
+0050 <span class="comment">%                   display it compared to the docking runs</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">%                   Enter the full path to file, ie.</span>
+0053 <span class="comment">%                   'path/to/file.pdb'</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">% Outputs:</span>
+0057 <span class="comment">%    output0    - HADDOCKtoPYMOL.pml</span>
+0058 <span class="comment">%                   a PyMOL script file for the loading of each model and</span>
+0059 <span class="comment">%                   setting of variables to correct display the structures.</span>
+0060 <span class="comment">%                   Image is automatically centred, auto-rotated to</span>
+0061 <span class="comment">%                   maximise data visualisation and ray-traced for</span>
+0062 <span class="comment">%                   publication quality images</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">%                   File is saved into the same HADDOCK run directory</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">%    output1    - LINUX AND MAC ONLY</span>
+0067 <span class="comment">%                   if PyMOL is already installed on the system and</span>
+0068 <span class="comment">%                   accessible to the system path then HADDOCKtoPYMOL.pml</span>
+0069 <span class="comment">%                   is automatically opened with PyMOL and the resulting</span>
+0070 <span class="comment">%                   image is exported to HADDOCK_run/HADDOCKtoPYMOL.png</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">% Example:</span>
+0073 <span class="comment">%    HADDOCK_CLUSTERS_TO_PYMOL</span>
+0074 <span class="comment">%               GUI load a folder, figure generated shows 16 (or less)</span>
+0075 <span class="comment">%               structures, the top 4 scoring structures from the top 4</span>
+0076 <span class="comment">%               scoring clusters</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">%   HADDOCK_CLUSTERS_TO_PYMOL(16,1)</span>
+0079 <span class="comment">%               GUI load a folder, figure generated shows 16 (or less)</span>
+0080 <span class="comment">%               structures, the top 16 scoring structures from top scoring</span>
+0081 <span class="comment">%               clusters</span>
+0082 <span class="comment">%</span>
+0083 <span class="comment">% Other m-files required:   none</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">% Subfunctions:             none</span>
+0086 <span class="comment">%</span>
+0087 <span class="comment">% MAT-files required:       none</span>
+0088 <span class="comment">%</span>
+0089 <span class="comment">%</span>
+0090 <span class="comment">% See also: EPRTOOLBOX HADDOCK_CLUSTERS_PROCESSING</span>
+0091 
+0092 <span class="comment">%                                        _                             _</span>
+0093 <span class="comment">%                                       | |                           | |</span>
+0094 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0095 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0096 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0097 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0098 <span class="comment">%                       __/ |                   __/ |</span>
+0099 <span class="comment">%                      |___/                   |___/</span>
+0100 <span class="comment">%</span>
+0101 <span class="comment">% M. Bye v14.01</span>
+0102 <span class="comment">%</span>
+0103 <span class="comment">% v13.09 - current</span>
+0104 <span class="comment">%               Chemical Physics Department</span>
+0105 <span class="comment">%               Weizmann Institute of Science</span>
+0106 <span class="comment">%               76100 REHOVOT, Israel</span>
+0107 <span class="comment">%</span>
+0108 <span class="comment">% v11.06 - v13.08</span>
+0109 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0110 <span class="comment">%               University of East Anglia</span>
+0111 <span class="comment">%               NORWICH, UK</span>
+0112 <span class="comment">%</span>
+0113 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0114 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
+0115 <span class="comment">%</span>
+0116 <span class="comment">% Last updated  Last revision: 13-December-2013</span>
+0117 <span class="comment">%</span>
+0118 <span class="comment">% Version history:</span>
+0119 <span class="comment">% Dec 13        &gt; New orientate commands, with single object selection</span>
+0120 <span class="comment">%               &gt; New ability to load a reference file on to the docking</span>
+0121 <span class="comment">%                   run</span>
+0122 <span class="comment">%</span>
+0123 <span class="comment">% Oct 13        Added help</span>
+0124 <span class="comment">%</span>
+0125 <span class="comment">% Aug 13        &gt; Removed error checking at start of script</span>
+0126 <span class="comment">%               &gt; Got properly operational</span>
+0127 <span class="comment">%               &gt; MAC and LINUX systems will perform pymol step</span>
+0128 <span class="comment">%                   automatically</span>
+0129 <span class="comment">%</span>
+0130 <span class="comment">% Nov 12        First release</span>
+0131 
+0132 <span class="comment">% Input arguments</span>
+0133 <span class="comment">% ===============</span>
+0134 
+0135 <span class="keyword">switch</span> nargin
+0136     
+0137     <span class="keyword">case</span> 0
+0138         folder = uigetdir(<span class="string">''</span>,<span class="string">'HADDOCKtoPyMOL: Select a folder to load'</span>);
+0139         
+0140         <span class="comment">% if user cancels command nothing happens</span>
+0141         <span class="keyword">if</span> isequal(folder,0)
+0142             <span class="keyword">return</span>
+0143         <span class="keyword">end</span>
+0144         
+0145         noClust  = 4;
+0146         noStruct = 4;
+0147         orient   = <span class="string">'all'</span>;
+0148         disp(<span class="string">'No structure restraints defined, using default parameters'</span>)
+0149         
+0150         
+0151     <span class="keyword">case</span> 1
+0152         <span class="comment">% Folder defined</span>
+0153         <span class="keyword">if</span> ischar(varargin{1})
+0154             folder   = varargin{1};
+0155             noClust  = 4;
+0156             noStruct = 4;
+0157             orient   = <span class="string">'all'</span>;
+0158             disp(<span class="string">'No structure restraints defined, using default parameters'</span>)
+0159             
+0160         <span class="comment">% Number of structures defined</span>
+0161         <span class="keyword">elseif</span> isnumeric(varargin{1})
+0162             folder = uigetdir(<span class="string">''</span>,<span class="string">'HADDOCKtoPyMOL: Select a folder to load'</span>);
+0163             
+0164             <span class="comment">% if user cancels command nothing happens</span>
+0165             <span class="keyword">if</span> isequal(folder,0)
+0166                 <span class="keyword">return</span>
+0167             <span class="keyword">end</span>
+0168             noClust  = varargin{1};
+0169             noStruct = 4;
+0170             orient   = <span class="string">'all'</span>;
+0171         <span class="keyword">end</span>
+0172         
+0173     <span class="keyword">case</span> 2
+0174         <span class="comment">% Folder and cluster defined</span>
+0175         <span class="keyword">if</span> ischar(varargin{1})
+0176             folder   = varargin{1};
+0177             noClust  = varargin{2};
+0178             noStruct = 4; 
+0179         
+0180         <span class="comment">% Structures and clusters defined</span>
+0181         <span class="keyword">elseif</span> isnumeric(varargin{1})
+0182             folder = uigetdir(<span class="string">''</span>,<span class="string">'HADDOCKtoPyMOL: Select a folder to load'</span>);
+0183             
+0184             <span class="comment">% if user cancels command nothing happens</span>
+0185             <span class="keyword">if</span> isequal(folder,0)
+0186                 <span class="keyword">return</span>
+0187             <span class="keyword">end</span>
+0188             
+0189             noClust  = varargin{1};
+0190             noStruct = varargin{2};
+0191             orient   = <span class="string">'all'</span>;
+0192         <span class="keyword">end</span>
+0193         
+0194     <span class="keyword">case</span> 3
+0195         folder   = varargin{1};
+0196         noClust  = varargin{2};
+0197         noStruct = varargin{3};
+0198         orient   = <span class="string">'all'</span>;
+0199         
+0200     <span class="keyword">case</span> 4
+0201         folder   = varargin{1};
+0202         noClust  = varargin{2};
+0203         noStruct = varargin{3};
+0204         orient   = varargin{4};
+0205         
+0206     <span class="keyword">case</span> 5
+0207         folder   = varargin{1};
+0208         noClust  = varargin{2};
+0209         noStruct = varargin{3};
+0210         orient   = varargin{4};
+0211         refStruct= varargin{5};
+0212 <span class="keyword">end</span>
+0213 
+0214 orient = [<span class="string">'orient '</span> orient <span class="string">'\n'</span>];
+0215 
+0216 <span class="keyword">if</span> noClust == 1
+0217     fprintf(<span class="string">'Using top cluster only and using %d structures\n'</span>,noStruct)
+0218 <span class="keyword">else</span>
+0219     fprintf(<span class="string">'Using %d structures from the top %d clusters\n'</span>,noStruct,noClust)
+0220 <span class="keyword">end</span>
+0221 
+0222 <span class="comment">% Get cluster order when ranked by Haddock score</span>
+0223 A = importdata([folder <span class="string">'/clusters_haddock-sorted.stat'</span>]);
+0224 clusterNamesSorted = A.textdata(2:<span class="keyword">end</span>,1);
+0225 
+0226 fprintf(<span class="string">'Searching clusters for PDBs...\n'</span>)
+0227 
+0228 <span class="keyword">for</span> k = 1:noClust
+0229     clusterPDBs{k} = importdata([folder <span class="string">'/'</span> clusterNamesSorted{k}]);
+0230     fprintf(<span class="string">'Found %0.2d PDBs in cluster %s\n'</span>,numel(clusterPDBs{k}),regexprep(clusterNamesSorted{k},<span class="string">'file.nam_clust'</span>,<span class="string">''</span>))
+0231 <span class="keyword">end</span>
+0232 
+0233 <span class="comment">% Get PDBs from clusters</span>
+0234 <span class="keyword">for</span> k = 1:noClust
+0235    fid = fopen([folder <span class="string">'/'</span> clusterNamesSorted{k}]);
+0236    cluster{k} = fscanf(fid,<span class="string">'%c'</span>);
+0237    fclose(fid);
+0238    struct(k) = regexp(cluster(k),<span class="string">'.pdb'</span>,<span class="string">'split'</span>);
+0239    
+0240    <span class="keyword">for</span> l = 1:noStruct
+0241        <span class="keyword">try</span>
+0242          list((k*noStruct)-noStruct+l) = struct{k}(l);
+0243        <span class="keyword">end</span>
+0244    <span class="keyword">end</span>
+0245 <span class="keyword">end</span>
+0246 
+0247 list = list(~cellfun(<span class="string">'isempty'</span>,list));
+0248 
+0249 path = [folder <span class="string">'/HADDOCKtoPyMOL_'</span> datestr(now, <span class="string">'yymmdd-HHMM'</span>)];
+0250     
+0251 <span class="comment">% Create file for loading into PyMOL</span>
+0252 fprintf(<span class="string">'Creating PyMOL initialisation script...\n'</span>)
+0253 PyMOL_launch = fopen([path <span class="string">'.pml'</span>],<span class="string">'w'</span>);
+0254 
+0255 header = [<span class="keyword">...</span>
+0256 <span class="string">'#                                        _                             _   '</span>;<span class="keyword">...</span>
+0257 <span class="string">'#                                       | |                           | |  '</span>;<span class="keyword">...</span>
+0258 <span class="string">'#  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_ '</span>;<span class="keyword">...</span>
+0259 <span class="string">'# | ''_ ` _ \ / _ \| ''__/ _` |/ _` | ''_ \| ''_ \| | | |/ _ \ | ''_ \ / _ \ __|'</span>;<span class="keyword">...</span>
+0260 <span class="string">'# | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_ '</span>;<span class="keyword">...</span>
+0261 <span class="string">'# |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|'</span>;<span class="keyword">...</span>
+0262 <span class="string">'#                       __/ |                   __/ |                      '</span>;<span class="keyword">...</span>
+0263 <span class="string">'#                      |___/                   |___/                       '</span>;<span class="keyword">...</span>
+0264 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0265 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0266 <span class="string">'# M. Bye v14.01                                                            '</span>;<span class="keyword">...</span>
+0267 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0268 <span class="string">'# Author:       Morgan Bye                                                 '</span>;<span class="keyword">...</span>
+0269 <span class="string">'# Work address: Department of Chemical Physics                             '</span>;<span class="keyword">...</span>
+0270 <span class="string">'#               Weizmann Institute of Science                              '</span>;<span class="keyword">...</span>
+0271 <span class="string">'#               REHOVOT, IL                                                '</span>;<span class="keyword">...</span>
+0272 <span class="string">'# Email:        morgan.bye@weizmann.ac.il                                  '</span>;<span class="keyword">...</span>
+0273 <span class="string">'# Website:      http://www.morganbye.net/eprtoolbox/                       '</span>;<span class="keyword">...</span>
+0274 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0275 <span class="string">'# File created at:                                                         '</span>];
+0276 
+0277 header = [header ; sprintf(<span class="string">'%-75s'</span>, [<span class="string">'# '</span> datestr(now, <span class="string">'dd mmmm yyyy - HH:MM'</span>)])];
+0278 
+0279 header = [header ; <span class="string">'#                                                                          '</span>];
+0280 
+0281 <span class="keyword">for</span> k = 1:size(header,1)
+0282     fprintf(PyMOL_launch,<span class="string">'%-75s\n'</span>,header(k,:));
+0283 <span class="keyword">end</span>
+0284 
+0285 <span class="comment">% Find location of align script</span>
+0286 <span class="comment">% alignscript  = which('align_all.py');</span>
+0287 <span class="comment">%</span>
+0288 <span class="comment">% fprintf(PyMOL_launch,'%-75s\n',['run ' alignscript]);</span>
+0289 <span class="comment">% fprintf(PyMOL_launch,'%-75s\n','align_all $TOPMOD');</span>
+0290 
+0291 <span class="comment">% Print the load commands</span>
+0292 <span class="keyword">for</span> k = 1:numel(list)
+0293     fprintf(PyMOL_launch,<span class="string">'load %s/%s.pdb, %d\n'</span>,folder,strtrim(list{k}),k);
+0294 <span class="keyword">end</span>
+0295 fprintf(PyMOL_launch,<span class="string">'hide all\n'</span>);
+0296 
+0297 <span class="comment">% Reference structure switch</span>
+0298 <span class="keyword">switch</span> nargin
+0299     <span class="keyword">case</span> 5
+0300         <span class="comment">% Load reference structure</span>
+0301         fprintf(PyMOL_launch,<span class="string">'load %s, reference\n'</span>,refStruct);
+0302         
+0303         <span class="comment">% Align docking structures to reference</span>
+0304         fprintf(PyMOL_launch,<span class="string">'select /reference//B\n'</span>);
+0305         
+0306         <span class="comment">% Align other structures to structure 1</span>
+0307         <span class="keyword">for</span> k = 1:numel(list)
+0308             fprintf(PyMOL_launch,<span class="string">'align %d, sele\n'</span>,k);
+0309         <span class="keyword">end</span>
+0310         
+0311         fprintf(PyMOL_launch,<span class="string">'hide all\n'</span>);
+0312 
+0313         <span class="comment">% Display/colour the reference structure</span>
+0314         fprintf(PyMOL_launch,<span class="string">'copy ref2, reference\n'</span>);
+0315         fprintf(PyMOL_launch,<span class="string">'select reference\n'</span>);
+0316         fprintf(PyMOL_launch,<span class="string">'show cartoon,(sele)\n'</span>);
+0317         fprintf(PyMOL_launch,<span class="string">'set transparency, 0.5,(sele)\n'</span>);
+0318         <span class="comment">% fprintf(PyMOL_launch,'cartoon putty,(sele)\n');</span>
+0319         
+0320         fprintf(PyMOL_launch,<span class="string">'deselect\n'</span>);
+0321         fprintf(PyMOL_launch,<span class="string">'select /reference//B\n'</span>);
+0322         fprintf(PyMOL_launch,<span class="string">'color grey60,(sele)\n'</span>);
+0323 
+0324         fprintf(PyMOL_launch,<span class="string">'deselect\n'</span>);
+0325         fprintf(PyMOL_launch,<span class="string">'select /reference//A\n'</span>);
+0326         fprintf(PyMOL_launch,<span class="string">'color palecyan,(sele)\n'</span>);
+0327         
+0328         fprintf(PyMOL_launch,<span class="string">'deselect\n'</span>);
+0329         fprintf(PyMOL_launch,<span class="string">'select /ref2//B and name c+o+n+ca\n'</span>);
+0330         fprintf(PyMOL_launch,<span class="string">'show lines, sele\n'</span>);
+0331         fprintf(PyMOL_launch,<span class="string">'color black,(sele)\n'</span>);
+0332         
+0333         <span class="comment">% Show the backbone of the binding partners as lines</span>
+0334         fprintf(PyMOL_launch,<span class="string">'deselect\n'</span>);
+0335         fprintf(PyMOL_launch,<span class="string">'select //A and name c+o+n+ca\n'</span>);
+0336         fprintf(PyMOL_launch,<span class="string">'show lines, sele\n'</span>);
+0337         
+0338         <span class="comment">% Colour chains using chainbow</span>
+0339         fprintf(PyMOL_launch,<span class="string">'util.chainbow(&quot;sele&quot;)\n'</span>);
+0340 
+0341         
+0342     <span class="keyword">otherwise</span>
+0343         <span class="comment">% Select structure 1</span>
+0344         fprintf(PyMOL_launch,<span class="string">'select /1/B\n'</span>);
+0345         
+0346         <span class="comment">% Align other structures to structure 1</span>
+0347         <span class="keyword">for</span> k = 1:numel(list)
+0348             fprintf(PyMOL_launch,<span class="string">'align %d, sele\n'</span>,k);
+0349         <span class="keyword">end</span>
+0350 
+0351         <span class="comment">% Show the original structure (chain B)</span>
+0352         fprintf(PyMOL_launch,<span class="string">'show cartoon,(sele)\n'</span>);
+0353         fprintf(PyMOL_launch,<span class="string">'cartoon automatic,(sele)\n'</span>);
+0354         
+0355         <span class="comment">% Deselect</span>
+0356         fprintf(PyMOL_launch,<span class="string">'deselect\n'</span>);
+0357         
+0358         <span class="comment">% Show the backbone of the binding partners as lines</span>
+0359         fprintf(PyMOL_launch,<span class="string">'select //A and name c+o+n+ca\n'</span>);
+0360         fprintf(PyMOL_launch,<span class="string">'show lines, sele\n'</span>);
+0361         fprintf(PyMOL_launch,<span class="string">'deselect\n'</span>);
+0362         
+0363         <span class="comment">% Colour chains using chainbow</span>
+0364         fprintf(PyMOL_launch,<span class="string">'util.chainbow\n'</span>);
+0365         
+0366         <span class="comment">% Recolour centre</span>
+0367         fprintf(PyMOL_launch,<span class="string">'select /1/B\n'</span>);
+0368         fprintf(PyMOL_launch,<span class="string">'color grey60,(sele)\n'</span>);
+0369         
+0370 <span class="keyword">end</span>
+0371 
+0372 <span class="comment">% Orientate and centre</span>
+0373 fprintf(PyMOL_launch,orient);
+0374 fprintf(PyMOL_launch,<span class="string">'center all\n'</span>);
+0375 fprintf(PyMOL_launch,<span class="string">'zoom all\n'</span>);
+0376 
+0377 <span class="comment">% Background colour</span>
+0378 fprintf(PyMOL_launch,<span class="string">'bg_color white\n'</span>);
+0379 
+0380 <span class="comment">% Save out image and session</span>
+0381 fprintf(PyMOL_launch,<span class="string">'ray 1280,1024\n'</span>);
+0382 fprintf(PyMOL_launch,<span class="string">'png %s.png\n'</span>,path);
+0383 fprintf(PyMOL_launch,<span class="string">'save %s.pse\n'</span>,path);
+0384 
+0385 <span class="comment">% Message user</span>
+0386 fprintf(<span class="string">'PyMOL initialisation script generated!\n'</span>)
+0387 
+0388 
+0389 <span class="comment">% Try to run the script automatically</span>
+0390 <span class="keyword">switch</span> computer
+0391     <span class="keyword">case</span> <span class="string">'GLNXA64'</span>
+0392         <span class="keyword">if</span> system(<span class="string">'which pymol'</span>) == 0
+0393             system(sprintf(<span class="string">'pymol %s.pml'</span>,path));
+0394             fprintf(<span class="string">'PyMOL image generated!\n'</span>)
+0395         <span class="keyword">end</span>
+0396         
+0397     <span class="keyword">case</span> <span class="string">'MACI64'</span>
+0398         <span class="keyword">if</span> system(<span class="string">'which pymol'</span>) == 0
+0399             system(sprintf(<span class="string">'pymol %s.pml'</span>,path));
+0400             fprintf(<span class="string">'PyMOL image generated!\n'</span>)
+0401         <span class="keyword">end</span>
+0402         
+0403     <span class="keyword">case</span> <span class="string">'PCWIN'</span>
+0404         fprintf(<span class="string">'Now open the PyMOL script:\n'</span>)
+0405         fprintf(<span class="string">'%s.pml\n'</span>,path)
+0406         fprintf(<span class="string">'with PyMOL to complete'</span>)
+0407 
+0408         
+0409     <span class="keyword">case</span> <span class="string">'PCWIN64'</span>
+0410         fprintf(<span class="string">'Now open the PyMOL script:\n'</span>)
+0411         fprintf(<span class="string">'%s.pml\n'</span>,path)
+0412         fprintf(<span class="string">'with PyMOL to complete'</span>)
+0413 <span class="keyword">end</span>
+0414</pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

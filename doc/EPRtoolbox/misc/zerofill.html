@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of zerofill</title>
+  <meta name="keywords" content="zerofill">
+  <meta name="description" content="ZEROFILL takes a dataset and adds zeroes to the end">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="index.html">misc</a> &gt; zerofill.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/misc&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>zerofill
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>ZEROFILL takes a dataset and adds zeroes to the end</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function varargout = zerofill(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> ZEROFILL takes a dataset and adds zeroes to the end
+
+ y     = ZEROFILL (y)
+ y     = ZEROFILL (y,par)
+ [x,y] = ZEROFILL (x,y,par)
+
+ Inputs:
+    input1     - y
+                   the data set
+    input2     - par
+                   the paramter to extend by one of:
+                       &gt; 'double' (default)
+                       &gt; percentage ie. the string '10%'
+                       &gt; total data points ie. 1024
+
+ Outputs:
+    output1    - y
+                   a zero filled dataset
+    output2    - x
+                   a linearly extrapolated dataset of length matching y
+ 
+ Example:
+ y     = ZEROFILL (y,'double')
+ y     = ZEROFILL (y,'10%')
+ y     = ZEROFILL (y,1024)
+
+ Other m-files required:   none
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: EPRTOOLBOX</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function varargout = zerofill(varargin)</a>
+0002 
+0003 <span class="comment">% ZEROFILL takes a dataset and adds zeroes to the end</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% y     = ZEROFILL (y)</span>
+0006 <span class="comment">% y     = ZEROFILL (y,par)</span>
+0007 <span class="comment">% [x,y] = ZEROFILL (x,y,par)</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Inputs:</span>
+0010 <span class="comment">%    input1     - y</span>
+0011 <span class="comment">%                   the data set</span>
+0012 <span class="comment">%    input2     - par</span>
+0013 <span class="comment">%                   the paramter to extend by one of:</span>
+0014 <span class="comment">%                       &gt; 'double' (default)</span>
+0015 <span class="comment">%                       &gt; percentage ie. the string '10%'</span>
+0016 <span class="comment">%                       &gt; total data points ie. 1024</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Outputs:</span>
+0019 <span class="comment">%    output1    - y</span>
+0020 <span class="comment">%                   a zero filled dataset</span>
+0021 <span class="comment">%    output2    - x</span>
+0022 <span class="comment">%                   a linearly extrapolated dataset of length matching y</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Example:</span>
+0025 <span class="comment">% y     = ZEROFILL (y,'double')</span>
+0026 <span class="comment">% y     = ZEROFILL (y,'10%')</span>
+0027 <span class="comment">% y     = ZEROFILL (y,1024)</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% Other m-files required:   none</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% Subfunctions:             none</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% MAT-files required:       none</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% See also: EPRTOOLBOX</span>
+0037 
+0038 <span class="comment">%                                        _                             _</span>
+0039 <span class="comment">%                                       | |                           | |</span>
+0040 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0041 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0042 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0043 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0044 <span class="comment">%                       __/ |                   __/ |</span>
+0045 <span class="comment">%                      |___/                   |___/</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% M. Bye v14.08</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% v13.09 - current</span>
+0050 <span class="comment">%               Chemical Physics Department</span>
+0051 <span class="comment">%               Weizmann Institute of Science</span>
+0052 <span class="comment">%               76100 REHOVOT, Israel</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0056 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% Last updated  25-August-2014</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">% Version history:</span>
+0061 <span class="comment">% Aug 14        Initial release</span>
+0062 
+0063 <span class="comment">%% Input parameters</span>
+0064 
+0065 <span class="keyword">switch</span> nargin
+0066     <span class="keyword">case</span> 0
+0067         error(<span class="string">'Require an input!'</span>)
+0068     <span class="keyword">case</span> 1
+0069         y = varargin{1};
+0070         par = <span class="string">'double'</span>;
+0071     <span class="keyword">case</span> 2
+0072         y = varargin{1};
+0073         par = varargin{2};
+0074     <span class="keyword">case</span> 3
+0075         x = varargin{1};
+0076         y = varargin{2};
+0077         par = varargin{3};
+0078         
+0079 <span class="keyword">end</span>
+0080 
+0081 <span class="comment">%% Figure out the parameter and new y size</span>
+0082 
+0083 <span class="comment">% Get size of y</span>
+0084 [m,n] = size(y);
+0085 
+0086 <span class="comment">% Is the parameter a number</span>
+0087 <span class="keyword">if</span> isnumeric(par)
+0088    parSize = par;
+0089    
+0090 <span class="comment">% Is the parameter a string</span>
+0091 <span class="keyword">elseif</span> ischar(par)
+0092     
+0093     <span class="comment">% Is the string &quot;double&quot;</span>
+0094     <span class="keyword">if</span> strcmp(par,<span class="string">'double'</span>)
+0095        parSize = m*2;
+0096        
+0097     <span class="comment">% Is the string a percentage</span>
+0098     <span class="keyword">elseif</span> strfind(par,<span class="string">'%'</span>)
+0099        parPer = str2double(regexprep(par,<span class="string">'%'</span>,<span class="string">''</span>));
+0100        parSize = round(m*(1+(parPer/100)));
+0101     <span class="keyword">end</span>
+0102 <span class="keyword">else</span>
+0103     error(<span class="string">'Can''t recognise the parameter input, make sure to use ''double'',''10%'' or a number'</span>)
+0104 <span class="keyword">end</span>
+0105 
+0106 <span class="comment">%% Generate the new array for y</span>
+0107 
+0108 y_out = zeros([parSize,n]);
+0109 y_out(1:m,1:n) = y(:,:);
+0110 
+0111 
+0112 <span class="comment">%% Generate the new x if required</span>
+0113 <span class="keyword">if</span> nargin &gt; 2
+0114    x_size = size(x,1);
+0115    
+0116    x_dif  = x(end)-x(1);
+0117    x_int  = x_dif / x_size;
+0118    
+0119    x_out = zeros([parSize,1]);
+0120    
+0121    <span class="keyword">for</span> k = 1:parSize
+0122        x_out(k) = x(1)+((k-1)*x_int);
+0123    <span class="keyword">end</span>
+0124 <span class="keyword">end</span>
+0125 
+0126 
+0127 <span class="comment">%% Outputs</span>
+0128 
+0129 <span class="keyword">switch</span> nargout
+0130     <span class="keyword">case</span> 0
+0131         plot(x,y_out)
+0132     <span class="keyword">case</span> 1
+0133         varargout{1} = y_out;
+0134      <span class="keyword">case</span> 2
+0135         varargout{1} = x_out;   
+0136         varargout{2} = y_out;
+0137 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

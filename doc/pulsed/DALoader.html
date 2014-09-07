@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DALoader</title>
+  <meta name="keywords" content="DALoader">
+  <meta name="description" content="DALOADER is a companion script to DAPLOTTER. DALOADER takes the saved">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">pulsed</a> &gt; DALoader.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for pulsed&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>DALoader
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>DALOADER is a companion script to DAPLOTTER. DALOADER takes the saved</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [x,y] = DALoader </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DALOADER is a companion script to DAPLOTTER. DALOADER takes the saved
+   DeerAnalysis analysis files and loads the data quickly into the
+   workspace
+
+   [x,y] = DALOADER
+
+ Inputs:
+    input0     - a graphical interface for file selection
+
+ Outputs:
+    output1    - x
+                   x axes (as sub-fields) for:
+                       &gt; raw - original data
+                       &gt; fit - bckg subtracted
+                       &gt; dd  - distance distribution
+
+    output2    - y
+                   y axes (as sub-fields) for:
+                       &gt; raw - original data
+                       &gt; fit - bckg subtracted
+                       &gt; dd  - distance distribution
+ 
+ Example:
+    [x,y] = DALOADER
+
+ Other m-files required:   none
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: EPRTOOLBOX <a href="DAPlotter.html" class="code" title="function DAPlotter(varargin)">DAPLOTTER</a> <a href="DACompare.html" class="code" title="function DACompare">DACOMPARE</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="DACompare.html" class="code" title="function DACompare">DACompare</a>	DACOMPARE is a companion script to DAPLOTTER. DACOMPARE takes two or more</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function [x,y] = DALoader</a>
+0002 
+0003 <span class="comment">% DALOADER is a companion script to DAPLOTTER. DALOADER takes the saved</span>
+0004 <span class="comment">%   DeerAnalysis analysis files and loads the data quickly into the</span>
+0005 <span class="comment">%   workspace</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   [x,y] = DALOADER</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% Inputs:</span>
+0010 <span class="comment">%    input0     - a graphical interface for file selection</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Outputs:</span>
+0013 <span class="comment">%    output1    - x</span>
+0014 <span class="comment">%                   x axes (as sub-fields) for:</span>
+0015 <span class="comment">%                       &gt; raw - original data</span>
+0016 <span class="comment">%                       &gt; fit - bckg subtracted</span>
+0017 <span class="comment">%                       &gt; dd  - distance distribution</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%    output2    - y</span>
+0020 <span class="comment">%                   y axes (as sub-fields) for:</span>
+0021 <span class="comment">%                       &gt; raw - original data</span>
+0022 <span class="comment">%                       &gt; fit - bckg subtracted</span>
+0023 <span class="comment">%                       &gt; dd  - distance distribution</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% Example:</span>
+0026 <span class="comment">%    [x,y] = DALOADER</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% Other m-files required:   none</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% Subfunctions:             none</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% MAT-files required:       none</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">% See also: EPRTOOLBOX DAPLOTTER DACOMPARE</span>
+0036 
+0037 <span class="comment">%                                        _                             _</span>
+0038 <span class="comment">%                                       | |                           | |</span>
+0039 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0040 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0041 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0042 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0043 <span class="comment">%                       __/ |                   __/ |</span>
+0044 <span class="comment">%                      |___/                   |___/</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% M. Bye v14.07</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">% v13.09 - current</span>
+0049 <span class="comment">%               Chemical Physics Department</span>
+0050 <span class="comment">%               Weizmann Institute of Science</span>
+0051 <span class="comment">%               76100 REHOVOT, Israel</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0054 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">% Last updated  16-June-2014</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% Version history:</span>
+0059 <span class="comment">% Jun 14        Initial release</span>
+0060 
+0061 <span class="comment">% GUI get file</span>
+0062 [file , directory] = uigetfile({<span class="string">'*_distr.dat'</span>,<span class="string">'DeerAnalysis distance distribution file (*_distr.dat)'</span>; <span class="keyword">...</span>
+0063     <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="keyword">...</span>
+0064     <span class="string">'Load DeerAnalysis distance distribution file'</span>);
+0065 
+0066 <span class="comment">% if user cancels command nothing happens</span>
+0067 <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0068     <span class="keyword">return</span>
+0069 <span class="keyword">end</span>
+0070 
+0071 
+0072 <span class="comment">% File name/path manipulation</span>
+0073 fileroot = regexprep(file,<span class="string">'_distr.dat'</span>,<span class="string">''</span>);
+0074 
+0075 <span class="comment">% Original data file</span>
+0076 <span class="comment">% ==================</span>
+0077 
+0078 filebckg = [directory,fileroot,<span class="string">'_bckg.dat'</span>];
+0079 rawbckg = importdata(filebckg);
+0080 
+0081 x.bckg = rawbckg(:,1);
+0082 y.bckg = rawbckg(:,2);
+0083 
+0084 <span class="comment">% Fit data file</span>
+0085 <span class="comment">% =============</span>
+0086 
+0087 filefit = [directory,fileroot,<span class="string">'_fit.dat'</span>];
+0088 rawfit = importdata(filefit);
+0089 
+0090 x.fit    = rawfit(:,1);
+0091 y.fitExp = rawfit(:,2);
+0092 y.fitFit = rawfit(:,3);
+0093 
+0094 <span class="comment">% Distance distribution file</span>
+0095 <span class="comment">% ==========================</span>
+0096 
+0097 filedd = [directory,fileroot,<span class="string">'_distr.dat'</span>];
+0098 rawdd = importdata(filedd);
+0099 
+0100 x.dd = rawdd(:,1);
+0101 
+0102 <span class="comment">% Normalize the distance distribtion to 1</span>
+0103 max_y = max(rawdd(:,2));
+0104 min_y = min(rawdd(:,2));
+0105 
+0106 y.dd = (rawdd(:,2) - min_y)/(max_y - min_y);
+0107</pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

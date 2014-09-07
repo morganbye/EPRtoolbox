@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PS_Pi</title>
+  <meta name="keywords" content="PS_Pi">
+  <meta name="description" content="PS_PI Calculate the Pi (accessibility) factor">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="../../index.html">cw</a> &gt; <a href="../index.html">PowerSat</a> &gt; <a href="index.html">_private</a> &gt; PS_Pi.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/cw/PowerSat/_private&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>PS_Pi
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>PS_PI Calculate the Pi (accessibility) factor</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function PS_Pi(handles) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PS_PI Calculate the Pi (accessibility) factor
+
+ Syntax:  PS_PI(handles)
+
+ Inputs:
+    input1 - handles
+               define the GUI area (ie gcf for PowerSat)
+
+ Outputs:
+    output1 - Power saturation curves plotted in PowerSat GUI
+
+ Example: 
+    see http://morganbye.net/PowerSat
+
+ Other m-files required:
+    PowerSat.m
+
+ Subfunctions:         PS_PI_DPPH
+                       PS_PI_SAMPLE
+                       PS_PI_CALCULATE
+
+ MAT-files required:   none</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="PS_Pi_Calculate.html" class="code" title="function PS_Pi_Calculate(handles,exp)">PS_Pi_Calculate</a>	PS_PI-CALCULATE Calculate the Pi (accessibility) factor</li><li><a href="PS_Pi_DPPH.html" class="code" title="function PS_Pi_DPPH(handles)">PS_Pi_DPPH</a>	PS_PI_DPPH Calculate ΔH_half for the DPPH standard</li><li><a href="PS_Pi_Sample.html" class="code" title="function PS_Pi_Sample(handles,exp)">PS_Pi_Sample</a>	PS_PI_SAMPLE Plot the power saturation curves</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>	PS_PLOTPS Plot the power saturation curves</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function PS_Pi(handles)</a>
+0002 
+0003 <span class="comment">% PS_PI Calculate the Pi (accessibility) factor</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Syntax:  PS_PI(handles)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% Inputs:</span>
+0008 <span class="comment">%    input1 - handles</span>
+0009 <span class="comment">%               define the GUI area (ie gcf for PowerSat)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Outputs:</span>
+0012 <span class="comment">%    output1 - Power saturation curves plotted in PowerSat GUI</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Example:</span>
+0015 <span class="comment">%    see http://morganbye.net/PowerSat</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% Other m-files required:</span>
+0018 <span class="comment">%    PowerSat.m</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Subfunctions:         PS_PI_DPPH</span>
+0021 <span class="comment">%                       PS_PI_SAMPLE</span>
+0022 <span class="comment">%                       PS_PI_CALCULATE</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% MAT-files required:   none</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%</span>
+0027 
+0028 <span class="comment">%                                        _                             _</span>
+0029 <span class="comment">%                                       | |                           | |</span>
+0030 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0031 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0032 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0033 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0034 <span class="comment">%                       __/ |                   __/ |</span>
+0035 <span class="comment">%                      |___/                   |___/</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">% M. Bye v13.04</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">% Author:       Morgan Bye</span>
+0041 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0042 <span class="comment">%               University of East Anglia</span>
+0043 <span class="comment">%               NORWICH, UK</span>
+0044 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0045 <span class="comment">% Website:      http://www.morganbye.net/PowerSat</span>
+0046 <span class="comment">% Mar 2013;     Last revision: 18-March-2013</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">% Version history:</span>
+0049 <span class="comment">% Mar 13        &gt; Pi is calculated faster and calculated automatically if</span>
+0050 <span class="comment">%                   N2 and DPPH have been loaded, it does not wait for all</span>
+0051 <span class="comment">%                   4 datasets to be loaded.</span>
+0052 <span class="comment">%               &gt; Lookup vars.exp.x not vars.exp to make sure the exp is</span>
+0053 <span class="comment">%                   populated</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% Jun 12        &gt; Error catching added to top of file.</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% Oct 11        &gt; Initial release</span>
+0058 
+0059 <span class="keyword">global</span> vars
+0060 
+0061 <span class="comment">% Catch error: if no DPPH has been loaded then abort calculation</span>
+0062 <span class="keyword">if</span> isfield(vars,<span class="string">'DPPH'</span>) == 0
+0063     <span class="keyword">return</span>
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="comment">% % Always run DPPH calculation, to make sure that the DPPH values have not</span>
+0067 <span class="comment">% % changed. We can then compare each experiment (that exists) to the DPPH</span>
+0068 <span class="comment">% % and solve for Pi</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% PS_Pi_DPPH(handles);</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">% if isfield(vars,'Oxy')</span>
+0073 <span class="comment">%     exp   = 'Oxy';</span>
+0074 <span class="comment">%     PS_Pi_Sample(handles,exp)</span>
+0075 <span class="comment">% end</span>
+0076 <span class="comment">%</span>
+0077 <span class="comment">% if isfield(vars,'N2')</span>
+0078 <span class="comment">%     exp   = 'N2';</span>
+0079 <span class="comment">%     PS_Pi_Sample(handles,exp)</span>
+0080 <span class="comment">% end</span>
+0081 <span class="comment">%</span>
+0082 <span class="comment">% if isfield(vars,'Ni')</span>
+0083 <span class="comment">%     exp   = 'Ni';</span>
+0084 <span class="comment">%     PS_Pi_Sample(handles,exp)</span>
+0085 <span class="comment">% end</span>
+0086 <span class="comment">%</span>
+0087 <span class="comment">% % If all experiments have been loaded, then finally calculate Pi</span>
+0088 <span class="comment">%</span>
+0089 <span class="comment">% if isfield(vars,'Oxy') &amp;&amp; isfield(vars,'N2') &amp;&amp; isfield(vars,'Ni')</span>
+0090 <span class="comment">%</span>
+0091 <span class="comment">%     PS_Pi_Calculate(handles,'Oxy');</span>
+0092 <span class="comment">%</span>
+0093 <span class="comment">%     if isfield(vars.Oxy, 'Pi')</span>
+0094 <span class="comment">%         set(handles.edit_pi_Oxy,'String',num2str(vars.Oxy.Pi));</span>
+0095 <span class="comment">%     end</span>
+0096 <span class="comment">%</span>
+0097 <span class="comment">%     PS_Pi_Calculate(handles,'Ni');</span>
+0098 <span class="comment">%</span>
+0099 <span class="comment">%     if isfield(vars.Ni, 'Pi')</span>
+0100 <span class="comment">%         set(handles.edit_pi_Ni,'String',num2str(vars.Ni.Pi));</span>
+0101 <span class="comment">%     end</span>
+0102 <span class="comment">%</span>
+0103 <span class="comment">%     if isfield(vars.Oxy, 'Pi') == 0 &amp;&amp; isfield(vars.Ni, 'Pi') == 0</span>
+0104 <span class="comment">%</span>
+0105 <span class="comment">%         error('Accessibility:PiCalculation', ...</span>
+0106 <span class="comment">%       ['No Π values could be calculated\n\n'...</span>
+0107 <span class="comment">%       'This may be because the P 1/2 value of Nitrogen is so high. '...</span>
+0108 <span class="comment">%       'Consult your data and try adjusting your parameters.'])</span>
+0109 <span class="comment">%     end</span>
+0110 <span class="comment">%     return</span>
+0111 <span class="comment">% end</span>
+0112 
+0113 <span class="comment">% v13.04</span>
+0114 <span class="comment">% NEW METHOD: if Nitrogen and DPPH are loaded then calculate Pi. Dont wait,</span>
+0115 <span class="comment">% as Pi calculation time is not long and allows for single experiment</span>
+0116 <span class="comment">% analysis.</span>
+0117 
+0118 <span class="comment">% Always run DPPH calculation, to make sure that the DPPH values have not</span>
+0119 <span class="comment">% changed. We can then compare each experiment (that exists) to the DPPH</span>
+0120 <span class="comment">% and solve for Pi</span>
+0121 
+0122 <a href="PS_Pi_DPPH.html" class="code" title="function PS_Pi_DPPH(handles)">PS_Pi_DPPH</a>(handles);
+0123 
+0124 <span class="comment">% Calculate the nitrogen Pi first</span>
+0125 <span class="keyword">if</span> isfield(vars.N2,<span class="string">'x'</span>)
+0126     exp   = <span class="string">'N2'</span>;
+0127     <a href="PS_Pi_Sample.html" class="code" title="function PS_Pi_Sample(handles,exp)">PS_Pi_Sample</a>(handles,exp)
+0128 <span class="keyword">end</span>
+0129 
+0130 <span class="comment">% Lookup the x of the Oxy rather than Oxy itself cos if the file has been</span>
+0131 <span class="comment">% cleared then Oxy will exist but will be empty.</span>
+0132 
+0133 <span class="keyword">if</span> isfield(vars,<span class="string">'Oxy'</span>) &amp;&amp; isfield(vars.Oxy,<span class="string">'x'</span>)
+0134     exp   = <span class="string">'Oxy'</span>;
+0135     <a href="PS_Pi_Sample.html" class="code" title="function PS_Pi_Sample(handles,exp)">PS_Pi_Sample</a>(handles,exp)
+0136     
+0137     <span class="comment">% If nitrogen loaded calculate pi</span>
+0138     <span class="keyword">if</span> isfield(vars.N2,<span class="string">'x'</span>)
+0139         <a href="PS_Pi_Calculate.html" class="code" title="function PS_Pi_Calculate(handles,exp)">PS_Pi_Calculate</a>(handles,<span class="string">'Oxy'</span>);
+0140         
+0141         <span class="comment">% If pi calculated, display it</span>
+0142         <span class="keyword">if</span> isfield(vars.Oxy, <span class="string">'Pi'</span>)
+0143             set(handles.edit_pi_Oxy,<span class="string">'String'</span>,num2str(vars.Oxy.Pi));
+0144         <span class="keyword">end</span>
+0145     <span class="keyword">end</span>
+0146 <span class="keyword">end</span>
+0147 
+0148 
+0149 <span class="keyword">if</span> isfield(vars,<span class="string">'Ni'</span>) &amp;&amp; isfield(vars.Ni,<span class="string">'x'</span>)
+0150     exp   = <span class="string">'Ni'</span>;
+0151     <a href="PS_Pi_Sample.html" class="code" title="function PS_Pi_Sample(handles,exp)">PS_Pi_Sample</a>(handles,exp)
+0152     
+0153     <span class="keyword">if</span> isfield(vars.N2,<span class="string">'x'</span>)
+0154         
+0155         <a href="PS_Pi_Calculate.html" class="code" title="function PS_Pi_Calculate(handles,exp)">PS_Pi_Calculate</a>(handles,<span class="string">'Ni'</span>);
+0156         
+0157         <span class="keyword">if</span> isfield(vars.Ni, <span class="string">'Pi'</span>)
+0158             set(handles.edit_pi_Ni,<span class="string">'String'</span>,num2str(vars.Ni.Pi));
+0159         <span class="keyword">end</span>
+0160     <span class="keyword">end</span>
+0161 <span class="keyword">end</span>
+0162 
+0163 <span class="comment">% Error checking</span>
+0164 <span class="keyword">if</span> (isfield(vars.Oxy,<span class="string">'x'</span>) == 0 &amp;&amp; isfield(vars.Oxy, <span class="string">'Pi'</span>) == 0) <span class="keyword">...</span>
+0165         &amp;&amp; ((isfield(vars.Ni,<span class="string">'x'</span>) == 0 &amp;&amp; isfield(vars.Ni, <span class="string">'Pi'</span>) == 0))
+0166     
+0167     error(<span class="string">'Accessibility:PiCalculation'</span>, <span class="keyword">...</span>
+0168         [<span class="string">'No Π values could be calculated\n\n'</span><span class="keyword">...</span>
+0169         <span class="string">'This may be because the P 1/2 value of Nitrogen is so high. '</span><span class="keyword">...</span>
+0170         <span class="string">'Consult your data and try adjusting your parameters.'</span>])
+0171 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

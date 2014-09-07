@@ -36,7 +36,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-</ul>
+<li><a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 </ul>
@@ -95,7 +95,7 @@ This function is called by:
 0048             <span class="string">'*.*'</span>,  <span class="string">'All Files (*.*)'</span>},<span class="string">'Load EPR file'</span>);
 0049         address = [directory,file];
 0050         
-0051         [x,y] = BrukerRead(address);
+0051         [x,y] = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>(address);
 0052         
 0053                 
 0054     <span class="keyword">case</span> <span class="string">'Folder of files'</span>
@@ -108,13 +108,13 @@ This function is called by:
 0061         
 0062         <span class="keyword">if</span> numel(dtaFiles) ~= 0
 0063             <span class="keyword">for</span> k=1:numel(dtaFiles)
-0064                 [x_,y_] = BrukerRead((regexprep(dtaFiles(k).name,<span class="string">'.DTA'</span>,<span class="string">''</span>)));
+0064                 [x_,y_] = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>((regexprep(dtaFiles(k).name,<span class="string">'.DTA'</span>,<span class="string">''</span>)));
 0065                 x(:,k) = x_(:);
 0066                 y(:,k) = y_(:);
 0067             <span class="keyword">end</span>
 0068         <span class="keyword">end</span>
 0069 
 0070 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

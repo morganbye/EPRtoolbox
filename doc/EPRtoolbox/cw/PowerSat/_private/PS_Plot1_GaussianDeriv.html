@@ -1,0 +1,391 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of PS_Plot1_GaussianDeriv</title>
+  <meta name="keywords" content="PS_Plot1_GaussianDeriv">
+  <meta name="description" content="PS_PLOT1_GAUSSIAN Use a Gaussian fitting model to fit the model high">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="../../index.html">cw</a> &gt; <a href="../index.html">PowerSat</a> &gt; <a href="index.html">_private</a> &gt; PS_Plot1_GaussianDeriv.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../../index.html"><img alt="<" border="0" src="../../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/cw/PowerSat/_private&nbsp;<img alt=">" border="0" src="../../../../right.png"></a></td></tr></table>-->
+
+<h1>PS_Plot1_GaussianDeriv
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>PS_PLOT1_GAUSSIAN Use a Gaussian fitting model to fit the model high</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="box"><strong>function PS_Plot1_GaussianDeriv(handles,Exp) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PS_PLOT1_GAUSSIAN Use a Gaussian fitting model to fit the model high
+ and low points of the graph. The high and low peak points are then
+ calculated from the result of the fit
+
+ This file takes a certain amount of inspiration from lorentzfit freely
+ available from Matlab Central File Exchange:
+ http://www.mathworks.com/matlabcentral/fileexchange/33775-lorentzian-fit
+
+ Syntax:  PS_PLOT1_GAUSSIAN
+
+ Inputs:
+    input1 - handles
+
+    input2 - Exp
+               experiment variable (ie Oxy,N2,Ni)
+
+ Outputs:
+    output1 - mwPower
+               the microwave power of the currently displayed spectrum
+
+ Example: 
+    see http://morganbye.net/PowerSat
+
+ Other m-files required:
+    PowerSat.m
+
+ Subfunctions:         none
+
+ MAT-files required:   none
+
+ References:   Equations for first and second derivative Gaussian's taken
+               from www.hulinks.co.jp/software/peakfit/functions.html</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../../matlabicon.gif)">
+<li><a href="PS_Plot1_PlotAll.html" class="code" title="function PS_Plot1_PlotAll(handles,graph,exp,color)">PS_Plot1_PlotAll</a>	PS_Plot1_PlotAll Plot all spectra from one experiment at once</li><li><a href="PS_Plot1_PlotSingle.html" class="code" title="function [mwPower] = PS_Plot1_PlotSingle(handles,graph,exp,color)">PS_Plot1_PlotSingle</a>	PS_Plot1_PlotSingle Plot one spectrum from an experiment.</li><li><a href="PS_PlotPS_Plot.html" class="code" title="function PS_PlotPS_Plot(handles,exp,color)">PS_PlotPS_Plot</a>	PS_PLOTPS_Plot Plot the power saturation curves</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function PS_Plot1_GaussianDeriv(handles,Exp)</a>
+0002 
+0003 <span class="comment">% PS_PLOT1_GAUSSIAN Use a Gaussian fitting model to fit the model high</span>
+0004 <span class="comment">% and low points of the graph. The high and low peak points are then</span>
+0005 <span class="comment">% calculated from the result of the fit</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% This file takes a certain amount of inspiration from lorentzfit freely</span>
+0008 <span class="comment">% available from Matlab Central File Exchange:</span>
+0009 <span class="comment">% http://www.mathworks.com/matlabcentral/fileexchange/33775-lorentzian-fit</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Syntax:  PS_PLOT1_GAUSSIAN</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Inputs:</span>
+0014 <span class="comment">%    input1 - handles</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    input2 - Exp</span>
+0017 <span class="comment">%               experiment variable (ie Oxy,N2,Ni)</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Outputs:</span>
+0020 <span class="comment">%    output1 - mwPower</span>
+0021 <span class="comment">%               the microwave power of the currently displayed spectrum</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Example:</span>
+0024 <span class="comment">%    see http://morganbye.net/PowerSat</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">% Other m-files required:</span>
+0027 <span class="comment">%    PowerSat.m</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">% Subfunctions:         none</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% MAT-files required:   none</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% References:   Equations for first and second derivative Gaussian's taken</span>
+0034 <span class="comment">%               from www.hulinks.co.jp/software/peakfit/functions.html</span>
+0035 
+0036 <span class="comment">%                                        _                             _</span>
+0037 <span class="comment">%                                       | |                           | |</span>
+0038 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0039 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0040 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0041 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0042 <span class="comment">%                       __/ |                   __/ |</span>
+0043 <span class="comment">%                      |___/                   |___/</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% M. Bye v12.12</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">% Author:       Morgan Bye</span>
+0049 <span class="comment">% Work address: Henry Wellcome Unit for Biological EPR</span>
+0050 <span class="comment">%               University of East Anglia</span>
+0051 <span class="comment">%               NORWICH, UK</span>
+0052 <span class="comment">% Email:        morgan.bye@uea.ac.uk</span>
+0053 <span class="comment">% Website:      http://www.morganbye.net/PowerSat</span>
+0054 <span class="comment">% Dec 2012;     Last revision: 7-December-2012</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">% Version history:</span>
+0057 <span class="comment">% Dec 12        &gt; Switches introduced for single file/folder loads which</span>
+0058 <span class="comment">%                   will use single/multi x-axes</span>
+0059 <span class="comment">%</span>
+0060 <span class="comment">% Aug 12        &gt; Initial release</span>
+0061 
+0062 <span class="comment">% Note to self:</span>
+0063 <span class="comment">% In this script only the shorthand for experiment is Exp not exp like</span>
+0064 <span class="comment">% everything else because otherwise the calculation of y of the Gaussian</span>
+0065 <span class="comment">% doesnt work as it tries to call the string of exp and not the function</span>
+0066 <span class="comment">% exp (exponential)</span>
+0067 
+0068 <span class="comment">% Get variables</span>
+0069 warning off
+0070 <span class="keyword">global</span> vars
+0071 
+0072 x       = vars.(Exp).x;
+0073 y       = vars.(Exp).y0;
+0074 info    = vars.(Exp).info;
+0075 maxpeak = vars.(Exp).MaxPeak;
+0076 minpeak = vars.(Exp).MinPeak;
+0077 warning on
+0078 
+0079 <span class="comment">% Set up the window in which to fit</span>
+0080 window  = str2double(get(handles.edit_fittingWindow,<span class="string">'String'</span>));
+0081 
+0082 window_midpoint = (maxpeak + minpeak)/2;
+0083 window_high     = minpeak + (window/2);
+0084 window_low      = maxpeak - (window/2);
+0085 
+0086 <span class="comment">% FIT SETUP</span>
+0087 <span class="comment">% ========================================================================</span>
+0088 
+0089 <span class="comment">% Get data within window</span>
+0090 [arb, SIG_WindUp] = min(abs(x-window_high));
+0091 [arb, SIG_WindLo] = min(abs(x-window_low));
+0092 
+0093 <span class="comment">% Resize x and y to only include the window</span>
+0094 yP = y (SIG_WindLo:SIG_WindUp,:);
+0095 xP = x (SIG_WindLo:SIG_WindUp,:);
+0096 
+0097 <span class="comment">% Fit options</span>
+0098 f = fittype(<span class="string">'(-a).*((x-b)./((c).^2)).*(exp(-0.5.*(((x-b)./(c)).^2)))'</span>);
+0099 
+0100 
+0101 <span class="comment">% FITTING</span>
+0102 <span class="comment">% ========================================================================</span>
+0103 warning off
+0104 
+0105 ysize = size(yP,2);
+0106 
+0107 <span class="comment">% Progress bar - all of this is needed to put the progress bar in the</span>
+0108 <span class="comment">% middle of the PowerSat window and not the centre of the desktop.</span>
+0109 set(gcf, <span class="string">'Units'</span> , <span class="string">'pixels'</span>);
+0110 a = waitbar(0,sprintf(<span class="string">'Fitting 1st derivative spectrum %1d of %1d'</span>,0,ysize));
+0111 
+0112 PS_position = get(handles.figure1,<span class="string">'OuterPosition'</span>);
+0113 b = get(a,<span class="string">'OuterPosition'</span>);
+0114 set(a,<span class="string">'OuterPosition'</span>,[PS_position(1)+200 PS_position(2)+200 b(3) b(4)]);
+0115 
+0116 <span class="keyword">switch</span> size(vars.(Exp).x,2)
+0117     <span class="comment">% Single file</span>
+0118     <span class="keyword">case</span> 1
+0119         
+0120         <span class="keyword">for</span> k = 1: ysize
+0121             
+0122             waitbar(k/ysize,a,sprintf(<span class="string">'Fitting 1st derivative spectrum %1d of %1d'</span>,k,ysize));
+0123             
+0124             <span class="comment">% Setup fit start point</span>
+0125             
+0126             <span class="comment">% Again this would be quicker computationally to set outside the for</span>
+0127             <span class="comment">% loop but this gives more chance of the fitting not working.</span>
+0128             amp    = (max(yP(:,k))  -min(yP(:,k)));
+0129             centre = (max(xP(:))    +min(xP(:)))./2;
+0130             width  = ((max(xP(:))   -min(xP(:)))./10).^2;
+0131             
+0132             options             = fitoptions(f);
+0133             options.StartPoint  = [amp centre width];
+0134             options.Lower       = [0    0       0];
+0135             options.Upper       = [Inf  Inf     Inf];
+0136             options.MaxFunEvals = 1200;
+0137             options.MaxIter     = 800;
+0138             f = setoptions(f, options);
+0139             
+0140             <span class="comment">% Do the fit</span>
+0141             SIGFit = fit(xP,yP(:,k),f);
+0142             
+0143             <span class="comment">% Get data from the fit</span>
+0144             SIGCoeff{k}  = coeffvalues(SIGFit);
+0145             vars.(Exp).FitGaussianDeriv.First.y(:,k) = feval(SIGFit,x);
+0146             
+0147         <span class="keyword">end</span>
+0148         
+0149         <span class="comment">% Folder of files</span>
+0150     <span class="keyword">otherwise</span>
+0151                 
+0152         <span class="keyword">for</span> k = 1: ysize
+0153             
+0154             waitbar(k/ysize,a,sprintf(<span class="string">'Fitting 1st derivative spectrum %1d of %1d'</span>,k,ysize));
+0155             
+0156             <span class="comment">% Setup fit start point</span>
+0157             amp    = (max(yP(:,k))  -min(yP(:,k)));
+0158             centre = (max(xP(:,k))    +min(xP(:,k)))./2;
+0159             width  = ((max(xP(:,k))   -min(xP(:,k)))./10).^2;
+0160             
+0161             options             = fitoptions(f);
+0162             options.StartPoint  = [amp centre width];
+0163             options.Lower       = [0    0       0];
+0164             options.Upper       = [Inf  Inf     Inf];
+0165             options.MaxFunEvals = 1200;
+0166             options.MaxIter     = 800;
+0167             f = setoptions(f, options);
+0168             
+0169             <span class="comment">% Do the fit</span>
+0170             SIGFit = fit(xP(:,k),yP(:,k),f);
+0171             
+0172             <span class="comment">% Get data from the fit</span>
+0173             SIGCoeff{k}  = coeffvalues(SIGFit);
+0174             vars.(Exp).FitGaussianDeriv.First.y(:,k) = feval(SIGFit,x(:,k));
+0175             
+0176         <span class="keyword">end</span>
+0177         
+0178 <span class="keyword">end</span>
+0179 
+0180 close(a)
+0181 warning on
+0182 
+0183 
+0184 <span class="comment">% POST FITTING</span>
+0185 <span class="comment">% ========================================================================</span>
+0186 
+0187 <span class="comment">% Save fittings to variables</span>
+0188 vars.(Exp).FitGaussianDeriv.First.Coeff       = SIGCoeff;
+0189 
+0190 <span class="comment">% Create fitting curves</span>
+0191 vars.(Exp).FitGaussianDeriv.First.x   = xP;
+0192 
+0193 <span class="comment">% 2nd Dev Gaussian</span>
+0194 <span class="comment">% ========================================================================</span>
+0195 
+0196 vars.(Exp).FitGaussianDeriv.Second.x   = xP;
+0197 
+0198 <span class="comment">% Setup progress bar again</span>
+0199 a = waitbar(0,sprintf(<span class="string">'Calculating 2nd derivative spectrum %1d of %1d'</span>,0,ysize));
+0200 
+0201 PS_position = get(handles.figure1,<span class="string">'OuterPosition'</span>);
+0202 b = get(a,<span class="string">'OuterPosition'</span>);
+0203 set(a,<span class="string">'OuterPosition'</span>,[PS_position(1)+200 PS_position(2)+200 b(3) b(4)]);
+0204 
+0205 warning off
+0206 <span class="keyword">switch</span> size(vars.(Exp).x,2)
+0207     <span class="comment">% Single file</span>
+0208     <span class="keyword">case</span> 1
+0209 
+0210         <span class="keyword">for</span> k = 1: ysize
+0211             
+0212             waitbar(k/ysize,a,sprintf(<span class="string">'Calculating 2nd derivative spectrum %1d of %1d'</span>,k,ysize));
+0213             
+0214             <span class="comment">% Create fitting curves</span>
+0215             
+0216             vars.(Exp).FitGaussianDeriv.Second.y(:,k)   = <span class="keyword">...</span>
+0217                 ((SIGCoeff{k}(1)) ./ ((SIGCoeff{k}(3)).^2)).*<span class="keyword">...</span>
+0218                 ((((xP - SIGCoeff{k}(2)) ./ SIGCoeff{k}(3)).^2)-1).*<span class="keyword">...</span>
+0219                 (exp(-0.5.*(((xP - SIGCoeff{k}(2)) ./ SIGCoeff{k}(3)).^2)));
+0220             
+0221             
+0222             <span class="comment">% Now we have the coefficients for the fit we can put them into the 2nd</span>
+0223             <span class="comment">% deriv. equation and find the x values where y = 0</span>
+0224             
+0225             <span class="comment">% Set the function (using this general equation, where a=amp, b=centre</span>
+0226             <span class="comment">% c=peak width)</span>
+0227             <span class="comment">% fun = @(x)(((a1) ./ ((c1).^2)).*((((x - b1) ./ c1).^2)-1).*(exp(-0.5.*(((x - b1) ./ c1).^2))));</span>
+0228             
+0229             <span class="comment">% Note: this is quite slow, as we are defining the function on each</span>
+0230             <span class="comment">% loop, it would be much quicker to simply state this as a subfunction</span>
+0231             <span class="comment">% and call it with the same parameters for each fit for each data set.</span>
+0232             <span class="comment">% Whilst this would not be a problem for good quality data I cannot</span>
+0233             <span class="comment">% guarantee the quality of data being put into the program, thus I have</span>
+0234             <span class="comment">% chosen to sacrifice time and fit each spectrum from using it's own</span>
+0235             <span class="comment">% coefficients.</span>
+0236             
+0237             fun = @(xP)<span class="keyword">...</span>
+0238                 ((SIGCoeff{k}(1)) ./ ((SIGCoeff{k}(3)).^2)).*<span class="keyword">...</span>
+0239                 ((((xP - SIGCoeff{k}(2)) ./ SIGCoeff{k}(3)).^2)-1).*<span class="keyword">...</span>
+0240                 (exp(-0.5.*(((xP - SIGCoeff{k}(2)) ./ SIGCoeff{k}(3)).^2)));
+0241             
+0242             
+0243             <span class="comment">% Then solve the equation to find for y=0</span>
+0244             <span class="comment">% fzero (fun) or fsolve(inline())</span>
+0245             
+0246             vars.(Exp).FitGaussianDeriv.Second.y0_Max(k) = fzero(fun,[SIGCoeff{k}(2)-(window/2) SIGCoeff{k}(2)]);
+0247             vars.(Exp).FitGaussianDeriv.Second.y0_Min(k) = fzero(fun,[SIGCoeff{k}(2) SIGCoeff{k}(2)+(window/2)]);
+0248             
+0249         <span class="keyword">end</span>
+0250         
+0251     <span class="keyword">otherwise</span>
+0252         
+0253         <span class="keyword">for</span> k = 1: ysize
+0254             
+0255             waitbar(k/ysize,a,sprintf(<span class="string">'Calculating 2nd derivative spectrum %1d of %1d'</span>,k,ysize));
+0256             
+0257             <span class="comment">% Create fitting curves</span>
+0258             vars.(Exp).FitGaussianDeriv.Second.y(:,k)   = <span class="keyword">...</span>
+0259                 ((SIGCoeff{k}(1)) ./ ((SIGCoeff{k}(3)).^2)).*<span class="keyword">...</span>
+0260                 ((((xP(:,k) - SIGCoeff{k}(2)) ./ SIGCoeff{k}(3)).^2)-1).*<span class="keyword">...</span>
+0261                 (exp(-0.5.*(((xP(:,k) - SIGCoeff{k}(2)) ./ SIGCoeff{k}(3)).^2)));
+0262             
+0263             <span class="comment">% Slight hack - function and fzero (ie solve for zero) will</span>
+0264             <span class="comment">% only work with one column of data. They wont let you</span>
+0265             <span class="comment">% reference a column of a matrix ie. xP(:,k) - so we'll have to</span>
+0266             <span class="comment">% write out the column to a new variable first</span>
+0267             
+0268             xP2 = xP(:,k);
+0269             
+0270             <span class="comment">% Create function</span>
+0271             
+0272             fun = @(xP2)<span class="keyword">...</span>
+0273                 ((SIGCoeff{k}(1)) ./ ((SIGCoeff{k}(3)).^2)).*<span class="keyword">...</span>
+0274                 ((((xP2 - SIGCoeff{k}(2)) ./ SIGCoeff{k}(3)).^2)-1).*<span class="keyword">...</span>
+0275                 (exp(-0.5.*(((xP2 - SIGCoeff{k}(2)) ./ SIGCoeff{k}(3)).^2)));
+0276             
+0277             <span class="comment">% Solve for zero</span>
+0278             
+0279             vars.(Exp).FitGaussianDeriv.Second.y0_Max(k) = fzero(fun,[SIGCoeff{k}(2)-(window/2) SIGCoeff{k}(2)]);
+0280             vars.(Exp).FitGaussianDeriv.Second.y0_Min(k) = fzero(fun,[SIGCoeff{k}(2) SIGCoeff{k}(2)+(window/2)]);
+0281             
+0282         <span class="keyword">end</span>
+0283 <span class="keyword">end</span>
+0284 
+0285 close(a)
+0286 warning on
+0287 
+0288 <span class="comment">% Now that we have the x positions where y = 0 (y0_Max &amp; y0_Min) we need to</span>
+0289 <span class="comment">% finally calculate the y value at those positions.</span>
+0290 <span class="comment">%</span>
+0291 <span class="comment">% Strictly speaking the 1st derivative peak and trough could be used, but</span>
+0292 <span class="comment">% this is not guaranteed to be as exact.</span>
+0293 <span class="comment">%</span>
+0294 <span class="comment">% Finally use the first deriv. equation with x = y0_Max &amp; y0_Min</span>
+0295 
+0296 <span class="keyword">for</span> k = 1:ysize
+0297     vars.(Exp).FitGaussianDeriv.PeakInt(k) = <span class="keyword">...</span>
+0298         (-SIGCoeff{k}(1)).*<span class="keyword">...</span>
+0299         ((vars.(Exp).FitGaussianDeriv.Second.y0_Max(k)-SIGCoeff{k}(2))./<span class="keyword">...</span>
+0300         ((SIGCoeff{k}(3)).^2)).*<span class="keyword">...</span>
+0301         (exp(-0.5.*<span class="keyword">...</span>
+0302         (((vars.(Exp).FitGaussianDeriv.Second.y0_Max(k)-SIGCoeff{k}(2))./<span class="keyword">...</span>
+0303         (SIGCoeff{k}(3))).^2)));
+0304     
+0305     vars.(Exp).FitGaussianDeriv.TroughInt(k) = <span class="keyword">...</span>
+0306         (-SIGCoeff{k}(1)).*<span class="keyword">...</span>
+0307         ((vars.(Exp).FitGaussianDeriv.Second.y0_Min(k)-SIGCoeff{k}(2))./<span class="keyword">...</span>
+0308         ((SIGCoeff{k}(3)).^2)).*<span class="keyword">...</span>
+0309         (exp(-0.5.*<span class="keyword">...</span>
+0310         (((vars.(Exp).FitGaussianDeriv.Second.y0_Min(k)-SIGCoeff{k}(2))./<span class="keyword">...</span>
+0311         (SIGCoeff{k}(3))).^2)));
+0312 <span class="keyword">end</span>
+0313</pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

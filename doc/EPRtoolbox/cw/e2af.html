@@ -1,0 +1,406 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of e2af</title>
+  <meta name="keywords" content="e2af">
+  <meta name="description" content="E2AF or &quot;EPR 2 ASCII folder&quot; Converts a folder of Bruker EPR files to">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="index.html">cw</a> &gt; e2af.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/cw&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>e2af
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>E2AF or &quot;EPR 2 ASCII folder&quot; Converts a folder of Bruker EPR files to</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function e2af(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> E2AF or &quot;EPR 2 ASCII folder&quot; Converts a folder of Bruker EPR files to
+ ASCII data files
+
+ Converts a folder of EPR data files from the spectrometer to usable
+ ASCII data format for data manipulation. Pulsed files will have 3 columns
+ in the format x, y.real, y.imaginary
+
+ Syntax:
+       E2AF
+       E2AF ('path/to/folder')
+       E2AF (delimiter)
+       E2AF ('path/to/folder',delimiter)
+       E2AF ('path/to/folder',delimiter, extension)
+       E2AF ('path/to/folder',delimiter, extension, 'noheader')
+       E2AF ('path/to/folder',delimiter, extension, interval)
+       E2AF ('path/to/folder',delimiter, extension, 'noheader', interval)
+
+ Inputs:
+       input1      - The path to folder of .DTA files
+       input2      - Delimiter is the seperator in the file ',' for comma
+                       ' ' for space, '\t' for tab, etc
+       input3      - Extension is the file format to output
+                       eg '.csv' , '.txt', '.dat', etc
+       input4      - 'noheader'
+                       This string turns off the header
+       input5      - Desired magnetic field interval
+                       eg 0.2 to use interpolation to give data points
+                       every 0.2 Gauss
+
+ Outputs:
+       output      - a file(s)
+                       by default a common seperated value file (.csv)
+
+ Example:
+       E2AF
+           Standard use, a graphical user interface to select file to
+           convert and where to put it
+       E2AF = ('/path/to/file.DTA',' ','.txt')
+           Take the file &quot;file.DTA&quot; and convert it to &quot;file.txt&quot; where
+           values are seperated with a space rather than the standard
+           comma
+
+   For use with pyDipfit
+        e2af('/folder/of/files','\t', '.dat', 'noheader', 0.2)
+               
+
+ For more information see:
+ http://morganbye.net/eprtoolbox/e2af
+
+ Other m-files required:
+       BrukerRead
+
+ Subfunctions:         none
+
+ MAT-files required:   none
+
+ See also: <a href="e2a.html" class="code" title="function e2a(varargin)">E2A</a> BRUKERREAD</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../EPRtoolbox/misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function e2af(varargin)</a>
+0002 
+0003 <span class="comment">% E2AF or &quot;EPR 2 ASCII folder&quot; Converts a folder of Bruker EPR files to</span>
+0004 <span class="comment">% ASCII data files</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Converts a folder of EPR data files from the spectrometer to usable</span>
+0007 <span class="comment">% ASCII data format for data manipulation. Pulsed files will have 3 columns</span>
+0008 <span class="comment">% in the format x, y.real, y.imaginary</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Syntax:</span>
+0011 <span class="comment">%       E2AF</span>
+0012 <span class="comment">%       E2AF ('path/to/folder')</span>
+0013 <span class="comment">%       E2AF (delimiter)</span>
+0014 <span class="comment">%       E2AF ('path/to/folder',delimiter)</span>
+0015 <span class="comment">%       E2AF ('path/to/folder',delimiter, extension)</span>
+0016 <span class="comment">%       E2AF ('path/to/folder',delimiter, extension, 'noheader')</span>
+0017 <span class="comment">%       E2AF ('path/to/folder',delimiter, extension, interval)</span>
+0018 <span class="comment">%       E2AF ('path/to/folder',delimiter, extension, 'noheader', interval)</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% Inputs:</span>
+0021 <span class="comment">%       input1      - The path to folder of .DTA files</span>
+0022 <span class="comment">%       input2      - Delimiter is the seperator in the file ',' for comma</span>
+0023 <span class="comment">%                       ' ' for space, '\t' for tab, etc</span>
+0024 <span class="comment">%       input3      - Extension is the file format to output</span>
+0025 <span class="comment">%                       eg '.csv' , '.txt', '.dat', etc</span>
+0026 <span class="comment">%       input4      - 'noheader'</span>
+0027 <span class="comment">%                       This string turns off the header</span>
+0028 <span class="comment">%       input5      - Desired magnetic field interval</span>
+0029 <span class="comment">%                       eg 0.2 to use interpolation to give data points</span>
+0030 <span class="comment">%                       every 0.2 Gauss</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">% Outputs:</span>
+0033 <span class="comment">%       output      - a file(s)</span>
+0034 <span class="comment">%                       by default a common seperated value file (.csv)</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">% Example:</span>
+0037 <span class="comment">%       E2AF</span>
+0038 <span class="comment">%           Standard use, a graphical user interface to select file to</span>
+0039 <span class="comment">%           convert and where to put it</span>
+0040 <span class="comment">%       E2AF = ('/path/to/file.DTA',' ','.txt')</span>
+0041 <span class="comment">%           Take the file &quot;file.DTA&quot; and convert it to &quot;file.txt&quot; where</span>
+0042 <span class="comment">%           values are seperated with a space rather than the standard</span>
+0043 <span class="comment">%           comma</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%   For use with pyDipfit</span>
+0046 <span class="comment">%        e2af('/folder/of/files','\t', '.dat', 'noheader', 0.2)</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% For more information see:</span>
+0050 <span class="comment">% http://morganbye.net/eprtoolbox/e2af</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% Other m-files required:</span>
+0053 <span class="comment">%       BrukerRead</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% Subfunctions:         none</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% MAT-files required:   none</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">% See also: E2A BRUKERREAD</span>
+0060 
+0061 <span class="comment">%                                        _                             _</span>
+0062 <span class="comment">%                                       | |                           | |</span>
+0063 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0064 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0065 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0066 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0067 <span class="comment">%                       __/ |                   __/ |</span>
+0068 <span class="comment">%                      |___/                   |___/</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% M. Bye v13.11</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">% v13.09 - current</span>
+0073 <span class="comment">%               Chemical Physics Department</span>
+0074 <span class="comment">%               Weizmann Institute of Science</span>
+0075 <span class="comment">%               76100 REHOVOT, Israel</span>
+0076 <span class="comment">%</span>
+0077 <span class="comment">% v11.06 - v13.08</span>
+0078 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0079 <span class="comment">%               University of East Anglia</span>
+0080 <span class="comment">%               NORWICH, UK</span>
+0081 <span class="comment">%</span>
+0082 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0083 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/cwplot</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">% Last updated  11-November-2013</span>
+0086 <span class="comment">%</span>
+0087 <span class="comment">% Version history:</span>
+0088 <span class="comment">% Nov 13        Header updated and improved</span>
+0089 <span class="comment">%</span>
+0090 <span class="comment">% Jul 13        e2af now handles pulsed experiments with real and imaginary</span>
+0091 <span class="comment">%                   data channels</span>
+0092 <span class="comment">%</span>
+0093 <span class="comment">% Mar 13        Updates reflecting changes to e2a, allowing interval</span>
+0094 <span class="comment">%                   interpolation and noheader options</span>
+0095 <span class="comment">%</span>
+0096 <span class="comment">% Oct 12        Initial release</span>
+0097 
+0098 <span class="comment">% Input arguments</span>
+0099 <span class="comment">% ===============</span>
+0100 
+0101 <span class="keyword">switch</span> nargin
+0102     
+0103     <span class="comment">% No inputs. Default option. Use GUI for file selection. Comma</span>
+0104     <span class="comment">% delimiter and output as CSV</span>
+0105     
+0106     <span class="keyword">case</span> 0
+0107         delimiter = <span class="string">','</span>;
+0108         extension = <span class="string">'.csv'</span>;
+0109         
+0110         folder = uigetdir(<span class="string">''</span>,<span class="string">'e2af: Select a folder to load'</span>);
+0111         
+0112         <span class="comment">% if user cancels command nothing happens</span>
+0113         <span class="keyword">if</span> isequal(folder,0)
+0114             <span class="keyword">return</span>
+0115         <span class="keyword">end</span>
+0116           
+0117     <span class="comment">% 1 input, need to check if its a folder path or a delimiter</span>
+0118         
+0119     <span class="keyword">case</span> 1
+0120         
+0121         <span class="comment">% For File</span>
+0122         <span class="keyword">if</span> exist(varargin{1},<span class="string">'dir'</span>);
+0123             
+0124             delimiter = <span class="string">','</span>;
+0125             extension = <span class="string">'.csv'</span>;
+0126             
+0127             folder = varargin{1};
+0128             
+0129         <span class="comment">% For delimiter</span>
+0130         <span class="keyword">elseif</span> ischar(varargin{1}) &amp;&amp; length(varargin{1}) == 1
+0131             
+0132             delimiter = varargin{1};
+0133             extension = <span class="string">'.csv'</span>;
+0134             
+0135             folder = uigetdir;
+0136         
+0137             <span class="comment">% if user cancels command nothing happens</span>
+0138             <span class="keyword">if</span> isequal(file,0) <span class="comment">%|| isequal(directory,0)</span>
+0139                 <span class="keyword">return</span>
+0140             <span class="keyword">end</span>
+0141             
+0142         <span class="keyword">else</span>
+0143             error(<span class="string">'e2af: Input argument was not recognised'</span>)
+0144         <span class="keyword">end</span>
+0145        
+0146     <span class="comment">% File and delimiter selection</span>
+0147     
+0148     <span class="keyword">case</span> 2
+0149         <span class="keyword">if</span> exist(varargin{1},<span class="string">'dir'</span>);
+0150             folder = varargin{1};
+0151         <span class="keyword">else</span>
+0152             error(<span class="string">'e2af: Folder was not recognised'</span>)
+0153         <span class="keyword">end</span>
+0154 
+0155         delimiter = varargin{2};
+0156         
+0157     <span class="comment">% File, delimiter and extension selection</span>
+0158     <span class="keyword">case</span> 3
+0159         <span class="keyword">if</span> exist(varargin{1},<span class="string">'dir'</span>);
+0160             folder = varargin{1};
+0161         <span class="keyword">else</span>
+0162             error(<span class="string">'e2af: Folder was not recognised'</span>)
+0163         <span class="keyword">end</span>
+0164         
+0165         delimiter = varargin{2};
+0166         extension = varargin{3};
+0167         
+0168         <span class="comment">% File, delimiter, extension and 'noheader'/interval selection</span>
+0169     <span class="keyword">case</span> 4
+0170         <span class="keyword">if</span> exist(varargin{1},<span class="string">'dir'</span>);
+0171             folder = varargin{1};
+0172         <span class="keyword">else</span>
+0173             error(<span class="string">'e2af: Folder was not recognised'</span>)
+0174         <span class="keyword">end</span>
+0175         
+0176         delimiter = varargin{2};
+0177         extension = varargin{3};
+0178         
+0179         <span class="keyword">if</span> isa(varargin{4},<span class="string">'char'</span>)
+0180             noheader  = varargin{4};
+0181             
+0182         <span class="keyword">elseif</span> isa(varargin{4},<span class="string">'double'</span>)
+0183             interval = varargin{4};
+0184         <span class="keyword">end</span>
+0185         
+0186         
+0187          <span class="comment">% File, delimiter, extension and 'noheader'/interval selection</span>
+0188     <span class="keyword">case</span> 5
+0189         <span class="keyword">if</span> exist(varargin{1},<span class="string">'dir'</span>);
+0190             folder = varargin{1};
+0191         <span class="keyword">else</span>
+0192             error(<span class="string">'e2af: Folder was not recognised'</span>)
+0193         <span class="keyword">end</span>
+0194         
+0195         delimiter = varargin{2};
+0196         extension = varargin{3};
+0197         
+0198         <span class="keyword">if</span> isa(varargin{4},<span class="string">'char'</span>)
+0199             noheader  = varargin{4};
+0200         <span class="keyword">end</span>
+0201         <span class="keyword">if</span> isa(varargin{5},<span class="string">'double'</span>)
+0202             interval  = varargin{5};
+0203         <span class="keyword">end</span>
+0204 <span class="keyword">end</span>
+0205 
+0206 <span class="comment">% Output arguments</span>
+0207 <span class="comment">% ================</span>
+0208 outPrompt = questdlg(<span class="string">'Do you wish to convert to the same folder?'</span>,<span class="string">'Export'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>,<span class="string">'Yes'</span>);
+0209 
+0210 <span class="keyword">switch</span> outPrompt
+0211     <span class="keyword">case</span> <span class="string">'Yes'</span>
+0212         outAddress = folder;
+0213     <span class="keyword">case</span> <span class="string">'No'</span>
+0214         outAddress = uigetdir(<span class="string">''</span>,<span class="string">'e2af: Select a folder to save the files'</span>);
+0215 <span class="keyword">end</span>
+0216 
+0217 <span class="comment">% Processing</span>
+0218 <span class="comment">% ==========</span>
+0219 
+0220 <span class="comment">% Find all the files</span>
+0221 dtaFiles = dir([folder <span class="string">'/*.DTA'</span>]);
+0222 noFiles  = numel(dtaFiles);
+0223 
+0224 <span class="comment">% Load the files</span>
+0225 <span class="keyword">if</span> noFiles ~= 0
+0226     
+0227     h = waitbar(0,<span class="string">'Converting files...'</span>);
+0228     
+0229     <span class="keyword">for</span> k=1:noFiles
+0230         
+0231         <span class="comment">% Progress bar</span>
+0232         waitbar((k/noFiles),h,sprintf(<span class="string">'Converting file %d of %d'</span>,k,noFiles));
+0233                 
+0234         <span class="comment">% Load the file</span>
+0235         [x , y , info] = <a href="../../EPRtoolbox/misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([folder <span class="string">'/'</span> dtaFiles(k).name]);
+0236               
+0237         <span class="comment">% Create file name</span>
+0238         file = [outAddress <span class="string">'/'</span> regexprep(dtaFiles(k).name,<span class="string">'.DTA'</span>,extension)];
+0239         
+0240         <span class="keyword">if</span> exist(<span class="string">'noheader'</span>,<span class="string">'var'</span>) &amp;&amp; strcmp(noheader,<span class="string">'noheader'</span>)
+0241             <span class="comment">% Do nothing</span>
+0242         <span class="keyword">else</span>
+0243            <span class="comment">% Create file and then create the header lines</span>
+0244             fid = fopen(file,<span class="string">'w'</span>);
+0245             
+0246             header = [<span class="keyword">...</span>
+0247                 <span class="string">'#                            ___        __                                 '</span>;<span class="keyword">...</span>
+0248                 <span class="string">'#                           |__ \      / _|                                '</span>;<span class="keyword">...</span>
+0249                 <span class="string">'#                        ___   ) |__ _| |_                                 '</span>;<span class="keyword">...</span>
+0250                 <span class="string">'#                       / _ \ / /  _` |  _|                                '</span>;<span class="keyword">...</span>
+0251                 <span class="string">'#                      |  __// /| (_| | |                                  '</span>;<span class="keyword">...</span>
+0252                 <span class="string">'#                       \___|____\__,_|_|                                  '</span>;<span class="keyword">...</span>
+0253                 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0254                 <span class="string">'#  Part of the EPR toolbox:                           developed at         '</span>;<span class="keyword">...</span>
+0255                 <span class="string">'#  morganbye.net/eprtoolbox                    University of East Anglia   '</span>;<span class="keyword">...</span>
+0256                 <span class="string">'#                                                         &amp;                '</span>;<span class="keyword">...</span>
+0257                 <span class="string">'#                                             Weizmann Institue of Science '</span>;<span class="keyword">...</span>
+0258                 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0259                 <span class="string">'#                                                                          '</span>;<span class="keyword">...</span>
+0260                 <span class="string">'# This file has been created by e2af - v13.11 at:                          '</span>];
+0261             
+0262             header = [header ; sprintf(<span class="string">'%-75s'</span>, [<span class="string">'# '</span> datestr(now, <span class="string">'dd mmmm yyyy - HH:MM'</span>)])];
+0263             
+0264             <span class="keyword">for</span> j = 1:size(header,1)
+0265                 fprintf(fid,<span class="string">'%-75s\n'</span>,header(j,:));
+0266             <span class="keyword">end</span>
+0267             
+0268             <span class="comment">% Close the file (for C language operations/memory freeing)</span>
+0269             fclose(fid);
+0270             
+0271         <span class="keyword">end</span>
+0272         
+0273         <span class="comment">% Create matrix for exporting</span>
+0274         <span class="keyword">if</span> exist(<span class="string">'interval'</span>,<span class="string">'var'</span>)
+0275             x1 = (x(1):interval:x(end));
+0276             y1 = interp1(x,y,x1);
+0277             
+0278             z = [x1' y1'];
+0279             
+0280         <span class="keyword">else</span>
+0281             <span class="keyword">if</span> isfield(y,<span class="string">'real'</span>)
+0282                 z = [x y.real y.imag];
+0283             <span class="keyword">else</span>
+0284                 z = [x y];
+0285             <span class="keyword">end</span>
+0286         <span class="keyword">end</span>
+0287         
+0288         <span class="comment">% Write out results</span>
+0289         dlmwrite(file,<span class="keyword">...</span>
+0290             z,<span class="keyword">...</span>
+0291             <span class="string">'-append'</span>,<span class="keyword">...</span>
+0292             <span class="string">'delimiter'</span>, delimiter,<span class="keyword">...</span>
+0293             <span class="string">'precision'</span>, <span class="string">'%.13f'</span>);
+0294         
+0295     <span class="keyword">end</span>
+0296     
+0297     <span class="comment">% Close the progressbar</span>
+0298     close(h);
+0299     
+0300 <span class="keyword">else</span>
+0301     error(<span class="string">'e2af: No files could be found in that folder'</span>)
+0302 <span class="keyword">end</span>
+0303</pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

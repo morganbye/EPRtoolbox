@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of DACompare</title>
+  <meta name="keywords" content="DACompare">
+  <meta name="description" content="DACOMPARE is a companion script to DAPLOTTER. DACOMPARE takes two or more">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">pulsed</a> &gt; DACompare.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for pulsed&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>DACompare
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>DACOMPARE is a companion script to DAPLOTTER. DACOMPARE takes two or more</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function DACompare </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DACOMPARE is a companion script to DAPLOTTER. DACOMPARE takes two or more
+   saved DeerAnalysis analysis sets of files and quickly presents them in
+   a combined figure.
+
+   DACOMPARE ()
+   DACOMPARE ('export format')
+
+ Inputs:
+    input0     - a graphical interface for file selection
+    input1     - image format
+                   'pdf' or 'eps'
+
+ Outputs:
+    output1    - An image file
+ 
+ Example:
+    DACOMPARE ('pdf')
+
+ Other m-files required:   none
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: EPRTOOLBOX <a href="DALoader.html" class="code" title="function [x,y] = DALoader">DALOADER</a> <a href="DAPlotter.html" class="code" title="function DAPlotter(varargin)">DAPLOTTER</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="DALoader.html" class="code" title="function [x,y] = DALoader">DALoader</a>	DALOADER is a companion script to DAPLOTTER. DALOADER takes the saved</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function DACompare</a>
+0002 
+0003 <span class="comment">% DACOMPARE is a companion script to DAPLOTTER. DACOMPARE takes two or more</span>
+0004 <span class="comment">%   saved DeerAnalysis analysis sets of files and quickly presents them in</span>
+0005 <span class="comment">%   a combined figure.</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%   DACOMPARE ()</span>
+0008 <span class="comment">%   DACOMPARE ('export format')</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Inputs:</span>
+0011 <span class="comment">%    input0     - a graphical interface for file selection</span>
+0012 <span class="comment">%    input1     - image format</span>
+0013 <span class="comment">%                   'pdf' or 'eps'</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% Outputs:</span>
+0016 <span class="comment">%    output1    - An image file</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Example:</span>
+0019 <span class="comment">%    DACOMPARE ('pdf')</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% Other m-files required:   none</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% Subfunctions:             none</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% MAT-files required:       none</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% See also: EPRTOOLBOX DALOADER DAPLOTTER</span>
+0029 
+0030 <span class="comment">%                                        _                             _</span>
+0031 <span class="comment">%                                       | |                           | |</span>
+0032 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0033 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0034 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0035 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0036 <span class="comment">%                       __/ |                   __/ |</span>
+0037 <span class="comment">%                      |___/                   |___/</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% M. Bye v14.09</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">% v13.09 - current</span>
+0042 <span class="comment">%               Chemical Physics Department</span>
+0043 <span class="comment">%               Weizmann Institute of Science</span>
+0044 <span class="comment">%               76100 REHOVOT, Israel</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0047 <span class="comment">% Website:      http://morganbye.net/eprtoolbox/</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">% Last updated  25-August-2014</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% Version history:</span>
+0052 <span class="comment">% Aug 14        Initial release</span>
+0053 
+0054 <span class="comment">%% Input parameters</span>
+0055 
+0056 <span class="keyword">switch</span> nargin
+0057     <span class="keyword">case</span> 0
+0058         output = <span class="string">'pdf'</span>;
+0059     <span class="keyword">case</span> 1
+0060         output = varargin{1};
+0061 <span class="keyword">end</span>
+0062 
+0063 <span class="comment">%% File selection dialogue</span>
+0064 NoFiles = inputdlg(<span class="string">'How many files are we presenting today?'</span>,<span class="keyword">...</span>
+0065                         <span class="string">'DACompare: Number of files'</span>,<span class="keyword">...</span>
+0066                         1,<span class="keyword">...</span>
+0067                         {<span class="string">'2'</span>});
+0068 
+0069 <span class="comment">% Convert input into a number, return if fail</span>
+0070 <span class="keyword">try</span>
+0071     noFiles = str2double(NoFiles);
+0072 <span class="keyword">catch</span>
+0073     error(<span class="string">'You must select a number of files to report!'</span>)
+0074     <span class="keyword">return</span>
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="comment">%% Start the load loop</span>
+0078 <span class="keyword">for</span> k = 1:noFiles
+0079     <span class="comment">% First load the file(s)</span>
+0080     [x{k},y{k}] = <a href="DALoader.html" class="code" title="function [x,y] = DALoader">DALoader</a>;
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="comment">%% Create the figure</span>
+0084 
+0085 hF = figure(<span class="string">'pos'</span>,[0 0 900 300]);
+0086 
+0087 <span class="comment">% Set the line colours - jet generates a colour matrix transitioning from</span>
+0088 <span class="comment">% blue to red. Obviously, we want to save the red lines for the fitting so</span>
+0089 <span class="comment">% the 1.2 multiplier is added.</span>
+0090 
+0091 linecolor = jet(round(noFiles*1.2));
+0092 
+0093 <span class="comment">%% Plot the raw data</span>
+0094 
+0095 h1 = subplot(1,3,1);
+0096 hold on
+0097 
+0098 <span class="keyword">for</span> k = 1:noFiles
+0099    plot(x{k}.bckg,y{k}.bckg,<span class="string">'Color'</span>,linecolor(k,:));
+0100 <span class="keyword">end</span>
+0101 
+0102 <span class="comment">%% Plot the background subtracted</span>
+0103 
+0104 h2 = subplot(1,3,2);
+0105 hold on
+0106 
+0107 <span class="keyword">for</span> k = 1:noFiles
+0108     plot(x{k}.fit,y{k}.fitExp,<span class="string">'Color'</span>,linecolor(k,:));
+0109     plot(x{k}.fit,y{k}.fitFit,<span class="string">'Color'</span>,<span class="string">'r'</span>);
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="comment">%% Plot the distance distributions</span>
+0113 
+0114 h3 = subplot(1,3,3);
+0115 hold on
+0116 
+0117 <span class="keyword">for</span> k = 1:noFiles
+0118     plot(x{k}.dd,y{k}.dd,<span class="string">'Color'</span>,linecolor(k,:));
+0119 <span class="keyword">end</span>
+0120 
+0121 <span class="comment">%% Tidy up the figure</span>
+0122 
+0123 axis(h1,<span class="string">'tight'</span>);
+0124 axis(h2,<span class="string">'tight'</span>);
+0125 axis(h3,<span class="string">'tight'</span>);
+0126 title(h1,<span class="string">'4 Pulse DEER experiment'</span>,<span class="string">'FontSize'</span>,12);
+0127 title(h2,<span class="string">'Background subtracted DEER trace'</span>,<span class="string">'FontSize'</span>,12);
+0128 title(h3,<span class="string">'Distance distribution'</span>,<span class="string">'FontSize'</span>,12);
+0129 xlabel(h1,<span class="string">'Time / \mus'</span>);
+0130 xlabel(h2,<span class="string">'Time / \mus'</span>);
+0131 xlabel(h3,<span class="string">'Distance / nm'</span>);
+0132 set(h1,<span class="string">'YTick'</span>,[]);
+0133 set(h3,<span class="string">'YTick'</span>,[]);
+0134 set(hF,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>);
+0135 set(hF,<span class="string">'PaperSize'</span>,[30 10]);
+0136 set(hF,<span class="string">'PaperPosition'</span>, [0 0 30 10]);
+0137 box(h1,<span class="string">'on'</span>)
+0138 box(h2,<span class="string">'on'</span>)
+0139 box(h3,<span class="string">'on'</span>)
+0140 
+0141 <span class="comment">%% Legend</span>
+0142 
+0143 <span class="comment">% Create empty cell array</span>
+0144 Legend = cell(noFiles,1);
+0145 
+0146 <span class="comment">% Run prompt to fill each cell</span>
+0147 <span class="keyword">for</span> k = 1:noFiles
+0148     Legend(k,1) = inputdlg(<span class="string">'Please give the figure legend string, latex commands (ie \mu) are allowed'</span>,<span class="keyword">...</span>
+0149                         sprintf(<span class="string">'DACompare: Legend string for line %d'</span>,k),<span class="keyword">...</span>
+0150                         1,<span class="keyword">...</span>
+0151                         {sprintf(<span class="string">'DEER_{%d}'</span>,k)});
+0152                       
+0153 <span class="keyword">end</span>
+0154 
+0155 legend(h1,Legend)
+0156 legend(h1,<span class="string">'boxoff'</span>)
+0157 
+0158 <span class="comment">%% Export the figure</span>
+0159 
+0160 <span class="keyword">switch</span> output
+0161     <span class="keyword">case</span> <span class="string">'eps'</span>
+0162         set(gcf, <span class="string">'PaperPositionMode'</span>, <span class="string">'auto'</span>);
+0163         print(gcf, <span class="string">'-depsc'</span>,  [<span class="string">'DACompare_'</span> datestr(now,<span class="string">'YYmmDD-HHMM'</span>) <span class="string">'.eps'</span>]);
+0164         
+0165     <span class="keyword">case</span> <span class="string">'pdf'</span>
+0166         set(hF,<span class="string">'PaperUnits'</span>,<span class="string">'centimeters'</span>);
+0167         set(hF,<span class="string">'PaperSize'</span>,[30 10]);
+0168         set(hF,<span class="string">'PaperPosition'</span>, [0 0 30 10]);
+0169         print(gcf, <span class="string">'-dpdf'</span>,  [<span class="string">'DACompare_'</span> datestr(now,<span class="string">'YYmmDD-HHMM'</span>) <span class="string">'.pdf'</span>]);
+0170 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

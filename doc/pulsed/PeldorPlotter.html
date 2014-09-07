@@ -58,7 +58,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-</ul>
+<li><a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 </ul>
@@ -149,32 +149,32 @@ This function is called by:
 0080 
 0081 <span class="comment">% Load files</span>
 0082 <span class="keyword">try</span>
-0083     [xT2,yT2]       = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'T2'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0083     [xT2,yT2]       = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'T2'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
 0084 <span class="keyword">catch</span>
 0085     <span class="keyword">try</span>
-0086         [xT2,yT2]       = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'T2'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0086         [xT2,yT2]       = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'T2'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
 0087     <span class="keyword">end</span>
 0088         
 0089 <span class="keyword">end</span>
 0090 <span class="keyword">try</span>
-0091     [xT1,yT1]       = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'T1'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0091     [xT1,yT1]       = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'T1'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
 0092 <span class="keyword">catch</span>
 0093     <span class="keyword">try</span>
-0094         [xT1,yT1]       = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'T1'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0094         [xT1,yT1]       = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'T1'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
 0095     <span class="keyword">end</span>
 0096 <span class="keyword">end</span>
 0097 <span class="keyword">try</span>
-0098     [xFSE,yFSE]     = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'FSE'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0098     [xFSE,yFSE]     = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'FSE'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
 0099 <span class="keyword">catch</span>
 0100     <span class="keyword">try</span>
-0101         [xFSE,yFSE]     = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'FSE'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0101         [xFSE,yFSE]     = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'FSE'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
 0102     <span class="keyword">end</span>
 0103 <span class="keyword">end</span>
 0104 <span class="keyword">try</span>
-0105     [x4PEL,y4PEL]   = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'4PEL'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0105     [x4PEL,y4PEL]   = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'4PEL'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
 0106 <span class="keyword">catch</span>
 0107     <span class="keyword">try</span>
-0108         [x4PEL,y4PEL]   = BrukerRead([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'4PEL'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
+0108         [x4PEL,y4PEL]   = <a href="../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([directory date <span class="string">'-'</span> freq <span class="string">'-'</span> exp <span class="string">'-'</span> <span class="string">'4PEL'</span> <span class="string">'-'</span> samp <span class="string">'.DTA'</span>]);
 0109     <span class="keyword">end</span>
 0110 <span class="keyword">end</span>
 0111 
@@ -268,6 +268,6 @@ This function is called by:
 0199 print(gcf, <span class="string">'-dpdf'</span>,  [directory date <span class="string">'-'</span> freq <span class="string">'-'</span> <span class="string">'PDF'</span> <span class="string">'-'</span> temp <span class="string">'-'</span> samp <span class="string">'.pdf'</span>]);
 0200 
 0201 close(hF);</pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

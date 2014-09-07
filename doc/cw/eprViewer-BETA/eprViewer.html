@@ -88,7 +88,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-<li><a href="ev_data_man.html" class="code" title="function varargout = ev_data_man(varargin)">ev_data_man</a>	FILE_DETAILS The data manipulation window for cwViewer</li><li><a href="ev_file_details.html" class="code" title="function varargout = ev_file_details(varargin)">ev_file_details</a>	FILE_DETAILS The file details window for cwViewer</li><li><a href="ev_viewing_options.html" class="code" title="function varargout = ev_viewing_options(varargin)">ev_viewing_options</a>	VIEWING_OPTIONS The Viewing Options window for cwViewer</li></ul>
+<li><a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>	CV_PLOT Plotting function for cwViewer</li><li><a href="../../cw/cwViewer/easyfitting.html" class="code" title="function varargout = easyfitting(varargin)">easyfitting</a>	EASYFITTING The send to EasySpin window for cwViewer</li><li><a href="../../cw/cwViewer/file_details.html" class="code" title="function varargout = file_details(varargin)">file_details</a>	FILE_DETAILS The file details window for cwViewer</li><li><a href="../../cw/cwViewer/viewing_options.html" class="code" title="function varargout = viewing_options(varargin)">viewing_options</a>	VIEWING_OPTIONS The Viewing Options window for cwViewer</li><li><a href="../../cw/eprViewer-BETA/_private/ev_plot.html" class="code" title="function ev_plot(varargin)">ev_plot</a>	CV_PLOT Plotting function for cwViewer</li><li><a href="ev_data_man.html" class="code" title="function varargout = ev_data_man(varargin)">ev_data_man</a>	FILE_DETAILS The data manipulation window for cwViewer</li><li><a href="ev_file_details.html" class="code" title="function varargout = ev_file_details(varargin)">ev_file_details</a>	FILE_DETAILS The file details window for cwViewer</li><li><a href="ev_viewing_options.html" class="code" title="function varargout = ev_viewing_options(varargin)">ev_viewing_options</a>	VIEWING_OPTIONS The Viewing Options window for cwViewer</li><li><a href="../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>	BRUKERREAD Open Bruker BE3ST files (.DTA / .DSC or  .spc / .par) into the</li><li><a href="../../misc/BrukerWrite.html" class="code" title="function BrukerWrite(varargin)">BrukerWrite</a>	BRUKERWRITE save x and y MATLAB variables out to Bruker BES3T files (.DTA</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
@@ -398,7 +398,7 @@ This function is called by:
 0297 Var.Slider.Value = get(hObject,<span class="string">'Value'</span>);
 0298 setappdata(cwview, <span class="string">'Var'</span> , Var);
 0299 
-0300 cv_plot;
+0300 <a href="../../cw/cwViewer/cv_plot.html" class="code" title="function cv_plot(varargin)">cv_plot</a>;
 0301 
 0302 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
 0303 <a name="_sub6" href="#_subfunctions" class="code">function slider_CreateFcn(hObject, eventdata, handles)</a>
@@ -523,7 +523,7 @@ This function is called by:
 0422 set(hFile.edit_mw,      <span class="string">'String'</span>, num2str(info.MWPW*1e3));
 0423 
 0424 <span class="comment">% Update the axes.</span>
-0425 ev_plot;
+0425 <a href="../../cw/eprViewer-BETA/_private/ev_plot.html" class="code" title="function ev_plot(varargin)">ev_plot</a>;
 0426 
 0427 <span class="comment">% 8888888                                         888</span>
 0428 <span class="comment">%   888                                           888</span>
@@ -555,7 +555,7 @@ This function is called by:
 0454 <span class="keyword">end</span>
 0455 
 0456 <span class="comment">% Load the file</span>
-0457 [x , y , info] = BrukerRead;
+0457 [x , y , info] = <a href="../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>;
 0458 
 0459 <span class="comment">% Move the file to data structure</span>
 0460 data.([<span class="string">'File'</span> mat2str(fileNum)]).x = x;
@@ -632,7 +632,7 @@ This function is called by:
 0531 <span class="keyword">end</span>
 0532 
 0533 <span class="comment">% Plot the new graph</span>
-0534 ev_plot;
+0534 <a href="../../cw/eprViewer-BETA/_private/ev_plot.html" class="code" title="function ev_plot(varargin)">ev_plot</a>;
 0535 
 0536 
 0537 <span class="comment">% --------------------------------------------------------------------</span>
@@ -662,7 +662,7 @@ This function is called by:
 0561         <span class="keyword">end</span>
 0562         
 0563         <span class="comment">% Load the file</span>
-0564         [x , y , info] = BrukerRead([folder <span class="string">'/'</span> dtaFiles(k).name]);
+0564         [x , y , info] = <a href="../../misc/BrukerRead.html" class="code" title="function varargout = BrukerRead(varargin)">BrukerRead</a>([folder <span class="string">'/'</span> dtaFiles(k).name]);
 0565         
 0566         <span class="comment">% Move the file to data structure</span>
 0567         data.([<span class="string">'File'</span> mat2str(fileNum)]).x = x;
@@ -715,7 +715,7 @@ This function is called by:
 0614     <span class="comment">% Save variables to main workspace</span>
 0615     setappdata(cwview,<span class="string">'hFile'</span>,hFile);
 0616     
-0617     ev_plot;
+0617     <a href="../../cw/eprViewer-BETA/_private/ev_plot.html" class="code" title="function ev_plot(varargin)">ev_plot</a>;
 0618     
 0619 <span class="keyword">else</span>
 0620     warndlg(<span class="string">'No files could be found in that folder'</span>,<span class="string">'Load folder error'</span>);
@@ -885,7 +885,7 @@ This function is called by:
 0784         <span class="keyword">end</span>
 0785         
 0786         <span class="keyword">if</span> size_x == 1 &amp;&amp; size_y == 1
-0787             BrukerWrite(exp.x_view,exp.y_view,out_add);
+0787             <a href="../../misc/BrukerWrite.html" class="code" title="function BrukerWrite(varargin)">BrukerWrite</a>(exp.x_view,exp.y_view,out_add);
 0788         
 0789         <span class="comment">% Many X, Single Y</span>
 0790         <span class="keyword">elseif</span> size_x ~= 1 &amp;&amp; size_y == 1
@@ -1036,7 +1036,7 @@ This function is called by:
 0935     <span class="comment">% If window is not open, open it</span>
 0936     <span class="keyword">case</span> <span class="string">'off'</span>
 0937         
-0938         wFile = file_details;
+0938         wFile = <a href="../../cw/cwViewer/file_details.html" class="code" title="function varargout = file_details(varargin)">file_details</a>;
 0939         Win = allchild(0);
 0940         WindowHandles.FileDetails = Win(1);
 0941         WindowVisible.FileDetails = 1;
@@ -1080,7 +1080,7 @@ This function is called by:
 0979     <span class="comment">% If window is not open, open it</span>
 0980     <span class="keyword">case</span> <span class="string">'off'</span>
 0981         
-0982         wView = viewing_options;
+0982         wView = <a href="../../cw/cwViewer/viewing_options.html" class="code" title="function varargout = viewing_options(varargin)">viewing_options</a>;
 0983         Win = allchild(0);
 0984         WindowHandles.ViewingOptions = Win(1);
 0985         WindowVisible.ViewingOptions = 1;
@@ -1125,7 +1125,7 @@ This function is called by:
 1024     <span class="comment">% If window is not open, open it</span>
 1025     <span class="keyword">case</span> <span class="string">'off'</span>
 1026         
-1027         wView = viewing_options;
+1027         wView = <a href="../../cw/cwViewer/viewing_options.html" class="code" title="function varargout = viewing_options(varargin)">viewing_options</a>;
 1028         Win = allchild(0);
 1029         WindowHandles.DataMan = Win(1);
 1030         WindowVisible.DataMan = 1;
@@ -1169,7 +1169,7 @@ This function is called by:
 1068     <span class="comment">% If window is not open, open it</span>
 1069     <span class="keyword">case</span> <span class="string">'off'</span>
 1070         
-1071         wEzF = easyfitting;
+1071         wEzF = <a href="../../cw/cwViewer/easyfitting.html" class="code" title="function varargout = easyfitting(varargin)">easyfitting</a>;
 1072         Win = allchild(0);
 1073         WindowHandles.EasyFitting = Win(1);
 1074         WindowVisible.EasyFitting = 1;
@@ -1216,6 +1216,6 @@ This function is called by:
 1115 Links = sprintf(<span class="string">'\n&lt;a href=&quot;http://morganbye.net/eprtoolbox&quot;&gt;morganbye.net/eprtoolbox&lt;/a&gt;\n&lt;a href=&quot;http://sourceforge.net/projects/eprtoolbox&quot;&gt;sourceforge.net/projects/eprtoolbox&lt;/a&gt;\n\n'</span>)
 1116 
 1117 msgbox(l1,<span class="string">'eprViewer - v13.04'</span>);</pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

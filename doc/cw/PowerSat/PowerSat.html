@@ -109,7 +109,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../matlabicon.gif)">
-</ul>
+<li><a href="../../cw/PowerSat/_private/PS_DetachPlot.html" class="code" title="function PS_DetachPlot(axesObject)">PS_DetachPlot</a>	PS_DETACHPLOT Export a plot from within the GUI</li><li><a href="../../cw/PowerSat/_private/PS_ExportToOrigin.html" class="code" title="function PS_ExportToOrigin(handles)">PS_ExportToOrigin</a>	PS_EXPORTTOORIGIN Export the power saturation spectra to an Origin</li><li><a href="../../cw/PowerSat/_private/PS_FileLoad.html" class="code" title="function PS_FileLoad(exp,file)">PS_FileLoad</a>	PS_FileLoad Load power saturation experiments</li><li><a href="../../cw/PowerSat/_private/PS_Help_About.html" class="code" title="function PS_Help_About">PS_Help_About</a>	PS_Help</li><li><a href="../../cw/PowerSat/_private/PS_Help_Help.html" class="code" title="function PS_Help_Help">PS_Help_Help</a>	PS_Help</li><li><a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>	PS_PLOT1 Plot the raw power saturation spectra</li><li><a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>	PS_PLOTPS Plot the power saturation curves</li><li><a href="../../cw/PowerSat/_private/PS_SavePlot.html" class="code" title="function PS_SavePlot(axesObject)">PS_SavePlot</a>	PS_SAVEPLOT Export a plot from within the GUI</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../matlabicon.gif)">
 </ul>
@@ -382,7 +382,7 @@ This function is called by:
 0260 handles = guidata(hObject); 
 0261 
 0262 set(handles.slider1,<span class="string">'Value'</span>,1);
-0263 PS_Plot1(handles)
+0263 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles)
 0264 
 0265 guidata(hObject, handles);
 0266 
@@ -406,8 +406,8 @@ This function is called by:
 0284     vars.Oxy.MaxPeak = input;
 0285 <span class="keyword">end</span>
 0286 
-0287 PS_Plot1(handles)                           <span class="comment">% Replot with new values</span>
-0288 PS_PlotPS(handles);
+0287 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles)                           <span class="comment">% Replot with new values</span>
+0288 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0289 
 0290 guidata(hObject, handles);
 0291 
@@ -436,8 +436,8 @@ This function is called by:
 0314     vars.Oxy.MinPeak = input;
 0315 <span class="keyword">end</span>
 0316 
-0317 PS_Plot1(handles)
-0318 PS_PlotPS(handles);
+0317 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles)
+0318 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0319 
 0320 guidata(hObject, handles);
 0321 
@@ -467,8 +467,8 @@ This function is called by:
 0345     vars.N2.MaxPeak = input;
 0346 <span class="keyword">end</span>
 0347 
-0348 PS_Plot1(handles)
-0349 PS_PlotPS(handles);
+0348 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles)
+0349 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0350 
 0351 guidata(hObject, handles);
 0352 
@@ -494,8 +494,8 @@ This function is called by:
 0372     vars.N2.MinPeak = input;
 0373 <span class="keyword">end</span>
 0374 
-0375 PS_Plot1(handles)
-0376 PS_PlotPS(handles);
+0375 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles)
+0376 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0377 
 0378 guidata(hObject, handles);
 0379 
@@ -523,8 +523,8 @@ This function is called by:
 0401     vars.Ni.MaxPeak = input;
 0402 <span class="keyword">end</span>
 0403 
-0404 PS_Plot1(handles)
-0405 PS_PlotPS(handles);
+0404 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles)
+0405 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0406 
 0407 guidata(hObject, handles);
 0408 
@@ -550,8 +550,8 @@ This function is called by:
 0428     vars.Ni.MinPeak = input;
 0429 <span class="keyword">end</span>
 0430 
-0431 PS_Plot1(handles)
-0432 PS_PlotPS(handles);
+0431 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles)
+0432 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0433 
 0434 guidata(hObject, handles);
 0435 
@@ -580,8 +580,8 @@ This function is called by:
 0458     vars.DPPH.MaxPeak = input;
 0459 <span class="keyword">end</span>
 0460 
-0461 PS_Plot1(handles)
-0462 PS_PlotPS(handles);
+0461 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles)
+0462 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0463 
 0464 guidata(hObject, handles);
 0465 
@@ -607,8 +607,8 @@ This function is called by:
 0485     vars.DPPH.MinPeak = input;
 0486 <span class="keyword">end</span>
 0487 
-0488 PS_Plot1(handles)
-0489 PS_PlotPS(handles);
+0488 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles)
+0489 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0490 
 0491 guidata(hObject, handles);
 0492 
@@ -631,16 +631,16 @@ This function is called by:
 0509 <span class="comment">% --- Executes on button press in checkbox_autozero.</span>
 0510 <a name="_sub20" href="#_subfunctions" class="code">function checkbox_autozero_Callback(hObject, eventdata, handles)</a>
 0511 
-0512 PS_Plot1(handles);
-0513 PS_PlotPS(handles);
+0512 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
+0513 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0514 
 0515 
 0516 
 0517 <span class="comment">% --- Executes on selection change in dropdown_fitting.</span>
 0518 <a name="_sub21" href="#_subfunctions" class="code">function dropdown_fitting_Callback(hObject, eventdata, handles)</a>
 0519 
-0520 PS_Plot1(handles);
-0521 PS_PlotPS(handles);
+0520 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
+0521 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0522 
 0523 
 0524 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
@@ -653,8 +653,8 @@ This function is called by:
 0531 
 0532 <a name="_sub23" href="#_subfunctions" class="code">function edit_fittingWindow_Callback(hObject, eventdata, handles)</a>
 0533 
-0534 PS_Plot1(handles);
-0535 PS_PlotPS(handles);
+0534 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
+0535 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0536 
 0537 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
 0538 <a name="_sub24" href="#_subfunctions" class="code">function edit_fittingWindow_CreateFcn(hObject, eventdata, handles)</a>
@@ -674,7 +674,7 @@ This function is called by:
 0552 
 0553 <a name="_sub25" href="#_subfunctions" class="code">function edit_mWpower_Callback(hObject, eventdata, handles)</a>
 0554 
-0555 PS_Plot1(handles);
+0555 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
 0556 
 0557 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
 0558 <a name="_sub26" href="#_subfunctions" class="code">function edit_mWpower_CreateFcn(hObject, eventdata, handles)</a>
@@ -687,7 +687,7 @@ This function is called by:
 0565 <span class="comment">% --- Executes on selection change in dropdown_view.</span>
 0566 <a name="_sub27" href="#_subfunctions" class="code">function dropdown_view_Callback(hObject, eventdata, handles)</a>
 0567 
-0568 PS_Plot1(handles);
+0568 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
 0569 
 0570 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
 0571 <a name="_sub28" href="#_subfunctions" class="code">function dropdown_view_CreateFcn(hObject, eventdata, handles)</a>
@@ -707,7 +707,7 @@ This function is called by:
 0585 <span class="comment">% --- Executes on Slider movement.</span>
 0586 <a name="_sub29" href="#_subfunctions" class="code">function [handles] = slider1_Callback(hObject, eventdata, handles)</a>
 0587 
-0588 PS_Plot1(handles)
+0588 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles)
 0589 
 0590 
 0591 <span class="comment">% --- Executes during object creation, after setting all properties.</span>
@@ -738,13 +738,13 @@ This function is called by:
 0616 <span class="comment">% --- Executes on button press in checkbox_PSfits.</span>
 0617 <a name="_sub31" href="#_subfunctions" class="code">function checkbox_PSfits_Callback(hObject, eventdata, handles)</a>
 0618 
-0619 PS_PlotPS(handles);
+0619 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0620 
 0621 
 0622 <span class="comment">% --- Executes on button press in checkbox_errorbars.</span>
 0623 <a name="_sub32" href="#_subfunctions" class="code">function checkbox_errorbars_Callback(hObject, eventdata, handles)</a>
 0624 
-0625 PS_PlotPS(handles);
+0625 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0626 
 0627 
 0628 
@@ -956,7 +956,7 @@ This function is called by:
 0834 load(address , <span class="string">'vars'</span>);
 0835 
 0836 <span class="comment">% Update plots</span>
-0837 PS_Plot1(handles);
+0837 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
 0838 
 0839 <span class="keyword">if</span> isfield(vars,<span class="string">'DPPH'</span>)
 0840     set(handles.button_DPPHSelect ,<span class="string">'Value'</span>,1)
@@ -978,7 +978,7 @@ This function is called by:
 0856     <span class="keyword">return</span>
 0857 <span class="keyword">end</span>
 0858 
-0859 PS_PlotPS(handles);
+0859 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0860 
 0861 
 0862 
@@ -1106,15 +1106,15 @@ This function is called by:
 0984 set(handles.dropdown_view    ,<span class="string">'Value'</span>,1);
 0985 
 0986 <span class="comment">% Load and plot file</span>
-0987 PS_FileLoad(<span class="string">'Oxy'</span>,<span class="string">'file'</span>);
-0988 PS_Plot1(handles);
+0987 <a href="../../cw/PowerSat/_private/PS_FileLoad.html" class="code" title="function PS_FileLoad(exp,file)">PS_FileLoad</a>(<span class="string">'Oxy'</span>,<span class="string">'file'</span>);
+0988 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
 0989 
 0990 <span class="comment">% Update data boxes in GUI</span>
 0991 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
 0992 set(handles.edit_OxyHigh,<span class="string">'String'</span>,vars.Oxy.MaxPeak);
 0993 set(handles.edit_OxyLow ,<span class="string">'String'</span>,vars.Oxy.MinPeak);
 0994 
-0995 PS_PlotPS(handles);
+0995 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 0996 
 0997 guidata(hObject, handles);
 0998 
@@ -1132,15 +1132,15 @@ This function is called by:
 1010 set(handles.dropdown_view    ,<span class="string">'Value'</span>,1);
 1011 
 1012 <span class="comment">% Load and plot file</span>
-1013 PS_FileLoad(<span class="string">'Oxy'</span>,<span class="string">'folder'</span>);
-1014 PS_Plot1(handles);
+1013 <a href="../../cw/PowerSat/_private/PS_FileLoad.html" class="code" title="function PS_FileLoad(exp,file)">PS_FileLoad</a>(<span class="string">'Oxy'</span>,<span class="string">'folder'</span>);
+1014 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
 1015 
 1016 <span class="comment">% Update data boxes in GUI</span>
 1017 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
 1018 set(handles.edit_OxyHigh,<span class="string">'String'</span>,vars.Oxy.MaxPeak);
 1019 set(handles.edit_OxyLow ,<span class="string">'String'</span>,vars.Oxy.MinPeak);
 1020 
-1021 PS_PlotPS(handles);
+1021 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 1022 
 1023 guidata(hObject, handles);
 1024 
@@ -1162,15 +1162,15 @@ This function is called by:
 1040 set(handles.dropdown_view    ,<span class="string">'Value'</span>,1);
 1041 
 1042 <span class="comment">% Load and plot file</span>
-1043 PS_FileLoad(<span class="string">'N2'</span>,<span class="string">'file'</span>);
-1044 PS_Plot1(handles);
+1043 <a href="../../cw/PowerSat/_private/PS_FileLoad.html" class="code" title="function PS_FileLoad(exp,file)">PS_FileLoad</a>(<span class="string">'N2'</span>,<span class="string">'file'</span>);
+1044 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
 1045 
 1046 <span class="comment">% Update data boxes in GUI</span>
 1047 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
 1048 set(handles.edit_N2High,<span class="string">'String'</span>,vars.N2.MaxPeak);
 1049 set(handles.edit_N2Low ,<span class="string">'String'</span>,vars.N2.MinPeak);
 1050 
-1051 PS_PlotPS(handles);
+1051 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 1052 
 1053 guidata(hObject, handles);
 1054 
@@ -1187,15 +1187,15 @@ This function is called by:
 1065 set(handles.dropdown_view    ,<span class="string">'Value'</span>,1);
 1066 
 1067 <span class="comment">% Load and plot file</span>
-1068 PS_FileLoad(<span class="string">'N2'</span>,<span class="string">'folder'</span>);
-1069 PS_Plot1(handles);
+1068 <a href="../../cw/PowerSat/_private/PS_FileLoad.html" class="code" title="function PS_FileLoad(exp,file)">PS_FileLoad</a>(<span class="string">'N2'</span>,<span class="string">'folder'</span>);
+1069 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
 1070 
 1071 <span class="comment">% Update data boxes in GUI</span>
 1072 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
 1073 set(handles.edit_N2High,<span class="string">'String'</span>,vars.N2.MaxPeak);
 1074 set(handles.edit_N2Low ,<span class="string">'String'</span>,vars.N2.MinPeak);
 1075 
-1076 PS_PlotPS(handles);
+1076 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 1077 
 1078 guidata(hObject, handles);
 1079 
@@ -1215,15 +1215,15 @@ This function is called by:
 1093 set(handles.dropdown_view    ,<span class="string">'Value'</span>,1);
 1094 
 1095 <span class="comment">% Load and plot file</span>
-1096 PS_FileLoad(<span class="string">'Ni'</span>,<span class="string">'file'</span>);
-1097 PS_Plot1(handles);
+1096 <a href="../../cw/PowerSat/_private/PS_FileLoad.html" class="code" title="function PS_FileLoad(exp,file)">PS_FileLoad</a>(<span class="string">'Ni'</span>,<span class="string">'file'</span>);
+1097 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
 1098 
 1099 <span class="comment">% Update data boxes in GUI</span>
 1100 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
 1101 set(handles.edit_NiHigh,<span class="string">'String'</span>,vars.Ni.MaxPeak);
 1102 set(handles.edit_NiLow ,<span class="string">'String'</span>,vars.Ni.MinPeak);
 1103 
-1104 PS_PlotPS(handles);
+1104 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 1105 
 1106 guidata(hObject, handles);
 1107 
@@ -1240,15 +1240,15 @@ This function is called by:
 1118 set(handles.dropdown_view    ,<span class="string">'Value'</span>,1);
 1119 
 1120 <span class="comment">% Load and plot file</span>
-1121 PS_FileLoad(<span class="string">'Ni'</span>,<span class="string">'folder'</span>);
-1122 PS_Plot1(handles);
+1121 <a href="../../cw/PowerSat/_private/PS_FileLoad.html" class="code" title="function PS_FileLoad(exp,file)">PS_FileLoad</a>(<span class="string">'Ni'</span>,<span class="string">'folder'</span>);
+1122 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
 1123 
 1124 <span class="comment">% Update data boxes in GUI</span>
 1125 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
 1126 set(handles.edit_NiHigh,<span class="string">'String'</span>,vars.Ni.MaxPeak);
 1127 set(handles.edit_NiLow ,<span class="string">'String'</span>,vars.Ni.MinPeak);
 1128 
-1129 PS_PlotPS(handles);
+1129 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 1130 
 1131 guidata(hObject, handles);
 1132 
@@ -1268,15 +1268,15 @@ This function is called by:
 1146 set(handles.dropdown_view    ,<span class="string">'Value'</span>,1);
 1147 
 1148 <span class="comment">% Load and plot file</span>
-1149 PS_FileLoad(<span class="string">'DPPH'</span>,<span class="string">'file'</span>);
-1150 PS_Plot1(handles);
+1149 <a href="../../cw/PowerSat/_private/PS_FileLoad.html" class="code" title="function PS_FileLoad(exp,file)">PS_FileLoad</a>(<span class="string">'DPPH'</span>,<span class="string">'file'</span>);
+1150 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
 1151 
 1152 <span class="comment">% Update data boxes in GUI</span>
 1153 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
 1154 set(handles.edit_DPPHHigh,<span class="string">'String'</span>,vars.DPPH.MaxPeak);
 1155 set(handles.edit_DPPHLow ,<span class="string">'String'</span>,vars.DPPH.MinPeak);
 1156 
-1157 PS_PlotPS(handles);
+1157 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 1158 
 1159 guidata(hObject, handles);
 1160 
@@ -1294,15 +1294,15 @@ This function is called by:
 1172 set(handles.dropdown_view    ,<span class="string">'Value'</span>,1);
 1173 
 1174 <span class="comment">% Load and plot file</span>
-1175 PS_FileLoad(<span class="string">'DPPH'</span>,<span class="string">'folder'</span>);
-1176 PS_Plot1(handles);
+1175 <a href="../../cw/PowerSat/_private/PS_FileLoad.html" class="code" title="function PS_FileLoad(exp,file)">PS_FileLoad</a>(<span class="string">'DPPH'</span>,<span class="string">'folder'</span>);
+1176 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
 1177 
 1178 <span class="comment">% Update data boxes in GUI</span>
 1179 set(handles.edit_mWpower,<span class="string">'String'</span>,<span class="string">'All'</span>);
 1180 set(handles.edit_DPPHHigh,<span class="string">'String'</span>,vars.DPPH.MaxPeak);
 1181 set(handles.edit_DPPHLow ,<span class="string">'String'</span>,vars.DPPH.MinPeak);
 1182 
-1183 PS_PlotPS(handles);
+1183 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 1184 
 1185 guidata(hObject, handles);
 1186 
@@ -1341,20 +1341,20 @@ This function is called by:
 1219 <span class="comment">%     end</span>
 1220 <span class="comment">% end</span>
 1221 
-1222 PS_Plot1(handles);
-1223 PS_PlotPS(handles);
+1222 <a href="../../cw/PowerSat/_private/PS_Plot1.html" class="code" title="function PS_Plot1(handles)">PS_Plot1</a>(handles);
+1223 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 1224 
 1225 
 1226 <span class="comment">% --------------------------------------------------------------------</span>
 1227 <a name="_sub84" href="#_subfunctions" class="code">function menu_spec_detach_Callback(hObject, eventdata, handles)</a>
 1228 
-1229 PS_DetachPlot(handles.plot_load);
+1229 <a href="../../cw/PowerSat/_private/PS_DetachPlot.html" class="code" title="function PS_DetachPlot(axesObject)">PS_DetachPlot</a>(handles.plot_load);
 1230 
 1231 
 1232 <span class="comment">% --------------------------------------------------------------------</span>
 1233 <a name="_sub85" href="#_subfunctions" class="code">function menu_spec_save_Callback(hObject, eventdata, handles)</a>
 1234 
-1235 PS_SavePlot(handles.plot_load);
+1235 <a href="../../cw/PowerSat/_private/PS_SavePlot.html" class="code" title="function PS_SavePlot(axesObject)">PS_SavePlot</a>(handles.plot_load);
 1236 
 1237 
 1238 
@@ -1402,24 +1402,24 @@ This function is called by:
 1280 <span class="comment">% --------------------------------------------------------------------</span>
 1281 <a name="_sub88" href="#_subfunctions" class="code">function menu_PS_Origin_Callback(hObject, eventdata, handles)</a>
 1282 
-1283 PS_ExportToOrigin(handles);
+1283 <a href="../../cw/PowerSat/_private/PS_ExportToOrigin.html" class="code" title="function PS_ExportToOrigin(handles)">PS_ExportToOrigin</a>(handles);
 1284 
 1285 
 1286 <span class="comment">% --------------------------------------------------------------------</span>
 1287 <a name="_sub89" href="#_subfunctions" class="code">function menu_PS_replot_Callback(hObject, eventdata, handles)</a>
 1288 
-1289 PS_PlotPS(handles);
+1289 <a href="../../cw/PowerSat/_private/PS_PlotPS.html" class="code" title="function PS_PlotPS(handles)">PS_PlotPS</a>(handles);
 1290 
 1291 
 1292 <span class="comment">% --------------------------------------------------------------------</span>
 1293 <a name="_sub90" href="#_subfunctions" class="code">function menu_PS_detach_Callback(hObject, eventdata, handles)</a>
 1294 
-1295 PS_DetachPlot(handles.plot_PS);
+1295 <a href="../../cw/PowerSat/_private/PS_DetachPlot.html" class="code" title="function PS_DetachPlot(axesObject)">PS_DetachPlot</a>(handles.plot_PS);
 1296 
 1297 <span class="comment">% --------------------------------------------------------------------</span>
 1298 <a name="_sub91" href="#_subfunctions" class="code">function menu_PS_save_Callback(hObject, eventdata, handles)</a>
 1299 
-1300 PS_SavePlot(handles.plot_PS);
+1300 <a href="../../cw/PowerSat/_private/PS_SavePlot.html" class="code" title="function PS_SavePlot(axesObject)">PS_SavePlot</a>(handles.plot_PS);
 1301 
 1302 
 1303 <span class="comment">% --------------------------------------------------------------------</span>
@@ -1438,14 +1438,14 @@ This function is called by:
 1316 <span class="comment">% --------------------------------------------------------------------</span>
 1317 <a name="_sub94" href="#_subfunctions" class="code">function menu_help_help_Callback(hObject, eventdata, handles)</a>
 1318 
-1319 PS_Help_Help;
+1319 <a href="../../cw/PowerSat/_private/PS_Help_Help.html" class="code" title="function PS_Help_Help">PS_Help_Help</a>;
 1320 
 1321 
 1322 <span class="comment">% --------------------------------------------------------------------</span>
 1323 <a name="_sub95" href="#_subfunctions" class="code">function help_about_Callback(hObject, eventdata, handles)</a>
 1324 
-1325 PS_Help_About;
+1325 <a href="../../cw/PowerSat/_private/PS_Help_About.html" class="code" title="function PS_Help_About">PS_Help_About</a>;
 1326</pre></div>
-<hr><address>Generated on Tue 15-Apr-2014 15:10:31 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Sun 07-Sep-2014 15:05:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

@@ -1,0 +1,478 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of pdbexport</title>
+  <meta name="keywords" content="pdbexport">
+  <meta name="description" content="PDBEXPORT exports a PDB-like structure in MATLAB to a .pdb file">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">EPRtoolbox</a> &gt; <a href="index.html">PDB</a> &gt; pdbexport.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for EPRtoolbox/PDB&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>pdbexport
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>PDBEXPORT exports a PDB-like structure in MATLAB to a .pdb file</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function pdbexport(varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> PDBEXPORT exports a PDB-like structure in MATLAB to a .pdb file
+
+   PDBEXPORT (myProtein)
+   PDBEXPORT (myProtein,'complete')
+   PDBEXPORT (myProtein,'complete','/path/to/file/myProtein.pdb')
+
+ PDBEXPORT allows a MATLAB PDB structure created with PDBIMPORT to be
+ saved out from MATLAB to a .pdb file. By default the save location is
+ selected using a graphical user interface, but can also be done using a
+ command line method.
+
+ Inputs:
+    input1     - structure
+                   the PDB-like structure in MATLAB 
+    input2     - option
+                   select between 'basic' for just the atoms or 'complete'
+                   for a file with all sections included
+    input3     - a file location
+                   a full file location to save the file, if the user does
+                   not want to use the GUI to select a location
+
+ Outputs:
+    output1    - a file
+                   
+ Example: 
+    PDBEXPORT(myProtein)
+               export the PDB structure myProtein
+
+    PDBEXPORT(myProtein,'complete')
+               export the PDB structure myProtein, with all the PDB
+               information such as sequence, headers, remarks, etc
+
+    PDBEXPORT(myProtein,'complete','/home/user/PDBs/myProtein.pdb')
+               export the PDB structure myProtein, with all the PDB
+               information, to the user's home directory
+
+ Other m-files required:   none
+
+ Subfunctions:             none
+
+ MAT-files required:       none
+
+
+ See also: EPRTOOLBOX <a href="pdbimport.html" class="code" title="function structure = MISHAP_pdbimport(varargin)">PDBIMPORT</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <a name="_sub0" href="#_subfunctions" class="code">function pdbexport(varargin)</a>
+0002 
+0003 <span class="comment">% PDBEXPORT exports a PDB-like structure in MATLAB to a .pdb file</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   PDBEXPORT (myProtein)</span>
+0006 <span class="comment">%   PDBEXPORT (myProtein,'complete')</span>
+0007 <span class="comment">%   PDBEXPORT (myProtein,'complete','/path/to/file/myProtein.pdb')</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% PDBEXPORT allows a MATLAB PDB structure created with PDBIMPORT to be</span>
+0010 <span class="comment">% saved out from MATLAB to a .pdb file. By default the save location is</span>
+0011 <span class="comment">% selected using a graphical user interface, but can also be done using a</span>
+0012 <span class="comment">% command line method.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% Inputs:</span>
+0015 <span class="comment">%    input1     - structure</span>
+0016 <span class="comment">%                   the PDB-like structure in MATLAB</span>
+0017 <span class="comment">%    input2     - option</span>
+0018 <span class="comment">%                   select between 'basic' for just the atoms or 'complete'</span>
+0019 <span class="comment">%                   for a file with all sections included</span>
+0020 <span class="comment">%    input3     - a file location</span>
+0021 <span class="comment">%                   a full file location to save the file, if the user does</span>
+0022 <span class="comment">%                   not want to use the GUI to select a location</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% Outputs:</span>
+0025 <span class="comment">%    output1    - a file</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Example:</span>
+0028 <span class="comment">%    PDBEXPORT(myProtein)</span>
+0029 <span class="comment">%               export the PDB structure myProtein</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    PDBEXPORT(myProtein,'complete')</span>
+0032 <span class="comment">%               export the PDB structure myProtein, with all the PDB</span>
+0033 <span class="comment">%               information such as sequence, headers, remarks, etc</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%    PDBEXPORT(myProtein,'complete','/home/user/PDBs/myProtein.pdb')</span>
+0036 <span class="comment">%               export the PDB structure myProtein, with all the PDB</span>
+0037 <span class="comment">%               information, to the user's home directory</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% Other m-files required:   none</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">% Subfunctions:             none</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">% MAT-files required:       none</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">% See also: EPRTOOLBOX PDBIMPORT</span>
+0047 
+0048 <span class="comment">%                                        _                             _</span>
+0049 <span class="comment">%                                       | |                           | |</span>
+0050 <span class="comment">%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_</span>
+0051 <span class="comment">% | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|</span>
+0052 <span class="comment">% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_</span>
+0053 <span class="comment">% |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|</span>
+0054 <span class="comment">%                       __/ |                   __/ |</span>
+0055 <span class="comment">%                      |___/                   |___/</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% M. Bye v13.09</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">% v13.09 - current</span>
+0060 <span class="comment">%               Chemical Physics Department</span>
+0061 <span class="comment">%               Weizmann Institute of Science</span>
+0062 <span class="comment">%               76100 REHOVOT, Israel</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">% v11.06 - v13.08</span>
+0065 <span class="comment">%               Henry Wellcome Unit for Biological EPR</span>
+0066 <span class="comment">%               University of East Anglia</span>
+0067 <span class="comment">%               NORWICH, UK</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">% Email:        morgan.bye@weizmann.ac.il</span>
+0070 <span class="comment">% Website:      http://morganbye.net/eprtoolbox</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">% Last updated  23-August-2012</span>
+0073 <span class="comment">%</span>
+0074 <span class="comment">% Version history:</span>
+0075 <span class="comment">% Aug 12        &gt; 2 arguments in for basic/complete export</span>
+0076 <span class="comment">%               &gt; Better error handling</span>
+0077 <span class="comment">%               &gt; More reliable export</span>
+0078 <span class="comment">%               &gt; Command line addressing if required</span>
+0079 <span class="comment">%</span>
+0080 <span class="comment">% Feb 12        Initial release</span>
+0081 <span class="comment">%</span>
+0082 
+0083 <span class="keyword">switch</span> nargin
+0084     <span class="keyword">case</span> 0
+0085         error(<span class="string">'No PDB structure has been selected for export'</span>)
+0086     
+0087     <span class="keyword">case</span> 1
+0088         structure = varargin{1};
+0089         option = <span class="string">'basic'</span>;
+0090         
+0091     <span class="keyword">case</span> 2
+0092         structure = varargin{1};
+0093         option = varargin{2};
+0094         
+0095         <span class="keyword">if</span> strcmp(option,<span class="string">'basic'</span>) == 0 || strcmp(option,<span class="string">'complete'</span>)
+0096             error(<span class="string">'Unrecognized 2nd input, use ''basic'' or ''complete'''</span>);
+0097         <span class="keyword">end</span>
+0098         
+0099     <span class="keyword">case</span> 3
+0100         structure = varargin{1};
+0101         option = varargin{2};
+0102         
+0103         <span class="keyword">if</span> strcmp(option,<span class="string">'basic'</span>) == 0 || strcmp(option,<span class="string">'complete'</span>)
+0104             error(<span class="string">'Unrecognized 2nd input, use ''basic'' or ''complete'''</span>);
+0105         <span class="keyword">end</span>
+0106         
+0107         out_add = varargin{3};
+0108         
+0109 <span class="keyword">end</span>
+0110         
+0111 <span class="comment">% Check input is a structure</span>
+0112 <span class="keyword">if</span> ~isstruct(structure)
+0113     error (<span class="string">'The input must be a valid MATLAB structure'</span>)
+0114 <span class="keyword">end</span>
+0115 
+0116 <span class="comment">% Set output location with GUI</span>
+0117 <span class="keyword">if</span> nargin &lt; 3
+0118     [out_name, out_path] = uiputfile(<span class="string">'*.pdb'</span>, <span class="string">'Save PDB as...'</span>);
+0119     out_add = fullfile(out_path,out_name);
+0120 <span class="keyword">end</span>
+0121 
+0122 <span class="comment">% Check that the required fields exist</span>
+0123 <span class="keyword">if</span> isfield(structure.Model,<span class="string">'Atom'</span>) == 0
+0124     error (<span class="string">'The selected protein has no Atom field in the model'</span>)
+0125 <span class="keyword">end</span>
+0126 
+0127 <span class="comment">% If user has requested the complete PDB then start writing the header.</span>
+0128 <span class="comment">% Otherwise</span>
+0129 <span class="keyword">if</span> strcmp(option,<span class="string">'complete'</span>)
+0130 
+0131     <span class="comment">% Start writing the output to &quot;output&quot; string</span>
+0132     output = [];
+0133     
+0134     <span class="keyword">if</span> isfield(structure,<span class="string">'Header'</span>)
+0135         output = [output ; structure.Header];
+0136     <span class="keyword">end</span>
+0137     
+0138     <span class="keyword">if</span> isfield(structure,<span class="string">'Obsolete'</span>)
+0139         output = [output ; structure.Obsolete];
+0140     <span class="keyword">end</span>
+0141     
+0142     <span class="keyword">if</span> isfield(structure,<span class="string">'Title'</span>)
+0143         output = [output ; sprintf(<span class="string">'%-80s'</span>,structure.Title)];
+0144     <span class="keyword">end</span>
+0145     
+0146     <span class="keyword">if</span> isfield(structure,<span class="string">'Caveat'</span>)
+0147         output = [output ; structure.Caveat];
+0148     <span class="keyword">end</span>
+0149     
+0150     <span class="keyword">if</span> isfield(structure,<span class="string">'Compound'</span>)
+0151         output = [output ; structure.Compound];
+0152     <span class="keyword">end</span>
+0153     
+0154     <span class="keyword">if</span> isfield(structure,<span class="string">'Source'</span>)
+0155         output = [output ; structure.Source];
+0156     <span class="keyword">end</span>
+0157     
+0158     <span class="keyword">if</span> isfield(structure,<span class="string">'Keywords'</span>)
+0159         output = [output ; structure.Keywords];
+0160     <span class="keyword">end</span>
+0161     
+0162     <span class="keyword">if</span> isfield(structure,<span class="string">'ExperimentalData'</span>)
+0163         output = [output ; structure.ExperimentalData];
+0164     <span class="keyword">end</span>
+0165     
+0166     <span class="keyword">if</span> isfield(structure,<span class="string">'Authors'</span>)
+0167         output = [output ; structure.Authors];
+0168     <span class="keyword">end</span>
+0169     
+0170     <span class="keyword">if</span> isfield(structure,<span class="string">'RevisionDate'</span>)
+0171         output = [output ; structure.RevisionDate];
+0172     <span class="keyword">end</span>
+0173     
+0174     <span class="keyword">if</span> isfield(structure,<span class="string">'Superseded'</span>)
+0175         output = [output ; structure.Superseded];
+0176     <span class="keyword">end</span>
+0177     
+0178     <span class="keyword">if</span> isfield(structure,<span class="string">'Journal'</span>)
+0179         output = [output ; structure.Journal];
+0180     <span class="keyword">end</span>
+0181     
+0182     <span class="keyword">if</span> isfield(structure,<span class="string">'Remark'</span>)
+0183         output = [output ; structure.Remark];
+0184     <span class="keyword">end</span>
+0185     
+0186     <span class="keyword">if</span> isfield(structure,<span class="string">'DBReferences'</span>)
+0187         output = [output ; structure.DBReferences];
+0188     <span class="keyword">end</span>
+0189     
+0190     <span class="keyword">if</span> isfield(structure,<span class="string">'SequenceConflicts'</span>)
+0191         output = [output ; structure.SequenceConflicts];
+0192     <span class="keyword">end</span>
+0193     
+0194     <span class="comment">% Special case for Sequence</span>
+0195     <span class="keyword">if</span> isfield(structure,<span class="string">'Sequence'</span>)
+0196         output = [output ; structure.Sequence];
+0197     <span class="keyword">end</span>
+0198     
+0199     <span class="keyword">if</span> isfield(structure,<span class="string">'Footnote'</span>)
+0200         output = [output ; structure.Footnote];
+0201     <span class="keyword">end</span>
+0202     
+0203     <span class="keyword">if</span> isfield(structure,<span class="string">'MODRES'</span>)
+0204         output = [output ; structure.MODRES];
+0205     <span class="keyword">end</span>
+0206     
+0207     <span class="keyword">if</span> isfield(structure,<span class="string">'Heterogen'</span>)
+0208         output = [output ; structure.Heterogen];
+0209     <span class="keyword">end</span>
+0210     
+0211     <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenName'</span>)
+0212         output = [output ; structure.HeterogenName];
+0213     <span class="keyword">end</span>
+0214     
+0215     <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenSynonym'</span>)
+0216         output = [output ; structure.HeterogenSynonym];
+0217     <span class="keyword">end</span>
+0218     
+0219     <span class="keyword">if</span> isfield(structure,<span class="string">'Formula'</span>)
+0220         output = [output ; structure.Formula];
+0221     <span class="keyword">end</span>
+0222     
+0223     <span class="keyword">if</span> isfield(structure,<span class="string">'Helix'</span>)
+0224         output = [output ; structure.Helix];
+0225     <span class="keyword">end</span>
+0226     
+0227     <span class="keyword">if</span> isfield(structure,<span class="string">'Sheet'</span>)
+0228         output = [output ; structure.Sheet];
+0229     <span class="keyword">end</span>
+0230     
+0231     <span class="keyword">if</span> isfield(structure,<span class="string">'SSBond'</span>)
+0232         output = [output ; structure.SSBond];
+0233     <span class="keyword">end</span>
+0234     
+0235     <span class="keyword">if</span> isfield(structure,<span class="string">'Link'</span>)
+0236         output = [output ; structure.Link];
+0237     <span class="keyword">end</span>
+0238     
+0239     <span class="keyword">if</span> isfield(structure,<span class="string">'HydrogenBond'</span>)
+0240         output = [output ; structure.HydrogenBond];
+0241     <span class="keyword">end</span>
+0242     
+0243     <span class="keyword">if</span> isfield(structure,<span class="string">'SaltBridge'</span>)
+0244         output = [output ; structure.SaltBridge];
+0245     <span class="keyword">end</span>
+0246     
+0247     <span class="keyword">if</span> isfield(structure,<span class="string">'CISPeptide'</span>)
+0248         output = [output ; structure.CISPeptide];
+0249     <span class="keyword">end</span>
+0250     
+0251     <span class="keyword">if</span> isfield(structure,<span class="string">'Cryst1'</span>)
+0252         output = [output ; structure.Cryst1];
+0253     <span class="keyword">end</span>
+0254     
+0255     <span class="keyword">if</span> isfield(structure,<span class="string">'TranslationVector'</span>)
+0256         output = [output ; structure.TranslationVector];
+0257     <span class="keyword">end</span>
+0258 
+0259 <span class="keyword">else</span>
+0260     output = [];
+0261 <span class="keyword">end</span>
+0262 
+0263 
+0264 
+0265 <span class="keyword">if</span> isfield(structure,<span class="string">'Model'</span>)              <span class="comment">% If Atoms exist</span>
+0266     
+0267     atoms       = [];
+0268     TotalAtoms  = size(structure.Model.Atom,2);
+0269     term        = cellstr(structure.Terminal);
+0270     
+0271     
+0272     <span class="keyword">for</span> j = 1 : numel(fieldnames(structure.Sequence))
+0273         <span class="comment">% For each chain</span>
+0274         i = char(j-1+<span class="string">'A'</span>);
+0275         
+0276         <span class="keyword">for</span> k = 1 : TotalAtoms
+0277             <span class="comment">% Search the atoms</span>
+0278             <span class="keyword">if</span> structure.Model.Atom(k).chainID == i
+0279                 <span class="comment">% For matching chain</span>
+0280                 <span class="comment">%               ATOM 1234 CA  ALA B     123    X    Y    Z</span>
+0281                 line = [<span class="string">'ATOM  '</span>,<span class="keyword">...</span>
+0282                     (sprintf(<span class="string">'%5d %-4s%3s %1s   %5d   %8.3f%8.3f%8.3f%6.2f%6.2f          %1s'</span>, <span class="keyword">...</span>
+0283                     structure.Model.Atom(k).AtomSerNo , <span class="keyword">...</span>
+0284                     structure.Model.Atom(k).AtomName , <span class="keyword">...</span>
+0285                     structure.Model.Atom(k).resName , <span class="keyword">...</span>
+0286                     structure.Model.Atom(k).chainID , <span class="keyword">...</span>
+0287                     structure.Model.Atom(k).resSeq , <span class="keyword">...</span>
+0288                     structure.Model.Atom(k).X , <span class="keyword">...</span>
+0289                     structure.Model.Atom(k).Y , <span class="keyword">...</span>
+0290                     structure.Model.Atom(k).Z , <span class="keyword">...</span>
+0291                     structure.Model.Atom(k).occupancy , <span class="keyword">...</span>
+0292                     structure.Model.Atom(k).tempFactor , <span class="keyword">...</span>
+0293                     structure.Model.Atom(k).element))];
+0294                     <span class="comment">% Format the output</span>
+0295                     
+0296                     <span class="keyword">try</span>
+0297                         atoms = [atoms ; sprintf(<span class="string">'%-80s'</span>,line)];
+0298                     <span class="keyword">catch</span>
+0299                         disp(sprintf(<span class="string">'Error %f'</span>,k))
+0300                     <span class="keyword">end</span>
+0301             <span class="keyword">end</span>
+0302             
+0303         <span class="keyword">end</span>
+0304         <span class="comment">% Add TERM line after each chain</span>
+0305         atoms = [atoms ; sprintf(<span class="string">'%-80s'</span>,term{j}) ];
+0306     <span class="keyword">end</span>
+0307     
+0308     output = [output ; atoms];
+0309 <span class="keyword">end</span>
+0310 
+0311 <span class="keyword">if</span> strcmp(option,<span class="string">'complete'</span>)
+0312     
+0313     <span class="keyword">if</span> isfield(structure,<span class="string">'AtomSD'</span>)
+0314         output = [output ; structure.AtomSD];
+0315     <span class="keyword">end</span>
+0316     
+0317     <span class="keyword">if</span> isfield(structure,<span class="string">'AnisotropicTemp'</span>)
+0318         output = [output ; structure.AnisotropicTemp];
+0319     <span class="keyword">end</span>
+0320     
+0321     <span class="keyword">if</span> isfield(structure,<span class="string">'AnisotropicTempSD'</span>)
+0322         output = [output ; structure.AnisotropicTempSD];
+0323     <span class="keyword">end</span>
+0324     
+0325 <span class="keyword">end</span>
+0326 
+0327 <span class="keyword">if</span> isfield(structure,<span class="string">'HeterogenAtom'</span>)
+0328     output = [output ; structure.HeterogenAtom];
+0329 <span class="keyword">end</span>
+0330 
+0331 <span class="comment">% if isfield(structure,'Connectivity')</span>
+0332 <span class="comment">%</span>
+0333 <span class="comment">%     Connect     = [];</span>
+0334 <span class="comment">%     TotalCon    = size(structure.Connectivity,2);</span>
+0335 <span class="comment">%     % term        = cellstr(structure.Terminal);</span>
+0336 <span class="comment">%</span>
+0337 <span class="comment">%     for j = 1 : TotalCon</span>
+0338 <span class="comment">%         line = ['CONECT ',...</span>
+0339 <span class="comment">%                     (sprintf('',...</span>
+0340 <span class="comment">%        );</span>
+0341 <span class="comment">%     end</span>
+0342 <span class="comment">%</span>
+0343 <span class="comment">%</span>
+0344 <span class="comment">%     output = [output ; structure.Connectivity];</span>
+0345 <span class="comment">% end</span>
+0346 
+0347 output = [output ; sprintf(<span class="string">'%-80s'</span>,<span class="string">'END'</span>)];
+0348 
+0349 
+0350 <span class="comment">% File shuffling</span>
+0351 <span class="comment">% ========================================================================</span>
+0352 
+0353 <span class="comment">% Convert to array of strings (each line in new cell)</span>
+0354 output = cellstr(output);
+0355 
+0356 <span class="comment">% Find empty cells and remove them</span>
+0357 output = output(~cellfun(@isempty,output));
+0358 
+0359 <span class="comment">% Convert back to string for export</span>
+0360 output = char(output);
+0361 
+0362 <span class="comment">% Write output to file</span>
+0363 <span class="comment">% ========================================================================</span>
+0364 
+0365 fid = fopen(out_add,<span class="string">'w+'</span>);
+0366 
+0367 <span class="comment">% Check file can be opened/written to</span>
+0368 <span class="keyword">if</span> fid == (-1)
+0369     error (<span class="string">'The file cannot be opened for writing, please check the folder''s permissions'</span>)
+0370 <span class="keyword">end</span>
+0371 
+0372 <span class="keyword">try</span>
+0373     <span class="keyword">for</span> k = 1 : length(output)
+0374         fprintf(fid, [output(k,:) <span class="string">'\n'</span>]);
+0375     <span class="keyword">end</span>
+0376     
+0377     fclose(fid);
+0378     
+0379 <span class="keyword">catch</span>
+0380     <span class="comment">% if there's an error close the file and delete it ready for another</span>
+0381     <span class="comment">% try</span>
+0382     fclose(fid);
+0383     delete(out_add);
+0384     error (<span class="string">'The file could not be written'</span>)
+0385 <span class="keyword">end</span>
+0386 
+0387 
+0388</pre></div>
+<hr><address>Generated on Sun 07-Sep-2014 15:11:40 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>
