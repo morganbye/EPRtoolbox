@@ -13,7 +13,7 @@ function varargout = reportbuilder(varargin)
 % REPORTBUILDER is fully functional with both Bruker and SpecMan data
 % files, however due to limitations in the experiment description files the
 % file must have the experiment in the file name. Therefore it is
-% recommended to conform you file names in a manner such as:
+% recommended to conform your file names in a manner such as:
 %
 % DATE-FREQ-TEMP-EXP-SAMPLE_NAME.exp
 %
@@ -38,11 +38,14 @@ function varargout = reportbuilder(varargin)
 % along with the R^2 value will appear in the parameter table.
 %
 % REPORTBUILDER has been tested with:
-%       > T2
-%       > T1 (inversion recovery)
-%       > FSE
-%       > Nutation
-%       > DEER / PELDOR
+%       Experiment                 Label
+%       > T2                       - T2
+%       > T1 (inversion recovery)  - T1
+%       > Field Swept Echo         - FSE
+%       > Nutation                 - NUT
+%       > DEER / PELDOR            - DEER or 4PEL
+%       > Echo profile (SpecMan)   - Echo
+%       > Freq sweep (SpecMan)     - Freq
 %
 % Inputs:
 %    input0     - graphical user file selection
@@ -91,7 +94,7 @@ function varargout = reportbuilder(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v14.05
+% M. Bye v14.09
 %
 % v13.09 - current
 %               Chemical Physics Department
@@ -101,9 +104,16 @@ function varargout = reportbuilder(varargin)
 % Email:        morgan.bye@weizmann.ac.il
 % Website:      http://morganbye.net/eprtoolbox/
 %
-% Last updated  Last revision: 09-March-2014
+% Last updated  Last revision: 07-September-2014
 %
 % Version history:
+% Sep 14        > Update for new file types for SpecMan
+%                   > Echo profile
+%                   > Freq sweep
+%               > Allow DEER or 4PEL
+%               > Error handling if file type not recognised
+%                   
+%
 % Jun 14        > More LaTeX updates
 %               > Removed autorun for linux
 %               > Command list printed in command window to successfully
@@ -160,8 +170,15 @@ for k = 1:noFiles
         fileInfo{k}.fileType = 'FSE';
     elseif strfind(fileInfo{k}.file,'NUT')
         fileInfo{k}.fileType = 'NUT';
-    elseif strfind(fileInfo{k}.file,'4PEL')
+    elseif strfind(fileInfo{k}.file,'4PEL') || strfind(fileInfo{k}.file,'DEER')
         fileInfo{k}.fileType = '4PEL';
+    elseif strfind(fileInfo{k}.file,'Freq')
+        fileInfo{k}.fileType = 'Freq';
+    elseif strfind(fileInfo{k}.file,'Echo')
+        fileInfo{k}.fileType = 'Echo';  
+    else
+        error('Could not determine the file type in file %s',fileInfo{k}.file)
+        return
     end
     
     % Plot the figure
@@ -495,15 +512,38 @@ switch fileType
 
         xlabel('Time / \mus');
         ylabel('Relative intensity');
+        
+    case 'Echo'
+        
+        plot(x,y);
+        xlabel('Data point');
+        ylabel('Relative intensity');
+        
+        
+    case 'Freq'
+        
+        plot(x,y);
+        xlabel('Frequency / GHz');
+        ylabel('Relative intensity');
+        
 end
 
 set(gca,'Box','on')
 axis tight
 axesSize = axis;
-axis([axesSize(1) ...
-    axesSize(2) ...
-    axesSize(3)-((axesSize(4)*1.05)-axesSize(4)) ...
-    axesSize(4)*1.05]);
+
+% T2 ideally wants to go to zero, everything else wants to be visible
+if strcmp(fileType,'T2')
+    axis([axesSize(1) ...
+        axesSize(2) ...
+        0 ...
+        axesSize(4)*1.05]);
+else
+    axis([axesSize(1) ...
+        axesSize(2) ...
+        axesSize(3)-((axesSize(4)*1.05)-axesSize(4)) ...
+        axesSize(4)*1.05]);
+end
 
 % Print figure
 print(hF, '-depsc2',  [directory name '.eps']);
@@ -520,7 +560,7 @@ function tex_launch = texHeader(fileInfo)
 %% Open file
 tex_launch = fopen([fileInfo{1}.directory fileInfo{1}.file '.tex'],'w');
 
-%% Header
+%% File header
 header = [...
 '%                                        _                             _   ';...
 '%                                       | |                           | |  ';...
@@ -532,7 +572,7 @@ header = [...
 '%                      |___/                   |___/                       ';...
 '%                                                                          ';...
 '%                                                                          ';...
-'% M. Bye v14.04                                                            ';...
+'% M. Bye v14.09                                                            ';...
 '%                                                                          ';...
 '% Author:       Morgan Bye                                                 ';...
 '% Work address: Department of Chemical Physics                             ';...
@@ -551,7 +591,7 @@ for k = 1:size(header,1)
     fprintf(tex_launch,'%-75s\n',header(k,:));
 end
 
-% TeX header
+%% TeX header
 fprintf(tex_launch,'\\documentclass[a4paper]{report}\n');
 fprintf(tex_launch,'\\usepackage{graphicx}\n');
 fprintf(tex_launch,'\\usepackage{epstopdf}\n');
@@ -630,7 +670,12 @@ switch fileInfo.extension
                 fprintf(tex_launch,'Source 1 & %s  \\\\      \n',info.Source1.Frequency);
                 fprintf(tex_launch,'Source 2 & %s  \\\\      \n',info.Source2.Frequency);
                 fprintf(tex_launch,'Exp. time & %s  \\\\     \n',info.General.totaltime);
-      
+                
+            case 'Echo'
+                
+            case 'Freq'
+                d = strsplit(info.Parameters.tau,';');
+                fprintf(tex_launch,'Source 1 & %s  \\\\      \n',d{1});
         end
         
     case '.DTA'

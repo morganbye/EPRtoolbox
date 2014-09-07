@@ -80,7 +80,7 @@ function varargout = SpecManRead(varargin)
 %                       __/ |                   __/ |                      
 %                      |___/                   |___/                       
 %
-% M. Bye v14.07
+% M. Bye v14.09
 %
 %               Chemical Physics Department
 %               Weizmann Institute of Science
@@ -90,6 +90,10 @@ function varargout = SpecManRead(varargin)
 % Website:      http://morganbye.net/eprtoolbox/
 %
 % Version history:
+% Sep 14        Updates reflecting new experiments
+%                   > Echo profile
+%                   > Frequency sweep
+%
 % Jun 14        Line 379 
 %                       ax.t=='S' || ax.t=='I'
 %                   replaced with in if statement
