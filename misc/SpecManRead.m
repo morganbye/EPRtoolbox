@@ -466,104 +466,113 @@ for k = 1:size(sweepax, 1)
            % Now we have to build the axis based upon on how the experiment
            % was set up
            
-           switch splitstr{1}{3}
-               % Variable of kind 10 ns to 100 ns
-               case 'to'
-                   % Get numerical values
-                   axStart = str2double(splitstr{1}{1});
-                   axEnd   = str2double(splitstr{1}{4});
+           % But first let's check that this axis actually moves, and if it
+           % doesn't then we need to skip it, otherwise it might overwrite
+           % the correct axis
+           
+           if ~ str2double(splitstr{1}{1}) == str2double(splitstr{1}{4})
+           
+               % Now start building the x-axis
+               switch splitstr{1}{3}
                    
-                   % Get the unit prefix, but if there's no prefix in the
-                   % next step we only want to multiply by 1
-                   if size(splitstr{1}{2},2) > 1
-                       unitPrefixStart = findstr(prefix,splitstr{1}{2}(1));
-                   else
-                       unitPrefixStart = 1;
-                   end
-                   if size(splitstr{1}{5},2) > 1
-                       unitPrefixEnd   = findstr(prefix,splitstr{1}{5}(1));
-                   else
-                       unitPrefixEnd   = 1;
-                   end
-                   
-                   % Multiple the value by the unit
-                   axStart   = axStart * coeff(unitPrefixStart);
-                   axEnd     = axEnd   * coeff(unitPrefixEnd);
-                   
-                   % Calculate the step
-                   axStep  = (axEnd-axStart)/(imx-1);
-                            
-                   % Generate the axis
-                   ax = axStart : axStep : axEnd;
-                   x = ax';
-                   
-               % Variable of kind 10 ns step 50 ns    
-               case 'step'
-                   % Get numerical values
-                   axStart = str2double(splitstr{1}{1});
-                   axStep  = str2double(splitstr{1}{4});
-                   
-                   % Get the unit prefix, but if there's no prefix in the
-                   % next step we only want to multiply by 1
-                   if size(splitstr{1}{2},2) > 1
-                       unitPrefixStart = findstr(prefix,splitstr{1}{2}(1));
-                   else
-                       unitPrefixStart = 1;
-                   end
-                   if size(splitstr{1}{5},2) > 1
-                       unitPrefixStep  = findstr(prefix,splitstr{1}{5}(1));
-                   else
-                       unitPrefixStep  = 1;
-                   end
-                   
-                   % Multiple the value by the unit
-                   axStart   = axStart * coeff(unitPrefixStart);
-                   axStep    = axStep  * coeff(unitPrefixStep);
-                   
-                   % Generate the axis
-                   ax = axStart : axStep : axStart+(axStep*(imx-1));
-                   x = ax';
-                   
-               % Variable is a manual list
-               otherwise
-                   
-                   % But not always - ie. some nutation experiments
-                   % This is bad coding and needs to be improved
-                   try
-                       % Create array
-                       x = [];
+                   % Variable of kind 10 ns to 100 ns
+                   case 'to'
+                       % Get numerical values
+                       axStart = str2double(splitstr{1}{1});
+                       axEnd   = str2double(splitstr{1}{4});
                        
-                       % Split the string at the first comma
-                       [tk1, str1] = strtok(str1, ',');
+                       % Get the unit prefix, but if there's no prefix in the
+                       % next step we only want to multiply by 1
+                       if size(splitstr{1}{2},2) > 1
+                           unitPrefixStart = findstr(prefix,splitstr{1}{2}(1));
+                       else
+                           unitPrefixStart = 1;
+                       end
+                       if size(splitstr{1}{5},2) > 1
+                           unitPrefixEnd   = findstr(prefix,splitstr{1}{5}(1));
+                       else
+                           unitPrefixEnd   = 1;
+                       end
                        
-                       % Stick the remaining string in a "while not empty" loop
-                       while ~isempty(tk1)
+                       % Multiple the value by the unit
+                       axStart   = axStart * coeff(unitPrefixStart);
+                       axEnd     = axEnd   * coeff(unitPrefixEnd);
+                       
+                       % Calculate the step
+                       axStep  = (axEnd-axStart)/(imx-1);
+                       
+                       % Generate the axis
+                       ax = axStart : axStep : axEnd;
+                       x = ax';
+                       
+                   % Variable of kind 10 ns step 50 ns
+                   case 'step'
+                       % Get numerical values
+                       axStart = str2double(splitstr{1}{1});
+                       axStep  = str2double(splitstr{1}{4});
+                       
+                       % Get the unit prefix, but if there's no prefix in the
+                       % next step we only want to multiply by 1
+                       if size(splitstr{1}{2},2) > 1
+                           unitPrefixStart = findstr(prefix,splitstr{1}{2}(1));
+                       else
+                           unitPrefixStart = 1;
+                       end
+                       if size(splitstr{1}{5},2) > 1
+                           unitPrefixStep  = findstr(prefix,splitstr{1}{5}(1));
+                       else
+                           unitPrefixStep  = 1;
+                       end
+                       
+                       % Multiple the value by the unit
+                       axStart   = axStart * coeff(unitPrefixStart);
+                       axStep    = axStep  * coeff(unitPrefixStep);
+                       
+                       % Generate the axis
+                       ax = axStart : axStep : axStart+(axStep*(imx-1));
+                       x = ax';
+                       
+                   % Variable is a manual list
+                   otherwise
+                       
+                       % But not always - ie. some nutation experiments
+                       % This is bad coding and needs to be improved
+                       try
+                           % Create array
+                           x = [];
                            
-                           % Split the first comma value
-                           splitstr = strsplit(tk1);
-                           axStep   = str2double(splitstr{1});
+                           % Split the string at the first comma
+                           [tk1, str1] = strtok(str1, ',');
                            
-                           % Convert the unit if necessary
-                           if size(splitstr{2},2) > 1
-                               unitPrefixStep = findstr(prefix,splitstr{2}(1));
-                           else
-                               unitPrefixStep = 1;
-                           end
-                           
-                           % Multiple value by the unit
-                           x(end+1)    = axStep * coeff(unitPrefixStart);
-                           
-                           % Increment to the next loop value
-                           [tk1, str1] = gettoken(str1, ',');
-                           
-                           % If there is no remaining string then we need to
-                           % terminate the loop
-                           if isempty(tk1) && ~isempty(str1)
-                               tk1 = str1; str1 = [];
+                           % Stick the remaining string in a "while not empty" loop
+                           while ~isempty(tk1)
+                               
+                               % Split the first comma value
+                               splitstr = strsplit(tk1);
+                               axStep   = str2double(splitstr{1});
+                               
+                               % Convert the unit if necessary
+                               if size(splitstr{2},2) > 1
+                                   unitPrefixStep = findstr(prefix,splitstr{2}(1));
+                               else
+                                   unitPrefixStep = 1;
+                               end
+                               
+                               % Multiple value by the unit
+                               x(end+1)    = axStep * coeff(unitPrefixStart);
+                               
+                               % Increment to the next loop value
+                               [tk1, str1] = gettoken(str1, ',');
+                               
+                               % If there is no remaining string then we need to
+                               % terminate the loop
+                               if isempty(tk1) && ~isempty(str1)
+                                   tk1 = str1; str1 = [];
+                               end
                            end
                        end
-                   end
-                   
+                       
+               end
            end
         
         % Needed for echo profiles, where nothing is swept
