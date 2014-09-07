@@ -565,7 +565,40 @@ for k = 1:size(sweepax, 1)
                    end
                    
            end
+        
+        % Needed for echo profiles, where nothing is swept
+        else
            
+            % If we have an Acquiris we can check the sampling rate of the
+            % scope. If we don't then we need to set an arbitary scale for
+            % the data points ie. data point 1,2,3...
+            
+            if isfield(parameters,'Aquiris')
+                Sampling = textscan(parameters.Aquiris.Sampling,'%s','Delimiter', ',; ');
+                axStep = str2double(Sampling{1}(1));
+                
+                % Convert the unit if necessary
+                if size(Sampling{1},1) > 1
+                    unitPrefixStep = findstr(prefix,Sampling{1}{2}(1));
+                else
+                    unitPrefixStep = 1;
+                end
+                
+                % Multiple the value by the unit
+                axStart   = 0;
+                axStep    = axStep  * coeff(unitPrefixStep);
+                   
+                % Generate the axis
+                ax = axStart : axStep : axStart+(axStep*(imx-1));
+                x = ax';
+                      
+            else
+                
+                x = 1:1:size(Data{1},1);
+                x = x';
+            
+            end
+            
         end
             
         else
