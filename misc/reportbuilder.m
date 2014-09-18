@@ -168,13 +168,31 @@ for k = 1:noFiles
         fileInfo{k}.fileType = 'T1';
     elseif strfind(fileInfo{k}.file,'FSE')
         fileInfo{k}.fileType = 'FSE';
+    elseif strfind(fileInfo{k}.file,'Field')
+        fileInfo{k}.fileType = 'FSE';
+    elseif strfind(fileInfo{k}.file,'field')
+        fileInfo{k}.fileType = 'FSE';
     elseif strfind(fileInfo{k}.file,'NUT')
+        fileInfo{k}.fileType = 'NUT';
+    elseif strfind(fileInfo{k}.file,'Nutation')
+        fileInfo{k}.fileType = 'NUT';
+    elseif strfind(fileInfo{k}.file,'Nutations')
+        fileInfo{k}.fileType = 'NUT';
+    elseif strfind(fileInfo{k}.file,'nutation')
+        fileInfo{k}.fileType = 'NUT';
+    elseif strfind(fileInfo{k}.file,'nutations')
         fileInfo{k}.fileType = 'NUT';
     elseif strfind(fileInfo{k}.file,'4PEL')
         fileInfo{k}.fileType = '4PEL';
     elseif strfind(fileInfo{k}.file,'DEER')
         fileInfo{k}.fileType = '4PEL';
+    elseif strfind(fileInfo{k}.file,'deer')
+        fileInfo{k}.fileType = '4PEL';
     elseif strfind(fileInfo{k}.file,'Freq')
+        fileInfo{k}.fileType = 'Freq';
+    elseif strfind(fileInfo{k}.file,'Frequency')
+        fileInfo{k}.fileType = 'Freq';
+    elseif strfind(fileInfo{k}.file,'freq')
         fileInfo{k}.fileType = 'Freq';
     elseif strfind(fileInfo{k}.file,'Echo')
         fileInfo{k}.fileType = 'Echo';  
