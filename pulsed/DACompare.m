@@ -88,7 +88,7 @@ hF = figure('pos',[0 0 900 300]);
 % blue to red. Obviously, we want to save the red lines for the fitting so
 % the 1.2 multiplier is added.
 
-linecolor = jet(round(noFiles*1.2));
+linecolor = jet(round(noFiles*1.4));
 
 %% Plot the raw data
 

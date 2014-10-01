@@ -190,11 +190,15 @@ for k = 1:noFiles
         fileInfo{k}.fileType = '4PEL';
     elseif strfind(fileInfo{k}.file,'Freq')
         fileInfo{k}.fileType = 'Freq';
+    elseif strfind(fileInfo{k}.file,'FREQ')
+        fileInfo{k}.fileType = 'Freq';
     elseif strfind(fileInfo{k}.file,'Frequency')
         fileInfo{k}.fileType = 'Freq';
     elseif strfind(fileInfo{k}.file,'freq')
         fileInfo{k}.fileType = 'Freq';
     elseif strfind(fileInfo{k}.file,'Echo')
+        fileInfo{k}.fileType = 'Echo';  
+    elseif strfind(fileInfo{k}.file,'ECHO')
         fileInfo{k}.fileType = 'Echo';  
     else
         error('Could not determine the file type in file %s',fileInfo{k}.file)
@@ -308,6 +312,11 @@ end
 % File name/path manipulation
 fileInfo.address = [fileInfo.directory,fileInfo.file];
 [~, fileInfo.name,fileInfo.extension] = fileparts(fileInfo.address);
+
+% Rename files to remove common, bad LaTeX characters
+% fileInfo.name = regexprep(fileInfo.name,'_','-');
+% fileInfo.name = regexprep(fileInfo.name,'.','-');
+
 
 %% Load file
 switch fileInfo.extension
