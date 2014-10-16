@@ -46,9 +46,11 @@ function DACompare
 % Email:        morgan.bye@weizmann.ac.il
 % Website:      http://morganbye.net/eprtoolbox/
 %
-% Last updated  25-August-2014
+% Last updated  16-October-2014
 %
 % Version history:
+% Oct 14        Add y-axis to raw data
+%
 % Aug 14        Initial release
 
 %% Input parameters
@@ -86,9 +88,9 @@ hF = figure('pos',[0 0 900 300]);
 
 % Set the line colours - jet generates a colour matrix transitioning from
 % blue to red. Obviously, we want to save the red lines for the fitting so
-% the 1.2 multiplier is added.
+% the 1.4 multiplier is added.
 
-linecolor = jet(round(noFiles*1.4));
+linecolor = jet(round(noFiles*1.6));
 
 %% Plot the raw data
 
@@ -129,7 +131,7 @@ title(h3,'Distance distribution','FontSize',12);
 xlabel(h1,'Time / \mus');
 xlabel(h2,'Time / \mus');
 xlabel(h3,'Distance / nm');
-set(h1,'YTick',[]);
+% set(h1,'YTick',[]);
 set(h3,'YTick',[]);
 set(hF,'PaperUnits','centimeters');
 set(hF,'PaperSize',[30 10]);
@@ -152,7 +154,7 @@ for k = 1:noFiles
                       
 end
 
-legend(h1,Legend)
+legend(h1,Legend,'Location','best')
 legend(h1,'boxoff')
 
 %% Export the figure

@@ -44,9 +44,11 @@ function DAreporter(varargin)
 % Email:        morgan.bye@weizmann.ac.il
 % Website:      http://morganbye.net/eprtoolbox/
 %
-% Last updated  06-May-2013
+% Last updated  16-October-2014
 %
 % Version history:
+% Oct 14        Add y-axis to raw data
+%
 % May 14        Initial release
 
 %% GUI get data file
@@ -258,7 +260,7 @@ xlabel(h1,'Time / \mus');
 xlabel(h2,'Time / \mus');
 xlabel(h3,'Distance / nm');
 
-set(h1,'YTick',[]);
+% set(h1,'YTick',[]);
 set(h3,'YTick',[]);
 
 
