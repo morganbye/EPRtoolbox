@@ -14,7 +14,7 @@ function varargout = EPRtoolbox(varargin)
 % Outputs:
 %    output1 - n/a
 %
-% Example: 
+% Example:
 %    see http://morganbye.net/eprtoolbox
 %
 % Other m-files required: none
@@ -26,14 +26,14 @@ function varargout = EPRtoolbox(varargin)
 %
 % See also: POWERSAT CWVIEWER MISHAP
 
-%                                        _                             _   
-%                                       | |                           | |  
-%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_ 
+%                                        _                             _
+%                                       | |                           | |
+%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_
 % | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|
-% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_ 
+% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_
 % |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|
-%                       __/ |                   __/ |                      
-%                      |___/                   |___/                       
+%                       __/ |                   __/ |
+%                      |___/                   |___/
 %
 % M. Bye v14.09
 %
@@ -41,7 +41,7 @@ function varargout = EPRtoolbox(varargin)
 %               Chemical Physics Department
 %               Weizmann Institute of Science
 %               76100 REHOVOT, Israel
-% 
+%
 % v11.06 - v13.08
 %               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
@@ -107,6 +107,12 @@ function EPRtoolbox_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to EPRtoolbox (see VARARGIN)
 
+% Test to see if they are using MatLab 2014b or newer
+if ~verLessThan('matlab', '8.3')
+  errordlg('Your version of MatLab is too new, see the README','MatLab version');
+  return
+end
+
 % Choose default command line output for EPRtoolbox
 handles.output = hObject;
 
@@ -132,17 +138,18 @@ image(logo_header);
 axis off
 
 Warning = ' ';
-Status  = sprintf('Status:\t\tUp-to-date');
+Status  = sprintf('Status:\t\tLong term maintenance release');
+Warning = sprintf('***EPR Toolbox is no longer actively developed***');
 
 % Check the version number
-if now > datenum('2015-01-01')
-    Status  = sprintf('Status:\t\tProbably out-of-date');
-    Warning = sprintf('EPR Toolbox is updated frequently with new features and bug fixes.\nYour version is over 3 months old, please consider upgrading.\n\nFor more information please see:\nmorganbye.net/eprtoolbox\n');
-end
+% if now > datenum('2015-01-01')
+%     Status  = sprintf('Status:\t\tProbably out-of-date');
+%     Warning = sprintf('EPR Toolbox is updated frequently with new features and bug fixes.\nYour version is over 3 months old, please consider upgrading.\n\nFor more information please see:\nmorganbye.net/eprtoolbox\n');
+% end
 
 % Startup message
-Version = sprintf('Version:\t\tv14.09');
-Release = sprintf('Release date:\t7th September 2014');
+Version = sprintf('Version:\t\tv18.0');
+Release = sprintf('Release date:\t4th January 2018');
 Info    = sprintf('User interfaces are available from the menus above\n\nFor more scripts please explore the downloaded folder');
 
 startup_text = strvcat(Version, Release, Status, Warning, Info);
@@ -153,7 +160,7 @@ set(handles.editbox,'String',startup_text);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = EPRtoolbox_OutputFcn(hObject, eventdata, handles) 
+function varargout = EPRtoolbox_OutputFcn(hObject, eventdata, handles)
 
 varargout{1} = handles.output;
 
@@ -198,14 +205,14 @@ switch extension
     case 'DTA'
         [x,y,z] = BrukerRead(address);
         assignin('base','x',x)
-        assignin('base','y',y)        
+        assignin('base','y',y)
         assignin('base','info',z)
-        
+
     case 'spc'
         [x,y] = BrukerRead(address);
         assignin('base','x',x)
         assignin('base','y',y)
-        
+
 end
 
 

@@ -36,7 +36,7 @@ function e2a(varargin)
 %           Take the file "file.DTA" and convert it to "file.txt" where
 %           values are seperated with a space rather than the standard
 %           comma
-%               
+%
 %
 % For more information see:
 % http://morganbye.net/eprtoolbox/epr-converter-e2a
@@ -50,22 +50,22 @@ function e2a(varargin)
 %
 % See also: E2AF BRUKERREAD
 
-%                                        _                             _   
-%                                       | |                           | |  
-%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_ 
+%                                        _                             _
+%                                       | |                           | |
+%  _ __ ___   ___  _ __ __ _  __ _ _ __ | |__  _   _  ___   _ __   ___| |_
 % | '_ ` _ \ / _ \| '__/ _` |/ _` | '_ \| '_ \| | | |/ _ \ | '_ \ / _ \ __|
-% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_ 
+% | | | | | | (_) | | | (_| | (_| | | | | |_) | |_| |  __/_| | | |  __/ |_
 % |_| |_| |_|\___/|_|  \__, |\__,_|_| |_|_.__/ \__, |\___(_)_| |_|\___|\__|
-%                       __/ |                   __/ |                      
-%                      |___/                   |___/                       
+%                       __/ |                   __/ |
+%                      |___/                   |___/
 %
-% M. Bye v13.11
+% M. Bye v18.0
 %
 % v13.09 - current
 %               Chemical Physics Department
 %               Weizmann Institute of Science
 %               76100 REHOVOT, Israel
-% 
+%
 % v11.06 - v13.08
 %               Henry Wellcome Unit for Biological EPR
 %               University of East Anglia
@@ -74,9 +74,11 @@ function e2a(varargin)
 % Email:        morgan.bye@weizmann.ac.il
 % Website:      http://morganbye.net/eprtoolbox/e2a
 %
-% Last updated 11-November-2013
-%              
+% Last updated 04-Jan-2018
+%
 % Version history:
+% Jan 18        'noheader' fix for 0 args
+%
 % Nov 13        > Added header to output file
 %               > Optional 'noheader' call
 %               > Removed extremely complex output argument and replaced
@@ -103,60 +105,61 @@ switch nargin
     case 0
         delimiter = ',';
         extension = '.csv';
-        
+        noheader = '';
+
         % Select the file
         [file , directory] = uigetfile({'*.DTA','Bruker BES3T File (*.DTA)'; ...
             '*.spc','Bruker Spc File UNTESTED (*.spc)'; ...
             '*.*',  'All Files (*.*)'},'Load Bruker file');
-        
+
         % if user cancels command nothing happens
         if isequal(file,0) %|| isequal(directory,0)
             return
         end
-        
+
         in_address = [directory,file];
-        
+
         [mag_field, abs] = BrukerRead(in_address);
-    
+
         % File selected via command line
     case 1
             % For File
         if exist(varargin{1},'file');
-            
+
             if isempty(strfind(varargin{1},'/'))
                 error('The full file path must be entered! You cant just use the current folder')
             end
-            
+
             delimiter = ',';
-            
+
             in_address = varargin{1};
             [~,f,e] = fileparts(in_address);
             file = [f e];
             [mag_field, abs] = BrukerRead(in_address);
-            
+
             % For delimiter
         elseif ischar(varargin{1}) && length(varargin{1}) == 1
             delimiter = varargin{1};
-            
-            
+
+
             % Select the file
             [file , directory] = uigetfile({'*.DTA','Bruker BES3T File (*.DTA)'; ...
                 '*.spc','Bruker Spc File UNTESTED (*.spc)'; ...
                 '*.*',  'All Files (*.*)'},'Load Bruker file');
-            
+
             % if user cancels command nothing happens
             if isequal(file,0) %|| isequal(directory,0)
                 return
             end
-            
+
             in_address = [directory,file];
-            
+
             [mag_field, abs] = BrukerRead(in_address);
         end
-        
+
         extension = '.csv';
         noheader  = '';
-       
+
         % File and delimiter selection
     case 2
         if exist(varargin{1},'file');
@@ -168,7 +171,7 @@ switch nargin
 
         delimiter = varargin{2};
         noheader  = '';
-        
+
         % File, delimiter and extension selection
     case 3
         if exist(varargin{1},'file');
@@ -177,11 +180,11 @@ switch nargin
             file = [name ext];
             [mag_field, abs] = BrukerRead(in_address);
         end
-        
+
         delimiter = varargin{2};
         extension = varargin{3};
         noheader  = '';
-        
+
         % File, delimiter, extension and interval selection
     case 4
         if exist(varargin{1},'file');
@@ -190,12 +193,12 @@ switch nargin
             file = [name ext];
             [mag_field, abs] = BrukerRead(in_address);
         end
-        
+
         delimiter = varargin{2};
         extension = varargin{3};
         interval  = varargin{4};
         noheader  = '';
-        
+
     case 5
                 if exist(varargin{1},'file');
             in_address = varargin{1};
@@ -203,7 +206,7 @@ switch nargin
             file = [name ext];
             [mag_field, abs] = BrukerRead(in_address);
         end
-        
+
         delimiter = varargin{2};
         extension = varargin{3};
         interval  = varargin{4};
@@ -222,7 +225,7 @@ if exist('interval','var')
     y = interp1(mag_field,abs,x);
 
     z = [x' y'];
-    
+
 else
     z = [mag_field abs];
 end
@@ -242,29 +245,29 @@ switch prompt,
         % directory is blank and we have a leading '/'
         if size(directory,1) == 0
             % dlmwrite([name,extension], z, 'delimiter', delimiter,'precision', '%.13f');
-            
+
             out_add = [name,extension];
-            
+
         else
             % dlmwrite([directory,'/',name,extension], z, 'delimiter', delimiter,'precision', '%.13f');
-            
+
             out_add = [directory,'/',name,extension];
         end
 
     case 'No'
-        
+
         [out_name, out_path] = uiputfile('*.csv', 'Save output as...');
         out_add = fullfile(out_path,out_name);
-        
+
 end
 
 % Generate header
 % ===============
 
 if strcmp(noheader,'noheader') == 0
-    
+
     fid = fopen(out_add,'w');
-    
+
     header = [...
         '#                            ___                                           ';...
         '#                           |__ \                                          ';...
@@ -280,16 +283,16 @@ if strcmp(noheader,'noheader') == 0
         '#                                                                          ';...
         '#                                                                          ';...
         '# This file has been created by e2af - v13.11 at:                          '];
-    
+
     header = [header ; sprintf('%-75s', ['# ' datestr(now, 'dd mmmm yyyy - HH:MM')])];
-    
+
     for j = 1:size(header,1)
         fprintf(fid,'%-75s\n',header(j,:));
     end
-    
+
     % Close the file (for C language operations/memory freeing)
     fclose(fid);
-    
+
 end
 
 % Write out data
