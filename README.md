@@ -98,37 +98,40 @@ If you find the toolbox lacking feel free to fork and branch as you please.
 
 ## Contributors
 Alberto Collauto - Goethe-Universitat, Frankfurt am Main, Germany
-    * SpecMan file format
+* SpecMan file format
 
 Frederic Mentink - National High Field Magnet Laboratory, Tallahassee, USA
-    * PulseGen script writter
+* PulseGen script writer
 
-Help along the way
-------------------
+### Testing and error reporting
 
-Müge Aksoyoglu - Uni. Freiburg, Germany
-	BrukerRead and PowerSat error reporting
-Ray Burton-Smith - Queen Mary, Uni. of London, UK
-	Concept development (Beer!)
-Timothee Chauvire - ACERT, USA
-	BrukerRead error reporting
-Gunnar Jeschke - ETH Zurich, Switzerland
-	DeerAnalysis and MMM questions
-Peter Meadows - Jeol (UK) Ltd, UK
-	File format discussion
-Alexander Morley - Universitat Wien, Austria
-    cwViewer and PowerSat error reporting
-David Mulder - National Renewable Energy Laboratory, USA
-    * cwViewer error reporting
-    * e2af inspiration
-    * Beer!
-Patrick Pennington - Dartmouth, USA
-	Concept development
-Yevhen Polyhach - ETH Zurich, Switzerland
-	MMM questions and development
-Richard Rothery - Uni. of Alberta, Canada
-	e2a and BrukerRead error reporting
-Paulo Souza -  Uni. of Brasilia, Brazil
-	e2a error reporting
-Robert Usselman - Uni. of Montana, USA
-	Toolbox questions
+* Müge Aksoyoglu - Uni. Freiburg, Germany
+  * BrukerRead and PowerSat error reporting
+* Ray Burton-Smith - Queen Mary, Uni. of London, UK
+  * Concept development
+  * Beer!
+* Timothee Chauvire - ACERT, USA
+  * BrukerRead error reporting
+* Gunnar Jeschke - ETH Zurich, Switzerland
+  * DeerAnalysis discussion
+  * MMM discussion
+* Peter Meadows - Jeol (UK) Ltd, UK
+  * File format discussion
+* Alexander Morley - Universitat Wien, Austria
+  * cwViewer error reporting
+  * PowerSat error reporting
+* David Mulder - National Renewable Energy Laboratory, USA
+  * cwViewer error reporting
+  * e2af inspiration
+  * Beer!
+* Patrick Pennington - Dartmouth, USA
+  * Concept development
+* Yevhen Polyhach - ETH Zurich, Switzerland
+  * MMM development
+* Richard Rothery - Uni. of Alberta, Canada
+  * e2a error reporting
+  * BrukerRead error reporting
+* Paulo Souza -  Uni. of Brasilia, Brazil
+  * e2a error reporting
+* Robert Usselman - Uni. of Montana, USA
+  * Toolbox questions
